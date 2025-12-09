@@ -8,11 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { Shirt, Snowflake, Zap, Sun, Wind, ShoppingBag, VenetianMask } from "lucide-react";
+import { useState, useMemo } from "react";
 
 const services = [
-    { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, description: "Per lb, standard service" },
-    { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, description: "Per item, for delicates" },
-    { id: 'ironing', name: 'Ironing', icon: Shirt, description: "Per item, crisp finish" },
+    { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, description: "Per lb, standard service", price: 25.00, priceText: "Est. $25.00" },
+    { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, description: "Per item, for delicates", price: 15.00, priceText: "Est. $15.00" },
+    { id: 'ironing', name: 'Ironing', icon: Shirt, description: "Per item, crisp finish", price: 5.00, priceText: "Est. $5.00" },
 ];
 
 const preferences = {
@@ -28,6 +29,25 @@ const preferences = {
 
 
 export default function ServicesPage() {
+    const [selectedServices, setSelectedServices] = useState<string[]>(['wash-fold', 'dry-cleaning']);
+
+    const handleServiceToggle = (serviceId: string) => {
+        setSelectedServices(prev => 
+            prev.includes(serviceId) 
+                ? prev.filter(id => id !== serviceId)
+                : [...prev, serviceId]
+        );
+    }
+
+    const estimatedTotal = useMemo(() => {
+        return services.reduce((total, service) => {
+            if (selectedServices.includes(service.id)) {
+                return total + service.price;
+            }
+            return total;
+        }, 0);
+    }, [selectedServices]);
+
 
     return (
         <BookingLayout
@@ -42,7 +62,7 @@ export default function ServicesPage() {
                         <Card key={service.id} className="p-4">
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    <Checkbox id={service.id} />
+                                    <Checkbox id={service.id} checked={selectedServices.includes(service.id)} onCheckedChange={() => handleServiceToggle(service.id)} />
                                     <Label htmlFor={service.id} className="flex items-center gap-3 cursor-pointer">
                                         <div className="bg-primary/10 text-primary p-3 rounded-lg">
                                             <service.icon className="h-6 w-6" />
@@ -53,10 +73,10 @@ export default function ServicesPage() {
                                         </div>
                                     </Label>
                                 </div>
-                                <p className="font-semibold text-sm">From $1.75/lb</p>
+                                <p className="font-semibold text-sm">{service.priceText}</p>
                             </div>
                             {/* @ts-ignore */}
-                            {preferences[service.id] && (
+                            {preferences[service.id] && selectedServices.includes(service.id) && (
                                 <div className="mt-4 pl-16 space-y-4">
                                      {/* @ts-ignore */}
                                     {preferences[service.id].map(pref => (
@@ -92,17 +112,18 @@ export default function ServicesPage() {
                     <Card className="p-4 sticky top-24">
                         <h3 className="font-semibold mb-4">Order Summary</h3>
                         <div className="space-y-2 text-sm">
-                            <div className="flex justify-between">
-                                <p className="text-muted-foreground">Wash & Fold</p>
-                                <p>Est. $25.00</p>
-                            </div>
-                             <div className="flex justify-between">
-                                <p className="text-muted-foreground">Dry Cleaning</p>
-                                <p>Est. $15.00</p>
-                            </div>
+                            {services.map(service => selectedServices.includes(service.id) && (
+                                <div key={service.id} className="flex justify-between">
+                                    <p className="text-muted-foreground">{service.name}</p>
+                                    <p>{service.priceText}</p>
+                                </div>
+                            ))}
+                             {selectedServices.length === 0 && (
+                                <p className="text-muted-foreground text-center py-4">Select a service to see a summary.</p>
+                             )}
                              <div className="flex justify-between border-t pt-2 mt-2 font-semibold">
                                 <p>Estimated Total</p>
-                                <p>$40.00</p>
+                                <p>${estimatedTotal.toFixed(2)}</p>
                             </div>
                         </div>
                     </Card>
