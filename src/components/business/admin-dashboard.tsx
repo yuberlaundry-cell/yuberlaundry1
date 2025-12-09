@@ -46,7 +46,7 @@ export function AdminDashboard() {
                             <CardTitle>Spend Over Time</CardTitle>
                             <CardDescription>Company-wide spending for the last 6 months.</CardDescription>
                         </CardHeader>
-                        <CardContent>
+                        <CardContent className="pl-2">
                             <SpendChart />
                         </CardContent>
                     </Card>
