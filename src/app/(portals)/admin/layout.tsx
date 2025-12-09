@@ -46,6 +46,7 @@ import {
   ShieldAlert,
   Leaf,
   DollarSign,
+  Send,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -61,7 +62,7 @@ const menuItems = [
   { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
   { href: '/admin/financials', label: 'Financials', icon: CreditCard },
   { href: '/admin/payouts', label: 'Payouts', icon: Percent },
-  { href: '/admin/marketing', label: 'Marketing & CMS', icon: Book },
+  { href: '/admin/marketing', label: 'Marketing', icon: Send },
   { href: '/admin/promotions', label: 'Promotions', icon: Tags },
   { href: '/admin/tenants', label: 'Tenants', icon: LayoutGrid },
   { href: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
