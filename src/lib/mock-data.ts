@@ -385,3 +385,62 @@ export const mockBusinessOrders: BusinessOrder[] = [
         ]
     },
 ];
+
+export interface Invoice {
+    id: string;
+    date: string;
+    dueDate: string;
+    amount: number;
+    status: 'Paid' | 'Due' | 'Overdue';
+    items: {
+        description: string;
+        quantity: number;
+        price: number;
+        total: number;
+    }[];
+    subtotal: number;
+    tax: number;
+    total: number;
+}
+
+export const mockInvoices: Invoice[] = [
+    {
+        id: 'INV-2024-012',
+        date: 'Dec 1, 2024',
+        dueDate: 'Dec 15, 2024',
+        amount: 4250.00,
+        status: 'Paid',
+        items: [
+            { description: "Company-wide laundry services for November 2024", quantity: 1, price: 4250.00, total: 4250.00 }
+        ],
+        subtotal: 4250.00,
+        tax: 0,
+        total: 4250.00
+    },
+    {
+        id: 'INV-2024-011',
+        date: 'Nov 1, 2024',
+        dueDate: 'Nov 15, 2024',
+        amount: 3890.50,
+        status: 'Paid',
+        items: [
+            { description: "Company-wide laundry services for October 2024", quantity: 1, price: 3890.50, total: 3890.50 }
+        ],
+        subtotal: 3890.50,
+        tax: 0,
+        total: 3890.50
+    },
+    {
+        id: 'INV-2024-010',
+        date: 'Oct 1, 2024',
+        dueDate: 'Oct 15, 2024',
+        amount: 4120.00,
+        status: 'Paid',
+        items: [
+            { description: "Company-wide laundry services for September 2024", quantity: 1, price: 4120.00, total: 4120.00 }
+        ],
+        subtotal: 4120.00,
+        tax: 0,
+        total: 4120.00
+    },
+];
