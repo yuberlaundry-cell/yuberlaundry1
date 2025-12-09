@@ -1,22 +1,26 @@
 'use client';
 
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend } from "recharts"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, Chart as ChartPrimitive } from "@/components/ui/chart"
 
 const chartData = [
-  { month: "July", spend: 3800 },
-  { month: "August", spend: 4100 },
-  { month: "September", spend: 3900 },
-  { month: "October", spend: 4500 },
-  { month: "November", spend: 4300 },
-  { month: "December", spend: 4250 },
+  { month: "July", company: 3800, employee: 400 },
+  { month: "August", company: 4100, employee: 500 },
+  { month: "September", company: 3900, employee: 350 },
+  { month: "October", company: 4500, employee: 600 },
+  { month: "November", company: 4300, employee: 550 },
+  { month: "December", company: 4250, employee: 500 },
 ]
 
 const chartConfig = {
-  spend: {
-    label: "Spend",
+  company: {
+    label: "Company Spend",
     color: "hsl(var(--primary))",
+  },
+  employee: {
+    label: "Employee Spend",
+    color: "hsl(var(--secondary))",
   },
 }
 
@@ -41,7 +45,9 @@ export function SpendChart() {
                     cursor={false}
                     content={<ChartTooltipContent indicator="dot" />}
                 />
-                <Bar dataKey="spend" fill="var(--color-spend)" radius={4} />
+                <Legend />
+                <Bar dataKey="company" fill="var(--color-company)" radius={4} stackId="a" />
+                <Bar dataKey="employee" fill="var(--color-employee)" radius={4} stackId="a" />
             </BarChart>
         </ChartContainer>
   )

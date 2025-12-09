@@ -21,6 +21,7 @@ const adminMenuItems = [
 const employeeMenuItems = [
   { href: '/business', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/business/orders', label: 'My Orders', icon: ShoppingCart },
+  { href: '/business/reports', label: 'My Reports', icon: BarChart },
   { href: '/business/settings', label: 'Settings', icon: Settings },
 ]
 
