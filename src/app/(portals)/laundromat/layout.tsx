@@ -22,6 +22,7 @@ import {
   Settings,
   WashingMachine,
   ClipboardCheck,
+  CreditCard,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -37,6 +38,7 @@ const menuItems = [
   { href: '/laundromat/processing', label: 'Processing', icon: LayoutGrid },
   { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
   { href: '/laundromat/ready', label: 'Ready for Delivery', icon: Truck },
+  { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
   { href: '/laundromat/resources', label: 'Resources', icon: Book },
   { href: '/laundromat/settings', label: 'Settings', icon: Settings },
 ];

@@ -10,6 +10,7 @@ import {
 import {
   AlertCircle,
   Clock,
+  CreditCard,
   Package,
   PackageCheck,
   PackageOpen,
