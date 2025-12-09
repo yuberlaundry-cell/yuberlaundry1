@@ -281,3 +281,107 @@ export const mockBusinessEmployees: BusinessEmployee[] = [
         ]
     }
 ];
+
+export interface BusinessOrder {
+    id: string;
+    employee: { id: string, name: string, avatar?: string };
+    service: string;
+    status: 'Delivered' | 'In progress' | 'Cancelled' | 'Scheduled';
+    pickup: string;
+    delivery: string;
+    cost: number;
+    companyShare: number;
+    employeeShare: number;
+    timeline: TimelineEvent[];
+    pickupAddress: string;
+    deliveryAddress: string;
+}
+
+export const mockBusinessOrders: BusinessOrder[] = [
+    { 
+        id: '#C-54321',
+        employee: { id: 'emp-001', name: 'Emily Brown' },
+        service: 'Wash & Fold', 
+        status: 'Delivered', 
+        pickup: 'Dec 1, 2024', 
+        delivery: 'Dec 3, 2024', 
+        cost: 45.50,
+        companyShare: 45.50,
+        employeeShare: 0.00,
+        pickupAddress: '123 Main St, London, SW1A 0AA',
+        deliveryAddress: '123 Main St, London, SW1A 0AA',
+        timeline: [
+            { title: 'Order Created by Admin', timestamp: 'Nov 30, 2024', status: 'completed' },
+            { title: 'Scheduled', timestamp: 'Dec 1, 2024', status: 'completed' },
+            { title: 'Delivered', timestamp: 'Dec 3, 2024', status: 'completed' },
+        ]
+    },
+    { 
+        id: '#C-54320', 
+        employee: { id: 'emp-002', name: 'John Smith' },
+        service: 'Dry Cleaning', 
+        status: 'In progress', 
+        pickup: 'Dec 2, 2024', 
+        delivery: 'Dec 4, 2024', 
+        cost: 62.00,
+        companyShare: 62.00,
+        employeeShare: 0.00,
+        pickupAddress: '123 Main St, London, SW1A 0AA',
+        deliveryAddress: '123 Main St, London, SW1A 0AA',
+        timeline: [
+            { title: 'Order Created', timestamp: 'Dec 1, 2024', status: 'completed' },
+            { title: 'At Laundromat', timestamp: 'Dec 2, 2024', status: 'in-progress' },
+        ]
+    },
+    { 
+        id: '#C-54319', 
+        employee: { id: 'emp-003', name: 'Jessica Davis' },
+        service: 'Wash & Fold', 
+        status: 'Delivered', 
+        pickup: 'Nov 28, 2024', 
+        delivery: 'Nov 30, 2024', 
+        cost: 38.75,
+        companyShare: 38.75,
+        employeeShare: 0.00,
+        pickupAddress: '123 Main St, London, SW1A 0AA',
+        deliveryAddress: '123 Main St, London, SW1A 0AA',
+        timeline: [
+            { title: 'Scheduled', timestamp: 'Nov 28, 2024', status: 'completed' },
+            { title: 'Delivered', timestamp: 'Nov 30, 2024', status: 'completed' },
+        ]
+    },
+    { 
+        id: '#C-54318', 
+        employee: { id: 'emp-004', name: 'Michael Wilson' },
+        service: 'Wash & Fold', 
+        status: 'Cancelled', 
+        pickup: 'Nov 27, 2024', 
+        delivery: 'Nov 29, 2024', 
+        cost: 0.00,
+        companyShare: 0.00,
+        employeeShare: 0.00,
+        pickupAddress: '123 Main St, London, SW1A 0AA',
+        deliveryAddress: '123 Main St, London, SW1A 0AA',
+        timeline: [
+             { title: 'Scheduled', timestamp: 'Nov 27, 2024', status: 'completed' },
+             { title: 'Cancelled by user', timestamp: 'Nov 27, 2024', status: 'completed' },
+        ]
+    },
+    { 
+        id: '#C-54317', 
+        employee: { id: 'emp-001', name: 'Emily Brown' },
+        service: 'Ironing', 
+        status: 'Delivered', 
+        pickup: 'Nov 25, 2024', 
+        delivery: 'Nov 26, 2024', 
+        cost: 25.00,
+        companyShare: 25.00,
+        employeeShare: 0.00,
+        pickupAddress: '123 Main St, London, SW1A 0AA',
+        deliveryAddress: '123 Main St, London, SW1A 0AA',
+        timeline: [
+             { title: 'Scheduled', timestamp: 'Nov 24, 2024', status: 'completed' },
+            { title: 'Delivered', timestamp: 'Nov 26, 2024', status: 'completed' },
+        ]
+    },
+];
