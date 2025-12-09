@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, CheckSquare, Wind, Droplets } from 'lucide-react';
+import { MoreHorizontal, CheckSquare, Wind, Droplets, Package } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,44 +72,47 @@ const columns = [
   },
 ];
 
-const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => (
-  <Card className="mb-4">
-    <CardHeader className="p-4">
-      <div className="flex justify-between items-start">
-        <Link href={`/laundromat/orders/${order.id}`}>
-            <CardTitle className="text-base font-bold hover:underline">{order.id}</CardTitle>
-        </Link>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem asChild>
-                <Link href={`/laundromat/orders/${order.id}`}>View Details</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem>Move to Next Stage</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              Report Issue
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <CardDescription>{order.customer}</CardDescription>
-    </CardHeader>
-    <CardContent className="p-4 pt-0">
-      <div className="flex justify-between items-center text-sm">
-        <p className="font-medium">{order.service}</p>
-        <Badge
-          variant={order.sla === 'Completed' ? 'default' : 'destructive'}
-        >
-          {order.sla}
-        </Badge>
-      </div>
-    </CardContent>
-  </Card>
-);
+const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => {
+    const orderId = order.id.replace('#', '');
+    return (
+      <Card className="mb-4">
+        <CardHeader className="p-4">
+          <div className="flex justify-between items-start">
+            <Link href={`/laundromat/orders/${orderId}`}>
+                <CardTitle className="text-base font-bold hover:underline">{order.id}</CardTitle>
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                    <Link href={`/laundromat/orders/${orderId}`}>View Details</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Move to Next Stage</DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive">
+                  Report Issue
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <CardDescription>{order.customer}</CardDescription>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
+          <div className="flex justify-between items-center text-sm">
+            <p className="font-medium">{order.service}</p>
+            <Badge
+              variant={order.sla === 'Completed' ? 'default' : 'destructive'}
+            >
+              {order.sla}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+    );
+}
 
 export default function ProcessingPage() {
   return (
