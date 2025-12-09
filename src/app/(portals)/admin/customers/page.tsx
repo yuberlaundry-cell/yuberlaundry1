@@ -85,10 +85,10 @@ export default function CustomersPage() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline">
-            <Download className="mr-2" /> Export
+            <Download className="mr-2 h-4 w-4" /> Export
           </Button>
           <Button>
-            <PlusCircle className="mr-2" /> Add Customer
+            <PlusCircle className="mr-2 h-4 w-4" /> Add Customer
           </Button>
         </div>
       </div>
