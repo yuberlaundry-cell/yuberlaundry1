@@ -17,8 +17,9 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Search, PlusCircle, Play, SlidersHorizontal } from 'lucide-react';
+import { Search, PlusCircle, Play, SlidersHorizontal, MoreHorizontal } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 const workflows = [
   {
@@ -53,11 +54,20 @@ const workflows = [
     nextRun: '2 weeks',
     status: 'Inactive',
   },
+   {
+    name: 'Fraud: Review High-Value First Order',
+    type: 'Fraud',
+    trigger: 'Event: order.created > $100',
+    lastRun: '1 hour ago',
+    nextRun: 'N/A',
+    status: 'Active',
+  },
 ];
 
 const statusColors: { [key: string]: string } = {
     Active: 'bg-green-100 text-green-800',
     Inactive: 'bg-gray-100 text-gray-800',
+    Error: 'bg-red-100 text-red-800',
 };
 
 
@@ -92,7 +102,6 @@ export default function AutomationPage() {
                     className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
                 />
             </div>
-            {/* Add filters here */}
           </div>
         </CardHeader>
         <CardContent>
@@ -113,7 +122,7 @@ export default function AutomationPage() {
                   <TableRow key={flow.name}>
                     <TableCell className="font-medium">{flow.name}</TableCell>
                     <TableCell>{flow.type}</TableCell>
-                    <TableCell>{flow.trigger}</TableCell>
+                    <TableCell className="font-mono text-xs">{flow.trigger}</TableCell>
                     <TableCell>{flow.lastRun}</TableCell>
                     <TableCell>{flow.nextRun}</TableCell>
                     <TableCell>
@@ -122,9 +131,19 @@ export default function AutomationPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right">
-                        <Button variant="ghost" size="icon">
-                            <Play className="h-4 w-4"/>
-                        </Button>
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="ghost" size="icon">
+                                    <MoreHorizontal className="h-4 w-4"/>
+                                </Button>
+                            </DropdownMenuTrigger>
+                             <DropdownMenuContent align="end">
+                                <DropdownMenuItem><Play className="mr-2 h-4 w-4"/> Run Now</DropdownMenuItem>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem>View Logs</DropdownMenuItem>
+                                 <DropdownMenuItem className="text-destructive">Disable</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </TableCell>
                   </TableRow>
                 ))}
