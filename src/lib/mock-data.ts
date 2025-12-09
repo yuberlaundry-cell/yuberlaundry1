@@ -34,7 +34,6 @@ export interface Order {
     };
 }
 
-
 export const mockOrders: Order[] = [
     {
         id: '#YL12345',
@@ -183,4 +182,102 @@ export const mockOrders: Order[] = [
             serviceFee: '$0.00',
         }
     },
+];
+
+
+export interface BusinessEmployee {
+    id: string;
+    name: string;
+    email: string;
+    role: 'Admin' | 'Manager' | 'Employee';
+    status: 'Active' | 'Inactive';
+    department: string;
+    joinDate: string;
+    mobile: string;
+    allowance: {
+        monthly: number;
+        remaining: number;
+        perOrder: number;
+    },
+    totalOrders: number;
+    totalSpend: number;
+    avgTurnaround: number;
+    recentOrders: {
+        id: string;
+        date: string;
+        status: 'Delivered' | 'In progress' | 'Cancelled';
+        cost: number;
+    }[];
+}
+
+export const mockBusinessEmployees: BusinessEmployee[] = [
+    {
+        id: 'emp-001',
+        name: 'Emily Brown',
+        email: 'emily.brown@acmecorp.com',
+        role: 'Employee',
+        status: 'Active',
+        department: 'Marketing',
+        joinDate: 'Jan 15, 2023',
+        mobile: '(555) 123-4567',
+        allowance: { monthly: 200, remaining: 145.50, perOrder: 75 },
+        totalOrders: 18,
+        totalSpend: 512.40,
+        avgTurnaround: 48,
+        recentOrders: [
+            { id: '#C-54321', date: 'Dec 1, 2024', status: 'Delivered', cost: 45.50 },
+            { id: '#C-54317', date: 'Nov 25, 2024', status: 'Delivered', cost: 25.00 }
+        ]
+    },
+    {
+        id: 'emp-002',
+        name: 'John Smith',
+        email: 'john.smith@acmecorp.com',
+        role: 'Admin',
+        status: 'Active',
+        department: 'Management',
+        joinDate: 'Mar 22, 2022',
+        mobile: '(555) 987-6543',
+        allowance: { monthly: 500, remaining: 350.00, perOrder: 150 },
+        totalOrders: 35,
+        totalSpend: 1250.80,
+        avgTurnaround: 46,
+        recentOrders: [
+            { id: '#C-54320', date: 'Dec 2, 2024', status: 'In progress', cost: 62.00 },
+        ]
+    },
+    {
+        id: 'emp-003',
+        name: 'Jessica Davis',
+        email: 'jessica.davis@acmecorp.com',
+        role: 'Manager',
+        status: 'Active',
+        department: 'Sales',
+        joinDate: 'Feb 01, 2023',
+        mobile: '(555) 234-5678',
+        allowance: { monthly: 250, remaining: 55.25, perOrder: 75 },
+        totalOrders: 25,
+        totalSpend: 850.90,
+        avgTurnaround: 52,
+        recentOrders: [
+            { id: '#C-54319', date: 'Nov 28, 2024', status: 'Delivered', cost: 38.75 }
+        ]
+    },
+    {
+        id: 'emp-004',
+        name: 'Michael Wilson',
+        email: 'michael.wilson@acmecorp.com',
+        role: 'Employee',
+        status: 'Inactive',
+        department: 'Engineering',
+        joinDate: 'Jun 10, 2023',
+        mobile: '(555) 345-6789',
+        allowance: { monthly: 150, remaining: 150.00, perOrder: 50 },
+        totalOrders: 5,
+        totalSpend: 150.00,
+        avgTurnaround: 48,
+        recentOrders: [
+            { id: '#C-54318', date: 'Nov 27, 2024', status: 'Cancelled', cost: 0.00 },
+        ]
+    }
 ];
