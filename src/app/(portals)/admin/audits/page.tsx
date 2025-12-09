@@ -33,6 +33,9 @@ const auditLogs = [
     { ts: '2024-07-26 14:05:15', actor: 'System', entity: 'Order: #YL12345', action: 'SLA Breached', details: 'Processing time exceeded 24 hours.' },
     { ts: '2024-07-26 13:50:41', actor: 'john.smith@acmecorp.com', entity: 'Policy: Privacy v2.1', action: 'Policy Acknowledged', details: 'User acknowledged the latest privacy policy.' },
     { ts: '2024-07-26 12:00:00', actor: 'Sam Admin', entity: 'Feature Flag: Tipping', action: 'Flag Enabled', details: 'Tipping feature enabled for UK tenant.' },
+    { ts: '2024-07-26 11:45:10', actor: 'System', entity: 'Payout: P-5678', action: 'Payout Processed', details: 'Payout batch sent to payment provider.' },
+    { ts: '2024-07-26 11:30:00', actor: 'jane.doe@example.com', entity: 'User: cust-001', action: 'Profile Updated', details: 'User updated their phone number.' },
+    { ts: '2024-07-26 10:55:23', actor: 'ops@yuber.com', entity: 'Laundromat: LM-02', action: 'QC Score Updated', details: 'Laundromat QC score dropped to 85.' },
 ];
 
 export default function AuditsPage() {
@@ -56,10 +59,10 @@ export default function AuditsPage() {
                     className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
                 />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
                  <Popover>
                     <PopoverTrigger asChild>
-                    <Button variant="outline">
+                    <Button variant="outline" className="w-full sm:w-auto">
                         Date: All Time <ChevronDown className="ml-2 h-4 w-4" />
                     </Button>
                     </PopoverTrigger>
@@ -67,7 +70,7 @@ export default function AuditsPage() {
                         <Calendar mode="range" />
                     </PopoverContent>
                 </Popover>
-                 <Button variant="outline"><Download className="mr-2"/> Export</Button>
+                 <Button variant="outline"><Download className="mr-2 h-4 w-4"/> Export</Button>
             </div>
           </div>
         </CardHeader>
