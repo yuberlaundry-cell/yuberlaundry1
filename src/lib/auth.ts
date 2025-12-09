@@ -58,7 +58,7 @@ export const mockUsers: Record<string, User> = {
     id: 'user-laundromat-1',
     firstName: 'Maria',
     lastName: 'Garcia',
-    email: 'maria.g@example.com',
+    email: 'maria.g@mainstreetlaundry.com',
     avatarUrl: 'https://picsum.photos/seed/user5/100/100',
     role: 'laundromat_staff',
   },
