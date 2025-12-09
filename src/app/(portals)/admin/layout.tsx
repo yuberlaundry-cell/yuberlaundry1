@@ -38,6 +38,14 @@ import {
   Clock,
   BookCopy,
   Code,
+  Users,
+  BrainCircuit,
+  TrendingUp,
+  Container,
+  Route,
+  ShieldAlert,
+  Leaf,
+  DollarSign,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -57,6 +65,7 @@ const menuItems = [
   { href: '/admin/promotions', label: 'Promotions', icon: Tags },
   { href: '/admin/tenants', label: 'Tenants', icon: LayoutGrid },
   { href: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
+  { href: '/admin/intelligence', label: 'Intelligence', icon: BrainCircuit },
   { href: '/admin/integrations', label: 'Integrations & API', icon: Key },
   { href: '/admin/staff', label: 'Staff & Roles', icon: Users },
   { href: '/admin/audits', label: 'Audit Logs', icon: ClipboardList },
