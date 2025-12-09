@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
-import { Camera, CheckCircle, ScanLine, Search } from 'lucide-react';
+import { Camera, CheckCircle, ScanLine, Search, UserPlus } from 'lucide-react';
 
 const orderToCome = {
   id: '#YL12345',
@@ -36,7 +36,20 @@ export default function IntakePage() {
         <div className="space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle>Scan QR Code</CardTitle>
+              <CardTitle>In-Store Drop-off</CardTitle>
+              <CardDescription>
+                Create a new order for a walk-in customer.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <Button className="w-full">
+                <UserPlus className="mr-2" /> Create Walk-in Order
+              </Button>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Scan QR Code (Driver Drop-off)</CardTitle>
               <CardDescription>
                 Use the camera to scan the QR code on the order bag.
               </CardDescription>
@@ -55,7 +68,7 @@ export default function IntakePage() {
             <CardHeader>
               <CardTitle>Manual Entry</CardTitle>
                <CardDescription>
-                If the QR code is not available, enter the order ID manually.
+                If a QR code is not available, enter the order ID manually.
               </CardDescription>
             </CardHeader>
             <CardContent className="flex gap-2">
@@ -71,7 +84,7 @@ export default function IntakePage() {
         <div className="lg:sticky top-24 space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle>Arriving Soon</CardTitle>
+              <CardTitle>Arriving Soon via Driver</CardTitle>
                <CardDescription>
                 This order is scheduled for drop-off.
               </CardDescription>
