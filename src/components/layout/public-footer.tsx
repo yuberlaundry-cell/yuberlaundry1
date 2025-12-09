@@ -56,8 +56,8 @@ export function PublicFooter() {
           ))}
         </div>
         
-        <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <div className="text-sm text-muted-foreground order-2 md:order-1">
+        <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
+          <div className="text-sm text-muted-foreground order-2 md:order-1 text-center md:text-left">
             <p>&copy; {currentYear} Yuber Laundry Ltd. All rights reserved.</p>
             <div className="flex space-x-4 mt-2 justify-center md:justify-start">
               <Link href="#" className="hover:text-foreground">Website T&Cs</Link>
@@ -65,15 +65,15 @@ export function PublicFooter() {
               <Link href="#" className="hover:text-foreground">Cookie Policy</Link>
             </div>
           </div>
-          <div className="flex space-x-2 order-1 md:order-2">
-             <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white">
+          <div className="flex flex-col sm:flex-row items-center gap-2 order-1 md:order-2">
+             <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
                 <Apple className="h-6 w-6"/>
                 <div>
                     <div className='text-xs'>Download on the</div>
                     <div className="font-bold text-base -mt-1">App Store</div>
                 </div>
             </Button>
-            <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white">
+            <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
                 <Play className="h-6 w-6"/>
                 <div>
                     <div className='text-xs'>GET IT ON</div>
