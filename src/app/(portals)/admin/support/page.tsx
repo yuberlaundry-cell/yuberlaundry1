@@ -29,6 +29,7 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu';
 
 const tickets = [
@@ -50,6 +51,24 @@ const tickets = [
     lastUpdate: '1 day ago',
     agent: 'Unassigned',
   },
+  {
+    id: 'TKT-003',
+    customer: 'Peter Pan',
+    subject: 'Driver was late for pickup',
+    status: 'Open',
+    priority: 'High',
+    lastUpdate: '5 minutes ago',
+    agent: 'Sam Admin',
+  },
+  {
+    id: 'TKT-004',
+    customer: 'Acme Corp',
+    subject: 'Question about business invoicing',
+    status: 'Resolved',
+    priority: 'Low',
+    lastUpdate: '2 days ago',
+    agent: 'Support Team',
+  }
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -93,7 +112,7 @@ export default function SupportCenterPage() {
                 className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
               />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full sm:w-auto">
@@ -101,11 +120,11 @@ export default function SupportCenterPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>All</DropdownMenuItem>
-                  <DropdownMenuItem>New</DropdownMenuItem>
-                  <DropdownMenuItem>Open</DropdownMenuItem>
-                  <DropdownMenuItem>Resolved</DropdownMenuItem>
-                  <DropdownMenuItem>Closed</DropdownMenuItem>
+                  <DropdownMenuCheckboxItem checked>All</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>New</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Open</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Resolved</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Closed</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
               <DropdownMenu>
@@ -115,10 +134,10 @@ export default function SupportCenterPage() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>All</DropdownMenuItem>
-                  <DropdownMenuItem>Low</DropdownMenuItem>
-                  <DropdownMenuItem>Medium</DropdownMenuItem>
-                  <DropdownMenuItem>High</DropdownMenuItem>
+                  <DropdownMenuCheckboxItem checked>All</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Low</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Medium</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>High</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
