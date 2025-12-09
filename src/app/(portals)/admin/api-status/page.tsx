@@ -1,4 +1,5 @@
 'use client';
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -18,14 +19,14 @@ const services = [
   { name: 'Notifications API', status: 'Operational', uptime: '99.99%', latency: '50ms' },
 ];
 
-const statusIcons = {
+const statusIcons: { [key: string]: React.ReactNode } = {
   Operational: <CheckCircle className="h-5 w-5 text-green-500" />,
   'Degraded Performance': <AlertTriangle className="h-5 w-5 text-amber-500" />,
   'Under Maintenance': <Clock className="h-5 w-5 text-blue-500" />,
   'Major Outage': <XCircle className="h-5 w-5 text-red-500" />,
 };
 
-const statusColors = {
+const statusColors: { [key: string]: string } = {
   Operational: 'bg-green-100 text-green-800',
   'Degraded Performance': 'bg-amber-100 text-amber-800',
   'Under Maintenance': 'bg-blue-100 text-blue-800',
