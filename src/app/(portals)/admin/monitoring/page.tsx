@@ -15,9 +15,8 @@ import {
   Server,
   CheckCircle,
 } from 'lucide-react';
-import { OrderStatusChart } from '@/components/laundromat/order-status-chart';
 import { SpendChart } from '@/components/business/spend-chart';
-
+import { OrderStatusChart } from '@/components/laundromat/order-status-chart';
 
 const kpiCards = [
   {
