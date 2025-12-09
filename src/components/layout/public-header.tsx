@@ -93,7 +93,7 @@ export function PublicHeader() {
 
               {navLinks.map((link) => (
                 <NavigationMenuItem key={link.href}>
-                  <Link href={link.href} legacyBehavior passHref>
+                  <Link href={link.href} passHref>
                     <NavigationMenuLink className={cn(navigationMenuTriggerStyle(), pathname === link.href ? "text-foreground" : "text-foreground/60")}>
                       {link.label}
                     </NavigationMenuLink>
