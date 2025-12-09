@@ -30,9 +30,14 @@ import {
   ShoppingCart,
   Tags,
   Truck,
-  Users,
   Warehouse,
   WashingMachine,
+  Combine,
+  HeartPulse,
+  Server,
+  Clock,
+  BookCopy,
+  Code,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -57,6 +62,12 @@ const menuItems = [
   { href: '/admin/audits', label: 'Audit Logs', icon: ClipboardList },
   { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/support', label: 'Support Center', icon: HelpCircle },
+  { href: '/admin/automation', label: 'Automation', icon: Combine },
+  { href: '/admin/monitoring', label: 'System Monitoring', icon: HeartPulse },
+  { href: '/admin/api-status', label: 'API Status', icon: Server },
+  { href: '/admin/tasks', label: 'Task Schedules', icon: Clock },
+  { href: '/admin/logs', label: 'Logs', icon: BookCopy },
+  { href: '/admin/dev-tools', label: 'Dev Tools', icon: Code },
 ];
 
 export default function SuperadminLayout({
