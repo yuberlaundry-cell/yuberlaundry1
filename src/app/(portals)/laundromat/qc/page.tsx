@@ -85,7 +85,7 @@ export default function QCPage() {
                     {qcTasks.map((task) => (
                         <TableRow key={task.orderId}>
                             <TableCell className="font-medium">
-                                <Link href={`/laundromat/orders/${task.orderId}`} className="hover:underline">
+                                <Link href={`/laundromat/orders/${task.orderId.replace('#', '')}`} className="hover:underline">
                                     {task.orderId}
                                 </Link>
                             </TableCell>
@@ -98,7 +98,7 @@ export default function QCPage() {
                             </TableCell>
                             <TableCell>
                                 <Button variant="outline" size="sm" asChild>
-                                    <Link href={`/laundromat/orders/${task.orderId}`}>
+                                    <Link href={`/laundromat/orders/${task.orderId.replace('#', '')}`}>
                                         Start QC
                                     </Link>
                                 </Button>
