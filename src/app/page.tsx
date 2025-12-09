@@ -1,21 +1,17 @@
 import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
-import { Hero } from "@/components/marketing/hero";
-import { HowItWorks } from "@/components/marketing/how-it-works";
-import { SocialProof } from "@/components/marketing/social-proof";
-import { Testimonials } from "@/components/marketing/testimonials";
-import { Cta } from "@/components/marketing/cta";
+import { NewHero } from "@/components/marketing/new-hero";
+import { ValueProp } from "@/components/marketing/value-prop";
+import { FeatureCards } from "@/components/marketing/feature-cards";
 
 export default function Home() {
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
       <main className="flex-grow">
-        <Hero />
-        <SocialProof />
-        <HowItWorks />
-        <Testimonials />
-        <Cta />
+        <NewHero />
+        <ValueProp />
+        <FeatureCards />
       </main>
       <PublicFooter />
     </div>
