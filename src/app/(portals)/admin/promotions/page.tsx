@@ -24,18 +24,21 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuCheckboxItem,
 } from '@/components/ui/dropdown-menu';
 
 const plans = [
-    { name: 'Yuber Plus (Monthly)', price: '$45.00/mo', activeSubscribers: 1250, status: 'Active'},
-    { name: 'Yuber Plus (Annual)', price: '$450.00/yr', activeSubscribers: 320, status: 'Active'},
-    { name: 'Business Pro', price: '$200.00/mo', activeSubscribers: 45, status: 'Active'},
-    { name: 'Legacy Student Plan', price: '$25.00/mo', activeSubscribers: 0, status: 'Retired'},
+    { name: 'Yuber Plus (Monthly)', price: '$45.00/mo', activeSubscribers: 1250, status: 'Active', availability: 'Global'},
+    { name: 'Yuber Plus (Annual)', price: '$450.00/yr', activeSubscribers: 320, status: 'Active', availability: 'Global'},
+    { name: 'Business Pro', price: '$200.00/mo', activeSubscribers: 45, status: 'Active', availability: 'US, UK'},
+    { name: 'Legacy Student Plan', price: '$25.00/mo', activeSubscribers: 0, status: 'Retired', availability: 'UK Only'},
+    { name: 'Paris Launch Offer', price: '€20.00/mo', activeSubscribers: 0, status: 'Test-only', availability: 'FR Only'},
 ]
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-100 text-green-800',
   Retired: 'bg-gray-100 text-gray-800',
+  'Test-only': 'bg-amber-100 text-amber-800'
 };
 
 
@@ -70,14 +73,28 @@ export default function PromotionsPage() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline" className="w-full sm:w-auto">
-                    Status: All <ChevronDown className="ml-2 h-4 w-4" />
+                    Status <ChevronDown className="ml-2 h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>All</DropdownMenuItem>
-                  <DropdownMenuItem>Active</DropdownMenuItem>
-                  <DropdownMenuItem>Retired</DropdownMenuItem>
-                  <DropdownMenuItem>Test-only</DropdownMenuItem>
+                  <DropdownMenuCheckboxItem checked>All</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Active</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Retired</DropdownMenuCheckboxItem>
+                  <DropdownMenuCheckboxItem>Test-only</DropdownMenuCheckboxItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+               <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="w-full sm:w-auto">
+                    Availability <ChevronDown className="ml-2 h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuCheckboxItem checked>All</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>Global</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>US</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>UK</DropdownMenuCheckboxItem>
+                    <DropdownMenuCheckboxItem>FR</DropdownMenuCheckboxItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -91,6 +108,7 @@ export default function PromotionsPage() {
                 <TableHead>Price</TableHead>
                 <TableHead>Active Subscribers</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Availability</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -104,6 +122,7 @@ export default function PromotionsPage() {
                       {plan.status}
                     </Badge>
                   </TableCell>
+                  <TableCell>{plan.availability}</TableCell>
                 </TableRow>
               ))}
             </TableBody>

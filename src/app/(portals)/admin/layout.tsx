@@ -63,7 +63,7 @@ const menuItems = [
   { href: '/admin/financials', label: 'Financials', icon: CreditCard },
   { href: '/admin/payouts', label: 'Payouts', icon: Percent },
   { href: '/admin/marketing', label: 'Marketing', icon: Send },
-  { href: '/admin/promotions', label: 'Promotions', icon: Tags },
+  { href: '/admin/promotions', label: 'Subscriptions', icon: Tags },
   { href: '/admin/tenants', label: 'Tenants', icon: LayoutGrid },
   { href: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
   { href: '/admin/intelligence', label: 'Intelligence', icon: BrainCircuit },
