@@ -6,7 +6,7 @@ export default function FaqPage() {
   return (
     <div className="flex flex-col min-h-screen">
       <PublicHeader />
-      <main className="flex-grow container mx-auto px-4 py-8 md:py-16">
+      <main className="flex-grow container mx-auto px-4 py-12 sm:py-16">
         <FaqChatbot />
       </main>
       <PublicFooter />

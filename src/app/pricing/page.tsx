@@ -37,7 +37,7 @@ export default function PricingPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
-            <main className="flex-grow container mx-auto px-4 py-16">
+            <main className="flex-grow container mx-auto px-4 py-12 sm:py-16 md:py-24">
                 <div className="text-center max-w-3xl mx-auto">
                     <h1 className="text-4xl md:text-5xl font-bold font-headline">Simple, transparent pricing</h1>
                     <p className="mt-4 text-lg text-muted-foreground">Choose a plan that works for you. No hidden fees, ever.</p>

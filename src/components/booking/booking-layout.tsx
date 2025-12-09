@@ -30,7 +30,7 @@ export function BookingLayout({ children, stepTitle, stepDescription, nextHref, 
                             {children}
                         </CardContent>
                         {!hideFooter && (
-                             <CardFooter className="flex justify-between border-t pt-6">
+                             <CardFooter className="flex justify-between border-t px-6 py-4">
                                 <Button variant="outline" asChild>
                                     <Link href={backHref}>Back</Link>
                                 </Button>

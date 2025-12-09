@@ -74,7 +74,7 @@ export default function BusinessPortalLayout({
             <div className="flex-1" />
             <UserNav />
         </header>
-        <main className="flex-1 p-4 sm:px-6 sm:py-0">
+        <main className="flex-1 p-4 sm:p-6 lg:p-8">
           {children}
         </main>
       </SidebarInset>

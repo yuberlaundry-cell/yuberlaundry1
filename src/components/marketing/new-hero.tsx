@@ -16,7 +16,7 @@ export function NewHero() {
   };
 
   return (
-    <section className="container mx-auto px-4 py-16 md:py-24">
+    <section className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="relative">
           <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tighter !leading-tight">
