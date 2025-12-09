@@ -70,7 +70,6 @@ const menuItems = [
   { href: '/admin/integrations', label: 'Integrations & API', icon: Key },
   { href: '/admin/staff', label: 'Staff & Roles', icon: Users },
   { href: '/admin/audits', label: 'Audit Logs', icon: ClipboardList },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
   { href: '/admin/support', label: 'Support Center', icon: HelpCircle },
   { href: '/admin/automation', label: 'Automation', icon: Combine },
   { href: '/admin/monitoring', label: 'System Monitoring', icon: HeartPulse },
@@ -78,6 +77,7 @@ const menuItems = [
   { href: '/admin/tasks', label: 'Task Schedules', icon: Clock },
   { href: '/admin/logs', label: 'Logs', icon: BookCopy },
   { href: '/admin/dev-tools', label: 'Dev Tools', icon: Code },
+  { href: '/admin/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function SuperadminLayout({

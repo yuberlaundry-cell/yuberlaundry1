@@ -24,6 +24,7 @@ const pickupSteps = [
     { id: 'navigate', label: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Pickup' },
     { id: 'scan', label: 'Scan Bag QR Code' },
+    { id: 'photo', label: 'Take Photo' },
     { id: 'confirm', label: 'Confirm Items Collected' },
 ]
 
@@ -119,7 +120,29 @@ export default function JobDetailsPage() {
                                                 </DialogContent>
                                             </Dialog>
                                         )}
-                                         {index === currentStep && step.id !== 'scan' && (
+                                        {index === currentStep && step.id === 'photo' && (
+                                            <Dialog>
+                                                <DialogTrigger asChild>
+                                                     <Button className="mt-2 w-full" onClick={handleNextStep}>
+                                                        <Camera className="mr-2" /> Take Photo
+                                                    </Button>
+                                                </DialogTrigger>
+                                                <DialogContent>
+                                                    <DialogHeader>
+                                                        <DialogTitle>Capture Photo</DialogTitle>
+                                                        <DialogDescription>
+                                                           Take a photo of the items at the pickup location.
+                                                        </DialogDescription>
+                                                    </DialogHeader>
+                                                     <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
+                                                        <p className="text-white z-10">Camera Preview</p>
+                                                        <Camera className="h-24 w-24 text-gray-600 absolute" />
+                                                    </div>
+                                                    <Button onClick={() => alert('Photo captured (mock)')}>Capture</Button>
+                                                </DialogContent>
+                                            </Dialog>
+                                        )}
+                                         {index === currentStep && !['scan', 'photo'].includes(step.id) && (
                                             <Button className="mt-2 w-full" onClick={handleNextStep}>{step.label}</Button>
                                         )}
                                         

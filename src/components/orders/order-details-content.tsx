@@ -11,6 +11,7 @@ import { DriverTrackingCard } from "./driver-tracking-card";
 import { OrderSummaryCard } from "./order-summary-card";
 import { SupportCard } from "./support-card";
 import { ReviewPrompt } from "./review-prompt";
+import { OrderPhotosCard } from "./order-photos-card";
 
 const statusColors = {
     'upcoming': 'bg-blue-100 text-blue-800',
@@ -44,6 +45,7 @@ export function OrderDetailsContent({ order }: { order: Order }) {
                 <div className="lg:col-span-2 space-y-8">
                     {order.statusCategory === 'completed' && <ReviewPrompt />}
                     <OrderStatusTimeline timeline={order.timeline} />
+                    <OrderPhotosCard />
                     {order.driver && (
                         <DriverTrackingCard driver={order.driver} status={order.status} />
                     )}
