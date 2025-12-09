@@ -10,6 +10,8 @@ import {
   SidebarMenuButton,
   SidebarProvider,
   SidebarTrigger,
+  SidebarGroup,
+  SidebarGroupLabel,
 } from '@/components/ui/sidebar';
 import { UserNav } from '@/components/layout/user-nav';
 import {
@@ -47,38 +49,75 @@ import {
   Leaf,
   DollarSign,
   Send,
+  ShieldCheck,
+  Target,
+  BarChart,
+  UserCheck,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-const menuItems = [
-  { href: '/admin', label: 'Dashboard', icon: Gauge },
-  { href: '/admin/customers', label: 'Customers', icon: Contact },
-  { href: '/admin/drivers', label: 'Drivers', icon: Truck },
-  { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
-  { href: '/admin/warehouses', label: 'Warehouses', icon: Warehouse },
-  { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
-  { href: '/admin/financials', label: 'Financials', icon: CreditCard },
-  { href: '/admin/payouts', label: 'Payouts', icon: Percent },
-  { href: '/admin/marketing', label: 'Marketing', icon: Send },
-  { href: '/admin/promotions', label: 'Subscriptions', icon: Tags },
-  { href: '/admin/tenants', label: 'Tenants', icon: LayoutGrid },
-  { href: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
-  { href: '/admin/intelligence', label: 'Intelligence', icon: BrainCircuit },
-  { href: '/admin/integrations', label: 'Integrations & API', icon: Key },
-  { href: '/admin/staff', label: 'Staff & Roles', icon: Users },
-  { href: '/admin/audits', label: 'Audit Logs', icon: ClipboardList },
-  { href: '/admin/support', label: 'Support Center', icon: HelpCircle },
-  { href: '/admin/automation', label: 'Automation', icon: Combine },
-  { href: '/admin/monitoring', label: 'System Monitoring', icon: HeartPulse },
-  { href: '/admin/api-status', label: 'API Status', icon: Server },
-  { href: '/admin/tasks', label: 'Task Schedules', icon: Clock },
-  { href: '/admin/logs', label: 'Logs', icon: BookCopy },
-  { href: '/admin/dev-tools', label: 'Dev Tools', icon: Code },
-  { href: '/admin/settings', label: 'Settings', icon: Settings },
+const menuConfig = [
+  {
+    group: 'Overview & Insights',
+    items: [
+      { href: '/admin', label: 'Global Dashboard', icon: Gauge },
+      { href: '/admin/intelligence', label: 'Intelligence', icon: BrainCircuit },
+      { href: '/admin/monitoring', label: 'System Monitoring', icon: HeartPulse },
+    ],
+  },
+  {
+    group: 'Operations',
+    items: [
+      { href: '/admin/orders', label: 'Orders', icon: ShoppingCart },
+      { href: '/admin/drivers', label: 'Drivers', icon: Truck },
+      { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
+      { href: '/admin/warehouses', label: 'Warehouses', icon: Warehouse },
+      { href: '/admin/tasks', label: 'Task Schedules', icon: Clock },
+    ],
+  },
+  {
+    group: 'Quality & Risk',
+    items: [
+      { href: '/admin/qc', label: 'Quality Control', icon: ShieldCheck },
+      { href: '/admin/audits', label: 'Audit Logs', icon: ClipboardList },
+      { href: '/admin/compliance', label: 'Compliance', icon: Target },
+    ]
+  },
+  {
+    group: 'Customers & Revenue',
+    items: [
+      { href: '/admin/customers', label: 'Customers', icon: Contact },
+      { href: '/admin/promotions', label: 'Subscriptions', icon: Tags },
+      { href: '/admin/marketing', label: 'Marketing', icon: Send },
+      { href: '/admin/financials', label: 'Financials', icon: CreditCard },
+      { href: '/admin/payouts', label: 'Payouts', icon: Percent },
+    ],
+  },
+  {
+    group: 'Platform',
+    items: [
+      { href: '/admin/automation', label: 'Automation', icon: Combine },
+      { href: '/admin/support', label: 'Support Center', icon: HelpCircle },
+      { href: '/admin/tenants', label: 'Tenants', icon: LayoutGrid },
+      { href: '/admin/feature-flags', label: 'Feature Flags', icon: Flag },
+      { href: '/admin/staff', label: 'Staff & Roles', icon: UserCheck },
+      { href: '/admin/settings', label: 'Global Settings', icon: Settings },
+    ],
+  },
+  {
+    group: 'Developer',
+    items: [
+      { href: '/admin/api-status', label: 'API Status', icon: Server },
+      { href: '/admin/integrations', label: 'Integrations', icon: Key },
+      { href: '/admin/logs', label: 'Logs', icon: BookCopy },
+      { href: '/admin/dev-tools', label: 'Dev Tools', icon: Code },
+    ],
+  },
 ];
+
 
 export default function SuperadminLayout({
   children,
@@ -115,22 +154,27 @@ export default function SuperadminLayout({
                 <Input placeholder="Global search..." className="w-full" />
             </div>
           <SidebarMenu>
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={item.label}
-                  isActive={
-                    pathname.startsWith(item.href) &&
-                    (item.href === '/admin' ? pathname === item.href : true)
-                  }
-                >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+            {menuConfig.map((group) => (
+              <SidebarGroup key={group.group}>
+                <SidebarGroupLabel>{group.group}</SidebarGroupLabel>
+                 {group.items.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={item.label}
+                      isActive={
+                        pathname.startsWith(item.href) &&
+                        (item.href === '/admin' ? pathname === item.href : true)
+                      }
+                    >
+                      <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarGroup>
             ))}
           </SidebarMenu>
         </SidebarContent>
