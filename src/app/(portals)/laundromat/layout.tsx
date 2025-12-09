@@ -21,6 +21,7 @@ import {
   Book,
   Settings,
   WashingMachine,
+  ClipboardCheck,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -34,6 +35,7 @@ const menuItems = [
   { href: '/laundromat/orders', label: 'Orders', icon: Package },
   { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
   { href: '/laundromat/processing', label: 'Processing', icon: LayoutGrid },
+  { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
   { href: '/laundromat/ready', label: 'Ready for Delivery', icon: Truck },
   { href: '/laundromat/resources', label: 'Resources', icon: Book },
   { href: '/laundromat/settings', label: 'Settings', icon: Settings },

@@ -9,8 +9,10 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Package, User, Clock } from 'lucide-react';
+import { ArrowLeft, Package, User, Clock, CheckSquare, Image as ImageIcon, MessageSquareWarning } from 'lucide-react';
 import Link from 'next/link';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
 
 const order = {
     id: '#YL12345',
@@ -29,6 +31,14 @@ const order = {
     ],
     notes: 'Customer requested hypoallergenic detergent.'
 }
+
+const qcChecklist = [
+    { id: 'check-stains', label: 'Stains addressed' },
+    { id: 'check-damage', label: 'No new damage' },
+    { id: 'check-folding', label: 'Folding meets standard' },
+    { id: 'check-packaging', label: 'Packaging is secure' },
+    { id: 'check-completeness', label: 'All items accounted for' },
+];
 
 export default function OrderProcessingDetailsPage() {
 
@@ -74,6 +84,41 @@ export default function OrderProcessingDetailsPage() {
                         </div>
                     ))}
                 </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                      <CheckSquare className="h-5 w-5 text-primary" />
+                      Quality Control Checklist
+                  </CardTitle>
+                  <CardDescription>
+                      Perform these checks before moving the order to the next stage.
+                  </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                  <div className="space-y-3">
+                      {qcChecklist.map(item => (
+                          <div key={item.id} className="flex items-center space-x-2">
+                              <Checkbox id={item.id} />
+                              <Label htmlFor={item.id} className="font-medium">
+                                  {item.label}
+                              </Label>
+                          </div>
+                      ))}
+                  </div>
+                  <Separator />
+                  <div className="space-y-3">
+                      <Button variant="outline" className="w-full sm:w-auto">
+                          <ImageIcon className="mr-2 h-4 w-4" />
+                          Upload QC Photo
+                      </Button>
+                       <Button variant="destructive" className="w-full sm:w-auto">
+                          <MessageSquareWarning className="mr-2 h-4 w-4" />
+                          Log Issue / Defect
+                      </Button>
+                  </div>
+              </CardContent>
             </Card>
 
             <Card>
