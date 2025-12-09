@@ -46,6 +46,7 @@ export function UserNav() {
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">{user.firstName} {user.lastName}</p>
+            {user.companyName && <p className="text-xs leading-none text-muted-foreground">{user.companyName}</p>}
             <p className="text-xs leading-none text-muted-foreground">
               {user.email}
             </p>
@@ -56,9 +57,16 @@ export function UserNav() {
           <DropdownMenuItem asChild>
             <Link href={dashboardPath}>Dashboard</Link>
           </DropdownMenuItem>
-          <DropdownMenuItem asChild>
-             <Link href="/app/account">Account Settings</Link>
-          </DropdownMenuItem>
+           { user.role === 'consumer' &&
+             <DropdownMenuItem asChild>
+                <Link href="/app/account">Account Settings</Link>
+             </DropdownMenuItem>
+           }
+           { (user.role === 'business_admin' || user.role === 'business_employee') &&
+             <DropdownMenuItem asChild>
+                <Link href="/business/settings">Settings</Link>
+             </DropdownMenuItem>
+           }
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>

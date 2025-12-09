@@ -2,46 +2,59 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { Home, ShoppingCart, Wallet, Tag, User, Menu } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingCart, BarChart, CreditCard, Settings, LogOut, Menu } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
-const menuItems = [
-  { href: '/app', label: 'Home', icon: Home },
-  { href: '/app/orders', label: 'Orders', icon: ShoppingCart },
-  { href: '/app/wallet', label: 'Wallet', icon: Wallet },
-  { href: '/app/promotions', label: 'Promotions', icon: Tag },
-  { href: '/app/account', label: 'Account', icon: User },
+const adminMenuItems = [
+  { href: '/business', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/business/employees', label: 'Employees', icon: Users },
+  { href: '/business/orders', label: 'Orders', icon: ShoppingCart },
+  { href: '/business/reports', label: 'Reports', icon: BarChart },
+  { href: '/business/billing', label: 'Billing', icon: CreditCard },
+  { href: '/business/settings', label: 'Settings', icon: Settings },
 ];
 
-export default function ConsumerPortalLayout({
+const employeeMenuItems = [
+  { href: '/business', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/business/orders', label: 'My Orders', icon: ShoppingCart },
+  { href: '/business/settings', label: 'Settings', icon: Settings },
+]
+
+export default function BusinessPortalLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const isAdmin = user?.role === 'business_admin';
+  const menuItems = isAdmin ? adminMenuItems : employeeMenuItems;
   
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="p-4">
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" asChild className="group-data-[collapsible=icon]:hidden">
+             <Button variant="ghost" size="icon" asChild className="group-data-[collapsible=icon]:hidden">
                 <Link href="/" className="mr-auto">
                     <WashingMachine className="h-7 w-7 text-primary" />
                 </Link>
             </Button>
-            <h1 className="font-headline text-lg font-semibold">Yuber Laundry</h1>
+            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                <h1 className="font-headline text-lg font-semibold -mb-1">{user?.companyName || 'Business Portal'}</h1>
+                <p className="text-xs text-muted-foreground">{isAdmin ? 'Admin' : 'Employee'}</p>
+            </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
             {menuItems.map(item => (
               <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton asChild tooltip={item.label} isActive={pathname.startsWith(item.href) && (item.href === '/app' ? pathname === item.href : true) }>
+                <SidebarMenuButton asChild tooltip={item.label} isActive={pathname.startsWith(item.href) && (item.href === '/business' ? pathname === item.href : true)}>
                   <Link href={item.href}>
                     <item.icon />
                     <span>{item.label}</span>

@@ -15,6 +15,7 @@ export interface User {
   email: string;
   avatarUrl: string;
   role: UserRole;
+  companyName?: string;
 }
 
 // Mock user data
@@ -31,9 +32,19 @@ export const mockUsers: Record<string, User> = {
     id: 'user-bizadmin-1',
     firstName: 'John',
     lastName: 'Smith',
-    email: 'john.smith@example.com',
+    email: 'john.smith@acmecorp.com',
     avatarUrl: 'https://picsum.photos/seed/user2/100/100',
     role: 'business_admin',
+    companyName: 'Acme Corp',
+  },
+  business_employee: {
+    id: 'user-bizemployee-1',
+    firstName: 'Emily',
+    lastName: 'Jones',
+    email: 'emily.jones@acmecorp.com',
+    avatarUrl: 'https://picsum.photos/seed/user6/100/100',
+    role: 'business_employee',
+    companyName: 'Acme Corp',
   },
   driver: {
     id: 'user-driver-1',

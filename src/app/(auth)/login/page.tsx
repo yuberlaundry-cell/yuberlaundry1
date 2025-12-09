@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { WashingMachine } from 'lucide-react';
 import Link from 'next/link';
 
-const roles: UserRole[] = ['consumer', 'business_admin', 'driver', 'laundromat_staff', 'superadmin'];
+const roles: UserRole[] = ['consumer', 'business_admin', 'business_employee', 'driver', 'laundromat_staff', 'superadmin'];
 
 export default function LoginPage() {
   const { login } = useAuth();
