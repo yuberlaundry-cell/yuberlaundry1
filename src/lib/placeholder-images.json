@@ -1,3 +1,52 @@
 {
-  "placeholderImages": []
+  "placeholderImages": [
+    {
+      "id": "hero",
+      "description": "A pile of freshly folded laundry on a clean surface.",
+      "imageUrl": "https://images.unsplash.com/photo-1765015981399-8d024b928fb2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmb2xkZWQlMjBsYXVuZHJ5fGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "folded laundry"
+    },
+    {
+      "id": "how-it-works-1",
+      "description": "A person scheduling a pickup on their smartphone.",
+      "imageUrl": "https://images.unsplash.com/photo-1598708521413-feaa4e69c01b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwaG9uZSUyMHNjaGVkdWxlfGVufDB8fHx8MTc2NTMwODk4NHww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "phone schedule"
+    },
+    {
+      "id": "how-it-works-2",
+      "description": "A delivery driver picking up a laundry bag from a doorstep.",
+      "imageUrl": "https://images.unsplash.com/photo-1684560207594-a68e6b2f6ff1?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxkZWxpdmVyeSUyMHBpY2t1cHxlbnwwfHx8fDE3NjUzMDg5ODR8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "delivery pickup"
+    },
+    {
+      "id": "how-it-works-3",
+      "description": "Clean, folded clothes being delivered back to a happy customer.",
+      "imageUrl": "https://images.unsplash.com/photo-1743614956028-d1001990ee38?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxjbGVhbiUyMGNsb3RoZXN8ZW58MHx8fHwxNzY1MzA4OTg0fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "clean clothes"
+    },
+    {
+      "id": "testimonial-1",
+      "description": "A smiling person's profile picture.",
+      "imageUrl": "https://images.unsplash.com/photo-1613145997970-db84a7975fbb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwyfHxwcm9maWxlJTIwcGVyc29ufGVufDB8fHx8MTc2NTIyMTkxNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "profile person"
+    },
+    {
+      "id": "testimonial-2",
+      "description": "Another smiling person's profile picture.",
+      "imageUrl": "https://images.unsplash.com/photo-1594227734402-815483a9e6c6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxwcm9maWxlJTIwd29tYW58ZW58MHx8fHwxNzY1Mjk3MzY5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "profile woman"
+    },
+    {
+      "id": "testimonial-3",
+      "description": "A third smiling person's profile picture.",
+      "imageUrl": "https://images.unsplash.com/photo-1701481063068-0103e348d844?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwxMHx8cHJvZmlsZSUyMG1hbnxlbnwwfHx8fDE3NjUyODU1NTh8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "profile man"
+    },
+    {
+      "id": "business-hero",
+      "description": "A modern office environment with employees working.",
+      "imageUrl": "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MjgxNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "modern office"
+    }
+  ]
 }
