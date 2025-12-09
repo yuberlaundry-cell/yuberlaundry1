@@ -44,7 +44,7 @@ export default function ConsumerDashboard() {
             </CardContent>
             <CardFooter>
                 <Button variant="outline" className="w-full" asChild>
-                    <Link href="#">
+                    <Link href="/app/orders/#YL12345">
                         Track Order
                     </Link>
                 </Button>
@@ -81,9 +81,11 @@ export default function ConsumerDashboard() {
                     </div>
                     <div className="flex items-center gap-4">
                         <p className="font-medium">$25.50</p>
-                        <Button variant="ghost" size="icon">
-                            <FileText className="h-4 w-4" />
-                            <span className="sr-only">View Receipt</span>
+                        <Button variant="ghost" size="icon" asChild>
+                            <Link href="/app/orders/#YL12344">
+                                <FileText className="h-4 w-4" />
+                                <span className="sr-only">View Details</span>
+                            </Link>
                         </Button>
                     </div>
                 </div>
@@ -91,7 +93,7 @@ export default function ConsumerDashboard() {
             <div className="text-center py-8 text-muted-foreground">
                 <p>You have no other recent orders.</p>
                 <Button variant="link" asChild>
-                    <Link href="#">View all orders</Link>
+                    <Link href="/app/orders">View all orders</Link>
                 </Button>
             </div>
         </CardContent>
