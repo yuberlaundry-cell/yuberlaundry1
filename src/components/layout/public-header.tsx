@@ -1,7 +1,7 @@
 "use client";
 
 import Link from 'next/link';
-import { WashingMachine, Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Apple, Play } from 'lucide-react';
+import { WashingMachine, Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Apple, Play, Building, Briefcase, FileText, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -21,8 +21,6 @@ import React from 'react';
 import { Badge } from '../ui/badge';
 
 const navLinks = [
-  { href: '/for-business', label: 'Business' },
-  { href: '/how-it-works', label: 'How it works' },
   { href: '/locations', label: 'Locations' },
 ];
 
@@ -47,6 +45,40 @@ const personalMegaMenuItems = {
     { icon: Star, title: "Reviews", href: "#" },
   ]
 };
+
+const businessMegaMenuItems = {
+    "Solutions": [
+      { icon: Building, title: "For Hotels", href: "/for-business" },
+      { icon: Briefcase, title: "For Corporates", href: "/for-business" },
+      { icon: Building, title: "For Restaurants", href: "/for-business" },
+      { icon: Building, title: "For Gyms & Salons", href: "/for-business" },
+    ],
+    "Platform Features": [
+      { icon: FileText, title: "Centralized Billing", href: "/for-business" },
+      { icon: FileText, title: "Usage Reports", href: "/for-business" },
+      { icon: FileText, title: "Employee Allowances", href: "/for-business" },
+      { icon: FileText, title: "Dedicated Portal", href: "/for-business" },
+    ],
+    "Resources": [
+      { icon: Bot, title: "Request a Demo", href: "/for-business#contact" },
+      { icon: Mail, title: "Contact Sales", href: "/for-business#contact" },
+      { icon: Star, title: "Case Studies", href: "#" },
+    ]
+};
+
+const howItWorksMenuItems = {
+    "The Process": [
+      { icon: Rocket, title: "Schedule Pickup", description: "Book a pickup in seconds using our app.", href: "#" },
+      { icon: Shirt, title: "Professional Cleaning", description: "Our expert partners ensure your items are perfectly cleaned.", href: "#" },
+      { icon: Bike, title: "Contactless Delivery", description: "Get fresh, folded laundry delivered to your door.", href: "#" },
+    ],
+    "Our Services": [
+      { icon: Shirt, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/pricing" },
+      { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/pricing" },
+      { icon: Sparkles, title: "Yuber Plus", description: "Subscription for savings and convenience.", href: "/pricing", popular: true },
+    ]
+};
+
 
 export function PublicHeader() {
   const { user, loading } = useAuth();
@@ -91,6 +123,52 @@ export function PublicHeader() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
+               <NavigationMenuItem>
+                <NavigationMenuTrigger>For Business</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid w-[600px] lg:w-[700px] grid-cols-3 gap-6 p-6">
+                    {Object.entries(businessMegaMenuItems).map(([title, items]) => (
+                       <div key={title}>
+                          <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
+                          <ul className="space-y-3">
+                            {items.map(item => (
+                              <li key={item.title}>
+                                <NavigationMenuLink asChild>
+                                  <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
+                                      <item.icon className="h-4 w-4 text-muted-foreground" />
+                                      <span>{item.title}</span>
+                                      {item.popular && <Badge variant="secondary">POPULAR</Badge>}
+                                  </Link>
+                                </NavigationMenuLink>
+                              </li>
+                            ))}
+                          </ul>
+                       </div>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>How It Works</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid w-[400px] lg:w-[500px] grid-cols-2 gap-6 p-6">
+                     {Object.entries(howItWorksMenuItems).map(([title, items]) => (
+                       <div key={title}>
+                          <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
+                          <ul className="space-y-1">
+                            {items.map(item => (
+                              <ListItem key={item.title} title={item.title} href={item.href}>
+                                  {item.description}
+                                </ListItem>
+                            ))}
+                          </ul>
+                       </div>
+                    ))}
+                  </div>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+
               {navLinks.map((link) => (
                 <NavigationMenuItem key={link.href}>
                     <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), pathname === link.href ? "text-foreground" : "text-foreground/60")}>
@@ -117,6 +195,8 @@ export function PublicHeader() {
                 <nav className="flex flex-col space-y-4">
                   {/* TODO: Add mobile mega menu */}
                     <Link href="#" className='font-medium'>Personal</Link>
+                    <Link href="/for-business" className='font-medium'>Business</Link>
+                    <Link href="#" className='font-medium'>How it works</Link>
                     {navLinks.map((link) => (
                       <Link
                           key={link.href}
