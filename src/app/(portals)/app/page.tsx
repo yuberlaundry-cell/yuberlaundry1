@@ -33,7 +33,7 @@ export default function ConsumerDashboard() {
             <CardHeader>
                 <CardTitle>Active Order</CardTitle>
                 <CardDescription>Your clothes are in good hands.</CardDescription>
-            </Header>
+            </CardHeader>
             <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                     <p className="font-medium">Status: Washing</p>
@@ -55,7 +55,7 @@ export default function ConsumerDashboard() {
             <CardHeader>
                 <CardTitle>Wallet Balance</CardTitle>
                 <CardDescription>Your available credits.</CardDescription>
-            </Header>
+            </CardHeader>
             <CardContent>
                 <p className="text-4xl font-bold">$15.50</p>
                 <p className="text-sm text-muted-foreground">Credits will be applied automatically.</p>
