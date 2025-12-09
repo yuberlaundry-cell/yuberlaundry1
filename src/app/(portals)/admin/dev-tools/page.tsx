@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { GitBranch, Server, Terminal, Vercel, Webhook } from 'lucide-react';
+import { GitBranch, Server, Terminal, Rocket, Webhook } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function DevToolsPage() {
@@ -56,7 +56,7 @@ export default function DevToolsPage() {
             <CardContent className="space-y-4">
                 <div className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-2">
-                        <Vercel className="h-5 w-5" />
+                        <Rocket className="h-5 w-5" />
                         <div>
                             <p className="font-semibold">Current Production Release</p>
                             <p className="text-sm text-muted-foreground">v2.1.3 - Deployed 4 hours ago</p>
