@@ -21,7 +21,7 @@ export default function ConsumerDashboard() {
             <CardContent className="flex-grow" />
             <CardFooter>
                  <Button className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90" asChild>
-                    <Link href="#">
+                    <Link href="/app/book/address">
                         New Order
                         <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -33,7 +33,7 @@ export default function ConsumerDashboard() {
             <CardHeader>
                 <CardTitle>Active Order</CardTitle>
                 <CardDescription>Your clothes are in good hands.</CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent className="space-y-4">
                 <div className="flex items-center justify-between">
                     <p className="font-medium">Status: Washing</p>
@@ -55,7 +55,7 @@ export default function ConsumerDashboard() {
             <CardHeader>
                 <CardTitle>Wallet Balance</CardTitle>
                 <CardDescription>Your available credits.</CardDescription>
-            </CardHeader>
+            </Header>
             <CardContent>
                 <p className="text-4xl font-bold">$15.50</p>
                 <p className="text-sm text-muted-foreground">Credits will be applied automatically.</p>
