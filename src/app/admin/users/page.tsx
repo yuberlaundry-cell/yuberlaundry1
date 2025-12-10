@@ -132,48 +132,71 @@ export default function UsersPage() {
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead><span className="sr-only">Actions</span></TableHead>
+                <TableHead>
+                  <span className="sr-only">Actions</span>
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {users.map((user) => (
                 <TableRow key={user.id}>
-                    <TableCell>
-                        <div className="flex items-center gap-3">
-                            <Avatar>
-                                <AvatarImage src={user.avatarUrl} alt={user.firstName} data-ai-hint="profile person" />
-                                <AvatarFallback>{user.firstName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                            </Avatar>
-                            <div>
-                                <p className="font-medium">{user.firstName} {user.lastName}</p>
-                                <p className="text-sm text-muted-foreground">{user.email}</p>
-                            </div>
-                        </div>
-                    </TableCell>
-                   <TableCell>
-                        <Badge variant="secondary" className={roleColors[user.role]}>
-                            {toTitleCase(user.role)}
-                        </Badge>
-                   </TableCell>
-                   <TableCell>
-                        <Badge variant="secondary" className={statusColors['Active']}>Active</Badge>
-                   </TableCell>
-                   <TableCell>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                    <span className="sr-only">Toggle menu</span>
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
-                                <DropdownMenuItem onClick={() => handleImpersonate(user.role)}>Impersonate User</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive">Suspend User</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                   </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-3">
+                      <Avatar>
+                        <AvatarImage
+                          src={user.avatarUrl}
+                          alt={user.firstName}
+                          data-ai-hint="profile person"
+                        />
+                        <AvatarFallback>
+                          {user.firstName
+                            .split(' ')
+                            .map((n) => n[0])
+                            .join('')}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium">
+                          {user.firstName} {user.lastName}
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {user.email}
+                        </p>
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className={roleColors[user.role]}>
+                      {toTitleCase(user.role)}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className={statusColors['Active']}>
+                      Active
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button aria-haspopup="true" size="icon" variant="ghost">
+                          <MoreHorizontal className="h-4 w-4" />
+                          <span className="sr-only">Toggle menu</span>
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem>View Details</DropdownMenuItem>
+                        <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleImpersonate(user.role)}
+                        >
+                          Impersonate User
+                        </DropdownMenuItem>
+                        <DropdownMenuItem className="text-destructive">
+                          Suspend User
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
