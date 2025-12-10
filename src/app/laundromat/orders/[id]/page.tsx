@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -15,7 +16,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useParams } from 'next/navigation';
 
-const order = {
+const orderData = {
     id: '#YL12345',
     customer: 'Jane Doe',
     service: 'Wash & Fold',
@@ -44,6 +45,9 @@ const qcChecklist = [
 export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
+    // In a real app, you would fetch the order details based on the orderId
+    const order = orderData;
+
 
   return (
     <div className="space-y-8 pb-8">

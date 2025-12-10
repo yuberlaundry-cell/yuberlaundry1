@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -24,6 +25,7 @@ import {
 } from 'lucide-react';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { useRouter } from 'next/navigation';
 
 const mockOrders = [
     {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold', pickup: 'Today, 10am', sla: 'Due in 3h'},
@@ -44,6 +46,7 @@ const statusColors: { [key: string]: string } = {
 
 
 export default function LaundromatOrdersPage() {
+    const router = useRouter();
 
   return (
     <div className="space-y-8 pb-8">
@@ -113,7 +116,7 @@ export default function LaundromatOrdersPage() {
                   key={order.id}
                   className="cursor-pointer"
                   onClick={() =>
-                    (window.location.href = `/laundromat/orders/${order.id.replace("#","")}`)
+                    router.push(`/laundromat/orders/${order.id.replace("#","")}`)
                   }
                 >
                   <TableCell className="font-medium">{order.id}</TableCell>

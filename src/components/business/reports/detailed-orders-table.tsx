@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -9,6 +10,7 @@ import Link from "next/link";
 import { mockBusinessOrders } from "@/lib/mock-data";
 import { Download, Search } from "lucide-react";
 import { Input } from "../../ui/input";
+import { useRouter } from "next/navigation";
 
 const statusColors: { [key: string]: string } = {
     'Delivered': 'bg-green-100 text-green-800',
@@ -19,6 +21,7 @@ const statusColors: { [key: string]: string } = {
 
 export function DetailedOrdersTable() {
     const orders = mockBusinessOrders;
+    const router = useRouter();
 
     return (
         <Card>
@@ -56,7 +59,7 @@ export function DetailedOrdersTable() {
                     </TableHeader>
                     <TableBody>
                         {orders.map((order) => (
-                            <TableRow key={order.id} className="cursor-pointer" onClick={() => window.location.href=`/business/orders/${order.id.replace('#', '')}`}}>
+                            <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/business/orders/${order.id.replace('#', '')}`)}>
                                 <TableCell className="font-medium">{order.id}</TableCell>
                                 <TableCell>{order.employee.name}</TableCell>
                                 <TableCell>{order.service}</TableCell>

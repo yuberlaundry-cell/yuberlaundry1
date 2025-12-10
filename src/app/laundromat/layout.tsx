@@ -1,3 +1,4 @@
+
 'use client';
 
 import {
@@ -25,11 +26,12 @@ import {
   CreditCard,
 } from 'lucide-react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { UserNav } from '@/components/layout/user-nav';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import React from 'react';
 
 const menuItems = [
   { href: '/laundromat', label: 'Dashboard', icon: Home },
@@ -49,7 +51,26 @@ export default function LaundromatPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
+   const router = useRouter();
+
+  React.useEffect(() => {
+    if (!loading && !user) {
+      router.push('/auth/login');
+    }
+     if (!loading && user && user.role !== 'laundromat_staff') {
+        router.push('/');
+    }
+  }, [user, loading, router]);
+
+  if (loading || !user) {
+    return (
+        <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+            <WashingMachine className="h-12 w-12 text-primary animate-spin" />
+            <p className="mt-4 text-muted-foreground">Loading your portal...</p>
+        </div>
+    );
+  }
 
   return (
     <SidebarProvider>

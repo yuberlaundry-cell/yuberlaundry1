@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { useAuth } from "@/hooks/use-auth";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { useRouter } from "next/navigation";
 
 const statusColors: { [key: string]: string } = {
     'Delivered': 'bg-green-100 text-green-800',
@@ -23,6 +25,7 @@ const statusColors: { [key: string]: string } = {
 
 export default function BusinessOrdersPage() {
     const { user } = useAuth();
+    const router = useRouter();
     const isAdmin = user?.role === 'business_admin';
     const orders = isAdmin ? mockBusinessOrders : mockBusinessOrders.filter(o => o.employee.id === user?.id);
 
@@ -148,7 +151,7 @@ export default function BusinessOrdersPage() {
                         </TableHeader>
                         <TableBody>
                             {orders.map((order) => (
-                                <TableRow key={order.id} className="cursor-pointer" onClick={() => window.location.href=`/business/orders/${order.id.replace("#","")}`}}>
+                                <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/business/orders/${order.id.replace("#","")}`)}>
                                     <TableCell>
                                         <div className="font-medium">{order.id}</div>
                                         <div className="text-sm text-muted-foreground">{order.service}</div>

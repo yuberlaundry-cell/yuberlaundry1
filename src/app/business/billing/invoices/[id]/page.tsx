@@ -60,8 +60,8 @@ export default function InvoiceDetailsPage() {
                 </div>
             </div>
 
-            <Card className="p-8">
-                <CardContent>
+            <Card className="p-6 sm:p-8">
+                <CardContent className="p-0">
                     <div className="grid md:grid-cols-2 gap-8 mb-8">
                         <div>
                             <h3 className="font-bold text-lg font-headline">Yuber Laundry</h3>

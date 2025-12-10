@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
+import { useRouter } from "next/navigation";
 
 const statusColors: { [key: string]: string } = {
     Paid: 'bg-green-100 text-green-800',
@@ -20,6 +21,7 @@ const statusColors: { [key: string]: string } = {
 };
 
 export default function InvoicesListPage() {
+    const router = useRouter();
     return (
         <div className="space-y-8 pb-8">
             <div>
@@ -82,7 +84,7 @@ export default function InvoicesListPage() {
                         </TableHeader>
                         <TableBody>
                             {mockInvoices.map((invoice) => (
-                                <TableRow key={invoice.id} className="cursor-pointer" onClick={() => window.location.href=`/business/billing/invoices/${invoice.id}`}>
+                                <TableRow key={invoice.id} className="cursor-pointer" onClick={() => router.push(`/business/billing/invoices/${invoice.id}`)}>
                                     <TableCell className="font-medium">{invoice.id}</TableCell>
                                     <TableCell>{invoice.date}</TableCell>
                                     <TableCell>{invoice.dueDate}</TableCell>

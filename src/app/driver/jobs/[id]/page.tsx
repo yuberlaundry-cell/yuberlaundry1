@@ -1,3 +1,4 @@
+
 'use client';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -10,13 +11,13 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useParams } from "next/navigation";
 
 
-const job = { 
-    id: 'PU-123', 
-    type: 'Pickup', 
+const jobData = {
+    id: 'PU-123',
+    type: 'Pickup',
     customer: 'Jane Doe',
     phone: '+44 7123 456789',
-    address: '123 Main St, London, SW1A 0AA', 
-    time: '12:00 - 14:00', 
+    address: '123 Main St, London, SW1A 0AA',
+    time: '12:00 - 14:00',
     status: 'Assigned',
     notes: 'Gate code is #1234. Beware of the small dog.'
 };
@@ -33,6 +34,7 @@ export default function JobDetailsPage() {
     const [currentStep, setCurrentStep] = useState(0);
     const params = useParams();
     const jobId = params.id as string;
+    const job = jobData;
 
     const handleNextStep = () => {
         if (currentStep < pickupSteps.length -1) {
