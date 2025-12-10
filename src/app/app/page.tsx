@@ -1,4 +1,6 @@
 
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { ArrowRight, FileText, ShoppingCart, Tag, Wallet } from "lucide-react";
@@ -7,6 +9,7 @@ import { Progress } from "@/components/ui/progress";
 import { mockOrders } from "@/lib/mock-data";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
+import { useRouter } from "next/navigation";
 
 const statusColors: { [key: string]: string } = {
     'upcoming': 'bg-blue-100 text-blue-800',
@@ -17,6 +20,11 @@ const statusColors: { [key: string]: string } = {
 
 export default function ConsumerDashboard() {
   const recentOrders = mockOrders.filter(o => o.statusCategory === 'completed' || o.statusCategory === 'in-progress').slice(0, 3);
+  const router = useRouter();
+
+  const handleRowClick = (orderId: string) => {
+    router.push(`/app/orders/${orderId.replace('#','')}`);
+  };
 
   return (
     <div className="space-y-8 pb-8">
@@ -101,7 +109,7 @@ export default function ConsumerDashboard() {
                 </TableHeader>
                 <TableBody>
                     {recentOrders.map(order => (
-                        <TableRow key={order.id} className="cursor-pointer" onClick={() => window.location.href = `/app/orders/${order.id.replace('#','')}`}>
+                        <TableRow key={order.id} className="cursor-pointer" onClick={() => handleRowClick(order.id)}>
                              <TableCell className="font-medium">{order.id}</TableCell>
                             <TableCell>
                                 <Badge variant="secondary" className={statusColors[order.statusCategory]}>
