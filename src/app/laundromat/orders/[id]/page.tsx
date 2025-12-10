@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Package, User, Clock, CheckSquare, Image as ImageIcon, MessageSquareWarning } from 'lucide-react';
+import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning } from 'lucide-react';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';

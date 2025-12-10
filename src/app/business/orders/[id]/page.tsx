@@ -4,14 +4,14 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { OrderStatusTimeline } from "@/components/orders/order-status-timeline";
 import { Separator } from "@/components/ui/separator";
+import { useAuth } from "@/hooks/use-auth";
 import { mockBusinessOrders } from "@/lib/mock-data";
-import { ArrowLeft, Download, XCircle, FileText, ShoppingBag, VenetianMask, Shirt } from "lucide-react";
+import { ArrowLeft, FileText, Shirt, ShoppingBag, VenetianMask, XCircle } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useAuth } from "@/hooks/use-auth";
-import { OrderStatusTimeline } from "@/components/orders/order-status-timeline";
 
 const statusColors: { [key: string]: string } = {
     'Delivered': 'bg-green-100 text-green-800',

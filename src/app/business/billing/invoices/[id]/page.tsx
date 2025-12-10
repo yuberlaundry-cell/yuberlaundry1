@@ -1,17 +1,16 @@
 
 'use client';
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { useAuth } from "@/hooks/use-auth";
 import { mockInvoices } from "@/lib/mock-data";
-import { ArrowLeft, Download, Printer, CreditCard, Mail } from "lucide-react";
+import { ArrowLeft, CreditCard, Download, Mail, Printer } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { useAuth } from "@/hooks/use-auth";
 
 const statusColors: { [key: string]: string } = {
     Paid: 'bg-green-100 text-green-800',

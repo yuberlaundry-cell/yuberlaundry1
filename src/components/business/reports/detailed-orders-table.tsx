@@ -5,7 +5,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "../../ui/card";
 import { Button } from "../../ui/button";
-import { useAuth } from "@/hooks/use-auth";
 import Link from "next/link";
 import { mockBusinessOrders } from "@/lib/mock-data";
 import { Download, Search } from "lucide-react";

@@ -25,7 +25,6 @@ import { getRedirectPathForRole } from '@/lib/auth';
 
 const navLinks = [
   { href: '/pricing', label: 'Pricing' },
-  { href: '/locations', label: 'Locations' },
 ];
 
 const personalMegaMenuItems = {
@@ -296,10 +295,10 @@ export function PublicHeader() {
               ) : (
                 <div className='hidden md:flex items-center space-x-2'>
                   <Button variant="ghost" asChild>
-                    <Link href="/auth/login">Log in</Link>
+                    <Link href="/login">Log in</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/auth/register">Sign up</Link>
+                    <Link href="/register">Sign up</Link>
                   </Button>
                 </div>
               )}

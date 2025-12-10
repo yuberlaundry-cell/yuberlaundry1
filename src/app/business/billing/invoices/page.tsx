@@ -2,11 +2,11 @@
 'use client';
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { mockInvoices } from "@/lib/mock-data";
-import { Download, Search, ChevronDown, CalendarIcon } from "lucide-react";
+import { Download, Search, ChevronDown } from "lucide-react";
 import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu";
@@ -30,46 +30,44 @@ export default function InvoicesListPage() {
             </div>
 
             <Card>
-                <CardHeader>
-                     <div className="flex flex-col md:flex-row gap-4 justify-between">
-                         <div className="relative flex-1 md:grow-0">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input
-                            type="search"
-                            placeholder="Search by invoice number..."
-                            className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-                            />
-                        </div>
-                        <div className="flex items-center gap-2 flex-wrap">
-                             <DropdownMenu>
-                                <DropdownMenuTrigger asChild>
-                                    <Button variant="outline" className="w-full sm:w-auto">
-                                    Status: All <ChevronDown className="ml-2 h-4 w-4" />
-                                    </Button>
-                                </DropdownMenuTrigger>
-                                <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>All</DropdownMenuItem>
-                                    <DropdownMenuItem>Paid</DropdownMenuItem>
-                                    <DropdownMenuItem>Due</DropdownMenuItem>
-                                    <DropdownMenuItem>Overdue</DropdownMenuItem>
-                                </DropdownMenuContent>
-                            </DropdownMenu>
-                             <Popover>
-                                <PopoverTrigger asChild>
-                                <Button variant="outline" className="w-full sm:w-auto">
-                                    Date: All time <ChevronDown className="ml-2 h-4 w-4" />
-                                </Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0" align="start">
-                                    <Calendar mode="range" />
-                                </PopoverContent>
-                            </Popover>
-                             <Button variant="outline">
-                                <Download className="mr-2 h-4 w-4" /> Export
-                            </Button>
-                        </div>
+                <div className="flex flex-col md:flex-row gap-4 justify-between p-6">
+                     <div className="relative flex-1 md:grow-0">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                        type="search"
+                        placeholder="Search by invoice number..."
+                        className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
+                        />
                     </div>
-                </CardHeader>
+                    <div className="flex items-center gap-2 flex-wrap">
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full sm:w-auto">
+                                Status: All <ChevronDown className="ml-2 h-4 w-4" />
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem>All</DropdownMenuItem>
+                                <DropdownMenuItem>Paid</DropdownMenuItem>
+                                <DropdownMenuItem>Due</DropdownMenuItem>
+                                <DropdownMenuItem>Overdue</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                         <Popover>
+                            <PopoverTrigger asChild>
+                            <Button variant="outline" className="w-full sm:w-auto">
+                                Date: All time <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                            </PopoverTrigger>
+                            <PopoverContent className="w-auto p-0" align="start">
+                                <Calendar mode="range" />
+                            </PopoverContent>
+                        </Popover>
+                         <Button variant="outline">
+                            <Download className="mr-2 h-4 w-4" /> Export
+                        </Button>
+                    </div>
+                </div>
                 <CardContent>
                     <Table>
                         <TableHeader>

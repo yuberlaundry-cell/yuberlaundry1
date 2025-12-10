@@ -4,12 +4,12 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { mockBusinessEmployees } from "@/lib/mock-data";
-import { ArrowLeft, Edit, Trash2, ShieldOff, BarChart2, DollarSign, ShoppingCart, User } from "lucide-react";
+import { ArrowLeft, BarChart2, DollarSign, Edit, ShieldOff, ShoppingCart, Trash2, User } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
