@@ -17,11 +17,11 @@ const navigationConfig = [
   { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
   { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
   { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: false },
-  { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 const bottomNavConfig = [
     { href: '/app/account', label: 'Settings', icon: Settings },
+    { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 
