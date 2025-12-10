@@ -30,7 +30,7 @@ export default function AccountPage() {
 
     const handleLogout = () => {
         logout();
-        router.push('/');
+        window.location.href = '/';
     }
 
     return (
