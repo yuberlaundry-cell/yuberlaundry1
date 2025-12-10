@@ -15,7 +15,7 @@ const navigationConfig = [
   { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
   { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
   { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
-  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: true },
+  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: false },
   { href: '#', label: 'AI Schedule Helper', icon: Bot, disabled: true },
 ];
 
