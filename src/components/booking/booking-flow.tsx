@@ -10,6 +10,7 @@ import ServicesStep from "./steps/services-step";
 import InstructionsStep from "./steps/instructions-step";
 import ReviewStep from "./steps/review-step";
 import ConfirmationStep from "@/app/app/book/confirmation/page";
+import { ShieldQuestion } from "lucide-react";
 
 const steps = [
     { id: 1, title: "Address" },
@@ -70,7 +71,9 @@ export function BookingFlow() {
                     {currentStep < steps.length ? (
                          <Button onClick={goToNextStep}>Continue</Button>
                     ) : (
-                        <Button onClick={handlePlaceOrder}>Place Order</Button>
+                        <Button onClick={handlePlaceOrder}>
+                            <ShieldQuestion className="mr-2 h-4 w-4" /> Place Order with Paystack
+                        </Button>
                     )}
                 </div>
             </div>
