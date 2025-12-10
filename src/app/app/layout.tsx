@@ -1,33 +1,29 @@
 
 "use client";
 
-import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
+import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { Home, ShoppingCart, Wallet, Tag, User, Menu, ChevronRight } from 'lucide-react';
+import { Home, ShoppingCart, Wallet, Tag, User, Menu, ChevronRight, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, Power, LayoutDashboard } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { useAuth } from "@/hooks/use-auth";
 
 const navigationConfig = [
-  { href: '/app', label: 'Home', icon: Home, isStandalone: true },
-  {
-    title: 'My Activity',
-    links: [
-      { href: '/app/orders', label: 'Orders', icon: ShoppingCart },
-      { href: '/app/wallet', label: 'Wallet', icon: Wallet },
-      { href: '/app/promotions', label: 'Promotions', icon: Tag },
-    ]
-  },
-  {
-    title: 'Settings',
-    links: [
-      { href: '/app/account', label: 'Account', icon: User },
-    ]
-  }
+  { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
+  { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
+  { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
+  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: true },
+  { href: '#', label: 'AI Schedule Helper', icon: Bot, disabled: true },
 ];
+
+const bottomNavConfig = [
+    { href: '/app/account', label: 'Settings', icon: Settings },
+    { href: '/faq', label: 'Support', icon: LifeBuoy },
+];
+
 
 export default function ConsumerPortalLayout({
   children,
@@ -35,71 +31,79 @@ export default function ConsumerPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const { logout } = useAuth();
   
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="p-4">
-          <div className="flex items-center gap-2">
-            <Button variant="ghost" size="icon" asChild className="group-data-[collapsible=icon]:hidden">
-                <Link href="/" className="mr-auto">
-                    <WashingMachine className="h-7 w-7 text-primary" />
-                </Link>
-            </Button>
-             <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+             <Link href="/" className="mr-auto group-data-[collapsible=icon]:mr-0">
+                <WashingMachine className="h-7 w-7 text-primary" />
+             </Link>
+            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                  <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
-                <p className="text-xs text-muted-foreground">Personal</p>
             </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            {navigationConfig.map((section) => {
-              if (section.isStandalone) {
-                return (
-                   <SidebarMenuItem key={section.href}>
-                    <SidebarMenuButton asChild tooltip={section.label} isActive={pathname === section.href}>
-                      <Link href={section.href}>
-                        <section.icon />
-                        <span>{section.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                )
-              }
-              return (
-              <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href))} className="group/collapsible">
-                <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
-                    <span className="truncate group-data-[collapsible=icon]:hidden">{section.title}</span>
-                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden" />
-                </CollapsibleTrigger>
-                <CollapsibleContent>
-                    <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
-                        {section.links.map((item) => (
-                            <SidebarMenuItem key={item.href}>
-                                <SidebarMenuButton
-                                asChild
-                                tooltip={item.label}
-                                isActive={pathname.startsWith(item.href)}
-                                >
-                                <Link href={item.href}>
-                                    <item.icon />
-                                    <span>{item.label}</span>
-                                </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
-                        ))}
-                    </div>
-                </CollapsibleContent>
-              </Collapsible>
-            )})}
+             <SidebarMenuItem>
+                 <Button asChild className="w-full justify-start">
+                    <Link href="/app/book/address">New Order</Link>
+                </Button>
+            </SidebarMenuItem>
+            {navigationConfig.map((item) => (
+              <SidebarMenuItem key={item.href}>
+                <SidebarMenuButton
+                asChild
+                tooltip={item.label}
+                isActive={pathname.startsWith(item.href) && item.href !== '/app' || pathname === item.href}
+                variant="ghost"
+                className="justify-start disabled:opacity-50"
+                disabled={item.disabled}
+                >
+                <Link href={item.href}>
+                    <item.icon />
+                    <span>{item.label}</span>
+                </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+            ))}
           </SidebarMenu>
         </SidebarContent>
+        <SidebarFooter className="p-2">
+            {bottomNavConfig.map((item) => (
+                 <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                    asChild
+                    tooltip={item.label}
+                    isActive={pathname.startsWith(item.href)}
+                    variant="ghost"
+                     className="justify-start"
+                    >
+                    <Link href={item.href}>
+                        <item.icon />
+                        <span>{item.label}</span>
+                    </Link>
+                    </SidebarMenuButton>
+                </SidebarMenuItem>
+            ))}
+             <SidebarMenuItem>
+                <SidebarMenuButton variant="ghost" className="justify-start w-full text-muted-foreground" onClick={logout}>
+                    <Power />
+                    <span>Logout</span>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
             <div className="md:hidden">
               <SidebarTrigger />
+            </div>
+             <div className="md:hidden flex items-center gap-2">
+                 <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
             </div>
             <div className="flex-1" />
             <UserNav />

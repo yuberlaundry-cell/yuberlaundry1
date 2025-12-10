@@ -3,134 +3,112 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, FileText, ShoppingCart, Tag, Wallet } from "lucide-react";
+import { ArrowRight, ShoppingCart, RefreshCw, CalendarClock, Wallet, LifeBuoy } from "lucide-react";
 import Link from "next/link";
-import { Progress } from "@/components/ui/progress";
-import { mockOrders } from "@/lib/mock-data";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/navigation";
 
-const statusColors: { [key: string]: string } = {
-    'upcoming': 'bg-blue-100 text-blue-800',
-    'in-progress': 'bg-amber-100 text-amber-800',
-    'completed': 'bg-green-100 text-green-800',
-    'cancelled': 'bg-red-100 text-red-800',
-};
+const actionCards = [
+    {
+        title: "Book New Order",
+        description: "Place a one-time order",
+        icon: ShoppingCart,
+        href: "/app/book/address"
+    },
+    {
+        title: "Reorder Last",
+        description: "Repeat your last order",
+        icon: RefreshCw,
+        href: "#"
+    },
+    {
+        title: "Schedule Recurring",
+        description: "Set up a regular pickup",
+        icon: CalendarClock,
+        href: "#"
+    },
+    {
+        title: "Add Funds",
+        description: "Top up your wallet",
+        icon: Wallet,
+        href: "/app/wallet"
+    }
+];
 
 export default function ConsumerDashboard() {
-  const recentOrders = mockOrders.filter(o => o.statusCategory === 'completed' || o.statusCategory === 'in-progress').slice(0, 3);
   const router = useRouter();
-
-  const handleRowClick = (orderId: string) => {
-    router.push(`/app/orders/${orderId.replace('#','')}`);
-  };
 
   return (
     <div className="space-y-8 pb-8">
       <div>
-        <h1 className="text-3xl font-bold font-headline">Welcome back, Jane!</h1>
-        <p className="text-muted-foreground">Here's what's happening with your laundry.</p>
+        <h1 className="text-3xl md:text-4xl font-bold font-headline">Customer Dashboard</h1>
+        <p className="text-muted-foreground">Good morning, super! Here's a summary of your laundry activities.</p>
       </div>
       
-      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-        <Card className="flex flex-col bg-primary text-primary-foreground md:col-span-2 xl:col-span-1 xl:row-span-2">
-            <CardHeader>
-                <CardTitle>Schedule a Pickup</CardTitle>
-                <CardDescription className="text-primary-foreground/80">Ready for your next laundry day? We are.</CardDescription>
-            </CardHeader>
-            <CardContent className="flex-grow flex items-end">
-                 <Button className="w-full bg-primary-foreground text-primary hover:bg-primary-foreground/90" asChild>
-                    <Link href="/app/book/address">
-                        New Order
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                    </Link>
-                </Button>
-            </CardContent>
-        </Card>
-
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Active Order</CardTitle>
-                 <Link href="/app/orders/YL12345" className="text-sm font-medium text-primary hover:underline">
-                    #YL12345
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {actionCards.map(card => (
+            <Card key={card.title} className="hover:border-primary/80 hover:shadow-sm transition-all">
+                <Link href={card.href} className="flex flex-col h-full">
+                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
+                        <div className="bg-primary/10 p-3 rounded-lg text-primary">
+                            <card.icon className="h-6 w-6" />
+                        </div>
+                        <div>
+                            <CardTitle className="text-base">{card.title}</CardTitle>
+                            <CardDescription className="text-xs">{card.description}</CardDescription>
+                        </div>
+                    </CardHeader>
                 </Link>
+            </Card>
+        ))}
+      </div>
+
+       <div className="grid lg:grid-cols-3 gap-8">
+        <Card className="lg:col-span-2">
+            <CardHeader>
+                <CardTitle>Wallet</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4">
-                <div className="flex items-center justify-between">
-                    <p className="font-medium">Status: Washing</p>
+            <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                    <p className="text-sm text-muted-foreground">Balance</p>
+                    <p className="text-2xl font-bold">R0.00</p>
                 </div>
-                <Progress value={60} aria-label="60% complete" />
-                <p className="text-sm text-muted-foreground">Estimated delivery: Tomorrow, 4-6 PM</p>
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                    <p className="text-sm text-muted-foreground">Referral Credits</p>
+                    <p className="text-2xl font-bold">R0.00</p>
+                </div>
+                <div className="p-4 rounded-lg bg-muted/50 text-center">
+                    <p className="text-sm text-muted-foreground">Loyalty Points</p>
+                    <p className="text-2xl font-bold">0 pts</p>
+                </div>
             </CardContent>
-             <CardFooter>
-                 <Button variant="outline" className="w-full" asChild>
-                    <Link href="/app/orders/YL12345">
-                        Track Order
-                    </Link>
-                </Button>
-            </CardFooter>
+             <CardFooter className="flex-wrap gap-2 border-t pt-4">
+                <Button>Add Funds</Button>
+                <Button variant="outline">View History</Button>
+             </CardFooter>
         </Card>
 
         <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2">
-                <CardTitle className="text-sm font-medium">Wallet Balance</CardTitle>
-                <Wallet className="h-4 w-4 text-muted-foreground" />
+            <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Promotions</CardTitle>
+                <Button variant="link" asChild><Link href="#">View all offers</Link></Button>
             </CardHeader>
-            <CardContent>
-                <p className="text-4xl font-bold">$15.50</p>
-                <p className="text-sm text-muted-foreground">Credits apply automatically.</p>
+            <CardContent className="text-center text-muted-foreground py-8">
+                <p>No active promotions.</p>
             </CardContent>
-             <CardFooter>
-                <Button variant="secondary" className="w-full" asChild>
-                    <Link href="/app/wallet">Manage Wallet</Link>
-                </Button>
-            </CardFooter>
         </Card>
       </div>
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
-            <CardTitle>Recent Orders</CardTitle>
-             <Button variant="outline" size="sm" asChild>
-                <Link href="/app/orders">View all orders</Link>
+            <CardTitle>Recent orders</CardTitle>
+             <Button variant="link" asChild>
+                <Link href="/app/orders">View all</Link>
             </Button>
         </CardHeader>
         <CardContent>
-             <Table>
-                <TableHeader>
-                    <TableRow>
-                        <TableHead>Order ID</TableHead>
-                        <TableHead>Status</TableHead>
-                        <TableHead>Service</TableHead>
-                        <TableHead>Date</TableHead>
-                        <TableHead className="text-right">Total</TableHead>
-                    </TableRow>
-                </TableHeader>
-                <TableBody>
-                    {recentOrders.map(order => (
-                        <TableRow key={order.id} className="cursor-pointer" onClick={() => handleRowClick(order.id)}>
-                             <TableCell className="font-medium">{order.id}</TableCell>
-                            <TableCell>
-                                <Badge variant="secondary" className={statusColors[order.statusCategory]}>
-                                    {order.status}
-                                </Badge>
-                            </TableCell>
-                            <TableCell>{order.serviceSummary}</TableCell>
-                            <TableCell>{order.pickupTime.split(',')[1]}</TableCell>
-                            <TableCell className="text-right">{order.price}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-            {recentOrders.length === 0 && (
-                 <div className="text-center py-8 text-muted-foreground">
-                    <p>You have no recent orders.</p>
-                    <Button variant="link" asChild>
-                        <Link href="/app/book/address">Schedule your first order</Link>
-                    </Button>
-                </div>
-            )}
+            <div className="text-center py-8 text-muted-foreground">
+                <p>No recent orders found.</p>
+            </div>
         </CardContent>
       </Card>
     </div>
