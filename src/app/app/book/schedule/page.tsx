@@ -1,3 +1,4 @@
+
 'use client';
 
 import { BookingLayout } from "@/components/booking/booking-layout";
@@ -9,6 +10,8 @@ import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { format, addDays } from 'date-fns';
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
 
 const generateDates = () => {
     const dates = [];
@@ -19,15 +22,31 @@ const generateDates = () => {
     return dates;
 }
 
-const pickupTimes = ['09:00 - 11:00', '12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00'];
-const deliveryTimes = ['12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00', '20:00 - 22:00'];
+const allPickupTimes = ['08:00 - 10:00', '09:00 - 11:00', '10:00 - 12:00', '11:00 - 13:00', '12:00 - 14:00', '13:00 - 15:00', '14:00 - 16:00', '15:00 - 17:00', '16:00 - 18:00', '17:00 - 19:00', '18:00 - 20:00', '19:00 - 21:00'];
+const allDeliveryTimes = ['12:00 - 14:00', '13:00 - 15:00', '14:00 - 16:00', '15:00 - 17:00', '16:00 - 18:00', '17:00 - 19:00', '18:00 - 20:00', '19:00 - 21:00', '20:00 - 22:00'];
+
+const featuredPickupTimes = ['09:00 - 11:00', '12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00'];
+const featuredDeliveryTimes = ['12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00', '20:00 - 22:00'];
 
 export default function SchedulePage() {
     const dates = generateDates();
     const [selectedPickupDate, setSelectedPickupDate] = useState(dates[0]);
-    const [selectedPickupTime, setSelectedPickupTime] = useState(pickupTimes[1]);
+    const [selectedPickupTime, setSelectedPickupTime] = useState(featuredPickupTimes[1]);
     const [selectedDeliveryDate, setSelectedDeliveryDate] = useState(addDays(dates[0], 2));
-    const [selectedDeliveryTime, setSelectedDeliveryTime] = useState(deliveryTimes[0]);
+    const [selectedDeliveryTime, setSelectedDeliveryTime] = useState(featuredDeliveryTimes[0]);
+
+    const [isPickupModalOpen, setPickupModalOpen] = useState(false);
+    const [isDeliveryModalOpen, setDeliveryModalOpen] = useState(false);
+
+    const handlePickupTimeSelect = (time: string) => {
+        setSelectedPickupTime(time);
+        setPickupModalOpen(false);
+    }
+    
+    const handleDeliveryTimeSelect = (time: string) => {
+        setSelectedDeliveryTime(time);
+        setDeliveryModalOpen(false);
+    }
 
     return (
         <BookingLayout
@@ -65,14 +84,34 @@ export default function SchedulePage() {
                     <div>
                         <Label className="mb-2 block">Time</Label>
                         <RadioGroup value={selectedPickupTime} onValueChange={setSelectedPickupTime} className="grid grid-cols-2 gap-2">
-                            {pickupTimes.map(time => (
+                            {featuredPickupTimes.map(time => (
                                 <Label key={time} htmlFor={`pickup-${time}`} className={cn("block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50", { "border-primary bg-primary/5": selectedPickupTime === time })}>
                                      <RadioGroupItem value={time} id={`pickup-${time}`} className="sr-only"/>
                                     <span className="font-medium text-sm">{time}</span>
                                 </Label>
                             ))}
                         </RadioGroup>
-                         <Button variant="link" className="mt-2 w-full text-primary">See all available times</Button>
+                         <Dialog open={isPickupModalOpen} onOpenChange={setPickupModalOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="link" className="mt-2 w-full text-primary">See all available times</Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-h-[90vh] flex flex-col">
+                                <DialogHeader>
+                                    <DialogTitle>All Pickup Times</DialogTitle>
+                                    <DialogDescription>For {format(selectedPickupDate, 'EEEE, MMMM d')}</DialogDescription>
+                                </DialogHeader>
+                                <Separator/>
+                                <ScrollArea className="flex-grow pr-4 -mr-6">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {allPickupTimes.map(time => (
+                                            <Button key={time} variant={selectedPickupTime === time ? 'default' : 'outline'} onClick={() => handlePickupTimeSelect(time)}>
+                                                {time}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
+                            </DialogContent>
+                         </Dialog>
                     </div>
                 </div>
 
@@ -104,14 +143,34 @@ export default function SchedulePage() {
                     <div>
                         <Label className="mb-2 block">Time</Label>
                         <RadioGroup value={selectedDeliveryTime} onValueChange={setSelectedDeliveryTime} className="grid grid-cols-2 gap-2">
-                            {deliveryTimes.map(time => (
+                            {featuredDeliveryTimes.map(time => (
                                 <Label key={time} htmlFor={`delivery-${time}`} className={cn("block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50", { "border-primary bg-primary/5": selectedDeliveryTime === time })}>
                                      <RadioGroupItem value={time} id={`delivery-${time}`} className="sr-only"/>
                                     <span className="font-medium text-sm">{time}</span>
                                 </Label>
                             ))}
                         </RadioGroup>
-                         <Button variant="link" className="mt-2 w-full text-primary">See all available times</Button>
+                         <Dialog open={isDeliveryModalOpen} onOpenChange={setDeliveryModalOpen}>
+                            <DialogTrigger asChild>
+                                <Button variant="link" className="mt-2 w-full text-primary">See all available times</Button>
+                            </DialogTrigger>
+                            <DialogContent className="max-h-[90vh] flex flex-col">
+                                <DialogHeader>
+                                    <DialogTitle>All Delivery Times</DialogTitle>
+                                    <DialogDescription>For {format(selectedDeliveryDate, 'EEEE, MMMM d')}</DialogDescription>
+                                </DialogHeader>
+                                <Separator/>
+                                <ScrollArea className="flex-grow pr-4 -mr-6">
+                                    <div className="grid grid-cols-2 gap-2">
+                                        {allDeliveryTimes.map(time => (
+                                            <Button key={time} variant={selectedDeliveryTime === time ? 'default' : 'outline'} onClick={() => handleDeliveryTimeSelect(time)}>
+                                                {time}
+                                            </Button>
+                                        ))}
+                                    </div>
+                                </ScrollArea>
+                            </DialogContent>
+                         </Dialog>
                     </div>
                 </div>
             </div>
