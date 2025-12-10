@@ -26,6 +26,9 @@ import {
   Settings,
   Shield,
   HeartPulse,
+  CreditCard,
+  Percent,
+  Crown,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -50,6 +53,14 @@ const navigationConfig = [
       { href: '#', label: 'Orders Control', icon: ShoppingCart, disabled: true },
       { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
       { href: '#', label: 'Driver Fleet', icon: Truck, disabled: true },
+    ],
+  },
+  {
+    title: 'Revenue & Billing',
+    links: [
+      { href: '/admin/revenue/commissions', label: 'Commission Rules', icon: Percent },
+      { href: '/admin/revenue/subscriptions', label: 'Subscription Plans', icon: Crown },
+      { href: '#', label: 'B2B Billing', icon: CreditCard, disabled: true },
     ],
   },
   {
