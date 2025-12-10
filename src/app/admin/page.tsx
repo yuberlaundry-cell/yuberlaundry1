@@ -23,7 +23,6 @@ import {
   WashingMachine,
   Truck,
   DollarSign,
-  BarChart,
 } from 'lucide-react';
 import {
   ChartContainer,
@@ -84,17 +83,17 @@ const recentActivities = [
 
 export default function AdminDashboardPage() {
   return (
-    <div className="space-y-8 pb-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold font-headline">
+          <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">
             Admin Dashboard
           </h1>
           <p className="text-muted-foreground">
             Platform-wide overview and key metrics.
           </p>
         </div>
-         <Button asChild>
+         <Button asChild className="w-full sm:w-auto">
             <Link href="/admin/reports">View All Reports</Link>
         </Button>
       </div>
@@ -114,7 +113,7 @@ export default function AdminDashboardPage() {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Revenue Over Time</CardTitle>

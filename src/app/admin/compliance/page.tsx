@@ -23,14 +23,12 @@ import {
   ShieldAlert,
   AlertOctagon,
   CalendarClock,
-  BarChart,
   ChevronDown,
 } from 'lucide-react';
 import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-  Chart,
 } from '@/components/ui/chart';
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -87,10 +85,10 @@ const recentTasks = [
 
 export default function CompliancePage() {
   return (
-    <div className="space-y-8 pb-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold font-headline">
+          <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">
             Compliance & Governance
           </h1>
           <p className="text-muted-foreground">
@@ -100,8 +98,8 @@ export default function CompliancePage() {
          <div className="flex items-center gap-2">
             <Popover>
                 <PopoverTrigger asChild>
-                <Button variant="outline">
-                    Date: All Time <ChevronDown className="ml-2 h-4 w-4" />
+                <Button variant="outline" className="w-full sm:w-auto justify-start text-left font-normal">
+                    Date: All Time <ChevronDown className="ml-auto h-4 w-4 shrink-0 opacity-50" />
                 </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="end">
@@ -126,7 +124,7 @@ export default function CompliancePage() {
         ))}
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-8">
+      <div className="grid lg:grid-cols-3 gap-6">
         <Card className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Platform Risk Score Over Time</CardTitle>

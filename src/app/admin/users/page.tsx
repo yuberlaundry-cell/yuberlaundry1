@@ -69,60 +69,58 @@ export default function UsersPage() {
 
 
   return (
-    <div className="space-y-8 pb-8">
-       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+    <div className="space-y-6">
+       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Users</h1>
+                <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Users</h1>
                 <p className="text-muted-foreground">Manage all users across the platform.</p>
             </div>
             <div className="flex gap-2">
-                <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Invite User
+                <Button className="w-full sm:w-auto">
+                    <PlusCircle /> Invite User
                 </Button>
             </div>
         </div>
 
       <Card>
-         <CardHeader>
-            <div className="flex flex-col md:flex-row gap-4 justify-between">
-                    <div className="relative flex-1 md:grow-0">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                        type="search"
-                        placeholder="Search by name, email, or role..."
-                        className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
-                    />
-                </div>
-                <div className="flex items-center gap-2 flex-wrap">
-                        <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="w-full sm:w-auto">
-                            Role: All <ChevronDown className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem>All</DropdownMenuItem>
-                            <DropdownMenuItem>Consumer</DropdownMenuItem>
-                            <DropdownMenuItem>Business Admin</DropdownMenuItem>
-                            <DropdownMenuItem>Business Employee</DropdownMenuItem>
-                            <DropdownMenuItem>Driver</DropdownMenuItem>
-                            <DropdownMenuItem>Laundromat Staff</DropdownMenuItem>
-                             <DropdownMenuItem>Superadmin</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                     <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                            <Button variant="outline" className="w-full sm:w-auto">
-                            Status: All <ChevronDown className="ml-2 h-4 w-4" />
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                            <DropdownMenuItem>All</DropdownMenuItem>
-                            <DropdownMenuItem>Active</DropdownMenuItem>
-                            <DropdownMenuItem>Inactive</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
-                </div>
+         <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="relative flex-1 md:grow-0">
+            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input
+                type="search"
+                placeholder="Search by name, email, or role..."
+                className="w-full rounded-lg bg-background pl-8 md:w-[250px] lg:w-[350px]"
+            />
+            </div>
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full sm:w-auto">
+                    Role: All <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem>All</DropdownMenuItem>
+                    <DropdownMenuItem>Consumer</DropdownMenuItem>
+                    <DropdownMenuItem>Business Admin</DropdownMenuItem>
+                    <DropdownMenuItem>Business Employee</DropdownMenuItem>
+                    <DropdownMenuItem>Driver</DropdownMenuItem>
+                    <DropdownMenuItem>Laundromat Staff</DropdownMenuItem>
+                      <DropdownMenuItem>Superadmin</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                    <Button variant="outline" className="w-full sm:w-auto">
+                    Status: All <ChevronDown className="ml-2 h-4 w-4" />
+                    </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                    <DropdownMenuItem>All</DropdownMenuItem>
+                    <DropdownMenuItem>Active</DropdownMenuItem>
+                    <DropdownMenuItem>Inactive</DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
             </div>
         </CardHeader>
         <CardContent>

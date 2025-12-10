@@ -65,18 +65,18 @@ const plans = [
 
 export default function SubscriptionsPage() {
   return (
-    <div className="space-y-8 pb-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold font-headline">Subscription Plans</h1>
+          <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Subscription Plans</h1>
           <p className="text-muted-foreground">
             Manage consumer membership tiers and benefits.
           </p>
         </div>
          <Dialog>
             <DialogTrigger asChild>
-                <Button>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add New Plan
+                <Button className="w-full sm:w-auto">
+                    <PlusCircle /> Add New Plan
                 </Button>
             </DialogTrigger>
             <DialogContent>
@@ -111,7 +111,7 @@ export default function SubscriptionsPage() {
         </Dialog>
       </div>
       
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 items-start">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {plans.map((plan) => (
             <Card key={plan.name} className={!plan.active ? 'bg-muted/50' : ''}>
                 <CardHeader>

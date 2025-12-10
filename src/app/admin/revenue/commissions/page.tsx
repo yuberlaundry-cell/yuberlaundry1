@@ -48,10 +48,10 @@ const overrides = [
 
 export default function CommissionsPage() {
   return (
-    <div className="space-y-8 pb-8">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold font-headline">Commission Rules</h1>
+          <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Commission Rules</h1>
           <p className="text-muted-foreground">
             Manage commission structures for the entire platform.
           </p>
@@ -59,7 +59,7 @@ export default function CommissionsPage() {
       </div>
 
       <Tabs defaultValue="defaults">
-        <TabsList>
+        <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="defaults">Platform Defaults</TabsTrigger>
           <TabsTrigger value="overrides">Laundromat Overrides</TabsTrigger>
         </TabsList>
@@ -111,13 +111,13 @@ export default function CommissionsPage() {
         </TabsContent>
         <TabsContent value="overrides">
           <Card>
-            <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <CardHeader className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                <div>
                     <CardTitle>Laundromat-Specific Overrides</CardTitle>
                     <CardDescription>Custom commission rules for specific partners.</CardDescription>
                </div>
-               <div className="flex gap-2">
-                    <div className="relative flex-1 md:grow-0">
+               <div className="flex flex-col gap-2 sm:flex-row">
+                    <div className="relative flex-1">
                         <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                         <Input
                             type="search"
@@ -126,7 +126,7 @@ export default function CommissionsPage() {
                         />
                     </div>
                     <Button>
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add Override
+                        <PlusCircle /> Add Override
                     </Button>
                 </div>
             </CardHeader>

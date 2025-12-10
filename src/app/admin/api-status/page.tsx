@@ -16,7 +16,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import {
   CheckCircle,
@@ -111,16 +110,16 @@ const incidentLog = [
 
 export default function ApiStatusPage() {
   return (
-    <div className="space-y-8 pb-8">
-      <div className="flex items-center justify-between">
+    <div className="space-y-6">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-3xl font-bold font-headline">API Status</h1>
+          <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">API Status</h1>
           <p className="text-muted-foreground">
             Real-time monitoring of all critical system services.
           </p>
         </div>
-        <Button variant="outline">
-          <RefreshCw className="mr-2 h-4 w-4" /> Refresh Status
+        <Button variant="outline" className="w-full sm:w-auto">
+          <RefreshCw /> Refresh Status
         </Button>
       </div>
 
@@ -165,7 +164,7 @@ export default function ApiStatusPage() {
           </Card>
         ))}
       </div>
-        <div className="grid lg:grid-cols-2 gap-8">
+        <div className="grid lg:grid-cols-2 gap-6">
             <Card>
                 <CardHeader>
                     <CardTitle>Uptime</CardTitle>
