@@ -1,3 +1,6 @@
+
+'use client';
+
 import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
@@ -7,6 +10,7 @@ import { CheckCircle, Zap, Users, BarChart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 const benefits = [
     {
@@ -33,6 +37,16 @@ const benefits = [
 
 export default function ForBusinessPage() {
     const heroImage = PlaceHolderImages.find(p => p.id === 'business-hero');
+    const { toast } = useToast();
+
+    const handleDemoRequest = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Demo Requested",
+            description: "Our sales team will be in touch with you shortly.",
+        });
+    }
+
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
@@ -104,7 +118,7 @@ export default function ForBusinessPage() {
                                 <CardDescription>Let's talk about your laundry needs.</CardDescription>
                             </CardHeader>
                             <CardContent>
-                                <form className="space-y-4">
+                                <form className="space-y-4" onSubmit={handleDemoRequest}>
                                     <div className="space-y-2">
                                         <Label htmlFor="company-name">Company Name</Label>
                                         <Input id="company-name" placeholder="Your Company, Inc." />
@@ -117,7 +131,7 @@ export default function ForBusinessPage() {
                                         <Label htmlFor="team-size">Team Size</Label>
                                         <Input id="team-size" type="number" placeholder="e.g., 50" />
                                     </div>
-                                    <Button className="w-full">Submit</Button>
+                                    <Button type="submit" className="w-full">Submit</Button>
                                 </form>
                             </CardContent>
                         </Card>
