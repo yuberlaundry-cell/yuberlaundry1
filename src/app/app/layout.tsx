@@ -11,6 +11,8 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Input } from "@/components/ui/input";
 import React from "react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { BookingFlow } from "@/components/booking/booking-flow";
 
 const navigationConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
@@ -50,9 +52,14 @@ export default function ConsumerPortalLayout({
         <SidebarContent>
           <SidebarMenu>
              <SidebarMenuItem className="px-2">
-                 <Button asChild className="w-full justify-start">
-                    <Link href="/app/book/address">New Order</Link>
-                </Button>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button className="w-full justify-start">New Order</Button>
+                  </DialogTrigger>
+                  <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
+                      <BookingFlow />
+                  </DialogContent>
+                </Dialog>
             </SidebarMenuItem>
             {navigationConfig.map((item) => (
               <SidebarMenuItem key={item.href} className="px-2">
