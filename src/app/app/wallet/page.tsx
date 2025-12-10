@@ -28,22 +28,22 @@ const transactions = [
   {
     date: 'May 12, 2024',
     description: 'Credit from referral',
-    amount: '+$5.00',
+    amount: '+R5.00',
   },
   {
     date: 'May 10, 2024',
     description: 'Applied to Order #YL12344',
-    amount: '-$10.00',
+    amount: '-R10.00',
   },
   {
     date: 'May 1, 2024',
     description: 'Yuber Plus monthly credit',
-    amount: '+$5.00',
+    amount: '+R5.00',
   },
   {
     date: 'April 20, 2024',
     description: 'Refund for missing item',
-    amount: '+$15.50',
+    amount: '+R15.50',
   },
 ];
 
@@ -76,7 +76,7 @@ export default function WalletPage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-5xl font-bold">$15.50</p>
+            <p className="text-5xl font-bold">R15.50</p>
             <p className="text-sm text-muted-foreground mt-1">
               Available credits are automatically applied to your next order.
             </p>
@@ -97,8 +97,8 @@ export default function WalletPage() {
                 </DialogHeader>
                 <form className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="amount">Amount ($)</Label>
-                    <Input id="amount" type="number" placeholder="e.g., 20" />
+                    <Label htmlFor="amount">Amount (R)</Label>
+                    <Input id="amount" type="number" placeholder="e.g., 200" />
                   </div>
                    <div className="space-y-2">
                       <Label htmlFor="card-number">Card Number</Label>
@@ -115,7 +115,7 @@ export default function WalletPage() {
                       </div>
                   </div>
                   <Button type="submit" className="w-full">
-                    Add $20.00 to Wallet
+                    Add R200.00 to Wallet
                   </Button>
                 </form>
               </DialogContent>
@@ -129,7 +129,7 @@ export default function WalletPage() {
               Refer & Earn
             </CardTitle>
             <CardDescription>
-              Share your code with friends. They get $10 off, and you get $10
+              Share your code with friends. They get R100 off, and you get R100
               when they place their first order.
             </CardDescription>
           </CardHeader>
