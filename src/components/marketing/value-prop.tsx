@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-export function ValueProp() {
+export default function ValueProp() {
   return (
     <section className="py-12 sm:py-16 md:py-24 bg-card">
       <div className="container mx-auto px-4 text-center">
@@ -11,7 +11,7 @@ export function ValueProp() {
         </p>
         <div className="mt-8">
           <Button size="lg" variant="secondary" className="bg-foreground text-background hover:bg-foreground/80 font-semibold" asChild>
-            <Link href="/register">Schedule your pickup</Link>
+            <Link href="/auth/register">Schedule your pickup</Link>
           </Button>
         </div>
       </div>
