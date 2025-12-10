@@ -96,9 +96,32 @@ export default function IntakePage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button className="w-full">
-                <UserPlus className="mr-2" /> Create Walk-in Order
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button className="w-full">
+                    <UserPlus className="mr-2" /> Create Walk-in Order
+                  </Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Create Walk-in Order</DialogTitle>
+                    <DialogDescription>
+                      Enter customer and order details for an in-store drop-off.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <form className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="customer-name">Customer Name</Label>
+                        <Input id="customer-name" placeholder="John Doe" />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="customer-phone">Phone Number</Label>
+                        <Input id="customer-phone" type="tel" placeholder="+44 7123 456789" />
+                    </div>
+                    <Button className="w-full" type="submit">Create Order & Print Tag</Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
           <Card>
