@@ -6,7 +6,7 @@ import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mai
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTrigger } from '@/components/ui/sheet';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import {
@@ -192,6 +192,12 @@ export function PublicHeader() {
               </Button>
             </SheetTrigger>
             <SheetContent side="left" className='w-full'>
+                <SheetHeader>
+                    <SheetTitle className="sr-only">Main Menu</SheetTitle>
+                    <SheetDescription className="sr-only">
+                        Navigate through personal, business, and informational links.
+                    </SheetDescription>
+                </SheetHeader>
                 <Link href="/" className="flex items-center space-x-2 mb-6">
                     <span className="font-bold font-headline text-lg">Yuber Laundry</span>
                 </Link>
@@ -335,3 +341,5 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
+
+    
