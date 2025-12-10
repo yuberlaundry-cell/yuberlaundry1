@@ -24,7 +24,7 @@ export function PortalsLayout({
 
   useEffect(() => {
     if (!loading && !user && isPortalPage) {
-      router.push('/login');
+      router.push('/auth/login');
     }
   }, [user, loading, router, isPortalPage, pathname]);
 
