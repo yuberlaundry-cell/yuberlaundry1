@@ -8,10 +8,17 @@ import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { Building, Car, HelpCircle, LogOut, Mail, Newspaper, Bell } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
     const { user, logout } = useAuth();
+    const router = useRouter();
     const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`;
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
+    }
 
     return (
         <div className="space-y-8">
@@ -84,7 +91,7 @@ export default function ProfilePage() {
                     <Button variant="ghost" className="w-full justify-start"><HelpCircle className="mr-2"/> Help Center</Button>
                     <Button variant="ghost" className="w-full justify-start"><Newspaper className="mr-2"/> Terms of Service</Button>
                     <Separator/>
-                    <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive" onClick={logout}>
+                    <Button variant="ghost" className="w-full justify-start text-destructive hover:text-destructive" onClick={handleLogout}>
                         <LogOut className="mr-2"/> Log Out
                     </Button>
                 </CardContent>

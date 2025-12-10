@@ -12,10 +12,12 @@ import { CreditCard, Shield, Bell, HelpCircle, LogOut, ChevronRight, User } from
 import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 export default function AccountPage() {
     const { user, logout } = useAuth();
     const { toast } = useToast();
+    const router = useRouter();
     const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`;
 
     const handleSaveProfile = (e: React.FormEvent) => {
@@ -24,6 +26,11 @@ export default function AccountPage() {
             title: "Profile Saved",
             description: "Your information has been updated successfully.",
         });
+    }
+
+    const handleLogout = () => {
+        logout();
+        router.push('/');
     }
 
     return (
@@ -134,7 +141,7 @@ export default function AccountPage() {
                     </Link>
                 </CardContent>
                  <CardFooter className="pt-6">
-                     <Button variant="ghost" className="text-destructive hover:text-destructive -ml-4" onClick={logout}>
+                     <Button variant="ghost" className="text-destructive hover:text-destructive -ml-4" onClick={handleLogout}>
                          <LogOut className="mr-2"/>
                          Log Out
                     </Button>

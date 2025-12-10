@@ -2,7 +2,6 @@
 
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 import { User, UserRole, mockUsers } from '@/lib/auth';
-import { useRouter } from 'next/navigation';
 
 interface AuthContextType {
   user: User | null;
@@ -16,7 +15,6 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  const router = useRouter();
 
   React.useEffect(() => {
     try {
@@ -49,8 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     } catch (error) {
         console.error("Failed to remove user from localStorage", error);
     }
-    router.push('/');
-  }, [router]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout, loading }}>
