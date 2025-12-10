@@ -191,98 +191,110 @@ export function PublicHeader() {
                 <span className="sr-only">Toggle Menu</span>
               </Button>
             </SheetTrigger>
-            <SheetContent side="left" className='w-full'>
+            <SheetContent side="left" className='w-full flex flex-col'>
                 <SheetHeader>
                     <SheetTitle className="sr-only">Main Menu</SheetTitle>
                     <SheetDescription className="sr-only">
                         Navigate through personal, business, and informational links.
                     </SheetDescription>
                 </SheetHeader>
-                <Link href="/" className="flex items-center space-x-2 mb-6">
-                    <span className="font-bold font-headline text-lg">Yuber Laundry</span>
-                </Link>
-                <Accordion type="multiple" className="w-full">
-                  <AccordionItem value="personal">
-                    <AccordionTrigger className="font-semibold">Personal</AccordionTrigger>
-                    <AccordionContent>
-                      <ul className="space-y-4 pt-2">
-                        {Object.entries(personalMegaMenuItems).map(([title, items]) => (
-                          <div key={title}>
-                            <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
-                            <ul className="space-y-3">
-                              {items.map(item => (
-                                <li key={item.title}>
-                                  <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
-                                      <item.icon className="h-4 w-4 text-muted-foreground" />
-                                      <span>{item.title}</span>
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                <div className="flex-grow overflow-y-auto">
+                    <Link href="/" className="flex items-center space-x-2 mb-6">
+                        <span className="font-bold font-headline text-lg">Yuber Laundry</span>
+                    </Link>
+                    <Accordion type="multiple" className="w-full">
+                    <AccordionItem value="personal">
+                        <AccordionTrigger className="font-semibold">Personal</AccordionTrigger>
+                        <AccordionContent>
+                        <ul className="space-y-4 pt-2">
+                            {Object.entries(personalMegaMenuItems).map(([title, items]) => (
+                            <div key={title}>
+                                <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
+                                <ul className="space-y-3">
+                                {items.map(item => (
+                                    <li key={item.title}>
+                                    <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
+                                        <item.icon className="h-4 w-4 text-muted-foreground" />
+                                        <span>{item.title}</span>
+                                    </Link>
+                                    </li>
+                                ))}
+                                </ul>
+                            </div>
+                            ))}
+                        </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="business">
+                        <AccordionTrigger className="font-semibold">For Business</AccordionTrigger>
+                        <AccordionContent>
+                        <ul className="space-y-4 pt-2">
+                            {Object.entries(businessMegaMenuItems).map(([title, items]) => (
+                            <div key={title}>
+                                <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
+                                <ul className="space-y-3">
+                                {items.map(item => (
+                                    <li key={item.title}>
+                                    <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
+                                        <item.icon className="h-4 w-4 text-muted-foreground" />
+                                        <span>{item.title}</span>
+                                    </Link>
+                                    </li>
+                                ))}
+                                </ul>
+                            </div>
+                            ))}
+                        </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                    <AccordionItem value="how-it-works">
+                        <AccordionTrigger className="font-semibold">How It Works</AccordionTrigger>
+                        <AccordionContent>
+                        <ul className="space-y-4 pt-2">
+                            {Object.entries(howItWorksMenuItems).map(([title, items]) => (
+                            <div key={title}>
+                                <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
+                                <ul className="space-y-3">
+                                {items.map(item => (
+                                    <li key={item.title}>
+                                    <Link href={item.href} className="flex flex-col gap-1 text-sm font-medium hover:text-primary transition-colors">
+                                        <span className="font-semibold">{item.title}</span>
+                                        <span className="text-xs text-muted-foreground">{item.description}</span>
+                                    </Link>
+                                    </li>
+                                ))}
+                                </ul>
+                            </div>
+                            ))}
+                        </ul>
+                        </AccordionContent>
+                    </AccordionItem>
+                    </Accordion>
+                    <nav className="flex flex-col space-y-4 mt-4 border-t pt-4">
+                        {navLinks.map((link) => (
+                        <Link
+                            key={link.href}
+                            href={link.href}
+                            className={cn(
+                                "transition-colors hover:text-foreground/80 font-semibold",
+                                pathname === link.href ? "text-foreground" : "text-foreground/80"
+                            )}
+                        >
+                            {link.label}
+                        </Link>
                         ))}
-                      </ul>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="business">
-                    <AccordionTrigger className="font-semibold">For Business</AccordionTrigger>
-                    <AccordionContent>
-                       <ul className="space-y-4 pt-2">
-                        {Object.entries(businessMegaMenuItems).map(([title, items]) => (
-                          <div key={title}>
-                            <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
-                            <ul className="space-y-3">
-                              {items.map(item => (
-                                <li key={item.title}>
-                                  <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
-                                      <item.icon className="h-4 w-4 text-muted-foreground" />
-                                      <span>{item.title}</span>
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </ul>
-                    </AccordionContent>
-                  </AccordionItem>
-                  <AccordionItem value="how-it-works">
-                    <AccordionTrigger className="font-semibold">How It Works</AccordionTrigger>
-                    <AccordionContent>
-                       <ul className="space-y-4 pt-2">
-                        {Object.entries(howItWorksMenuItems).map(([title, items]) => (
-                          <div key={title}>
-                            <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
-                            <ul className="space-y-3">
-                              {items.map(item => (
-                                <li key={item.title}>
-                                  <Link href={item.href} className="flex flex-col gap-1 text-sm font-medium hover:text-primary transition-colors">
-                                      <span className="font-semibold">{item.title}</span>
-                                      <span className="text-xs text-muted-foreground">{item.description}</span>
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-                        ))}
-                      </ul>
-                    </AccordionContent>
-                  </AccordionItem>
-                </Accordion>
-                 <nav className="flex flex-col space-y-4 mt-4 border-t pt-4">
-                    {navLinks.map((link) => (
-                      <Link
-                          key={link.href}
-                          href={link.href}
-                          className={cn(
-                            "transition-colors hover:text-foreground/80 font-semibold",
-                             pathname === link.href ? "text-foreground" : "text-foreground/80"
-                          )}
-                      >
-                          {link.label}
-                      </Link>
-                    ))}
-                </nav>
+                    </nav>
+                </div>
+                 {!loading && !user && (
+                    <div className="mt-auto border-t pt-4 space-y-2">
+                        <Button className="w-full" asChild>
+                            <Link href="/auth/register">Sign up</Link>
+                        </Button>
+                        <Button className="w-full" variant="outline" asChild>
+                            <Link href="/auth/login">Log in</Link>
+                        </Button>
+                    </div>
+                )}
             </SheetContent>
           </Sheet>
         </div>
@@ -318,7 +330,7 @@ export function PublicHeader() {
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a">
+  React.ComponentPropsWithoutRef<a >
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -342,4 +354,5 @@ const ListItem = React.forwardRef<
 })
 ListItem.displayName = "ListItem"
 
+    
     
