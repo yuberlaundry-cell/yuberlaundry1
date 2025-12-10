@@ -1,3 +1,4 @@
+
 'use client';
 
 import { BookingLayout } from "@/components/booking/booking-layout";
@@ -7,9 +8,32 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { Banknote, CreditCard, Landmark } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+
+const paymentMethods = [
+    { id: "card-4242", type: "Visa", last4: "4242" },
+    { id: "card-5555", type: "Mastercard", last4: "5555" },
+];
 
 
 export default function ReviewPage() {
+    const { toast } = useToast();
+    const [selectedMethod, setSelectedMethod] = useState("card-4242");
+
+    const handleApplyPromo = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Promo Code Applied",
+            description: "Your discount has been added to the order.",
+        });
+    }
+
+    const currentMethod = paymentMethods.find(p => p.id === selectedMethod);
+
 
     return (
         <BookingLayout
@@ -59,10 +83,10 @@ export default function ReviewPage() {
                      <Card>
                         <CardContent className="p-6 space-y-4">
                              <h3 className="font-semibold">Promo Code</h3>
-                            <div className="flex space-x-2">
+                            <form className="flex space-x-2" onSubmit={handleApplyPromo}>
                                 <Input placeholder="Enter code" />
-                                <Button variant="outline">Apply</Button>
-                            </div>
+                                <Button type="submit" variant="outline">Apply</Button>
+                            </form>
                         </CardContent>
                     </Card>
                      <Card>
@@ -72,9 +96,32 @@ export default function ReviewPage() {
                                 <div className="flex items-center justify-between p-3 border rounded-lg">
                                     <div className="flex items-center gap-3">
                                         <CreditCard className="h-5 w-5 text-muted-foreground" />
-                                        <p className="font-medium text-sm">Visa ending in 4242</p>
+                                        <p className="font-medium text-sm">{currentMethod?.type} ending in {currentMethod?.last4}</p>
                                     </div>
-                                    <Button variant="link" size="sm">Change</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                             <Button variant="link" size="sm">Change</Button>
+                                        </DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Change Payment Method</DialogTitle>
+                                                <DialogDescription>
+                                                   Select a different card from your wallet.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <RadioGroup value={selectedMethod} onValueChange={setSelectedMethod} className="space-y-3 pt-4">
+                                                {paymentMethods.map(method => (
+                                                    <Label key={method.id} htmlFor={method.id} className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                                        <RadioGroupItem value={method.id} id={method.id} />
+                                                        <div className="ml-4 flex items-center gap-3">
+                                                             <CreditCard className="h-5 w-5 text-muted-foreground" />
+                                                            <span className="font-medium">{method.type} ending in {method.last4}</span>
+                                                        </div>
+                                                    </Label>
+                                                ))}
+                                            </RadioGroup>
+                                        </DialogContent>
+                                    </Dialog>
                                 </div>
                                 <p className="text-xs text-muted-foreground pl-3">Your Yuber Wallet balance of $15.50 will be automatically applied.</p>
                              </div>
