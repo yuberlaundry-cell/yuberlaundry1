@@ -20,23 +20,59 @@ import {
   Building,
   Users,
   WashingMachine,
+  ShoppingCart,
+  Truck,
+  BarChart,
+  Settings,
+  Shield,
+  HeartPulse,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { UserNav } from '@/components/layout/user-nav';
 import React from 'react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
-const menuItems = [
-  { href: '/admin', label: 'Dashboard', icon: AreaChart },
-  { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck },
-  { href: '/admin/api-status', label: 'API Status', icon: BadgeInfo },
+const navigationConfig = [
   {
-    href: '/admin/laundromats',
-    label: 'Laundromats',
-    icon: Building,
+    title: 'Overview & Insights',
+    links: [
+      { href: '/admin', label: 'Global Dashboard', icon: AreaChart },
+      { href: '#', label: 'Demand vs Supply', icon: BarChart, disabled: true },
+    ],
   },
-  { href: '/admin/users', label: 'Users', icon: Users },
+  {
+    title: 'Operations',
+    links: [
+      { href: '#', label: 'Orders Control', icon: ShoppingCart, disabled: true },
+      { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
+      { href: '#', label: 'Driver Fleet', icon: Truck, disabled: true },
+    ],
+  },
+  {
+    title: 'Quality & Risk',
+    links: [
+      { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck },
+      { href: '#', label: 'Fraud Monitoring', icon: Shield, disabled: true },
+    ],
+  },
+   {
+    title: 'Platform Health',
+    links: [
+      { href: '/admin/api-status', label: 'API Status', icon: BadgeInfo },
+       { href: '#', label: 'System Health', icon: HeartPulse, disabled: true },
+    ],
+  },
+  {
+    title: 'Users & Config',
+    links: [
+      { href: '/admin/users', label: 'User Management', icon: Users },
+      { href: '#', label: 'Platform Settings', icon: Settings, disabled: true },
+    ],
+  },
 ];
 
 export default function AdminPortalLayout({
@@ -53,19 +89,18 @@ export default function AdminPortalLayout({
       router.push('/auth/login');
     }
     if (!loading && user && user.role !== 'superadmin') {
-        router.push('/');
+      router.push('/');
     }
   }, [user, loading, router]);
-  
+
   if (loading || !user) {
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-background">
-            <WashingMachine className="h-12 w-12 text-primary animate-spin" />
-            <p className="mt-4 text-muted-foreground">Loading your portal...</p>
-        </div>
+      <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+        <WashingMachine className="h-12 w-12 text-primary animate-spin" />
+        <p className="mt-4 text-muted-foreground">Loading your portal...</p>
+      </div>
     );
   }
-
 
   return (
     <SidebarProvider>
@@ -91,20 +126,33 @@ export default function AdminPortalLayout({
           </div>
         </SidebarHeader>
         <SidebarContent>
-          <SidebarMenu>
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={item.label}
-                  isActive={pathname === item.href}
-                >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+           <SidebarMenu>
+            {navigationConfig.map((section) => (
+              <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href) && l.href !== '/admin' || pathname === l.href)} className="group/collapsible">
+                <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
+                    <span>{section.title}</span>
+                    <ChevronRight className="h-4 w-4 transition-transform duration-200" />
+                </CollapsibleTrigger>
+                <CollapsibleContent>
+                    <div className="py-1 pl-4 border-l ml-[18px]">
+                        {section.links.map((item) => (
+                            <SidebarMenuItem key={item.href}>
+                                <SidebarMenuButton
+                                asChild
+                                tooltip={item.label}
+                                isActive={pathname === item.href}
+                                className={cn(item.disabled && "opacity-50 pointer-events-none")}
+                                >
+                                <Link href={item.href}>
+                                    <item.icon />
+                                    <span>{item.label}</span>
+                                </Link>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </div>
+                </CollapsibleContent>
+              </Collapsible>
             ))}
           </SidebarMenu>
         </SidebarContent>
