@@ -77,11 +77,13 @@ const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => {
     const orderId = order.id.replace('#', '');
     return (
       <Card className="mb-4">
-        <CardHeader className="p-4">
-          <div className="flex justify-between items-start">
+        <CardHeader className="p-4 flex flex-row items-start justify-between">
+          <div>
             <Link href={`/laundromat/orders/${orderId}`}>
                 <CardTitle className="text-base font-bold hover:underline">{order.id}</CardTitle>
             </Link>
+            <CardDescription>{order.customer}</CardDescription>
+          </div>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="h-6 w-6">
@@ -98,8 +100,6 @@ const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => {
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-          </div>
-          <CardDescription>{order.customer}</CardDescription>
         </CardHeader>
         <CardContent className="p-4 pt-0">
           <div className="flex justify-between items-center text-sm">
