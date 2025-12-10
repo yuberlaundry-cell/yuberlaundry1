@@ -1,12 +1,6 @@
 {
   "placeholderImages": [
     {
-      "id": "hero-old",
-      "description": "A pile of freshly folded laundry on a clean surface.",
-      "imageUrl": "https://images.unsplash.com/photo-1765015981399-8d024b928fb2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHxmb2xkZWQlMjBsYXVuZHJ5fGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "folded laundry"
-    },
-    {
       "id": "how-it-works-1",
       "description": "A person scheduling a pickup on their smartphone.",
       "imageUrl": "https://images.unsplash.com/photo-1598708521413-feaa4e69c01b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwaG9uZSUyMHNjaGVkdWxlfGVufDB8fHx8MTc2NTMwODk4NHww&ixlib=rb-4.1.0&q=80&w=1080",

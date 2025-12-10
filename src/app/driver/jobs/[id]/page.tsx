@@ -7,7 +7,6 @@ import { ArrowLeft, Check, MapPin, Phone, QrCode, ScanLine, Truck, Package, Navi
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -219,13 +218,14 @@ export default function JobDetailsPage() {
                                 </li>
                             ))}
                         </ol>
-                        {currentStep === pickupSteps.length -1 && (
-                            <Alert className="mt-6 border-green-500 text-green-700">
-                                <AlertTitle className="text-green-800 font-semibold">Job Complete!</AlertTitle>
-                                <AlertDescription>
-                                    This job has been marked as completed.
-                                </AlertDescription>
-                            </Alert>
+                        {currentStep === pickupSteps.length && (
+                             <div className="mt-6 flex items-center gap-3 rounded-lg border border-green-500 bg-green-50 p-4 text-green-800">
+                                <Check className="h-6 w-6" />
+                                <div>
+                                    <h4 className="font-semibold">Job Complete!</h4>
+                                    <p className="text-sm">This job has been marked as completed.</p>
+                                </div>
+                            </div>
                         )}
                     </CardContent>
                 </Card>
