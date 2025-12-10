@@ -1,3 +1,4 @@
+
 'use client';
 
 import { type Order } from "@/lib/mock-data";
@@ -13,7 +14,7 @@ import { SupportCard } from "./support-card";
 import { ReviewPrompt } from "./review-prompt";
 import { OrderPhotosCard } from "./order-photos-card";
 
-const statusColors = {
+const statusColors: { [key: string]: string } = {
     'upcoming': 'bg-blue-100 text-blue-800',
     'in-progress': 'bg-amber-100 text-amber-800',
     'completed': 'bg-green-100 text-green-800',

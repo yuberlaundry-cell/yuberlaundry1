@@ -1,3 +1,4 @@
+
 import Link from "next/link";
 import { Button } from "../ui/button";
 import { OrderCard } from "./order-card";
@@ -23,7 +24,7 @@ export function OrderList({ orders }: { orders: Order[] }) {
     }
 
     return (
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 pt-4">
+        <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6 pt-4">
             {orders.map(order => (
                 <OrderCard key={order.id} order={order} />
             ))}

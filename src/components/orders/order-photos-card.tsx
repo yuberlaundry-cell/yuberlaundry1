@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -27,7 +28,7 @@ export function OrderPhotosCard() {
         {photos.map((photo) => (
           <div key={photo.type}>
             <h3 className="text-sm font-medium mb-2">{photo.type}</h3>
-            <div className="relative aspect-video w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
+            <div className="relative aspect-[4/3] w-full rounded-lg overflow-hidden bg-muted flex items-center justify-center">
               <Image
                 src={photo.url}
                 alt={`${photo.type} photo`}
