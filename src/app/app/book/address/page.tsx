@@ -1,3 +1,4 @@
+
 'use client';
 
 import { BookingLayout } from "@/components/booking/booking-layout";
@@ -10,14 +11,43 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
 import { Home, Building, PlusCircle, Trash2, Edit } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
-const addresses = [
-    { id: 'home', label: 'Home', address: '123 Main St, London, SW1A 0AA', notes: 'Gate code: #1234'},
-    { id: 'work', label: 'Work', address: '456 Business Rd, London, EC1A 1BB', notes: 'Leave at reception'},
+const initialAddresses = [
+    { id: 'home', type: 'Home', label: 'Home', address: '123 Main St, London, SW1A 0AA', notes: 'Gate code: #1234'},
+    { id: 'work', type: 'Work', label: 'Work', address: '456 Business Rd, London, EC1A 1BB', notes: 'Leave at reception'},
 ];
 
+type Address = typeof initialAddresses[0];
+
 export default function AddressPage() {
+    const [addresses, setAddresses] = useState(initialAddresses);
     const [selectedAddress, setSelectedAddress] = useState('home');
+    const [isAddOpen, setAddOpen] = useState(false);
+    const [isEditOpen, setEditOpen] = useState<Address | null>(null);
+
+    const { register, handleSubmit, reset } = useForm<Omit<Address, 'id'>>();
+
+    const handleAddAddress = (data: Omit<Address, 'id'>) => {
+        const newAddress = {
+            id: `new-${Date.now()}`,
+            type: 'Home', // default, can be changed
+            ...data
+        };
+        setAddresses(prev => [...prev, newAddress]);
+        reset();
+        setAddOpen(false);
+    }
+    
+    const handleDeleteAddress = (e: React.MouseEvent, id: string) => {
+        e.preventDefault(); // prevent label click
+        e.stopPropagation(); // prevent label click
+        setAddresses(prev => prev.filter(addr => addr.id !== id));
+        if (selectedAddress === id) {
+            setSelectedAddress(addresses[0]?.id || '');
+        }
+    }
+
 
     return (
         <BookingLayout
@@ -34,7 +64,7 @@ export default function AddressPage() {
                                 <div className="flex items-center gap-4">
                                     <RadioGroupItem value={addr.id} id={addr.id} />
                                     <div className="flex items-center gap-3">
-                                        {addr.label === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Building className="h-5 w-5 text-muted-foreground" />}
+                                        {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Building className="h-5 w-5 text-muted-foreground" />}
                                         <div>
                                             <p className="font-semibold">{addr.label}</p>
                                             <p className="text-muted-foreground">{addr.address}</p>
@@ -43,10 +73,38 @@ export default function AddressPage() {
                                     </div>
                                 </div>
                                 <div className="flex items-center gap-2">
-                                    <Button variant="ghost" size="icon" className="h-8 w-8">
-                                        <Edit className="h-4 w-4" />
-                                    </Button>
-                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive">
+                                     <Dialog open={!!isEditOpen} onOpenChange={(open) => !open && setEditOpen(null)}>
+                                        <DialogTrigger asChild>
+                                             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => { e.preventDefault(); e.stopPropagation(); setEditOpen(addr); }}>
+                                                <Edit className="h-4 w-4" />
+                                            </Button>
+                                        </DialogTrigger>
+                                        <DialogContent onClick={(e) => e.stopPropagation()}>
+                                            <DialogHeader>
+                                                <DialogTitle>Edit address</DialogTitle>
+                                                <DialogDescription>
+                                                   Update the details for your location.
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); e.stopPropagation(); }}>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="edit-address-street">Street Address</Label>
+                                                    <Input id="edit-address-street" defaultValue={isEditOpen?.address} />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="edit-address-label">Label</Label>
+                                                    <Input id="edit-address-label" defaultValue={isEditOpen?.label} />
+                                                </div>
+                                                <div className="space-y-2">
+                                                    <Label htmlFor="edit-address-notes">Notes (optional)</Label>
+                                                    <Input id="edit-address-notes" defaultValue={isEditOpen?.notes} />
+                                                </div>
+                                                <Button type="submit" className="w-full" onClick={() => setEditOpen(null)}>Save Changes</Button>
+                                            </form>
+                                        </DialogContent>
+                                    </Dialog>
+
+                                    <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive" onClick={(e) => handleDeleteAddress(e, addr.id)}>
                                         <Trash2 className="h-4 w-4" />
                                     </Button>
                                 </div>
@@ -55,7 +113,7 @@ export default function AddressPage() {
                     ))}
                 </RadioGroup>
 
-                <Dialog>
+                <Dialog open={isAddOpen} onOpenChange={setAddOpen}>
                     <DialogTrigger asChild>
                         <Button variant="outline" className="w-full">
                             <PlusCircle className="mr-2 h-4 w-4" />
@@ -69,22 +127,18 @@ export default function AddressPage() {
                                 Enter the details for your new pickup and delivery location.
                             </DialogDescription>
                         </DialogHeader>
-                        <form className="space-y-4">
+                        <form className="space-y-4" onSubmit={handleSubmit(handleAddAddress)}>
+                             <div className="space-y-2">
+                                <Label htmlFor="label">Label</Label>
+                                <Input id="label" placeholder="e.g., Mom's House" {...register("label")} />
+                            </div>
                             <div className="space-y-2">
                                 <Label htmlFor="street">Street Address</Label>
-                                <Input id="street" placeholder="e.g., 10 Downing Street" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="apartment">Apartment / Unit (optional)</Label>
-                                <Input id="apartment" placeholder="e.g., Apt 5B" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="label">Label</Label>
-                                <Input id="label" placeholder="e.g., Mom's House" />
+                                <Input id="street" placeholder="e.g., 10 Downing Street" {...register("address")} />
                             </div>
                              <div className="space-y-2">
                                 <Label htmlFor="notes">Notes (optional)</Label>
-                                <Input id="notes" placeholder="e.g., Ring bell twice" />
+                                <Input id="notes" placeholder="e.g., Ring bell twice" {...register("notes")} />
                             </div>
                             <Button type="submit" className="w-full">Save Address</Button>
                         </form>
