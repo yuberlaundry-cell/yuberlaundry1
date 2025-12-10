@@ -49,19 +49,19 @@ export default function ConsumerPortalLayout({
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-             <SidebarMenuItem>
+             <SidebarMenuItem className="px-2">
                  <Button asChild className="w-full justify-start">
                     <Link href="/app/book/address">New Order</Link>
                 </Button>
             </SidebarMenuItem>
             {navigationConfig.map((item) => (
-              <SidebarMenuItem key={item.href}>
+              <SidebarMenuItem key={item.href} className="px-2">
                 <SidebarMenuButton
                 asChild
                 tooltip={item.label}
                 isActive={pathname.startsWith(item.href) && item.href !== '/app' || pathname === item.href}
                 variant="ghost"
-                className="justify-start disabled:opacity-50"
+                className="justify-start"
                 disabled={item.disabled}
                 >
                 <Link href={item.href}>
@@ -92,12 +92,8 @@ export default function ConsumerPortalLayout({
             ))}
              <SidebarMenuItem>
                 <SidebarMenuButton variant="ghost" className="justify-start w-full" onClick={logout}>
-                    <div className="flex items-center gap-2">
-                        <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center font-bold text-xs">
-                            {`${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`}
-                        </div>
-                        <span>Logout</span>
-                    </div>
+                    <LogOut />
+                    <span>Logout</span>
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarFooter>
