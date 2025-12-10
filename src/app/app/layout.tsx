@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, Search } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -13,13 +13,15 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { BookingFlow } from "@/components/booking/booking-flow";
+import { Search } from "lucide-react";
 
 const navigationConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
   { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
   { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
-  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: false },
+  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon },
+  { href: '#', label: 'AI Assistant', icon: Bot, disabled: true },
 ];
 
 const bottomNavConfig = [
