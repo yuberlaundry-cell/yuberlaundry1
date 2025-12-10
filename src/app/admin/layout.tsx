@@ -50,7 +50,7 @@ export default function AdminPortalLayout({
 
   React.useEffect(() => {
     if (!loading && !user) {
-      router.push('/login');
+      router.push('/auth/login');
     }
     if (!loading && user && user.role !== 'superadmin') {
         router.push('/');
