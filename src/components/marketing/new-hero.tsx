@@ -42,7 +42,7 @@ export function NewHero() {
                 </Label>
             </RadioGroup>
             <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
-            <Button size="lg" className="w-full mt-3">Continue</Button>
+            <Button size="lg" className="w-full mt-3" asChild><Link href="/app/book/address">Continue</Link></Button>
           </Card>
 
           <Button size="lg" variant="secondary" className="mt-6 rounded-full font-bold bg-foreground text-background hover:bg-foreground/80">

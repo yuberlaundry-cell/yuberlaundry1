@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
-import { CreditCard, Shield, Bell, HelpCircle, LogOut } from "lucide-react";
+import { CreditCard, Shield, Bell, HelpCircle, LogOut, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function AccountPage() {

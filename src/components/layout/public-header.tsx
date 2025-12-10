@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { WashingMachine, Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Apple, Play, Building, Briefcase, FileText, Bot } from 'lucide-react';
+import { WashingMachine, Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Apple, Play, Building, Briefcase, FileText, Bot, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -24,6 +24,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '..
 import { getRedirectPathForRole } from '@/lib/auth';
 
 const navLinks = [
+  { href: '/pricing', label: 'Pricing' },
   { href: '/locations', label: 'Locations' },
 ];
 
@@ -36,10 +37,10 @@ const personalMegaMenuItems = {
     { icon: Apple, title: "Download App", href: "#" },
   ],
   "Plans & Features": [
-    { icon: Sparkles, title: "Yuber Plus", href: "#", popular: true },
+    { icon: Sparkles, title: "Yuber Plus", href: "/pricing", popular: true },
     { icon: Sparkles, title: "Sustainability", href: "#" },
     { icon: Gift, title: "Gift Cards", href: "#" },
-    { icon: Sparkles, title: "Referral Program", href: "#" },
+    { icon: Sparkles, title: "Referral Program", href: "/app/promotions" },
   ],
   "Support": [
     { icon: CircleHelp, title: "Help Centre", href: "/faq" },
