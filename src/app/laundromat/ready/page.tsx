@@ -1,3 +1,4 @@
+
 'use client';
 import {
   Card,
@@ -39,7 +40,7 @@ const readyForPickupOrders = [
   },
 ];
 
-export default function ReadyForDeliveryPage() {
+export default function ReadyForHandoffPage() {
   return (
     <div className="space-y-8 pb-8">
       <div>

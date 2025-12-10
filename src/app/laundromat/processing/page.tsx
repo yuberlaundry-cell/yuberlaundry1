@@ -60,7 +60,7 @@ const columns = [
   },
   {
     id: 'ready',
-    title: 'Ready',
+    title: 'Ready for Handoff',
     icon: Package,
     orders: [
       {

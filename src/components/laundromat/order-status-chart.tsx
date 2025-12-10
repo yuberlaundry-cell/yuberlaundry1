@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
@@ -43,7 +44,7 @@ const chartConfig = {
     color: 'hsl(var(--chart-4))',
   },
   ready: {
-    label: 'Ready for Delivery',
+    label: 'Ready for Handoff',
     color: 'hsl(var(--chart-5))',
   },
 };

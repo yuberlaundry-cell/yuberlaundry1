@@ -39,7 +39,7 @@ const menuItems = [
   { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
   { href: '/laundromat/processing', label: 'Processing', icon: LayoutGrid },
   { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
-  { href: '/laundromat/ready', label: 'Ready for Delivery', icon: Truck },
+  { href: '/laundromat/ready', label: 'Ready for Handoff', icon: Truck },
   { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
   { href: '/laundromat/resources', label: 'Resources', icon: Book },
   { href: '/laundromat/settings', label: 'Settings', icon: Settings },

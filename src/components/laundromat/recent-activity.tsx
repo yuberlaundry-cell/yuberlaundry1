@@ -15,17 +15,17 @@ import Link from 'next/link';
 
 const mockOrders = [
     {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold'},
-    {id: '#YL12346', customer: 'John Smith', status: 'Folding', service: 'Dry Cleaning'},
-    {id: '#YL12347', customer: 'Acme Corp', status: 'Ready for Delivery', service: 'Wash & Fold'},
+    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning'},
+    {id: '#YL12347', customer: 'Acme Corp', status: 'Ready', service: 'Wash & Fold'},
     {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing'},
     {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold'},
 ];
 
 const statusColors: { [key: string]: string } = {
-  'Ready for Delivery': 'bg-green-100 text-green-800',
+  'Ready': 'bg-green-100 text-green-800',
   'Washing': 'bg-blue-100 text-blue-800',
   'Drying': 'bg-blue-100 text-blue-800',
-  'Folding': 'bg-purple-100 text-purple-800',
+  'Folding/QC': 'bg-purple-100 text-purple-800',
   'Intake': 'bg-gray-100 text-gray-800',
 };
 
