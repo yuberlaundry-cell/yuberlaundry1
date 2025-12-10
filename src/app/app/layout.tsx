@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Input } from "@/components/ui/input";
+import React from "react";
 
 const navigationConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
