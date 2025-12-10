@@ -147,7 +147,7 @@ export default function AdminPortalLayout({
                 <CollapsibleContent>
                     <div className="py-1 pl-4 border-l ml-[18px]">
                         {section.links.map((item) => (
-                            <SidebarMenuItem key={item.href}>
+                            <SidebarMenuItem key={`${item.href}-${item.label}`}>
                                 <SidebarMenuButton
                                 asChild
                                 tooltip={item.label}
