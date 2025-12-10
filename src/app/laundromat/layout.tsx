@@ -24,6 +24,7 @@ import {
   WashingMachine,
   ClipboardCheck,
   CreditCard,
+  ChevronRight,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -32,17 +33,29 @@ import { UserNav } from '@/components/layout/user-nav';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import React from 'react';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { cn } from '@/lib/utils';
 
-const menuItems = [
-  { href: '/laundromat', label: 'Dashboard', icon: Home },
-  { href: '/laundromat/orders', label: 'Orders', icon: Package },
-  { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
-  { href: '/laundromat/processing', label: 'Processing', icon: LayoutGrid },
-  { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
-  { href: '/laundromat/ready', label: 'Ready for Handoff', icon: Truck },
-  { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
-  { href: '/laundromat/resources', label: 'Resources', icon: Book },
-  { href: '/laundromat/settings', label: 'Settings', icon: Settings },
+const navigationConfig = [
+  { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },
+  {
+    title: 'Core Operations',
+    links: [
+      { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
+      { href: '/laundromat/orders', label: 'All Orders', icon: Package },
+      { href: '/laundromat/processing', label: 'Processing Board', icon: LayoutGrid },
+      { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
+      { href: '/laundromat/ready', label: 'Ready for Handoff', icon: Truck },
+    ]
+  },
+  {
+    title: 'Management',
+    links: [
+       { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
+       { href: '/laundromat/resources', label: 'Resources', icon: Book },
+       { href: '/laundromat/settings', label: 'Settings', icon: Settings },
+    ]
+  }
 ];
 
 export default function LaundromatPortalLayout({
@@ -97,23 +110,50 @@ export default function LaundromatPortalLayout({
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            {menuItems.map((item) => (
-              <SidebarMenuItem key={item.href}>
-                <SidebarMenuButton
-                  asChild
-                  tooltip={item.label}
-                  isActive={
-                    pathname.startsWith(item.href) &&
-                    (item.href === '/laundromat' ? pathname === item.href : true)
-                  }
-                >
-                  <Link href={item.href}>
-                    <item.icon />
-                    <span>{item.label}</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-            ))}
+            {navigationConfig.map((section) => {
+              if (section.isStandalone) {
+                return (
+                  <SidebarMenuItem key={section.href}>
+                    <SidebarMenuButton
+                      asChild
+                      tooltip={section.label}
+                      isActive={pathname === section.href}
+                    >
+                      <Link href={section.href}>
+                        <section.icon />
+                        <span>{section.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              }
+              return (
+                <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href))} className="group/collapsible">
+                   <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
+                    <span className="truncate group-data-[collapsible=icon]:hidden">{section.title}</span>
+                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden" />
+                </CollapsibleTrigger>
+                  <CollapsibleContent>
+                    <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
+                      {section.links.map((item) => (
+                        <SidebarMenuItem key={item.href}>
+                          <SidebarMenuButton
+                            asChild
+                            tooltip={item.label}
+                            isActive={pathname.startsWith(item.href)}
+                          >
+                            <Link href={item.href}>
+                              <item.icon />
+                              <span>{item.label}</span>
+                            </Link>
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      ))}
+                    </div>
+                  </CollapsibleContent>
+                </Collapsible>
+              );
+            })}
           </SidebarMenu>
         </SidebarContent>
       </Sidebar>

@@ -141,11 +141,11 @@ export default function AdminPortalLayout({
             {navigationConfig.map((section) => (
               <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href) && l.href !== '/admin' || pathname === l.href)} className="group/collapsible">
                 <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
-                    <span>{section.title}</span>
-                    <ChevronRight className="h-4 w-4 transition-transform duration-200" />
+                    <span className="truncate group-data-[collapsible=icon]:hidden">{section.title}</span>
+                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden" />
                 </CollapsibleTrigger>
                 <CollapsibleContent>
-                    <div className="py-1 pl-4 border-l ml-[18px]">
+                    <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
                         {section.links.map((item) => (
                             <SidebarMenuItem key={`${item.href}-${item.label}`}>
                                 <SidebarMenuButton
