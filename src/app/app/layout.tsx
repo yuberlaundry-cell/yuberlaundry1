@@ -3,12 +3,13 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { Home, ShoppingCart, Wallet, Tag, User, Menu, ChevronRight, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, Power, LayoutDashboard } from 'lucide-react';
+import { Home, ShoppingCart, Wallet, Tag, User, Menu, ChevronRight, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, Power, LayoutDashboard, Search } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
+import { Input } from "@/components/ui/input";
 
 const navigationConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
@@ -21,7 +22,7 @@ const navigationConfig = [
 
 const bottomNavConfig = [
     { href: '/app/account', label: 'Settings', icon: Settings },
-    { href: '/faq', label: 'Support', icon: LifeBuoy },
+    { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 
@@ -106,8 +107,13 @@ export default function ConsumerPortalLayout({
             <div className="md:hidden">
               <SidebarTrigger />
             </div>
-            <div className="hidden md:flex items-center gap-2">
-                 <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
+            <div className="relative flex-1 md:grow-0">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search knowledgebase..."
+                className="w-full rounded-lg bg-muted pl-8 md:w-[200px] lg:w-[336px]"
+              />
             </div>
             <div className="flex-1" />
             <UserNav />
