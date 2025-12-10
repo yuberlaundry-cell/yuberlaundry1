@@ -52,7 +52,7 @@ export function RecentActivity() {
             {mockOrders.map((order) => (
               <TableRow key={order.id}>
                 <TableCell className="font-medium">
-                  <Link href={`/laundromat/orders/${order.id}`} className="hover:underline">
+                  <Link href={`/laundromat/orders/${order.id.replace('#', '')}`} className="hover:underline">
                     {order.id}
                   </Link>
                 </TableCell>

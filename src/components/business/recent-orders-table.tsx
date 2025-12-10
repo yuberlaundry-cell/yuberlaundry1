@@ -44,7 +44,7 @@ export function RecentOrdersTable() {
                         {orders.map((order) => (
                             <TableRow key={order.id}>
                                 <TableCell className="font-medium">
-                                    <Link href={`/business/orders/${order.id}`} className="hover:underline">{order.id}</Link>
+                                    <Link href={`/business/orders/${order.id.replace('#', '')}`} className="hover:underline">{order.id}</Link>
                                 </TableCell>
                                 {isAdmin && <TableCell>{order.employee.name}</TableCell>}
                                 <TableCell>{order.service}</TableCell>

@@ -56,7 +56,7 @@ export function DetailedOrdersTable() {
                     </TableHeader>
                     <TableBody>
                         {orders.map((order) => (
-                            <TableRow key={order.id} className="cursor-pointer" onClick={() => window.location.href=`/business/orders/${order.id}`}>
+                            <TableRow key={order.id} className="cursor-pointer" onClick={() => window.location.href=`/business/orders/${order.id.replace('#', '')}`}}>
                                 <TableCell className="font-medium">{order.id}</TableCell>
                                 <TableCell>{order.employee.name}</TableCell>
                                 <TableCell>{order.service}</TableCell>
