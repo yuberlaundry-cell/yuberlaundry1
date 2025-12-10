@@ -49,7 +49,7 @@ export default function ConsumerDashboard() {
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {actionCards.map(card => (
-            <Card key={card.title} className="hover:border-primary/80 hover:shadow-sm transition-all">
+            <Card key={card.title} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
                 <Link href={card.href} className="flex flex-col h-full">
                     <CardHeader className="flex flex-row items-center gap-4 space-y-0">
                         <div className="bg-primary/10 p-3 rounded-lg text-primary">
@@ -73,11 +73,11 @@ export default function ConsumerDashboard() {
             <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className="text-2xl font-bold">$15.50</p>
+                    <p className="text-2xl font-bold">R15.50</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Referral Credits</p>
-                    <p className="text-2xl font-bold">$0.00</p>
+                    <p className="text-2xl font-bold">R0.00</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Loyalty Points</p>

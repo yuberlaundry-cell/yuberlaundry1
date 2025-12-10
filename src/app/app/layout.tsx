@@ -17,12 +17,11 @@ const navigationConfig = [
   { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
   { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
   { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon, disabled: false },
-  { href: '#', label: 'AI Schedule Helper', icon: Bot, disabled: true },
+  { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 const bottomNavConfig = [
     { href: '/app/account', label: 'Settings', icon: Settings },
-    { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 
@@ -107,7 +106,7 @@ export default function ConsumerPortalLayout({
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <Input
                 type="search"
-                placeholder="Search knowledgebase..."
+                placeholder="Search orders, pickups, help..."
                 className="w-full rounded-lg bg-muted pl-8 md:w-[200px] lg:w-[336px]"
               />
             </div>
