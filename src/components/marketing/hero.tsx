@@ -6,7 +6,7 @@ import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label";
 import { Card } from "../ui/card";
-import { Apple, ShoppingBasket, Tag } from "lucide-react";
+import { Smartphone, ShoppingBasket, Tag } from "lucide-react";
 
 export default function Hero() {
   const heroImage = {
@@ -46,7 +46,7 @@ export default function Hero() {
           </Card>
 
           <Button size="lg" variant="secondary" className="mt-6 rounded-full font-bold bg-foreground text-background hover:bg-foreground/80">
-            <Apple className="mr-2 h-5 w-5 fill-current"/>
+            <Smartphone className="mr-2 h-5 w-5"/>
             Download the app
           </Button>
 

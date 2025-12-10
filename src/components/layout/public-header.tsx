@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { WashingMachine, Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Apple, Play, Building, Briefcase, FileText, Bot, ChevronRight } from 'lucide-react';
+import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -33,7 +33,7 @@ const personalMegaMenuItems = {
     { icon: Shirt, title: "We Clean", href: "#" },
     { icon: Bike, title: "Fast Delivery", href: "#" },
     { icon: Shirt, title: "Pricing", href: "/pricing" },
-    { icon: Apple, title: "Download App", href: "#" },
+    { icon: Smartphone, title: "Download App", href: "#" },
   ],
   "Plans & Features": [
     { icon: Sparkles, title: "Yuber Plus", href: "/pricing", popular: true },

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Apple, Play } from 'lucide-react';
+import { Smartphone, Store } from 'lucide-react';
 import { Button } from '../ui/button';
 
 const footerLinks = {
@@ -67,14 +67,14 @@ export function PublicFooter() {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 order-1 md:order-2">
              <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
-                <Apple className="h-6 w-6"/>
+                <Smartphone className="h-6 w-6"/>
                 <div>
                     <div className='text-xs'>Download on the</div>
                     <div className="font-bold text-base -mt-1">App Store</div>
                 </div>
             </Button>
             <Button variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
-                <Play className="h-6 w-6"/>
+                <Store className="h-6 w-6"/>
                 <div>
                     <div className='text-xs'>GET IT ON</div>
                     <div className="font-bold text-base -mt-1">Google Play</div>
