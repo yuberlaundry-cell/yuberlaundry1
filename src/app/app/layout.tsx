@@ -32,7 +32,7 @@ export default function ConsumerPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { logout, user } = useAuth();
+  const { logout } = useAuth();
   
   return (
     <SidebarProvider>
