@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { AuthProvider } from '@/hooks/use-auth';
 import { Toaster } from '@/components/ui/toaster';
 import './globals.css';
+import { PortalsLayout } from './portals-layout';
 
 export const metadata: Metadata = {
   title: 'Yuber Laundry',
@@ -22,8 +23,10 @@ export default function RootLayout({
       </head>
       <body className="font-body antialiased bg-background text-foreground">
         <AuthProvider>
-          {children}
-          <Toaster />
+            <PortalsLayout>
+              {children}
+            </PortalsLayout>
+            <Toaster />
         </AuthProvider>
       </body>
     </html>
