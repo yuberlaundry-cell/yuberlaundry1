@@ -90,7 +90,7 @@ export default function ConsumerPortalLayout({
                 </SidebarMenuItem>
             ))}
              <SidebarMenuItem>
-                <SidebarMenuButton variant="ghost" className="justify-start w-full" onClick={logout}>
+                <SidebarMenuButton variant="ghost" className="justify-start w-full text-destructive hover:text-destructive" onClick={logout}>
                     <LogOut />
                     <span>Logout</span>
                 </SidebarMenuButton>

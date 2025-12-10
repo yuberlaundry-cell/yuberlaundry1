@@ -4,9 +4,8 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Box, CreditCard, LifeBuoy, Mail, MessageSquare, PhoneCall, Send, ShieldQuestion, Sparkles, User, Workflow } from "lucide-react";
+import { Box, CreditCard, LifeBuoy, Mail, MessageSquare, PhoneCall, ShieldQuestion, Sparkles, User, Workflow } from "lucide-react";
 import { FaqChatbot } from "@/components/faq-chatbot";
 
 const faqSections = {
@@ -143,5 +142,5 @@ export default function SupportPage() {
                 </div>
             </div>
         </div>
-    )
+    );
 }
