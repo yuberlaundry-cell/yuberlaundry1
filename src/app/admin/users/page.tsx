@@ -30,16 +30,11 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { UserRole } from '@/lib/auth';
+import { UserRole, getRedirectPathForRole, mockUsers } from '@/lib/auth';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
-const users = [
-    { id: 'user-consumer-1', name: 'Jane Doe', email: 'jane.doe@example.com', role: 'consumer', status: 'Active', registered: '2024-05-10', avatar: 'https://picsum.photos/seed/user1/40/40' },
-    { id: 'user-bizadmin-1', name: 'John Smith', email: 'john.smith@acmecorp.com', role: 'business_admin', status: 'Active', registered: '2024-03-20', avatar: 'https://picsum.photos/seed/user2/40/40' },
-    { id: 'user-driver-1', name: 'Alex Ray', email: 'alex.ray@yuber.com', role: 'driver', status: 'Active', registered: '2024-04-15', avatar: 'https://picsum.photos/seed/user3/40/40' },
-    { id: 'user-superadmin-1', name: 'Sam Admin', email: 'sam.admin@yuberlaundry.com', role: 'superadmin', status: 'Active', registered: '2024-01-01', avatar: 'https://picsum.photos/seed/user4/40/40' },
-    { id: 'user-laundromat-1', name: 'Maria Garcia', email: 'maria.g@mainstreetlaundry.com', role: 'laundromat_staff', status: 'Active', registered: '2024-02-18', avatar: 'https://picsum.photos/seed/user5/40/40' },
-     { id: 'user-bizemployee-1', name: 'Emily Jones', email: 'emily.jones@acmecorp.com', role: 'business_employee', status: 'Inactive', registered: '2024-05-01', avatar: 'https://picsum.photos/seed/user6/40/40' },
-];
+const users = Object.values(mockUsers);
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-100 text-green-800',
@@ -63,6 +58,16 @@ const toTitleCase = (str: string) => {
 };
 
 export default function UsersPage() {
+    const { login } = useAuth();
+    const router = useRouter();
+
+    const handleImpersonate = (role: UserRole) => {
+        login(role);
+        const redirectPath = getRedirectPathForRole(role);
+        router.push(redirectPath);
+    };
+
+
   return (
     <div className="space-y-8 pb-8">
        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -127,7 +132,6 @@ export default function UsersPage() {
                 <TableHead>User</TableHead>
                 <TableHead>Role</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Registered</TableHead>
                 <TableHead><span className="sr-only">Actions</span></TableHead>
               </TableRow>
             </TableHeader>
@@ -137,11 +141,11 @@ export default function UsersPage() {
                     <TableCell>
                         <div className="flex items-center gap-3">
                             <Avatar>
-                                <AvatarImage src={user.avatar} alt={user.name} data-ai-hint="profile person" />
-                                <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                <AvatarImage src={user.avatarUrl} alt={user.firstName} data-ai-hint="profile person" />
+                                <AvatarFallback>{user.firstName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                             </Avatar>
                             <div>
-                                <p className="font-medium">{user.name}</p>
+                                <p className="font-medium">{user.firstName} {user.lastName}</p>
                                 <p className="text-sm text-muted-foreground">{user.email}</p>
                             </div>
                         </div>
@@ -152,9 +156,8 @@ export default function UsersPage() {
                         </Badge>
                    </TableCell>
                    <TableCell>
-                        <Badge variant="secondary" className={statusColors[user.status]}>{user.status}</Badge>
+                        <Badge variant="secondary" className={statusColors['Active']}>Active</Badge>
                    </TableCell>
-                   <TableCell>{user.registered}</TableCell>
                    <TableCell>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
@@ -166,7 +169,7 @@ export default function UsersPage() {
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem>View Details</DropdownMenuItem>
                                 <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
-                                <DropdownMenuItem>Impersonate User</DropdownMenuItem>
+                                <DropdownMenuItem onClick={() => handleImpersonate(user.role)}>Impersonate User</DropdownMenuItem>
                                 <DropdownMenuItem className="text-destructive">Suspend User</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
