@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter }
 import { ArrowRight, ShoppingCart, RefreshCw, CalendarClock, Wallet, LifeBuoy } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { mockOrders } from "@/lib/mock-data";
+import { OrderCard } from "@/components/orders/order-card";
 
 const actionCards = [
     {
@@ -36,12 +38,13 @@ const actionCards = [
 
 export default function ConsumerDashboard() {
   const router = useRouter();
+  const recentOrders = mockOrders.slice(0, 2);
 
   return (
     <div className="space-y-8 pb-8">
       <div>
         <h1 className="text-3xl md:text-4xl font-bold font-headline">Customer Dashboard</h1>
-        <p className="text-muted-foreground">Good morning, super! Here's a summary of your laundry activities.</p>
+        <p className="text-muted-foreground">Good morning, Jane! Here's a summary of your laundry activities.</p>
       </div>
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -70,7 +73,7 @@ export default function ConsumerDashboard() {
             <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className="text-2xl font-bold">R0.00</p>
+                    <p className="text-2xl font-bold">R15.50</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Referral Credits</p>
@@ -78,7 +81,7 @@ export default function ConsumerDashboard() {
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Loyalty Points</p>
-                    <p className="text-2xl font-bold">0 pts</p>
+                    <p className="text-2xl font-bold">120 pts</p>
                 </div>
             </CardContent>
              <CardFooter className="flex-wrap gap-2 border-t pt-4">
@@ -110,9 +113,15 @@ export default function ConsumerDashboard() {
             </Button>
         </CardHeader>
         <CardContent>
-            <div className="text-center py-8 text-muted-foreground">
-                <p>No recent orders found.</p>
-            </div>
+            {recentOrders.length > 0 ? (
+                 <div className="grid sm:grid-cols-2 gap-6">
+                    {recentOrders.map(order => <OrderCard key={order.id} order={order} />)}
+                </div>
+            ) : (
+                <div className="text-center py-8 text-muted-foreground">
+                    <p>No recent orders found.</p>
+                </div>
+            )}
         </CardContent>
       </Card>
     </div>
