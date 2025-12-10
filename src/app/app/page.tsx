@@ -62,7 +62,7 @@ export default function ConsumerDashboard() {
         ))}
       </div>
 
-       <div className="grid lg:grid-cols-3 gap-8">
+       <div className="grid lg:grid-cols-3 gap-8 items-start">
         <Card className="lg:col-span-2">
             <CardHeader>
                 <CardTitle>Wallet</CardTitle>
@@ -70,7 +70,7 @@ export default function ConsumerDashboard() {
             <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className="text-2xl font-bold">R15.50</p>
+                    <p className="text-2xl font-bold">R0.00</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Referral Credits</p>
@@ -82,15 +82,19 @@ export default function ConsumerDashboard() {
                 </div>
             </CardContent>
              <CardFooter className="flex-wrap gap-2 border-t pt-4">
-                <Button>Add Funds</Button>
-                <Button variant="outline">View History</Button>
+                <Button asChild>
+                    <Link href="/app/wallet">Add Funds</Link>
+                </Button>
+                <Button variant="outline" asChild>
+                    <Link href="/app/wallet">View History</Link>
+                </Button>
              </CardFooter>
         </Card>
 
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Promotions</CardTitle>
-                <Button variant="link" asChild><Link href="#">View all offers</Link></Button>
+                <Button variant="link" size="sm" asChild><Link href="/app/promotions">View all offers</Link></Button>
             </CardHeader>
             <CardContent className="text-center text-muted-foreground py-8">
                 <p>No active promotions.</p>
@@ -101,7 +105,7 @@ export default function ConsumerDashboard() {
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent orders</CardTitle>
-             <Button variant="link" asChild>
+             <Button variant="link" size="sm" asChild>
                 <Link href="/app/orders">View all</Link>
             </Button>
         </CardHeader>

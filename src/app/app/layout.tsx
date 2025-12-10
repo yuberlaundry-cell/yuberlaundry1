@@ -31,7 +31,7 @@ export default function ConsumerPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   
   return (
     <SidebarProvider>
@@ -72,7 +72,7 @@ export default function ConsumerPortalLayout({
             ))}
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter className="p-2">
+        <SidebarFooter className="p-2 space-y-1">
             {bottomNavConfig.map((item) => (
                  <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
@@ -90,9 +90,13 @@ export default function ConsumerPortalLayout({
                 </SidebarMenuItem>
             ))}
              <SidebarMenuItem>
-                <SidebarMenuButton variant="ghost" className="justify-start w-full text-muted-foreground" onClick={logout}>
-                    <Power />
-                    <span>Logout</span>
+                <SidebarMenuButton variant="ghost" className="justify-start w-full" onClick={logout}>
+                    <div className="flex items-center gap-2">
+                        <div className="h-7 w-7 rounded-full bg-muted flex items-center justify-center font-bold text-xs">
+                            {`${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`}
+                        </div>
+                        <span>Logout</span>
+                    </div>
                 </SidebarMenuButton>
             </SidebarMenuItem>
         </SidebarFooter>
@@ -102,7 +106,7 @@ export default function ConsumerPortalLayout({
             <div className="md:hidden">
               <SidebarTrigger />
             </div>
-             <div className="md:hidden flex items-center gap-2">
+            <div className="hidden md:flex items-center gap-2">
                  <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
             </div>
             <div className="flex-1" />
