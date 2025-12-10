@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -13,6 +14,10 @@ import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { Camera, CheckCircle, ScanLine, Search, UserPlus } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { useState, useRef, useEffect } from 'react';
+import { useToast } from '@/hooks/use-toast';
+
 
 const orderToCome = {
   id: '#YL12345',
@@ -23,6 +28,55 @@ const orderToCome = {
 };
 
 export default function IntakePage() {
+    const { toast } = useToast();
+    const [isScannerOpen, setScannerOpen] = useState(false);
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const [manualOrderId, setManualOrderId] = useState('');
+
+    const getCameraPermission = async () => {
+        if (hasCameraPermission) return true;
+        if (typeof navigator.mediaDevices?.getUserMedia !== 'function') {
+            console.error('getUserMedia is not supported in this browser.');
+            setHasCameraPermission(false);
+            return false;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({video: true});
+            setHasCameraPermission(true);
+
+            if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+            }
+            return true;
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            setHasCameraPermission(false);
+            toast({
+                variant: 'destructive',
+                title: 'Camera Access Denied',
+                description: 'Please enable camera permissions in your browser settings to use the scanner.',
+            });
+            return false;
+        }
+    };
+
+    useEffect(() => {
+        if(isScannerOpen) {
+            getCameraPermission();
+        }
+    }, [isScannerOpen]);
+
+    const handleFindOrder = (e: React.FormEvent) => {
+      e.preventDefault();
+      if (manualOrderId) {
+        toast({
+          title: 'Searching for order...',
+          description: `Looking up details for order ${manualOrderId}.`
+        })
+      }
+    }
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -55,13 +109,32 @@ export default function IntakePage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                <Camera className="h-24 w-24 text-gray-600" />
-                <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg" />
-              </div>
-              <Button className="w-full">
-                <ScanLine className="mr-2" /> Start Scanner
-              </Button>
+               <Dialog open={isScannerOpen} onOpenChange={setScannerOpen}>
+                    <DialogTrigger asChild>
+                        <Button className="w-full">
+                            <ScanLine className="mr-2" /> Start Scanner
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Scan Order QR Code</DialogTitle>
+                            <DialogDescription>
+                                Center the QR code on the order bag inside the frame.
+                            </DialogDescription>
+                        </DialogHeader>
+                         <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
+                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                            {hasCameraPermission === false && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
+                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
+                                    <p className="text-center">Camera access is required to scan QR codes.</p>
+                                </div>
+                            )}
+                            <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
+                        </div>
+                        <Button onClick={() => setScannerOpen(false)}>Close Scanner</Button>
+                    </DialogContent>
+                </Dialog>
             </CardContent>
           </Card>
            <Card>
@@ -71,12 +144,18 @@ export default function IntakePage() {
                 If a QR code is not available, enter the order ID manually.
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex gap-2">
-                <Input placeholder="Enter Order ID, e.g., #YL12345" />
-                <Button>
-                    <Search className="mr-2 h-4 w-4" />
-                    Find Order
-                </Button>
+            <CardContent>
+              <form className="flex gap-2" onSubmit={handleFindOrder}>
+                  <Input 
+                    placeholder="Enter Order ID, e.g., #YL12345" 
+                    value={manualOrderId}
+                    onChange={(e) => setManualOrderId(e.target.value)}
+                  />
+                  <Button type="submit">
+                      <Search className="mr-2 h-4 w-4" />
+                      Find Order
+                  </Button>
+              </form>
             </CardContent>
           </Card>
         </div>
