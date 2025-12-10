@@ -1,3 +1,4 @@
+
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DollarSign, ShoppingCart, Users, AlertCircle, FilePlus, UserPlus, FileText, Settings } from "lucide-react";
@@ -5,6 +6,7 @@ import { SpendChart } from "./spend-chart";
 import { RecentOrdersTable } from "./recent-orders-table";
 import { EmployeeUsageWidget } from "./employee-usage-widget";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 const kpiCards = [
     { title: "Total Spend (Month)", value: "$4,250", change: "+12%", icon: DollarSign },
@@ -17,7 +19,7 @@ export function AdminDashboard() {
     return (
         <div className="space-y-8 pb-8">
             <div>
-                <h1 className="text-3xl font-bold font-headline">Business Dashboard</h1>
+                <h1 className="text-3xl md:text-4xl font-bold font-headline">Business Dashboard</h1>
                 <p className="text-muted-foreground">Track company laundry usage, spending, and activity.</p>
             </div>
 
@@ -39,31 +41,23 @@ export function AdminDashboard() {
                 ))}
             </div>
 
-            <div className="grid lg:grid-cols-3 gap-8">
+            <div className="grid lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Spend Over Time</CardTitle>
-                            <CardDescription>Company-wide spending for the last 6 months.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="pl-2">
-                            <SpendChart />
-                        </CardContent>
-                    </Card>
+                    <SpendChart />
                 </div>
                 <div className="space-y-8">
-                    <EmployeeUsageWidget />
-                    <Card>
+                     <Card>
                         <CardHeader>
                             <CardTitle>Quick Actions</CardTitle>
                         </CardHeader>
                         <CardContent className="grid grid-cols-2 gap-4">
-                            <Button variant="outline"><UserPlus className="mr-2"/> Add Employee</Button>
-                            <Button variant="outline"><FilePlus className="mr-2"/> New Order</Button>
-                            <Button variant="outline"><FileText className="mr-2"/> Get Invoice</Button>
-                            <Button variant="outline"><Settings className="mr-2"/> Manage Billing</Button>
+                            <Button variant="outline" asChild><Link href="/business/employees/new"><UserPlus className="mr-2"/> Add Employee</Link></Button>
+                            <Button variant="outline" asChild><Link href="/business/orders/new"><FilePlus className="mr-2"/> New Order</Link></Button>
+                            <Button variant="outline" asChild><Link href="/business/billing/invoices"><FileText className="mr-2"/> Get Invoice</Link></Button>
+                            <Button variant="outline" asChild><Link href="/business/billing"><Settings className="mr-2"/> Manage Billing</Link></Button>
                         </CardContent>
                     </Card>
+                    <EmployeeUsageWidget />
                 </div>
             </div>
 

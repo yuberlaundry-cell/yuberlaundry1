@@ -44,15 +44,15 @@ const navigationConfig = [
     title: 'Overview & Insights',
     links: [
       { href: '/admin', label: 'Global Dashboard', icon: AreaChart },
-      { href: '#', label: 'Demand vs Supply', icon: BarChart, disabled: true },
+      { href: '/admin/reports', label: 'Demand vs Supply', icon: BarChart },
     ],
   },
   {
     title: 'Operations',
     links: [
-      { href: '#', label: 'Orders Control', icon: ShoppingCart, disabled: true },
+      { href: '/admin/orders', label: 'Orders Control', icon: ShoppingCart },
       { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
-      { href: '#', label: 'Driver Fleet', icon: Truck, disabled: true },
+      { href: '/admin/drivers', label: 'Driver Fleet', icon: Truck },
     ],
   },
   {
@@ -60,28 +60,28 @@ const navigationConfig = [
     links: [
       { href: '/admin/revenue/commissions', label: 'Commission Rules', icon: Percent },
       { href: '/admin/revenue/subscriptions', label: 'Subscription Plans', icon: Crown },
-      { href: '#', label: 'B2B Billing', icon: CreditCard, disabled: true },
+      { href: '/admin/billing', label: 'B2B Billing', icon: CreditCard },
     ],
   },
   {
     title: 'Quality & Risk',
     links: [
       { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck },
-      { href: '#', label: 'Fraud Monitoring', icon: Shield, disabled: true },
+      { href: '/admin/fraud', label: 'Fraud Monitoring', icon: Shield },
     ],
   },
    {
     title: 'Platform Health',
     links: [
       { href: '/admin/api-status', label: 'API Status', icon: BadgeInfo },
-       { href: '#', label: 'System Health', icon: HeartPulse, disabled: true },
+       { href: '/admin/health', label: 'System Health', icon: HeartPulse },
     ],
   },
   {
     title: 'Users & Config',
     links: [
       { href: '/admin/users', label: 'User Management', icon: Users },
-      { href: '#', label: 'Platform Settings', icon: Settings, disabled: true },
+      { href: '/admin/settings', label: 'Platform Settings', icon: Settings },
     ],
   },
 ];
@@ -152,7 +152,7 @@ export default function AdminPortalLayout({
                                 asChild
                                 tooltip={item.label}
                                 isActive={pathname === item.href}
-                                className={cn(item.disabled && "opacity-50 pointer-events-none")}
+                                className={cn(item.href === '#' && "opacity-50 pointer-events-none")}
                                 >
                                 <Link href={item.href}>
                                     <item.icon />
@@ -177,7 +177,9 @@ export default function AdminPortalLayout({
           <UserNav />
         </header>
         <main className="p-4 sm:p-6 lg:p-8">
-            {children}
+            <div className="mx-auto w-full max-w-6xl">
+                {children}
+            </div>
         </main>
       </SidebarInset>
     </SidebarProvider>
