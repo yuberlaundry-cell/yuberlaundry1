@@ -5,10 +5,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ArrowLeft, Check, MapPin, Phone, QrCode, ScanLine, Truck, Package, Navigation, Camera, MessageSquare } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { useParams } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 
 const jobData = {
@@ -35,6 +36,39 @@ export default function JobDetailsPage() {
     const params = useParams();
     const jobId = params.id as string;
     const job = jobData;
+
+    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
+    const { toast } = useToast();
+
+    useEffect(() => {
+        const getCameraPermission = async () => {
+        if (typeof navigator.mediaDevices?.getUserMedia !== 'function') {
+            console.error('getUserMedia is not supported in this browser.');
+            setHasCameraPermission(false);
+            return;
+        }
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({video: true});
+            setHasCameraPermission(true);
+
+            if (videoRef.current) {
+            videoRef.current.srcObject = stream;
+            }
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+            setHasCameraPermission(false);
+            toast({
+            variant: 'destructive',
+            title: 'Camera Access Denied',
+            description: 'Please enable camera permissions in your browser settings to use this app.',
+            });
+        }
+        };
+
+        getCameraPermission();
+    }, [toast]);
+
 
     const handleNextStep = () => {
         if (currentStep < pickupSteps.length -1) {
@@ -119,7 +153,13 @@ export default function JobDetailsPage() {
                                                         </DialogDescription>
                                                     </DialogHeader>
                                                      <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                                                        <Camera className="h-24 w-24 text-gray-600" />
+                                                        <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                                                        {hasCameraPermission === false && (
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
+                                                                <Camera className="h-12 w-12 text-gray-500 mb-4" />
+                                                                <p className="text-center">Camera access is required to scan QR codes.</p>
+                                                            </div>
+                                                        )}
                                                         <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
                                                     </div>
                                                 </DialogContent>
@@ -139,9 +179,14 @@ export default function JobDetailsPage() {
                                                            Take a photo of the items at the pickup location.
                                                         </DialogDescription>
                                                     </DialogHeader>
-                                                     <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                                                        <p className="text-white z-10">Camera Preview</p>
-                                                        <Camera className="h-24 w-24 text-gray-600 absolute" />
+                                                      <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
+                                                        <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                                                        {hasCameraPermission === false && (
+                                                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
+                                                                <Camera className="h-12 w-12 text-gray-500 mb-4" />
+                                                                <p className="text-center">Camera access is required to take photos.</p>
+                                                            </div>
+                                                        )}
                                                     </div>
                                                     <Button onClick={() => alert('Photo captured (mock)')}>Capture</Button>
                                                 </DialogContent>
