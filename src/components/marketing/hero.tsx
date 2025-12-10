@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card } from "../ui/card";
 import { Apple, ShoppingBasket, Tag } from "lucide-react";
 
-export function Hero() {
+export default function Hero() {
   const heroImage = {
       imageUrl: "https://images.unsplash.com/photo-1582735689365-27f72f895995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
       description: "A smiling woman holding a Yuber Laundry bag",
