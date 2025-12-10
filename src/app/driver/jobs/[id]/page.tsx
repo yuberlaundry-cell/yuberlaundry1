@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { useParams } from "next/navigation";
 
 
 const job = { 
@@ -30,6 +31,8 @@ const pickupSteps = [
 
 export default function JobDetailsPage() {
     const [currentStep, setCurrentStep] = useState(0);
+    const params = useParams();
+    const jobId = params.id as string;
 
     const handleNextStep = () => {
         if (currentStep < pickupSteps.length -1) {
@@ -47,7 +50,7 @@ export default function JobDetailsPage() {
             </Button>
             <div>
                 <h1 className="text-2xl font-bold font-headline">Job Details</h1>
-                <p className="text-muted-foreground">Order ID: {job.id}</p>
+                <p className="text-muted-foreground">Order ID: {jobId}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8 items-start">
                 <div className="space-y-6">

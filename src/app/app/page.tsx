@@ -62,7 +62,7 @@ export default function ConsumerDashboard() {
             </CardContent>
             <CardFooter>
                 <Button variant="secondary" className="w-full" asChild>
-                    <Link href="#">Manage Wallet</Link>
+                    <Link href="/app/wallet">Manage Wallet</Link>
                 </Button>
             </CardFooter>
         </Card>

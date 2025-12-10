@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -47,7 +48,7 @@ export default function RegisterPage() {
           </form>
            <div className="mt-4 text-center text-sm">
             Already have an account?{' '}
-            <Link href="/auth/login" className="underline">
+            <Link href="/login" className="underline">
               Log in
             </Link>
           </div>

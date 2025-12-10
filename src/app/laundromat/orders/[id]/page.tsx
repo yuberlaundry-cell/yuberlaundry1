@@ -13,6 +13,7 @@ import { ArrowLeft, Package, User, Clock, CheckSquare, Image as ImageIcon, Messa
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
+import { useParams } from 'next/navigation';
 
 const order = {
     id: '#YL12345',
@@ -41,6 +42,8 @@ const qcChecklist = [
 ];
 
 export default function OrderProcessingDetailsPage() {
+    const params = useParams();
+    const orderId = `#${params.id as string}`;
 
   return (
     <div className="space-y-8 pb-8">
@@ -56,7 +59,7 @@ export default function OrderProcessingDetailsPage() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold font-headline flex items-center gap-3">
-            Order {order.id}
+            Order {orderId}
           </h1>
           <p className="text-muted-foreground mt-1">Status: {order.status}</p>
         </div>
