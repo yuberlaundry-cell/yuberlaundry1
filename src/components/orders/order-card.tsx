@@ -21,6 +21,7 @@ const serviceIcons = {
 
 export function OrderCard({ order }: { order: Order }) {
     const ctaText = order.statusCategory === 'completed' || order.statusCategory === 'cancelled' ? 'View Details' : 'Track Order';
+    const orderId = order.id.replace('#', '');
 
     return (
         <Card>
@@ -50,7 +51,7 @@ export function OrderCard({ order }: { order: Order }) {
             <CardFooter className="flex justify-between items-center">
                 <p className="font-bold text-lg">{order.price}</p>
                 <Button asChild variant="outline">
-                    <Link href={`/app/orders/${order.id}`}>{ctaText}</Link>
+                    <Link href={`/app/orders/${orderId}`}>{ctaText}</Link>
                 </Button>
             </CardFooter>
         </Card>

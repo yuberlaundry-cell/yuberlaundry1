@@ -20,6 +20,7 @@ import {
 import React from 'react';
 import { Badge } from '../ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
+import { getRedirectPathForRole } from '@/lib/auth';
 
 const navLinks = [
   { href: '/locations', label: 'Locations' },
@@ -284,14 +285,19 @@ export function PublicHeader() {
           {!loading && (
             <>
               {user ? (
-                <UserNav />
+                <div className="flex items-center gap-2">
+                    <Button variant="ghost" asChild>
+                        <Link href={getRedirectPathForRole(user.role)}>Dashboard</Link>
+                    </Button>
+                    <UserNav />
+                </div>
               ) : (
                 <div className='hidden md:flex items-center space-x-2'>
                   <Button variant="ghost" asChild>
-                    <Link href="/login">Log in</Link>
+                    <Link href="/auth/login">Log in</Link>
                   </Button>
                   <Button asChild>
-                    <Link href="/register">Sign up</Link>
+                    <Link href="/auth/register">Sign up</Link>
                   </Button>
                 </div>
               )}
