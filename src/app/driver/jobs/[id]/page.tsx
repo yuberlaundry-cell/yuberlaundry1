@@ -24,11 +24,11 @@ const jobData = {
 };
 
 const pickupSteps = [
-    { id: 'navigate', label: 'Start Navigation' },
-    { id: 'arrive', label: 'Arrive at Pickup' },
-    { id: 'scan', label: 'Scan Bag QR Code' },
-    { id: 'photo', label: 'Take Photo' },
-    { id: 'confirm', label: 'Confirm Items Collected' },
+    { id: 'navigate', label: 'Start Navigation', actionLabel: 'Start Navigation' },
+    { id: 'arrive', label: 'Arrive at Pickup', actionLabel: 'Confirm Arrival' },
+    { id: 'scan', label: 'Scan Bag QR Code', actionLabel: 'Scan Code', icon: QrCode },
+    { id: 'photo', label: 'Take Photo', actionLabel: 'Take Photo', icon: Camera },
+    { id: 'confirm', label: 'Confirm Items Collected', actionLabel: 'Confirm Pickup' },
 ]
 
 export default function JobDetailsPage() {
@@ -40,40 +40,115 @@ export default function JobDetailsPage() {
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const { toast } = useToast();
+    
+    const [isScanOpen, setScanOpen] = useState(false);
+    const [isPhotoOpen, setPhotoOpen] = useState(false);
 
-    useEffect(() => {
-        const getCameraPermission = async () => {
+    const getCameraPermission = async () => {
+        if (hasCameraPermission) return true;
         if (typeof navigator.mediaDevices?.getUserMedia !== 'function') {
             console.error('getUserMedia is not supported in this browser.');
             setHasCameraPermission(false);
-            return;
+            return false;
         }
         try {
             const stream = await navigator.mediaDevices.getUserMedia({video: true});
             setHasCameraPermission(true);
 
             if (videoRef.current) {
-            videoRef.current.srcObject = stream;
+                videoRef.current.srcObject = stream;
             }
+            return true;
         } catch (error) {
             console.error('Error accessing camera:', error);
             setHasCameraPermission(false);
             toast({
-            variant: 'destructive',
-            title: 'Camera Access Denied',
-            description: 'Please enable camera permissions in your browser settings to use this app.',
+                variant: 'destructive',
+                title: 'Camera Access Denied',
+                description: 'Please enable camera permissions in your browser settings to use this feature.',
             });
+            return false;
         }
-        };
+    };
 
-        getCameraPermission();
-    }, [toast]);
+    useEffect(() => {
+        if(isScanOpen || isPhotoOpen) {
+            getCameraPermission();
+        }
+    }, [isScanOpen, isPhotoOpen]);
 
 
     const handleNextStep = () => {
         if (currentStep < pickupSteps.length -1) {
             setCurrentStep(currentStep + 1);
         }
+    }
+    
+    const renderActionButton = (step: typeof pickupSteps[0], index: number) => {
+        const ActionIcon = step.icon;
+
+        if (step.id === 'scan') {
+             return (
+                <Dialog open={isScanOpen} onOpenChange={setScanOpen}>
+                    <DialogTrigger asChild>
+                        <Button className="mt-2 w-full">
+                            {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Scan QR Code</DialogTitle>
+                            <DialogDescription>
+                                Center the QR code on the customer's bag in the frame.
+                            </DialogDescription>
+                        </DialogHeader>
+                         <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
+                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                            {hasCameraPermission === false && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
+                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
+                                    <p className="text-center">Camera access is required to scan QR codes.</p>
+                                </div>
+                            )}
+                            <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
+                        </div>
+                        <Button onClick={() => { handleNextStep(); setScanOpen(false); }}>Confirm Scan</Button>
+                    </DialogContent>
+                </Dialog>
+            );
+        }
+        
+        if (step.id === 'photo') {
+             return (
+                <Dialog open={isPhotoOpen} onOpenChange={setPhotoOpen}>
+                    <DialogTrigger asChild>
+                        <Button className="mt-2 w-full">
+                             {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Capture Photo</DialogTitle>
+                            <DialogDescription>
+                                Take a photo of the items at the pickup location.
+                            </DialogDescription>
+                        </DialogHeader>
+                          <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
+                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                            {hasCameraPermission === false && (
+                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
+                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
+                                    <p className="text-center">Camera access is required to take photos.</p>
+                                </div>
+                            )}
+                        </div>
+                        <Button onClick={() => { handleNextStep(); setPhotoOpen(false); }}>Capture</Button>
+                    </DialogContent>
+                </Dialog>
+            );
+        }
+
+        return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
     }
 
     return (
@@ -129,72 +204,16 @@ export default function JobDetailsPage() {
                          <ol className="space-y-4">
                             {pickupSteps.map((step, index) => (
                                 <li key={step.id} className="flex items-start gap-4">
-                                    <div className="flex flex-col items-center">
+                                    <div className="flex flex-col items-center self-stretch">
                                         <div className={`flex h-8 w-8 items-center justify-center rounded-full ${index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                                             {index < currentStep ? <Check /> : (index === currentStep ? <ScanLine /> : index + 1)}
                                         </div>
-                                        {index < pickupSteps.length -1 && <div className={`w-px flex-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
+                                        {index < pickupSteps.length -1 && <div className={`w-px flex-1 my-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
                                     </div>
                                     <div className="flex-1 pt-1.5">
                                         <p className={`font-medium ${index <= currentStep ? 'text-foreground' : 'text-muted-foreground'}`}>{step.label}</p>
                                         
-                                        {index === currentStep && step.id === 'scan' && (
-                                             <Dialog>
-                                                <DialogTrigger asChild>
-                                                    <Button className="mt-2 w-full" onClick={handleNextStep}>
-                                                        <QrCode className="mr-2" /> Scan Code
-                                                    </Button>
-                                                </DialogTrigger>
-                                                <DialogContent>
-                                                    <DialogHeader>
-                                                        <DialogTitle>Scan QR Code</DialogTitle>
-                                                        <DialogDescription>
-                                                           Center the QR code on the customer's bag in the frame.
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                     <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                                                        <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
-                                                        {hasCameraPermission === false && (
-                                                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
-                                                                <Camera className="h-12 w-12 text-gray-500 mb-4" />
-                                                                <p className="text-center">Camera access is required to scan QR codes.</p>
-                                                            </div>
-                                                        )}
-                                                        <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
-                                                    </div>
-                                                </DialogContent>
-                                            </Dialog>
-                                        )}
-                                        {index === currentStep && step.id === 'photo' && (
-                                            <Dialog>
-                                                <DialogTrigger asChild>
-                                                     <Button className="mt-2 w-full" onClick={handleNextStep}>
-                                                        <Camera className="mr-2" /> Take Photo
-                                                    </Button>
-                                                </DialogTrigger>
-                                                <DialogContent>
-                                                    <DialogHeader>
-                                                        <DialogTitle>Capture Photo</DialogTitle>
-                                                        <DialogDescription>
-                                                           Take a photo of the items at the pickup location.
-                                                        </DialogDescription>
-                                                    </DialogHeader>
-                                                      <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                                                        <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
-                                                        {hasCameraPermission === false && (
-                                                            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
-                                                                <Camera className="h-12 w-12 text-gray-500 mb-4" />
-                                                                <p className="text-center">Camera access is required to take photos.</p>
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                    <Button onClick={() => alert('Photo captured (mock)')}>Capture</Button>
-                                                </DialogContent>
-                                            </Dialog>
-                                        )}
-                                         {index === currentStep && !['scan', 'photo'].includes(step.id) && (
-                                            <Button className="mt-2 w-full" onClick={handleNextStep}>{step.label}</Button>
-                                        )}
+                                        {index === currentStep && renderActionButton(step, index)}
                                         
                                     </div>
                                 </li>
@@ -214,3 +233,5 @@ export default function JobDetailsPage() {
         </div>
     )
 }
+
+    
