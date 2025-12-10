@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, Search } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -99,9 +99,17 @@ export default function ConsumerPortalLayout({
         </SidebarFooter>
       </Sidebar>
       <SidebarInset>
-        <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+        <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
             <div className="md:hidden">
               <SidebarTrigger />
+            </div>
+            <div className="relative flex-1 md:grow-0">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search knowledgebase..."
+                className="w-full rounded-lg bg-muted pl-8 md:w-[200px] lg:w-[336px]"
+              />
             </div>
             <div className="flex-1" />
             <UserNav />
