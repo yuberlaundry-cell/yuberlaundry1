@@ -8,18 +8,20 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, CheckSquare, Wind, Droplets, Package } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import Link from 'next/link';
 
 const columns = [
   {
     id: 'washing',
     title: 'Washing',
+    icon: Droplets,
     orders: [
       {
         id: '#YL12345',
@@ -32,6 +34,7 @@ const columns = [
   {
     id: 'drying',
     title: 'Drying',
+    icon: Wind,
     orders: [
       {
         id: '#YL12348',
@@ -43,7 +46,8 @@ const columns = [
   },
   {
     id: 'folding-qc',
-    title: 'Folding / QC',
+    title: 'Folding & QC',
+    icon: CheckSquare,
     orders: [
       {
         id: '#YL12346',
@@ -56,6 +60,7 @@ const columns = [
   {
     id: 'ready',
     title: 'Ready',
+    icon: Package,
     orders: [
       {
         id: '#YL12347',
@@ -67,40 +72,47 @@ const columns = [
   },
 ];
 
-const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => (
-  <Card className="mb-4">
-    <CardHeader className="p-4">
-      <div className="flex justify-between items-start">
-        <CardTitle className="text-base font-bold">{order.id}</CardTitle>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="h-6 w-6">
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem>View Details</DropdownMenuItem>
-            <DropdownMenuItem>Move to Next Stage</DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
-              Report Issue
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <CardDescription>{order.customer}</CardDescription>
-    </CardHeader>
-    <CardContent className="p-4 pt-0">
-      <div className="flex justify-between items-center text-sm">
-        <p className="font-medium">{order.service}</p>
-        <Badge
-          variant={order.sla === 'Completed' ? 'default' : 'destructive'}
-        >
-          {order.sla}
-        </Badge>
-      </div>
-    </CardContent>
-  </Card>
-);
+const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => {
+    const orderId = order.id.replace('#', '');
+    return (
+      <Card className="mb-4">
+        <CardHeader className="p-4">
+          <div className="flex justify-between items-start">
+            <Link href={`/laundromat/orders/${orderId}`}>
+                <CardTitle className="text-base font-bold hover:underline">{order.id}</CardTitle>
+            </Link>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-6 w-6">
+                  <MoreHorizontal className="h-4 w-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem asChild>
+                    <Link href={`/laundromat/orders/${orderId}`}>View Details</Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>Move to Next Stage</DropdownMenuItem>
+                <DropdownMenuItem className="text-destructive">
+                  Report Issue
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+          <CardDescription>{order.customer}</CardDescription>
+        </CardHeader>
+        <CardContent className="p-4 pt-0">
+          <div className="flex justify-between items-center text-sm">
+            <p className="font-medium">{order.service}</p>
+            <Badge
+              variant={order.sla === 'Completed' ? 'default' : 'destructive'}
+            >
+              {order.sla}
+            </Badge>
+          </div>
+        </CardContent>
+      </Card>
+    );
+}
 
 export default function ProcessingPage() {
   return (
@@ -119,6 +131,7 @@ export default function ProcessingPage() {
               className="bg-muted rounded-lg p-4 w-[320px] h-full flex flex-col"
             >
               <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
+                <column.icon className="h-5 w-5 text-muted-foreground" />
                 {column.title}{' '}
                 <span className="text-sm bg-background text-muted-foreground rounded-full h-6 w-6 flex items-center justify-center">
                   {column.orders.length}
