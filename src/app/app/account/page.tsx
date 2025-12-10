@@ -6,18 +6,14 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
-import { CreditCard, Shield, Bell, HelpCircle, LogOut, ChevronRight, User } from "lucide-react";
-import Link from "next/link";
+import { User } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useRouter } from "next/navigation";
 
 export default function AccountPage() {
-    const { user, logout } = useAuth();
+    const { user } = useAuth();
     const { toast } = useToast();
-    const router = useRouter();
     const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`;
 
     const handleSaveProfile = (e: React.FormEvent) => {
@@ -28,126 +24,104 @@ export default function AccountPage() {
         });
     }
 
-    const handleLogout = () => {
-        logout();
-        window.location.href = '/';
-    }
-
     return (
         <div className="space-y-8 pb-8">
             <div>
-                <h1 className="text-3xl font-bold font-headline flex items-center gap-3"><User /> Account Settings</h1>
-                <p className="text-muted-foreground">Manage your profile, payment methods, and notification preferences.</p>
+                <h1 className="text-3xl font-bold font-headline flex items-center gap-3">Settings</h1>
+                <p className="text-muted-foreground">Manage your account settings, addresses, and payment methods.</p>
             </div>
 
-            <Card>
-                <CardHeader>
-                    <div className="flex items-center gap-4">
-                        <Avatar className="h-16 w-16">
-                            <AvatarImage src={user?.avatarUrl} />
-                            <AvatarFallback className="text-2xl">{initials}</AvatarFallback>
-                        </Avatar>
-                        <div>
-                            <h2 className="text-2xl font-bold">{user?.firstName} {user?.lastName}</h2>
-                            <p className="text-muted-foreground">{user?.email}</p>
-                        </div>
-                    </div>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                     <form className="space-y-4 max-w-lg" onSubmit={handleSaveProfile}>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="first-name">First Name</Label>
-                                <Input id="first-name" defaultValue={user?.firstName} />
+            <Tabs defaultValue="profile">
+                <TabsList>
+                    <TabsTrigger value="profile">Profile</TabsTrigger>
+                    <TabsTrigger value="addresses">Addresses</TabsTrigger>
+                    <TabsTrigger value="payment">Payment</TabsTrigger>
+                    <TabsTrigger value="security">Security</TabsTrigger>
+                    <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                </TabsList>
+                <TabsContent value="profile">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Profile</CardTitle>
+                            <CardDescription>This is how others will see you on the site.</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-8">
+                            <div className="flex items-center gap-4">
+                                <Avatar className="h-20 w-20">
+                                    <AvatarImage src={user?.avatarUrl} />
+                                    <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
+                                </Avatar>
+                                <div className="flex gap-2">
+                                    <Button>Change photo</Button>
+                                    <Button variant="ghost" className="text-muted-foreground">Remove</Button>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="last-name">Last Name</Label>
-                                <Input id="last-name" defaultValue={user?.lastName} />
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email Address</Label>
-                            <Input id="email" type="email" defaultValue={user?.email} />
-                        </div>
-                        <Button type="submit">Save Profile</Button>
-                    </form>
-                    <Separator />
-                     <div className="space-y-4">
-                        <h3 className="font-semibold">Password</h3>
-                         <Dialog>
-                            <DialogTrigger asChild>
-                                <Button variant="outline">Change Password</Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Change Your Password</DialogTitle>
-                                    <DialogDescription>
-                                        Enter your old password and choose a new one.
-                                    </DialogDescription>
-                                </DialogHeader>
-                                <form className="space-y-4">
-                                    <div className="space-y-2">
-                                        <Label htmlFor="old-password">Current Password</Label>
-                                        <Input id="old-password" type="password" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="new-password">New Password</Label>
-                                        <Input id="new-password" type="password" />
-                                    </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="confirm-password">Confirm New Password</Label>
-                                        <Input id="confirm-password" type="password" />
-                                    </div>
-                                    <Button type="submit" className="w-full">Set New Password</Button>
-                                </form>
-                            </DialogContent>
-                        </Dialog>
-                    </div>
-                </CardContent>
-            </Card>
 
-             <Card>
-                <CardHeader>
-                    <CardTitle>Preferences & Legal</CardTitle>
-                </CardHeader>
-                <CardContent className="divide-y divide-border -mx-6 px-0">
-                     <Link href="#" className="py-3 flex items-center justify-between hover:bg-muted/50 px-6">
-                        <div className="flex items-center gap-3">
-                            <CreditCard className="h-5 w-5 text-muted-foreground" />
-                            <span>Payment Methods</span>
-                        </div>
-                         <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    </Link>
-                     <Link href="#" className="py-3 flex items-center justify-between hover:bg-muted/50 px-6">
-                         <div className="flex items-center gap-3">
-                            <Bell className="h-5 w-5 text-muted-foreground" />
-                            <span>Notifications</span>
-                        </div>
-                         <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    </Link>
-                     <Link href="#" className="py-3 flex items-center justify-between hover:bg-muted/50 px-6">
-                        <div className="flex items-center gap-3">
-                            <Shield className="h-5 w-5 text-muted-foreground" />
-                            <span>Privacy & Sharing</span>
-                        </div>
-                        <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    </Link>
-                     <Link href="/faq" className="py-3 flex items-center justify-between hover:bg-muted/50 px-6">
-                         <div className="flex items-center gap-3">
-                            <HelpCircle className="h-5 w-5 text-muted-foreground" />
-                            <span>Help Center</span>
-                        </div>
-                         <ChevronRight className="h-5 w-5 text-muted-foreground" />
-                    </Link>
-                </CardContent>
-                 <CardFooter className="pt-6">
-                     <Button variant="ghost" className="text-destructive hover:text-destructive -ml-4" onClick={handleLogout}>
-                         <LogOut className="mr-2"/>
-                         Log Out
-                    </Button>
-                 </CardFooter>
-            </Card>
-
+                             <form className="space-y-6" onSubmit={handleSaveProfile}>
+                                <div className="grid md:grid-cols-2 gap-6">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="full-name">Full Name</Label>
+                                        <Input id="full-name" defaultValue={`${user?.firstName} ${user?.lastName}`} />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="email">Email</Label>
+                                        <Input id="email" type="email" defaultValue={user?.email} />
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone">Phone Number</Label>
+                                    <Input id="phone" type="tel" />
+                                </div>
+                                <Button type="submit">Save Changes</Button>
+                            </form>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                 <TabsContent value="addresses">
+                    <Card>
+                         <CardHeader>
+                            <CardTitle>Addresses</CardTitle>
+                            <CardDescription>Manage your saved pickup and delivery addresses.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <p>Addresses management coming soon.</p>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="payment">
+                     <Card>
+                         <CardHeader>
+                            <CardTitle>Payment Methods</CardTitle>
+                            <CardDescription>Manage your saved payment methods.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           <p>Payment methods management coming soon.</p>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                <TabsContent value="security">
+                     <Card>
+                         <CardHeader>
+                            <CardTitle>Security</CardTitle>
+                            <CardDescription>Manage your password and account security.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           <p>Security settings coming soon.</p>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+                 <TabsContent value="notifications">
+                     <Card>
+                         <CardHeader>
+                            <CardTitle>Notifications</CardTitle>
+                            <CardDescription>Manage your notification preferences.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           <p>Notifications settings coming soon.</p>
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+            </Tabs>
         </div>
     );
 }
