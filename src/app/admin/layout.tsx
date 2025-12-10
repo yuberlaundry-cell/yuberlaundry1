@@ -97,12 +97,7 @@ export default function AdminPortalLayout({
                 <SidebarMenuButton
                   asChild
                   tooltip={item.label}
-                  isActive={
-                    pathname.startsWith(item.href) &&
-                    (item.href === '/admin'
-                      ? pathname === item.href
-                      : true)
-                  }
+                  isActive={pathname === item.href}
                 >
                   <Link href={item.href}>
                     <item.icon />
