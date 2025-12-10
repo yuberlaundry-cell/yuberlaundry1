@@ -49,7 +49,7 @@ const overrides = [
 export default function CommissionsPage() {
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Commission Rules</h1>
           <p className="text-muted-foreground">
@@ -58,7 +58,7 @@ export default function CommissionsPage() {
         </div>
       </div>
 
-      <Tabs defaultValue="defaults">
+      <Tabs defaultValue="defaults" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="defaults">Platform Defaults</TabsTrigger>
           <TabsTrigger value="overrides">Laundromat Overrides</TabsTrigger>
