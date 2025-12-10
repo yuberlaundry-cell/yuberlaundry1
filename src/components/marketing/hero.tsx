@@ -7,11 +7,24 @@ import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label";
 import { Card } from "../ui/card";
-import { Smartphone, Heart, MapPin } from "lucide-react";
+import { Smartphone, Heart, MapPin, Search, Check } from "lucide-react";
 import React from "react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
+import { Input } from "../ui/input";
+import { ScrollArea } from "../ui/scroll-area";
+import { cn } from "@/lib/utils";
+
+const cities = [
+    { id: "london", name: "London", country: "United Kingdom" },
+    { id: "manchester", name: "Manchester", country: "United Kingdom" },
+    { id: "birmingham", name: "Birmingham", country: "United Kingdom" },
+    { id: "edinburgh", name: "Edinburgh", country: "Scotland" },
+    { id: "glasgow", name: "Glasgow", country: "Scotland" },
+];
 
 export default function Hero() {
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const [location, setLocation] = React.useState("London");
 
   const heroImage = {
       imageUrl: "https://images.unsplash.com/photo-1582735689365-27f72f895995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -32,8 +45,44 @@ export default function Hero() {
 
           <Card className="p-6 mt-8 max-w-md shadow-lg">
             <div className="flex justify-between items-center mb-6">
-                <h3 className="font-semibold flex items-center gap-2"><MapPin className="h-5 w-5 text-muted-foreground"/> Schedule your collection in <span className="text-primary">London</span></h3>
-                <Button variant="link" className="text-primary">Change</Button>
+                <h3 className="font-semibold flex items-center gap-2"><MapPin className="h-5 w-5 text-muted-foreground"/> Schedule your collection in <span className="text-primary">{location}</span></h3>
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="link" className="text-primary">Change</Button>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-sm">
+                        <DialogHeader>
+                            <DialogTitle className="flex items-center gap-2"><MapPin className="h-5 w-5 text-primary" /> Select your city</DialogTitle>
+                            <DialogDescription>Choose where to schedule your pickup</DialogDescription>
+                        </DialogHeader>
+                        <div className="relative">
+                             <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                             <Input placeholder="Search for a city..." className="pl-8" />
+                        </div>
+                        <ScrollArea className="h-72">
+                             <RadioGroup value={location.toLowerCase()} onValueChange={(val) => setLocation(cities.find(c => c.id === val)?.name || 'London')} className="space-y-2 pr-4">
+                                {cities.map(city => (
+                                    <Label key={city.id} htmlFor={city.id} 
+                                      className={cn(
+                                        "flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50",
+                                        location.toLowerCase() === city.name.toLowerCase() && "bg-primary/10 border-primary"
+                                      )}
+                                    >
+                                        <div className="flex items-center gap-3">
+                                            <RadioGroupItem value={city.id} id={city.id} className="sr-only" />
+                                            <MapPin className="h-5 w-5 text-muted-foreground" />
+                                            <div>
+                                                <p className="font-medium">{city.name}</p>
+                                                <p className="text-sm text-muted-foreground">{city.country}</p>
+                                            </div>
+                                        </div>
+                                        {location.toLowerCase() === city.name.toLowerCase() && <Check className="h-5 w-5 text-primary"/>}
+                                    </Label>
+                                ))}
+                            </RadioGroup>
+                        </ScrollArea>
+                    </DialogContent>
+                </Dialog>
             </div>
             {isExpanded ? (
                 <>
@@ -48,7 +97,7 @@ export default function Hero() {
                         </Label>
                     </RadioGroup>
                     <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
-                    <Button size="lg" className="w-full mt-3" asChild><Link href="/app/book/address">Continue</Link></Button>
+                    <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
                 </>
             ) : (
                  <Button size="lg" className="w-full h-14 text-lg" onClick={() => setIsExpanded(true)}>
