@@ -1,9 +1,7 @@
 
 'use client';
 
-import { BookingLayout } from "@/components/booking/booking-layout";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -28,7 +26,7 @@ const allDeliveryTimes = ['12:00 - 14:00', '13:00 - 15:00', '14:00 - 16:00', '15
 const featuredPickupTimes = ['09:00 - 11:00', '12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00'];
 const featuredDeliveryTimes = ['12:00 - 14:00', '15:00 - 17:00', '18:00 - 20:00', '20:00 - 22:00'];
 
-export default function SchedulePage() {
+export default function ScheduleStep() {
     const dates = generateDates();
     const [selectedPickupDate, setSelectedPickupDate] = useState(dates[0]);
     const [selectedPickupTime, setSelectedPickupTime] = useState(featuredPickupTimes[1]);
@@ -49,12 +47,11 @@ export default function SchedulePage() {
     }
 
     return (
-        <BookingLayout
-            stepTitle="Schedule Pickup & Delivery"
-            stepDescription="Choose a convenient time for us to collect and return your laundry."
-            nextHref="/app/book/services"
-            backHref="/app/book/address"
-        >
+        <div className="space-y-8">
+            <div>
+                <h2 className="text-2xl font-bold font-headline">Schedule Pickup & Delivery</h2>
+                <p className="text-muted-foreground mt-1">Choose a convenient time for us to collect and return your laundry.</p>
+            </div>
             <div className="grid md:grid-cols-2 gap-8">
                 {/* Pickup Section */}
                 <div className="space-y-6">
@@ -174,6 +171,6 @@ export default function SchedulePage() {
                     </div>
                 </div>
             </div>
-        </BookingLayout>
+        </div>
     );
 }

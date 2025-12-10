@@ -4,8 +4,7 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Textarea } from "@/components/ui/textarea";
-import { Box, CreditCard, LifeBuoy, Mail, MessageSquare, PhoneCall, ShieldQuestion, Sparkles, User, Workflow } from "lucide-react";
+import { Box, CreditCard, LifeBuoy, Mail, MessageSquare, PhoneCall, Sparkles } from "lucide-react";
 import { FaqChatbot } from "@/components/faq-chatbot";
 
 const faqSections = {
@@ -106,19 +105,7 @@ export default function SupportPage() {
                     </Card>
                 </div>
                  <div className="lg:sticky top-24 space-y-8">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle className="flex items-center gap-2">
-                                <Sparkles className="h-5 w-5 text-accent"/>
-                                Live AI Support
-                            </CardTitle>
-                            <CardDescription>Ask our AI assistant for instant answers.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                             <Textarea placeholder="Type your question here... e.g., 'How do I change my delivery address?'" />
-                             <Button className="w-full mt-2">Ask AI</Button>
-                        </CardContent>
-                    </Card>
+                    <FaqChatbot />
                      <Card className="bg-muted/50 border-dashed">
                         <CardHeader>
                             <CardTitle>Support Hours</CardTitle>

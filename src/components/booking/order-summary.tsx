@@ -7,7 +7,7 @@ import { Button } from "../ui/button";
 
 export function OrderSummary() {
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 sticky top-8">
             <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold font-headline">Order Summary</h2>
                 <Button variant="ghost" size="icon">
@@ -43,9 +43,15 @@ export function OrderSummary() {
 
             <div>
                 <h3 className="font-semibold mb-4">Services</h3>
-                <div className="p-8 bg-background/50 rounded-lg text-center flex flex-col items-center">
-                    <ShoppingBag className="h-8 w-8 text-muted-foreground mb-2" />
-                    <p className="text-sm text-muted-foreground">No services selected yet</p>
+                <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                        <p className="text-muted-foreground">Wash & Fold</p>
+                        <p>Est. $25.00</p>
+                    </div>
+                    <div className="flex justify-between">
+                        <p className="text-muted-foreground">Dry Cleaning</p>
+                        <p>Est. $15.00</p>
+                    </div>
                 </div>
             </div>
 
@@ -54,15 +60,15 @@ export function OrderSummary() {
             <div className="space-y-2 text-sm">
                  <div className="flex justify-between">
                     <p className="text-muted-foreground">Subtotal</p>
-                    <p className="font-medium">R0.00</p>
+                    <p className="font-medium">$40.00</p>
                 </div>
                  <div className="flex justify-between">
                     <p className="text-muted-foreground">Tip (15%)</p>
-                    <p className="font-medium">R0.00</p>
+                    <p className="font-medium">$6.00</p>
                 </div>
                  <div className="flex justify-between font-bold text-base border-t pt-2 mt-2">
                     <p>Total</p>
-                    <p>R0.00</p>
+                    <p>$46.00</p>
                 </div>
             </div>
 

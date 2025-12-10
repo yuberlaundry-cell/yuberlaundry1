@@ -29,10 +29,10 @@ export default function OrdersPage() {
                     <Tabs defaultValue="all">
                         <div className="flex flex-col md:flex-row gap-4 justify-between items-start">
                             <TabsList className="grid grid-cols-2 sm:grid-cols-4 h-auto w-full md:w-auto">
-                                <TabsTrigger value="all">All</TabsTrigger>
-                                <TabsTrigger value="in-progress">Active</TabsTrigger>
-                                <TabsTrigger value="completed">Completed</TabsTrigger>
-                                <TabsTrigger value="cancelled">Cancelled</TabsTrigger>
+                                <TabsTrigger value="all">All ({mockOrders.length})</TabsTrigger>
+                                <TabsTrigger value="in-progress">Active ({inProgressOrders.length})</TabsTrigger>
+                                <TabsTrigger value="completed">Completed ({completedOrders.length})</TabsTrigger>
+                                <TabsTrigger value="cancelled">Cancelled ({cancelledOrders.length})</TabsTrigger>
                             </TabsList>
                             <div className="flex items-center gap-2 flex-wrap w-full md:w-auto">
                                  <div className="relative flex-1 md:grow-0">
@@ -70,7 +70,7 @@ export default function OrdersPage() {
                             </div>
                         </div>
                         <TabsContent value="all">
-                            <OrderList orders={[]} />
+                            <OrderList orders={mockOrders} />
                         </TabsContent>
                         <TabsContent value="in-progress">
                             <OrderList orders={inProgressOrders} />
@@ -93,11 +93,11 @@ export default function OrdersPage() {
                             <div className="flex justify-around text-center">
                                 <div>
                                     <p className="text-sm text-muted-foreground">Lifetime Orders</p>
-                                    <p className="text-2xl font-bold">0</p>
+                                    <p className="text-2xl font-bold">48</p>
                                 </div>
                                 <div>
                                     <p className="text-sm text-muted-foreground">Total Spent</p>
-                                    <p className="text-2xl font-bold">R0.00</p>
+                                    <p className="text-2xl font-bold">$1,245.50</p>
                                 </div>
                             </div>
                             <div>

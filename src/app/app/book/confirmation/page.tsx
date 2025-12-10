@@ -1,13 +1,17 @@
+
+'use client';
+
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { DialogClose } from "@/components/ui/dialog";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 
-export default function ConfirmationPage() {
+export default function ConfirmationStep() {
     return (
-        <div className="flex items-center justify-center min-h-screen bg-background p-4">
-            <Card className="w-full max-w-md text-center shadow-lg">
+        <div className="flex items-center justify-center h-full">
+            <Card className="w-full max-w-md text-center shadow-none border-none">
                 <CardContent className="p-8">
                     <div className="flex justify-center mb-4">
                         <CheckCircle2 className="h-20 w-20 text-green-500" />
@@ -40,12 +44,14 @@ export default function ConfirmationPage() {
                     <Separator className="my-6" />
 
                     <div className="space-y-3">
-                         <Button className="w-full" asChild>
-                            <Link href="/app/orders">Track your order</Link>
-                        </Button>
-                         <Button variant="outline" className="w-full" asChild>
-                            <Link href="/app">Back to Dashboard</Link>
-                        </Button>
+                         <DialogClose asChild>
+                            <Button className="w-full" asChild>
+                                <Link href="/app/orders">Track your order</Link>
+                            </Button>
+                         </DialogClose>
+                         <DialogClose asChild>
+                             <Button variant="outline" className="w-full">Back to Dashboard</Button>
+                         </DialogClose>
                     </div>
                 </CardContent>
             </Card>

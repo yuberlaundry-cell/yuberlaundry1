@@ -19,15 +19,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { DollarSign, Gift, PlusCircle, ShieldQuestion } from 'lucide-react';
+import { Gift, PlusCircle, ShieldQuestion } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 const kpiCards = [
-    { title: "Available Balance", value: "R0.00" },
-    { title: "Referral Credits", value: "R0.00" },
-    { title: "Loyalty Points", value: "0", description: "Equal to R0.00" },
+    { title: "Available Balance", value: "$15.50" },
+    { title: "Referral Credits", value: "$50.00" },
+    { title: "Loyalty Points", value: "1,245", description: "Equal to $12.45" },
+];
+
+const transactions = [
+    { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-$25.50'},
+    { date: 'May 10, 2024', description: 'Funds added', amount: '+$50.00'},
+    { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+$10.00'},
 ];
 
 export default function WalletPage() {
@@ -72,13 +78,13 @@ export default function WalletPage() {
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" className="flex-1">R250</Button>
-                    <Button className="flex-1">R500</Button>
-                    <Button variant="outline" className="flex-1">R1000</Button>
+                    <Button variant="outline" className="flex-1">$25</Button>
+                    <Button className="flex-1">$50</Button>
+                    <Button variant="outline" className="flex-1">$100</Button>
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="custom-amount">Custom Amount</Label>
-                    <Input id="custom-amount" placeholder="R0.00" />
+                    <Input id="custom-amount" placeholder="$0.00" />
                  </div>
                  <div className="space-y-2">
                     <Label>Payment Method</Label>
@@ -107,11 +113,19 @@ export default function WalletPage() {
                 </TableRow>
                 </TableHeader>
                 <TableBody>
-                    <TableRow>
-                        <TableCell colSpan={3} className="text-center text-muted-foreground h-24">
-                            No transactions yet.
-                        </TableCell>
-                    </TableRow>
+                    {transactions.length > 0 ? transactions.map(t => (
+                         <TableRow key={t.date + t.description}>
+                            <TableCell>{t.date}</TableCell>
+                            <TableCell>{t.description}</TableCell>
+                            <TableCell className={`text-right font-medium ${t.amount.startsWith('+') ? 'text-green-600' : ''}`}>{t.amount}</TableCell>
+                        </TableRow>
+                    )) : (
+                        <TableRow>
+                            <TableCell colSpan={3} className="text-center text-muted-foreground h-24">
+                                No transactions yet.
+                            </TableCell>
+                        </TableRow>
+                    )}
                 </TableBody>
             </Table>
             </CardContent>
@@ -123,7 +137,7 @@ export default function WalletPage() {
                 <CardTitle>Loyalty Points</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-muted-foreground">You have <span className="font-bold text-foreground">0 points</span> available. Conversion rate is 100 points = R1.00.</p>
+                <p className="text-sm text-muted-foreground">You have <span className="font-bold text-foreground">1,245 points</span> available. Conversion rate is 100 points = $1.00.</p>
                 <Button className="w-full mt-4">Redeem Points</Button>
             </CardContent>
           </Card>

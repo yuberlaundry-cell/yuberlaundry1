@@ -1,13 +1,11 @@
 
 'use client';
 
-import { BookingLayout } from "@/components/booking/booking-layout";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
-import { Banknote, CreditCard, Landmark } from "lucide-react";
-import Link from "next/link";
+import { CreditCard } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -20,7 +18,7 @@ const paymentMethods = [
 ];
 
 
-export default function ReviewPage() {
+export default function ReviewStep() {
     const { toast } = useToast();
     const [selectedMethod, setSelectedMethod] = useState("card-4242");
 
@@ -36,13 +34,11 @@ export default function ReviewPage() {
 
 
     return (
-        <BookingLayout
-            stepTitle="Review & Pay"
-            stepDescription="Almost there! Please review your order and complete the payment."
-            nextHref="/app/book/confirmation"
-            backHref="/app/book/instructions"
-            nextButtonText="Place Order"
-        >
+        <div className="space-y-8">
+            <div>
+                <h2 className="text-2xl font-bold font-headline">Review & Pay</h2>
+                <p className="text-muted-foreground mt-1">Almost there! Please review your order and complete the payment.</p>
+            </div>
            <div className="grid md:grid-cols-2 gap-8 items-start">
                {/* Order Summary */}
                <div className="space-y-6">
@@ -145,6 +141,6 @@ export default function ReviewPage() {
                     </Card>
                 </div>
            </div>
-        </BookingLayout>
+        </div>
     )
 }

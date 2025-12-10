@@ -1,13 +1,12 @@
 
 'use client';
 
-import { BookingLayout } from "@/components/booking/booking-layout";
-import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Upload, X, File as FileIcon } from "lucide-react";
 import { useState, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
-export default function InstructionsPage() {
+export default function InstructionsStep() {
     const [notes, setNotes] = useState('');
     const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -22,17 +21,12 @@ export default function InstructionsPage() {
         setUploadedFiles(prev => prev.filter(file => file.name !== fileName));
     };
 
-    const handleButtonClick = () => {
-        fileInputRef.current?.click();
-    };
-
     return (
-        <BookingLayout
-            stepTitle="Special Instructions"
-            stepDescription="Let us know if there's anything special to consider."
-            nextHref="/app/book/review"
-            backHref="/app/book/services"
-        >
+        <div className="space-y-8">
+             <div>
+                <h2 className="text-2xl font-bold font-headline">Any special instructions?</h2>
+                <p className="text-muted-foreground mt-1">Let us know if there's anything special to consider.</p>
+            </div>
             <div className="space-y-6">
                 <div>
                     <label htmlFor="instructions" className="block text-sm font-medium text-gray-700 mb-2">
@@ -74,7 +68,7 @@ export default function InstructionsPage() {
                                 </label>
                                 <p className="pl-1">or drag and drop</p>
                             </div>
-                            <p className="text-xs text-gray-500">PNG, JPG, GIF up to 10MB. Helpful for pointing out stains.</p>
+                            <p className="text-xs text-gray-500">PNG, JPG up to 10MB. Helpful for pointing out stains.</p>
                         </div>
                     </div>
                      {uploadedFiles.length > 0 && (
@@ -97,6 +91,6 @@ export default function InstructionsPage() {
                     )}
                 </div>
             </div>
-        </BookingLayout>
+        </div>
     )
 }
