@@ -1,36 +1,39 @@
-import { CheckCircle, Circle, Dot } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+
+import { CheckCircle, Circle, Loader } from "lucide-react";
+import { Card, CardContent } from "../ui/card";
 import { type TimelineEvent } from "@/lib/mock-data";
 import { cn } from "@/lib/utils";
 
-export function OrderStatusTimeline({ timeline }: { timeline: TimelineEvent[] }) {
+const iconMap = {
+    completed: <CheckCircle className="h-6 w-6 text-green-500" />,
+    'in-progress': <Loader className="h-6 w-6 text-blue-500 animate-spin" />,
+    pending: <Circle className="h-6 w-6 text-gray-300" />,
+}
 
-    const activeIndex = timeline.slice().reverse().findIndex(event => event.status === 'completed');
-    const currentStepIndex = activeIndex === -1 ? 0 : timeline.length - 1 - activeIndex;
+export function OrderStatusTimeline({ timeline }: { timeline: TimelineEvent[] }) {
 
     return (
         <Card>
-            <CardHeader>
-                <CardTitle>Status Timeline</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <ol className="relative border-l border-border ml-3.5">
-                    {timeline.map((event, index) => {
-                        const isCompleted = event.status === 'completed';
-                        const isCurrent = index === currentStepIndex;
-
+            <CardContent className="p-6">
+                <ol className="space-y-4">
+                    {timeline.slice(4).map((event, index) => { // Slicing to match the design
+                        const isLast = index === timeline.slice(4).length - 1;
                         return (
-                            <li key={event.title} className="mb-8 ml-8">
-                                <span className={cn(
-                                    "absolute -left-[1.1rem] flex items-center justify-center w-8 h-8 rounded-full ring-8 ring-background",
-                                    isCompleted ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
-                                    isCurrent && "bg-primary text-primary-foreground animate-pulse"
-                                )}>
-                                    {isCompleted || isCurrent ? <CheckCircle className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
-                                </span>
-                                <div className={cn(isCurrent ? "font-semibold" : "text-muted-foreground")}>
-                                    <h3 className={cn("font-semibold", isCompleted || isCurrent ? "text-foreground" : "")}>{event.title}</h3>
-                                    <time className="block text-sm font-normal leading-none">{event.timestamp}</time>
+                            <li key={event.title} className="flex items-start gap-4">
+                                <div className="flex flex-col items-center">
+                                    <div className="flex-shrink-0">
+                                         {iconMap[event.status]}
+                                    </div>
+                                    {!isLast && <div className="w-px h-8 bg-border mt-1" />}
+                                </div>
+                                <div className="pt-0.5">
+                                    <p className={cn(
+                                        "font-semibold",
+                                        event.status === 'pending' && "text-muted-foreground"
+                                    )}>{event.title}</p>
+                                    <p className="text-sm text-muted-foreground">
+                                        {event.status === 'completed' ? 'Completed' : event.status === 'in-progress' ? 'In Progress' : 'Pending'}
+                                    </p>
                                 </div>
                             </li>
                         );
