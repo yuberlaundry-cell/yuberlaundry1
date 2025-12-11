@@ -16,8 +16,6 @@ import {
 } from '@/components/ui/chart';
 
 const chartData = [
-  { month: 'Dec', hours: 4 },
-  { month: 'Jan', hours: 5 },
   { month: 'Feb', hours: 3.5 },
   { month: 'Mar', hours: 2.5 },
   { month: 'Apr', hours: 3 },
