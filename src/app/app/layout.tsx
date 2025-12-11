@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -15,8 +15,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { BookingFlow } from "@/components/booking/booking-flow";
 import { Search } from "lucide-react";
 import { FaqChatbot } from "@/components/faq-chatbot";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { cn } from "@/lib/utils";
 
-const navigationConfig = [
+const desktopNavConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
   { href: '/app/promotions', label: 'Promotions', icon: Tag },
@@ -24,10 +26,71 @@ const navigationConfig = [
   { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon },
 ];
 
-const bottomNavConfig = [
+const mobileNavItems = [
+    { href: '/app', label: 'Dashboard', icon: LayoutDashboard, exact: true },
+    { href: '/app/orders', label: 'Orders', icon: ShoppingCart },
+    { href: '/app/account', label: 'Profile', icon: CircleUserRound },
+];
+
+const desktopBottomNavConfig = [
     { href: '/app/account', label: 'Settings', icon: Settings },
     { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
+
+
+const BottomNavbar = () => {
+    const pathname = usePathname();
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
+            <div className="grid h-16 grid-cols-5 w-full">
+                {mobileNavItems.slice(0, 2).map((item) => {
+                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                                isActive && "text-primary"
+                            )}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            <span className="text-xs">{item.label}</span>
+                        </Link>
+                    )
+                })}
+                <div className="flex justify-center items-center">
+                     <Dialog>
+                        <DialogTrigger asChild>
+                           <Button size="icon" className="w-14 h-14 rounded-full -translate-y-4 shadow-lg">
+                                <PlusCircle className="h-7 w-7" />
+                           </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                             <BookingFlow />
+                        </DialogContent>
+                    </Dialog>
+                </div>
+                 {mobileNavItems.slice(2).map((item) => {
+                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                                isActive && "text-primary"
+                            )}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            <span className="text-xs">{item.label}</span>
+                        </Link>
+                    )
+                })}
+            </div>
+        </nav>
+    );
+};
 
 
 export default function ConsumerPortalLayout({
@@ -37,6 +100,37 @@ export default function ConsumerPortalLayout({
 }) {
   const pathname = usePathname();
   const { logout } = useAuth();
+  const isMobile = useIsMobile();
+  
+  if (isMobile) {
+    return (
+        <>
+             <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
+                 <Link href="/" className="mr-auto">
+                    <WashingMachine className="h-7 w-7 text-primary" />
+                 </Link>
+                <div className="relative flex-1 md:grow-0">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                    type="search"
+                    placeholder="Search orders, help..."
+                    className="w-full rounded-lg bg-muted pl-8"
+                />
+                </div>
+                <div className="flex items-center gap-2">
+                    <FaqChatbot />
+                    <UserNav />
+                </div>
+            </header>
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 mb-16">
+                 <div className="mx-auto w-full max-w-6xl">
+                    {children}
+                 </div>
+            </main>
+            <BottomNavbar />
+        </>
+    )
+  }
   
   return (
     <SidebarProvider>
@@ -63,7 +157,7 @@ export default function ConsumerPortalLayout({
                   </DialogContent>
                 </Dialog>
             </SidebarMenuItem>
-            {navigationConfig.map((item) => (
+            {desktopNavConfig.map((item) => (
               <SidebarMenuItem key={item.href} className="px-2">
                 <SidebarMenuButton
                 asChild
@@ -85,7 +179,7 @@ export default function ConsumerPortalLayout({
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-2 space-y-1">
-            {bottomNavConfig.map((item) => (
+            {desktopBottomNavConfig.map((item) => (
                  <SidebarMenuItem key={item.href}>
                     <SidebarMenuButton
                     asChild
