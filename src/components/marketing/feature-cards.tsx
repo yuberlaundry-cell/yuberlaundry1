@@ -1,3 +1,4 @@
+
 import Image from 'next/image';
 import { PlaceHolderImages } from '@/lib/placeholder-images';
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,7 +24,7 @@ const features = [
     subText: 'Our services',
     badgeText: 'Dry cleaning',
     badgeSubText: '10:45 AM',
-    badgeValue: '-£25.50',
+    badgeValue: '-R255.50',
     badgeIcon: SparklesIcon,
     bgColor: 'bg-gray-200',
     imageUrl: 'https://picsum.photos/seed/feature2/600/800',
@@ -35,7 +36,7 @@ const features = [
     subText: 'Track order',
     badgeText: 'Delivered',
     badgeSubText: 'Yesterday',
-    badgeValue: '+ £5.00 tip',
+    badgeValue: '+ R50.00 tip',
     badgeIcon: Truck,
     bgColor: 'bg-slate-800',
     imageUrl: 'https://picsum.photos/seed/feature3/600/800',

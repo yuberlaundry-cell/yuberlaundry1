@@ -29,9 +29,9 @@ const navLinks = [
 
 const personalMegaMenuItems = {
   "How it works": [
-    { icon: Rocket, title: "Schedule Pickup", href: "#" },
-    { icon: Shirt, title: "We Clean", href: "#" },
-    { icon: Bike, title: "Fast Delivery", href: "#" },
+    { icon: Rocket, title: "Schedule Pickup", href: "/#features" },
+    { icon: Shirt, title: "We Clean", href: "/#features" },
+    { icon: Bike, title: "Fast Delivery", href: "/#features" },
     { icon: Shirt, title: "Pricing", href: "/pricing" },
     { icon: Smartphone, title: "Download App", href: "#" },
   ],
@@ -39,11 +39,11 @@ const personalMegaMenuItems = {
     { icon: Sparkles, title: "Yuber Plus", href: "/pricing", popular: true },
     { icon: Sparkles, title: "Sustainability", href: "#" },
     { icon: Gift, title: "Gift Cards", href: "#" },
-    { icon: Sparkles, title: "Referral Program", href: "/app/promotions" },
+    { icon: Users, title: "Referral Program", href: "/app/referrals" },
   ],
   "Support": [
     { icon: CircleHelp, title: "Help Centre", href: "/faq" },
-    { icon: Mail, title: "Contact Us", href: "#" },
+    { icon: Mail, title: "Contact Us", href: "/faq" },
     { icon: MessageSquare, title: "FAQs", href: "/faq" },
     { icon: Star, title: "Reviews", href: "#" },
   ]
