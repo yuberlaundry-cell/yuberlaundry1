@@ -33,6 +33,7 @@ import {
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { OrderStatusChart } from '@/components/laundromat/order-status-chart';
+import { useToast } from '@/hooks/use-toast';
 
 const laundromatData = {
     'L-001': {
@@ -70,6 +71,14 @@ export default function LaundromatProfilePage() {
     const params = useParams();
     const laundromatId = params.id as keyof typeof laundromatData;
     const laundromat = laundromatData[laundromatId] || laundromatData['L-001'];
+    const { toast } = useToast();
+
+    const handleAction = (action: string) => {
+        toast({
+            title: `Action: ${action}`,
+            description: `The '${action}' action for ${laundromat.name} has been initiated.`,
+        });
+    }
 
     return (
         <div className="space-y-6">
@@ -95,9 +104,9 @@ export default function LaundromatProfilePage() {
                 </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline"><FileText className="mr-2"/> View Contract</Button>
-                    <Button variant="outline"><Edit className="mr-2"/> Edit</Button>
-                    <Button variant="destructive"><ShieldOff className="mr-2"/> Deactivate</Button>
+                    <Button variant="outline" onClick={() => handleAction('View Contract')}><FileText className="mr-2"/> View Contract</Button>
+                    <Button variant="outline" asChild><Link href={`/admin/laundromats/${laundromatId}/edit`}><Edit className="mr-2"/> Edit</Link></Button>
+                    <Button variant="destructive" onClick={() => handleAction('Deactivate Laundromat')}><ShieldOff className="mr-2"/> Deactivate</Button>
                 </div>
             </div>
 
@@ -136,7 +145,7 @@ export default function LaundromatProfilePage() {
                                 {laundromat.recentOrders.map(job => (
                                     <TableRow key={job.id}>
                                         <TableCell className="font-medium">
-                                            <Link href={`/admin/orders/${job.id.replace('#', '')}`} className="hover:underline">
+                                            <Link href={`/admin/orders/${job.id.replace('#YL', '')}`} className="hover:underline">
                                                 {job.id}
                                             </Link>
                                         </TableCell>
