@@ -16,7 +16,7 @@ import { BookingFlow } from "@/components/booking/booking-flow";
 import { FaqChatbot } from "@/components/faq-chatbot";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
 const desktopNavConfig = [
@@ -51,7 +51,7 @@ const BottomNavbar = () => {
     const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
-            <div className="grid h-16 grid-cols-5 w-full">
+            <div className="grid h-16 grid-cols-4 w-full">
                 {mobileNavItems.map((item) => {
                     const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                     return (
@@ -96,6 +96,12 @@ const BottomNavbar = () => {
                         </div>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="rounded-t-2xl">
+                         <SheetHeader>
+                            <SheetTitle className="sr-only">More Options</SheetTitle>
+                            <SheetDescription className="sr-only">
+                                Access additional menu items like orders, promotions, referrals, settings, and support.
+                            </SheetDescription>
+                        </SheetHeader>
                         <div className="space-y-2 py-4">
                             {moreMenuItems.map((item) => (
                                 <Button key={item.href} variant="ghost" className="w-full justify-start text-base py-6" asChild>
