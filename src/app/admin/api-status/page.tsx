@@ -119,7 +119,7 @@ export default function ApiStatusPage() {
           </p>
         </div>
         <Button variant="outline" className="w-full sm:w-auto">
-          <RefreshCw /> Refresh Status
+          <RefreshCw className="mr-2 h-4 w-4" /> Refresh Status
         </Button>
       </div>
 
