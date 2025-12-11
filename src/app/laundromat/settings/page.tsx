@@ -122,7 +122,7 @@ export default function LaundromatSettingsPage() {
               <form className="space-y-6 max-w-lg">
                 <div className="space-y-2">
                   <Label htmlFor="bank-name">Bank Name</Label>
-                  <Select>
+                  <Select name="bank-code">
                     <SelectTrigger id="bank-name">
                         <SelectValue placeholder="Select your bank"/>
                     </SelectTrigger>
@@ -130,6 +130,8 @@ export default function LaundromatSettingsPage() {
                         <SelectItem value="058">Guaranty Trust Bank</SelectItem>
                         <SelectItem value="011">First Bank of Nigeria</SelectItem>
                         <SelectItem value="057">Zenith Bank</SelectItem>
+                        <SelectItem value="044">Access Bank</SelectItem>
+                        <SelectItem value="033">United Bank For Africa</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -139,7 +141,7 @@ export default function LaundromatSettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="account-name">Account Holder Name</Label>
-                  <Input id="account-name" placeholder="Name will be verified via Paystack" readOnly />
+                  <Input id="account-name" placeholder="Name is verified via Paystack" readOnly />
                 </div>
                 <div className="pt-4">
                   <Button>Save Payout Information</Button>
