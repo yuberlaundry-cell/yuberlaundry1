@@ -71,9 +71,9 @@ const businessMegaMenuItems = {
 
 const howItWorksMenuItems = {
     "The Process": [
-      { icon: Rocket, title: "Schedule Pickup", description: "Book a pickup in seconds using our app.", href: "#" },
-      { icon: Shirt, title: "Professional Cleaning", description: "Our expert partners ensure your items are perfectly cleaned.", href: "#" },
-      { icon: Bike, title: "Contactless Delivery", description: "Get fresh, folded laundry delivered to your door.", href: "#" },
+      { icon: Rocket, title: "Schedule Pickup", description: "Book a pickup in seconds using our app.", href: "/#features" },
+      { icon: Shirt, title: "Professional Cleaning", description: "Our expert partners ensure your items are perfectly cleaned.", href: "/#features" },
+      { icon: Bike, title: "Contactless Delivery", description: "Get fresh, folded laundry delivered to your door.", href: "/#features" },
     ],
     "Our Services": [
       { icon: Shirt, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/pricing" },

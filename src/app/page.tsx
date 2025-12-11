@@ -11,7 +11,9 @@ export default function Home() {
       <main className="flex-grow">
         <Hero />
         <ValueProp />
-        <FeatureCards />
+        <section id="features">
+          <FeatureCards />
+        </section>
       </main>
       <PublicFooter />
     </div>
