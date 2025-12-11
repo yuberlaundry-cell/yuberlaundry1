@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
+import { Separator } from '@/components/ui/separator';
 
 export default function HomepageContentPage() {
     const { toast } = useToast();
@@ -62,6 +63,51 @@ export default function HomepageContentPage() {
                     <div className="space-y-2">
                         <Label htmlFor="value-prop-subheadline">Sub-headline</Label>
                         <Textarea id="value-prop-subheadline" defaultValue="Schedule quickly, clean professionally, deliver reliably — all with Yuber Laundry." />
+                    </div>
+                </CardContent>
+            </Card>
+            
+            <Card>
+                 <CardHeader>
+                    <CardTitle>Feature Cards</CardTitle>
+                     <CardDescription>Manage the three feature cards below the value proposition.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    {/* Feature 1 */}
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h4 className="font-semibold">Card 1: Schedule</h4>
+                         <div className="space-y-2">
+                            <Label htmlFor="feature1-super">Super Text</Label>
+                            <Input id="feature1-super" defaultValue="60 sec" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="feature1-badge">Badge Text</Label>
+                            <Input id="feature1-badge" defaultValue="Pickup scheduled" />
+                        </div>
+                    </div>
+                     {/* Feature 2 */}
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h4 className="font-semibold">Card 2: Professional</h4>
+                         <div className="space-y-2">
+                            <Label htmlFor="feature2-super">Super Text</Label>
+                            <Input id="feature2-super" defaultValue="Expert care" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="feature2-badge">Badge Text</Label>
+                            <Input id="feature2-badge" defaultValue="Dry cleaning" />
+                        </div>
+                    </div>
+                     {/* Feature 3 */}
+                    <div className="space-y-4 rounded-lg border p-4">
+                        <h4 className="font-semibold">Card 3: Delivery</h4>
+                         <div className="space-y-2">
+                            <Label htmlFor="feature3-super">Super Text</Label>
+                            <Input id="feature3-super" defaultValue="24 hours" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="feature3-badge">Badge Text</Label>
+                            <Input id="feature3-badge" defaultValue="Delivered" />
+                        </div>
                     </div>
                 </CardContent>
             </Card>
