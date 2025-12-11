@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const columns = [
   {
@@ -124,12 +125,12 @@ export default function ProcessingPage() {
           Manage orders through the laundry lifecycle.
         </p>
       </div>
-      <div className="flex-grow overflow-x-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 min-w-max">
+      <ScrollArea className="flex-grow w-full">
+        <div className="flex gap-6 pb-4">
           {columns.map((column) => (
             <div
               key={column.id}
-              className="bg-muted rounded-lg p-4 w-[320px] h-full flex flex-col"
+              className="bg-muted rounded-lg p-4 w-[320px] flex-shrink-0 h-full flex flex-col"
             >
               <h2 className="font-semibold text-lg mb-4 flex items-center gap-2">
                 <column.icon className="h-5 w-5 text-muted-foreground" />
@@ -151,7 +152,8 @@ export default function ProcessingPage() {
             </div>
           ))}
         </div>
-      </div>
+        <ScrollBar orientation="horizontal" />
+      </ScrollArea>
     </div>
   );
 }

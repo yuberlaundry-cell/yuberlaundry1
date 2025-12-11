@@ -17,6 +17,7 @@ import { Camera, CheckCircle, ScanLine, Search, UserPlus } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { useState, useRef, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
 
 const orderToCome = {
@@ -148,10 +149,13 @@ export default function IntakePage() {
                          <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
                             <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
                             {hasCameraPermission === false && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
-                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
-                                    <p className="text-center">Camera access is required to scan QR codes.</p>
-                                </div>
+                                <Alert variant="destructive" className="absolute inset-4">
+                                  <Camera className="h-4 w-4" />
+                                  <AlertTitle>Camera Access Required</AlertTitle>
+                                  <AlertDescription>
+                                    Please allow camera access to use this feature.
+                                  </AlertDescription>
+                                </Alert>
                             )}
                             <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
                         </div>
