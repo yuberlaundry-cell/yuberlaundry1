@@ -83,7 +83,11 @@ const navigationConfig = [
           { href: '/admin/compliance/documents', label: 'Expiring Documents' },
           { href: '/admin/compliance/tasks', label: 'Compliance Tasks' },
       ]},
-      { href: '/admin/fraud', label: 'Fraud Monitoring', icon: Shield },
+      { href: '/admin/fraud/overview', label: 'Fraud Monitoring', icon: Shield, subMenu: [
+          { href: '/admin/fraud/alerts', label: 'New Alerts' },
+          { href: '/admin/fraud/review', label: 'Under Review' },
+          { href: '/admin/fraud/blocked', label: 'Blocked Accounts' },
+      ]},
     ],
   },
    {
