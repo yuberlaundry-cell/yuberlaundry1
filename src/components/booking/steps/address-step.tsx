@@ -160,6 +160,7 @@ function AddressForm({ defaultValues }: { defaultValues?: any}) {
                     onChange={(e) => setSelectedAddress(e.target.value)}
                     onAddressSelect={(address) => {
                         setSelectedAddress(address.description);
+                        console.log('Selected address coordinates:', address.coordinates);
                     }}
                 />
             </div>
@@ -192,5 +193,3 @@ function AddressForm({ defaultValues }: { defaultValues?: any}) {
         </form>
     );
 }
-
-    

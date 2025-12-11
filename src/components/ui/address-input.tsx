@@ -19,27 +19,27 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
     const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
     const geocoder = useRef<google.maps.Geocoder | null>(null);
-    const internalValue = (props as any).defaultValue || '';
     
+    // Fallback for uncontrolled component
+    const [internalValue, setInternalValue] = useState(props.defaultValue || '');
     const controlledValue = value === undefined ? internalValue : value;
 
     useEffect(() => {
       const loadGoogleMapsScript = () => {
         const scriptId = 'google-maps-script';
         
-        // If script is already loaded or in the process of loading, don't add it again.
-        if (window.google?.maps?.places || document.getElementById(scriptId)) {
-          if (window.google?.maps?.places) {
-            setIsScriptLoaded(true);
-          } else {
-            // If the script tag exists but the API isn't ready, wait for it.
+        if (window.google?.maps?.places) {
+          setIsScriptLoaded(true);
+          return;
+        }
+        
+        if (document.getElementById(scriptId)) {
              const checkInterval = setInterval(() => {
                 if (window.google && window.google.maps && window.google.maps.places) {
                     setIsScriptLoaded(true);
                     clearInterval(checkInterval);
                 }
             }, 100);
-          }
           return;
         }
 
@@ -64,10 +64,14 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
     
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = event.target.value;
+      
       if (onChange) {
         onChange(event);
+      } else {
+        setInternalValue(inputValue);
       }
-      const inputValue = event.target.value;
+
       if (autocompleteService.current && inputValue) {
         autocompleteService.current.getPlacePredictions(
           { input: inputValue },
@@ -114,7 +118,7 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
           disabled={!isScriptLoaded || props.disabled}
         />
         {suggestions.length > 0 && (
-          <ul className="absolute z-10 w-full mt-1 bg-background border rounded-md shadow-lg">
+          <ul className="absolute z-50 w-full mt-1 bg-background border rounded-md shadow-lg">
             {suggestions.map((suggestion) => (
               <li
                 key={suggestion.place_id}

@@ -71,7 +71,10 @@ export default function EditLaundromatPage() {
                                 id="facility-address"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
-                                onAddressSelect={(addr) => setAddress(addr.description)}
+                                onAddressSelect={(addr) => {
+                                    setAddress(addr.description);
+                                    console.log("Selected coordinates:", addr.coordinates);
+                                }}
                                 required
                             />
                         </div>
