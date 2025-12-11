@@ -14,6 +14,7 @@ import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
+import { mockTimeSlots, TimeSlot } from "@/lib/mock-data";
 
 const cities = [
     { id: "london", name: "London", country: "United Kingdom" },
@@ -26,6 +27,7 @@ const cities = [
 export default function Hero() {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const [location, setLocation] = React.useState("London");
+  const [timeSlots, setTimeSlots] = React.useState<TimeSlot[]>(mockTimeSlots.today);
 
   const heroImage = {
       imageUrl: "https://images.unsplash.com/photo-1582735689365-27f72f895995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
@@ -86,15 +88,13 @@ export default function Hero() {
                 </Dialog>
             </div>
             
-            <RadioGroup defaultValue="time-2" className="space-y-3">
-                <Label htmlFor="time-1" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                    <RadioGroupItem value="time-1" id="time-1" />
-                    <span className="ml-4 font-medium">Today, 12:00 - 15:00</span>
-                </Label>
-                <Label htmlFor="time-2" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                    <RadioGroupItem value="time-2" id="time-2" />
-                    <span className="ml-4 font-medium">Today, 19:00 - 22:00</span>
-                </Label>
+            <RadioGroup defaultValue={timeSlots[0].value} className="space-y-3">
+                {timeSlots.map(slot => (
+                     <Label key={slot.value} htmlFor={slot.value} className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                        <RadioGroupItem value={slot.value} id={slot.value} />
+                        <span className="ml-4 font-medium">{slot.label}</span>
+                    </Label>
+                ))}
             </RadioGroup>
             <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
             <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
@@ -135,5 +135,3 @@ export default function Hero() {
     </section>
   );
 }
-
-    

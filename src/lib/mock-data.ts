@@ -185,6 +185,24 @@ export const mockOrders: Order[] = [
     },
 ];
 
+export interface TimeSlot {
+    value: string;
+    label: string;
+}
+
+export const mockTimeSlots: Record<string, TimeSlot[]> = {
+    today: [
+        { value: '12:00-15:00', label: 'Today, 12:00 - 15:00' },
+        { value: '15:00-18:00', label: 'Today, 15:00 - 18:00' },
+        { value: '18:00-21:00', label: 'Today, 18:00 - 21:00' },
+    ],
+    tomorrow: [
+        { value: '09:00-12:00', label: 'Tomorrow, 09:00 - 12:00' },
+        { value: '12:00-15:00', label: 'Tomorrow, 12:00 - 15:00' },
+        { value: '15:00-18:00', label: 'Tomorrow, 15:00 - 18:00' },
+    ]
+};
+
 
 export interface BusinessEmployee {
     id: string;

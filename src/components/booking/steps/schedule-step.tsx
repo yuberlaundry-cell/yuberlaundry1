@@ -6,8 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { mockTimeSlots, TimeSlot } from "@/lib/mock-data";
+import { useState } from "react";
 
 export default function ScheduleStep() {
+    const [collectionDay, setCollectionDay] = useState('today');
+    const [deliveryDay, setDeliveryDay] = useState('tomorrow');
+
+    const collectionSlots = collectionDay === 'today' ? mockTimeSlots.today : mockTimeSlots.tomorrow;
+    const deliverySlots = deliveryDay === 'today' ? mockTimeSlots.today : mockTimeSlots.tomorrow;
+
     return (
         <div className="space-y-8">
             <div>
@@ -19,7 +27,7 @@ export default function ScheduleStep() {
                 <div className="space-y-4">
                     <h3 className="font-semibold text-lg">Collection time</h3>
                     <div className="space-y-2">
-                        <Label htmlFor="collection-type">Collection Time</Label>
+                        <Label htmlFor="collection-type">Collection From</Label>
                          <Select defaultValue="personal">
                             <SelectTrigger id="collection-type">
                                 <SelectValue />
@@ -34,7 +42,7 @@ export default function ScheduleStep() {
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="collection-date">Date</Label>
-                            <Select defaultValue="today">
+                            <Select value={collectionDay} onValueChange={setCollectionDay}>
                                 <SelectTrigger id="collection-date">
                                     <SelectValue />
                                 </SelectTrigger>
@@ -46,13 +54,14 @@ export default function ScheduleStep() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="collection-time">Time</Label>
-                             <Select defaultValue="16:00-17:00">
+                             <Select defaultValue={collectionSlots[0].value}>
                                 <SelectTrigger id="collection-time">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="16:00-17:00">16:00 - 17:00</SelectItem>
-                                    <SelectItem value="17:00-18:00">17:00 - 18:00</SelectItem>
+                                   {collectionSlots.map(slot => (
+                                       <SelectItem key={slot.value} value={slot.value}>{slot.label.split(',')[1]}</SelectItem>
+                                   ))}
                                 </SelectContent>
                             </Select>
                         </div>
@@ -63,7 +72,7 @@ export default function ScheduleStep() {
                 <div className="space-y-4">
                     <h3 className="font-semibold text-lg">Delivery Time</h3>
                     <div className="space-y-2">
-                        <Label htmlFor="delivery-type">Delivery Time</Label>
+                        <Label htmlFor="delivery-type">Deliver To</Label>
                          <Select defaultValue="personal">
                             <SelectTrigger id="delivery-type">
                                 <SelectValue />
@@ -78,25 +87,26 @@ export default function ScheduleStep() {
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="delivery-date">Date</Label>
-                            <Select defaultValue="tomorrow">
+                            <Select value={deliveryDay} onValueChange={setDeliveryDay}>
                                 <SelectTrigger id="delivery-date">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
+                                    <SelectItem value="today">Today, 10 December</SelectItem>
                                     <SelectItem value="tomorrow">Tomorrow, 11 December</SelectItem>
-                                    <SelectItem value="day-after">Friday, 12 December</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="delivery-time">Time</Label>
-                             <Select defaultValue="17:00-18:00">
+                             <Select defaultValue={deliverySlots[0].value}>
                                 <SelectTrigger id="delivery-time">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="17:00-18:00">17:00 - 18:00</SelectItem>
-                                    <SelectItem value="18:00-19:00">18:00 - 19:00</SelectItem>
+                                      {deliverySlots.map(slot => (
+                                       <SelectItem key={slot.value} value={slot.value}>{slot.label.split(',')[1]}</SelectItem>
+                                   ))}
                                 </SelectContent>
                             </Select>
                         </div>
