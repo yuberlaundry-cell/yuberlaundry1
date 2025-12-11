@@ -6,7 +6,7 @@ export default function PrivacyPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
-            <main className="flex-grow container mx-auto px-4 py-12 sm:py-16 md:py-24">
+            <main className="flex-grow container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
                 <div className="prose lg:prose-xl mx-auto">
                     <h1>Privacy Policy</h1>
                     <p>Last updated: May 13, 2024</p>

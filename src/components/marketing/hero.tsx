@@ -39,7 +39,7 @@ export default function Hero() {
   const displayedSlots = isExpanded ? timeSlots : timeSlots.slice(0, 3);
 
   return (
-    <section className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
+    <section className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
         <div className="relative">
           <h1 className="text-5xl md:text-7xl font-bold font-headline tracking-tighter !leading-tight">
@@ -111,7 +111,7 @@ export default function Hero() {
                     <Button size="lg" className="w-full mt-3">Continue</Button>
                 </DialogTrigger>
                 <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
-                    <DialogHeader className="p-6 pb-0 hidden">
+                    <DialogHeader className="p-6 pb-0">
                         <DialogTitle>Book your laundry</DialogTitle>
                         <DialogDescription>
                             Configure your laundry order and schedule a pickup.

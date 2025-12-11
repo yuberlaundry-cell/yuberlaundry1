@@ -77,7 +77,7 @@ export default function ForBusinessPage() {
             <main className="flex-grow">
                 {/* Hero Section */}
                 <section className="bg-primary text-primary-foreground">
-                    <div className="container mx-auto px-4 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
+                    <div className="container mx-auto px-6 sm:px-8 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
                         <div className="text-center md:text-left">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline tracking-tight">
                                 The employee benefit that actually gives time back.
@@ -108,7 +108,7 @@ export default function ForBusinessPage() {
 
                  {/* How it works Section */}
                  <section className="py-16 md:py-24">
-                    <div className="container mx-auto px-4">
+                    <div className="container mx-auto px-6 sm:px-8">
                         <div className="text-center max-w-3xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">How it Works</h2>
                         </div>
@@ -140,7 +140,7 @@ export default function ForBusinessPage() {
 
                 {/* Platform Features Section */}
                 <section id="features" className="py-16 md:py-24 bg-card">
-                     <div className="container mx-auto px-4">
+                     <div className="container mx-auto px-6 sm:px-8">
                         <div className="text-center max-w-3xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">A control center for your business</h2>
                             <p className="mt-4 text-lg text-muted-foreground">
@@ -161,7 +161,7 @@ export default function ForBusinessPage() {
                 
                  {/* Solutions Section */}
                 <section id="solutions" className="py-16 md:py-24">
-                     <div className="container mx-auto px-4">
+                     <div className="container mx-auto px-6 sm:px-8">
                         <div className="text-center max-w-3xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">Tailored for your industry</h2>
                             <p className="mt-4 text-lg text-muted-foreground">
@@ -186,7 +186,7 @@ export default function ForBusinessPage() {
 
                 {/* Contact Form Section */}
                 <section id="contact" className="py-16 md:py-24 bg-primary/5">
-                    <div className="container mx-auto px-4 grid md:grid-cols-2 gap-12 items-center">
+                    <div className="container mx-auto px-6 sm:px-8 grid md:grid-cols-2 gap-12 items-center">
                         <div>
                              <h2 className="text-3xl md:text-4xl font-bold font-headline">Ready to get started?</h2>
                             <p className="mt-4 text-lg text-muted-foreground">

@@ -33,7 +33,7 @@ export default function FaqPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
-            <main className="flex-grow container mx-auto px-4 py-12 sm:py-16 md:py-24">
+            <main className="flex-grow container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
                 <div className="text-center max-w-3xl mx-auto">
                     <h1 className="text-4xl md:text-5xl font-bold font-headline">Frequently Asked Questions</h1>
                     <p className="mt-4 text-lg text-muted-foreground">Find answers to the most common questions about Yuber Laundry.</p>

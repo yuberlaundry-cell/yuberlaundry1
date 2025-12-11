@@ -34,7 +34,7 @@ export function PublicFooter() {
 
   return (
     <footer className="border-t bg-card text-foreground">
-      <div className="container mx-auto px-4 py-12 md:py-16">
+      <div className="container mx-auto px-6 sm:px-8 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1 mb-6 md:mb-0">
             <Link href="/" className="flex items-center space-x-2">

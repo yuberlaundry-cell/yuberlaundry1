@@ -47,7 +47,7 @@ const features = [
 export default function FeatureCards() {
   return (
     <section className="py-12 sm:py-16 md:py-24 bg-card/50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6 sm:px-8">
         <div className="grid gap-8 md:grid-cols-3">
           {features.map((feature) => (
             <Card key={feature.title} className={`relative overflow-hidden group ${feature.bgColor} text-foreground rounded-2xl shadow-lg`}>
@@ -82,5 +82,3 @@ export default function FeatureCards() {
     </section>
   );
 }
-
-    

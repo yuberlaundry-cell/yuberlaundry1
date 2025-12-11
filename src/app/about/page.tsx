@@ -26,7 +26,7 @@ export default function AboutPage() {
             <PublicHeader />
             <main className="flex-grow">
                 <section className="bg-primary text-primary-foreground py-20 md:py-32">
-                    <div className="container mx-auto px-4 text-center">
+                    <div className="container mx-auto px-6 sm:px-8 text-center">
                         <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">About Yuber Laundry</h1>
                         <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-primary-foreground/90">
                             We're on a mission to make laundry day a thing of the past. Life's too short for sorting, washing, and folding.
@@ -35,7 +35,7 @@ export default function AboutPage() {
                 </section>
 
                 <section className="py-16 md:py-24">
-                    <div className="container mx-auto px-4">
+                    <div className="container mx-auto px-6 sm:px-8">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <div className="relative aspect-square">
                                 <Image
@@ -57,7 +57,7 @@ export default function AboutPage() {
                 </section>
 
                 <section className="py-16 md:py-24 bg-card">
-                    <div className="container mx-auto px-4">
+                    <div className="container mx-auto px-6 sm:px-8">
                         <div className="text-center max-w-3xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Values</h2>
                             <p className="mt-4 text-lg text-muted-foreground">
@@ -78,7 +78,7 @@ export default function AboutPage() {
                 </section>
 
                 <section className="py-16 md:py-24">
-                    <div className="container mx-auto px-4">
+                    <div className="container mx-auto px-6 sm:px-8">
                         <div className="text-center max-w-3xl mx-auto">
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">Meet the Team</h2>
                         </div>
