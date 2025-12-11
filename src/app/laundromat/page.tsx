@@ -14,6 +14,7 @@ import {
   Package,
   PackageCheck,
   PackageOpen,
+  CheckCheck,
 } from 'lucide-react';
 import { RecentActivity } from '@/components/laundromat/recent-activity';
 import { OrderStatusChart } from '@/components/laundromat/order-status-chart';
@@ -32,16 +33,16 @@ const kpiCards = [
     description: 'Currently in the facility',
   },
   {
-    title: 'Ready for Delivery',
+    title: 'Ready for Handoff',
     value: '28',
     icon: PackageCheck,
     description: 'Awaiting driver pickup',
   },
   {
-    title: 'Avg. Turnaround',
-    value: '28.5h',
-    icon: Clock,
-    description: 'Last 7 days',
+    title: 'Completed Today',
+    value: '56',
+    icon: CheckCheck,
+    description: 'Past 24 hours',
   },
 ];
 
