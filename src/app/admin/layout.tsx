@@ -79,6 +79,9 @@ const navigationConfig = [
     title: 'Quality & Risk',
     links: [
       { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck },
+      { href: '/admin/compliance/risks', label: 'High-Risk Entities', icon: ShieldCheck },
+      { href: '/admin/compliance/documents', label: 'Expiring Documents', icon: ShieldCheck },
+      { href: '/admin/compliance/tasks', label: 'Compliance Tasks', icon: ShieldCheck },
       { href: '/admin/fraud', label: 'Fraud Monitoring', icon: Shield },
     ],
   },

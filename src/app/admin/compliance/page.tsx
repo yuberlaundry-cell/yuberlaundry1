@@ -41,28 +41,28 @@ const kpiCards = [
     value: '8',
     icon: ShieldAlert,
     description: '2 drivers, 6 laundromats',
-    href: '#'
+    href: '/admin/compliance/risks'
   },
   {
     title: 'Documents Expiring Soon',
     value: '14',
     icon: CalendarClock,
     description: 'Next 30 days',
-    href: '#'
+    href: '/admin/compliance/documents'
   },
   {
     title: 'Open Compliance Tasks',
     value: '21',
     icon: FileCheck,
     description: '5 overdue',
-    href: '#'
+    href: '/admin/compliance/tasks'
   },
   {
     title: 'Fraud Alerts (7d)',
     value: '4',
     icon: AlertOctagon,
     description: '2 requiring review',
-    href: '#'
+    href: '/admin/fraud'
   },
 ];
 
