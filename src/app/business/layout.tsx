@@ -66,16 +66,14 @@ export default function BusinessPortalLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="p-4">
-          <div className="flex items-center gap-2">
-             <Button variant="ghost" size="icon" asChild className="group-data-[collapsible=icon]:hidden">
-                <Link href="/" className="mr-auto">
-                    <WashingMachine className="h-7 w-7 text-primary" />
-                </Link>
-            </Button>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                <h1 className="font-headline text-lg font-semibold -mb-1 truncate">{user?.companyName || 'Business Portal'}</h1>
-                <p className="text-xs text-muted-foreground">{isAdmin ? 'Admin' : 'Employee'}</p>
-            </div>
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+             <Link href="/" className="flex items-center gap-2 group-data-[collapsible=icon]:mr-0">
+                <WashingMachine className="h-7 w-7 text-primary" />
+                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                    <h1 className="font-headline text-lg font-semibold -mb-1 truncate">{user?.companyName || 'Business Portal'}</h1>
+                    <p className="text-xs text-muted-foreground">{isAdmin ? 'Admin' : 'Employee'}</p>
+                </div>
+             </Link>
           </div>
         </SidebarHeader>
         <SidebarContent>
