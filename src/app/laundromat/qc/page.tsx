@@ -18,7 +18,6 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal } from 'lucide-react';
 import Link from 'next/link';
 
 const qcTasks = [
@@ -86,7 +85,7 @@ export default function QCPage() {
                     {qcTasks.map((task) => (
                         <TableRow key={task.orderId}>
                             <TableCell className="font-medium">
-                                <Link href={`/laundromat/orders/${task.orderId.replace('#', '')}`} className="hover:underline">
+                                <Link href={`/laundromat/orders/${task.orderId.replace('#', '')}`} className="hover:underline text-primary">
                                     {task.orderId}
                                 </Link>
                             </TableCell>
