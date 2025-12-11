@@ -34,6 +34,7 @@ import {
   Waypoints,
   FileText,
   UserCog,
+  Briefcase,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -56,6 +57,7 @@ const navigationConfig = [
     title: 'Operations',
     links: [
       { href: '/admin/orders', label: 'Orders Control', icon: ShoppingCart },
+      { href: '/admin/b2b', label: 'B2B Accounts', icon: Briefcase },
       { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
       { href: '/admin/drivers', label: 'Driver Fleet', icon: Truck },
     ],

@@ -35,6 +35,7 @@ const invoices = [
     { id: 'INV-STARK-023', company: 'Stark Industries', date: 'Dec 1, 2024', amount: 'R128,800.00', status: 'Paid' },
     { id: 'INV-WAYNE-045', company: 'Wayne Enterprises', date: 'Dec 5, 2024', amount: 'R85,500.00', status: 'Due' },
     { id: 'INV-OSCORP-007', company: 'Oscorp', date: 'Nov 15, 2024', amount: 'R32,200.00', status: 'Overdue' },
+    { id: 'INV-CYBER-001', company: 'Cyberdyne Systems', date: 'Dec 10, 2024', amount: 'R65,000.00', status: 'Due' },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -62,8 +63,8 @@ export default function B2BBillingPage() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">R117,700.00</div>
-              <p className="text-xs text-muted-foreground">Across 2 invoices</p>
+              <div className="text-2xl font-bold">R182,700.00</div>
+              <p className="text-xs text-muted-foreground">Across 3 invoices</p>
             </CardContent>
           </Card>
            <Card>
