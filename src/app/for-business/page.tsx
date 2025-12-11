@@ -76,20 +76,20 @@ export default function ForBusinessPage() {
             <PublicHeader />
             <main className="flex-grow">
                 {/* Hero Section */}
-                <section className="bg-gray-900 text-white">
+                <section className="bg-primary text-primary-foreground">
                     <div className="container mx-auto px-4 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
                         <div className="text-center md:text-left">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline tracking-tight">
                                 The employee benefit that actually gives time back.
                             </h1>
-                            <p className="mt-6 text-lg md:text-xl max-w-lg mx-auto md:mx-0 text-gray-300">
+                            <p className="mt-6 text-lg md:text-xl max-w-lg mx-auto md:mx-0 text-primary-foreground/90">
                                 Empower your team with the ultimate convenience. Yuber for Business simplifies laundry so your employees can focus on what matters most.
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                                <Button size="lg" asChild>
+                                <Button size="lg" variant="secondary" asChild>
                                     <Link href="#contact">Request a Demo</Link>
                                 </Button>
-                                <Button size="lg" variant="outline" className="bg-transparent text-white border-white hover:bg-white hover:text-gray-900" asChild>
+                                <Button size="lg" variant="outline" className="bg-transparent text-primary-foreground border-primary-foreground hover:bg-primary-foreground hover:text-primary" asChild>
                                      <Link href="#features">See Features <ArrowRight className="ml-2"/></Link>
                                 </Button>
                             </div>

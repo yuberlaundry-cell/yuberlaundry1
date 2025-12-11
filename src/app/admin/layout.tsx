@@ -104,6 +104,7 @@ const navigationConfig = [
     title: 'Content Management',
     links: [
         { href: '/admin/content/homepage', label: 'Homepage', icon: FileText },
+        { href: '/admin/content/for-business', label: 'For Business', icon: FileText },
         { href: '/admin/content/pages', label: 'Site Pages', icon: FileText },
     ]
   },
