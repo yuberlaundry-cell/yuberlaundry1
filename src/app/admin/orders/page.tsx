@@ -39,6 +39,8 @@ import { useToast } from '@/hooks/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import React from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const statusColors: { [key: string]: string } = {
   'upcoming': 'bg-blue-100 text-blue-800',
@@ -49,6 +51,7 @@ const statusColors: { [key: string]: string } = {
 
 export default function AdminOrdersPage() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleRefund = (e: React.FormEvent<HTMLFormElement>, orderId: string) => {
     e.preventDefault();
@@ -131,7 +134,7 @@ export default function AdminOrdersPage() {
             </TableHeader>
             <TableBody>
               {mockOrders.map((order) => (
-                <TableRow key={order.id}>
+                <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/admin/orders/${order.id.replace('#','')}`)}>
                   <TableCell className="font-medium">{order.id}</TableCell>
                   <TableCell>{order.driver?.name || 'Jane Doe'}</TableCell>
                   <TableCell>{order.pickupTime.split(',')[0]}</TableCell>
@@ -143,13 +146,13 @@ export default function AdminOrdersPage() {
                         <Dialog>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                                    <Button aria-haspopup="true" size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
                                         <MoreHorizontal className="h-4 w-4" />
                                         <span className="sr-only">Toggle menu</span>
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem onSelect={() => handleGenericAction('View Order Details', order.id)}>View Order Details</DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={() => router.push(`/admin/orders/${order.id.replace('#','')}`)}>View Order Details</DropdownMenuItem>
                                      <DialogTrigger asChild>
                                         <DropdownMenuItem disabled={order.statusCategory === 'cancelled' || order.statusCategory === 'upcoming'} onSelect={(e) => e.preventDefault()}>
                                             Refund Order

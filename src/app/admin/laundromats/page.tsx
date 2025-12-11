@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const laundromats = [
     { id: 'L-001', name: 'Speedy Suds', location: 'London, UK', status: 'Active', activeOrders: 25, issueRate: '1.2%', rating: 4.8 },
@@ -50,6 +51,7 @@ const statusColors: { [key: string]: string } = {
 
 export default function LaundromatsPage() {
     const { toast } = useToast();
+    const router = useRouter();
 
     const handleGenericAction = (action: string, laundromatName: string) => {
         toast({
@@ -113,7 +115,7 @@ export default function LaundromatsPage() {
             </TableHeader>
             <TableBody>
               {laundromats.map((l) => (
-                <TableRow key={l.id}>
+                <TableRow key={l.id} className="cursor-pointer" onClick={() => router.push(`/admin/laundromats/${l.id}`)}>
                   <TableCell className="font-medium">{l.name}</TableCell>
                   <TableCell>{l.location}</TableCell>
                    <TableCell>
@@ -125,13 +127,13 @@ export default function LaundromatsPage() {
                    <TableCell>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                <Button aria-haspopup="true" size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
                                     <MoreHorizontal className="h-4 w-4" />
                                     <span className="sr-only">Toggle menu</span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem onSelect={() => handleGenericAction('View Dashboard', l.name)}>View Dashboard</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push(`/admin/laundromats/${l.id}`)}>View Dashboard</DropdownMenuItem>
                                 <DropdownMenuItem onSelect={() => handleGenericAction('Edit Details', l.name)}>Edit Details</DropdownMenuItem>
                                 <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Deactivate', l.name)}>Deactivate</DropdownMenuItem>
                             </DropdownMenuContent>

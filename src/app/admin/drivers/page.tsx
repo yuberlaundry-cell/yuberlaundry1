@@ -33,6 +33,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const drivers = [
     { id: 'D-001', name: 'Alex Ray', location: 'London, UK', status: 'Online', activeJobs: 1, acceptanceRate: '98%', rating: 4.9, avatar: 'https://picsum.photos/seed/driver1/40/40' },
@@ -52,6 +53,7 @@ const statusColors: { [key: string]: string } = {
 
 export default function DriversPage() {
   const { toast } = useToast();
+  const router = useRouter();
 
   const handleGenericAction = (action: string, driverName: string) => {
     toast({
@@ -116,7 +118,7 @@ export default function DriversPage() {
             </TableHeader>
             <TableBody>
               {drivers.map((d) => (
-                <TableRow key={d.id}>
+                <TableRow key={d.id} className="cursor-pointer" onClick={() => router.push(`/admin/drivers/${d.id}`)}>
                   <TableCell className="font-medium">
                      <div className="flex items-center gap-3">
                       <Avatar>
@@ -136,13 +138,13 @@ export default function DriversPage() {
                    <TableCell>
                         <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                <Button aria-haspopup="true" size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
                                     <MoreHorizontal className="h-4 w-4" />
                                     <span className="sr-only">Toggle menu</span>
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem onSelect={() => handleGenericAction('View Profile', d.name)}>View Profile</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push(`/admin/drivers/${d.id}`)}>View Profile</DropdownMenuItem>
                                 <DropdownMenuItem onSelect={() => handleGenericAction('Send Message', d.name)}>Send Message</DropdownMenuItem>
                                 <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Suspend', d.name)}>Suspend</DropdownMenuItem>
                             </DropdownMenuContent>
