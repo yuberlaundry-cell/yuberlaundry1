@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Building, Home, Briefcase, Plus, Edit, Trash2 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { AddressInput } from '@/components/ui/address-input';
 
 const savedAddresses = [
     { id: 'home', type: 'Home', address: '123 Main St, London, SW1A 0AA' },
@@ -77,11 +78,21 @@ export default function AddressStep() {
 }
 
 function AddressForm({ defaultValues }: { defaultValues?: any}) {
+    const [selectedAddress, setSelectedAddress] = useState<string>(defaultValues?.street || '');
+    
     return (
         <form className="space-y-4">
             <div className="space-y-2">
                 <Label htmlFor="street">Street Address</Label>
-                <Input id="street" placeholder="123 Main St" defaultValue={defaultValues?.street || ''}/>
+                <AddressInput
+                    id="street"
+                    placeholder="Start typing your address..."
+                    value={selectedAddress}
+                    onChange={(e) => setSelectedAddress(e.target.value)}
+                    onAddressSelect={(address) => {
+                        setSelectedAddress(address.description);
+                    }}
+                />
             </div>
              <div className="grid grid-cols-2 gap-4">
                  <div className="space-y-2">
