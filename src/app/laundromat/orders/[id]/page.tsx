@@ -17,8 +17,9 @@ import { Label } from '@/components/ui/label';
 import { useParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
 
-const orderData = {
+const initialOrderData = {
     id: '#YL12345',
     customer: 'Jane Doe',
     service: 'Wash & Fold',
@@ -39,7 +40,8 @@ const orderData = {
     },
     items: [
         { id: 'wf', name: 'Wash & Fold', model: 'per_kg', price: 1.99, value: 0 },
-    ]
+    ],
+    isBilled: false,
 }
 
 const qcChecklist = [
@@ -53,8 +55,9 @@ const qcChecklist = [
 export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
+    const { toast } = useToast();
     // In a real app, you would fetch the order details based on the orderId
-    const [order, setOrder] = useState(orderData);
+    const [order, setOrder] = useState(initialOrderData);
 
     const handleValueChange = (id: string, value: number) => {
         const newItems = order.items.map(item => {
@@ -64,6 +67,26 @@ export default function OrderProcessingDetailsPage() {
             return item;
         });
         setOrder({...order, items: newItems});
+    }
+    
+    const handleFinalizeBill = () => {
+        setOrder({...order, isBilled: true});
+        toast({
+            title: 'Bill Finalized',
+            description: `The total for order ${order.id} has been confirmed.`,
+        });
+    }
+
+    const handleMoveStage = (newStatus: string) => {
+        setOrder({
+            ...order,
+            status: newStatus,
+            timeline: [...order.timeline, { status: `${newStatus} Started`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
+        });
+        toast({
+            title: 'Order Updated',
+            description: `Order ${order.id} has been moved to ${newStatus}.`
+        });
     }
 
     const subtotal = order.items.reduce((acc, item) => {
@@ -90,8 +113,8 @@ export default function OrderProcessingDetailsPage() {
           <p className="text-muted-foreground mt-1">Status: {order.status}</p>
         </div>
         <div className="flex gap-2">
-            <Button variant="outline">Move to Drying</Button>
-            <Button>Move to Folding/QC</Button>
+            <Button variant="outline" onClick={() => handleMoveStage('Drying')}>Move to Drying</Button>
+            <Button onClick={() => handleMoveStage('Folding/QC')}>Move to Folding/QC</Button>
         </div>
       </div>
       
@@ -122,6 +145,7 @@ export default function OrderProcessingDetailsPage() {
                                     placeholder={item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}
                                     value={item.value || ''}
                                     onChange={(e) => handleValueChange(item.id, parseFloat(e.target.value) || 0)}
+                                    disabled={order.isBilled}
                                 />
                             </div>
                             <div className="col-span-1 text-right">
@@ -135,7 +159,9 @@ export default function OrderProcessingDetailsPage() {
                             <p className="text-muted-foreground">Subtotal</p>
                             <p className="font-bold text-2xl">${subtotal.toFixed(2)}</p>
                         </div>
-                        <Button>Confirm & Finalize Bill</Button>
+                        <Button onClick={handleFinalizeBill} disabled={order.isBilled}>
+                            {order.isBilled ? 'Bill Finalized' : 'Confirm & Finalize Bill'}
+                        </Button>
                     </div>
                 </CardContent>
             </Card>
@@ -228,3 +254,5 @@ export default function OrderProcessingDetailsPage() {
     </div>
   );
 }
+
+    
