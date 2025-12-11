@@ -53,8 +53,8 @@ export function SpendOverTimeChart() {
                         content={<ChartTooltipContent indicator="dot" />}
                     />
                     <Legend />
-                    <Bar dataKey="company" fill="var(--color-company)" radius={4} />
-                    <Bar dataKey="employee" fill="var(--color-employee)" radius={4} />
+                    <Bar dataKey="company" fill="var(--color-company)" radius={4} stackId="a" />
+                    <Bar dataKey="employee" fill="var(--color-employee)" radius={4} stackId="a" />
                 </BarChart>
             </ChartContainer>
         </CardContent>

@@ -6,9 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 const chartData = [
-  { service: "Wash & Fold", spend: 850, fill: "var(--color-wash-fold)" },
-  { service: "Dry Cleaning", spend: 320, fill: "var(--color-dry-cleaning)" },
-  { service: "Ironing", spend: 80.75, fill: "var(--color-ironing)" },
+  { service: "Wash & Fold", spend: 8500, fill: "var(--color-wash-fold)" },
+  { service: "Dry Cleaning", spend: 3200, fill: "var(--color-dry-cleaning)" },
+  { service: "Ironing", spend: 807.75, fill: "var(--color-ironing)" },
 ]
 
 const chartConfig = {
