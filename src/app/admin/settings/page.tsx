@@ -9,7 +9,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function SettingsPage() {
     return (
@@ -94,32 +93,30 @@ export default function SettingsPage() {
                                     </Select>
                                 </div>
                                 <Separator/>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                     <div className="space-y-3">
-                                        <Label>Weight Unit</Label>
-                                        <RadioGroup defaultValue="kg" className="flex gap-4">
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="kg" id="kg"/>
-                                                <Label htmlFor="kg">Kilograms (kg)</Label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="lbs" id="lbs"/>
-                                                <Label htmlFor="lbs">Pounds (lbs)</Label>
-                                            </div>
-                                        </RadioGroup>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                     <div className="space-y-2">
+                                        <Label htmlFor="weight-unit">Weight Unit</Label>
+                                        <Select defaultValue="kg">
+                                            <SelectTrigger id="weight-unit">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                                                <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
-                                     <div className="space-y-3">
-                                        <Label>Distance Unit</Label>
-                                        <RadioGroup defaultValue="km" className="flex gap-4">
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="km" id="km"/>
-                                                <Label htmlFor="km">Kilometers (km)</Label>
-                                            </div>
-                                            <div className="flex items-center space-x-2">
-                                                <RadioGroupItem value="miles" id="miles"/>
-                                                <Label htmlFor="miles">Miles (mi)</Label>
-                                            </div>
-                                        </RadioGroup>
+                                     <div className="space-y-2">
+                                        <Label htmlFor="distance-unit">Distance Unit</Label>
+                                        <Select defaultValue="km">
+                                            <SelectTrigger id="distance-unit">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="km">Kilometers (km)</SelectItem>
+                                                <SelectItem value="miles">Miles (mi)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
                                     </div>
                                 </div>
                                 <Button>Save Localization Settings</Button>
