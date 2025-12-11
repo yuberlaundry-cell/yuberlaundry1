@@ -131,42 +131,66 @@ export default function SettingsPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>API Integrations</CardTitle>
-                             <CardDescription>Manage keys for third-party services. Keys are stored as secure environment variables.</CardDescription>
+                             <CardDescription>Manage keys and status for third-party services.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6 max-w-lg">
-                             <div className="space-y-2">
-                                <Label htmlFor="paystack-public">Paystack Public Key</Label>
-                                <Input id="paystack-public" type="text" placeholder="pk_test_xxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
+                            <div className="space-y-4 rounded-lg border p-4">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="paystack-toggle" className="text-base font-semibold">Paystack</Label>
+                                    <Switch id="paystack-toggle" defaultChecked />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="paystack-public">Public Key</Label>
+                                    <Input id="paystack-public" type="text" placeholder="pk_test_xxxxxxxxxxxxxxxx" />
+                                    <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="paystack-secret">Secret Key</Label>
+                                    <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
+                                    <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="paystack-secret">Paystack Secret Key</Label>
-                                <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
+                            
+                            <div className="space-y-4 rounded-lg border p-4">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="google-maps-toggle" className="text-base font-semibold">Google Maps</Label>
+                                    <Switch id="google-maps-toggle" defaultChecked />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="google-maps-key">API Key</Label>
+                                    <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
+                                    <p className="text-xs text-muted-foreground">Used for address autocomplete, maps, and navigation.</p>
+                                </div>
                             </div>
-                            <Separator />
-                            <div className="space-y-2">
-                                <Label htmlFor="google-maps-key">Google Maps API Key</Label>
-                                <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used for address autocomplete, maps, and navigation.</p>
+
+                             <div className="space-y-4 rounded-lg border p-4">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="twilio-toggle" className="text-base font-semibold">Twilio</Label>
+                                    <Switch id="twilio-toggle" defaultChecked />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="twilio-sid">Account SID</Label>
+                                    <Input id="twilio-sid" type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="twilio-token">Auth Token</Label>
+                                    <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
+                                </div>
                             </div>
-                            <Separator />
-                            <div className="space-y-2">
-                                <Label htmlFor="twilio-sid">Twilio Account SID</Label>
-                                <Input id="twilio-sid" type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used for sending SMS notifications.</p>
+
+                            <div className="space-y-4 rounded-lg border p-4">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="sendgrid-toggle" className="text-base font-semibold">SendGrid</Label>
+                                    <Switch id="sendgrid-toggle" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="sendgrid-key">API Key</Label>
+                                    <Input id="sendgrid-key" type="password" defaultValue="SG.xxxxxxxxxxxxxxxx" />
+                                    <p className="text-xs text-muted-foreground">Used for sending transactional emails.</p>
+                                </div>
                             </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="twilio-token">Twilio Auth Token</Label>
-                                <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
-                            </div>
-                            <Separator />
-                             <div className="space-y-2">
-                                <Label htmlFor="sendgrid-key">SendGrid API Key</Label>
-                                <Input id="sendgrid-key" type="password" defaultValue="SG.xxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used for sending transactional emails.</p>
-                            </div>
-                            <Button>Save Integration Keys</Button>
+                            
+                            <Button>Save Integration Settings</Button>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -195,7 +219,7 @@ export default function SettingsPage() {
                                 </Label>
                                  <p className="text-sm text-muted-foreground">
                                     Allow users to interact with the GenAI assistant.
-                                </p>
+                                 </p>
                                 </div>
                                 <Switch id="ff-ai-chatbot" defaultChecked />
                             </div>
