@@ -15,14 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
-
-const services = [
-  { id: 'wash-fold', label: 'Wash & Fold' },
-  { id: 'dry-cleaning', label: 'Dry Cleaning' },
-  { id: 'ironing', label: 'Ironing' },
-  { id: 'bedding', label: 'Bedding & Duvets' },
-  { id: 'repairs', label: 'Repairs & Alterations' },
-];
+import Link from 'next/link';
 
 export default function LaundromatSettingsPage() {
   return (
@@ -35,9 +28,10 @@ export default function LaundromatSettingsPage() {
       </div>
 
       <Tabs defaultValue="profile">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-4">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="operations">Operations</TabsTrigger>
+          <TabsTrigger value="pricing" asChild><Link href="/laundromat/settings/pricing">Services & Pricing</Link></TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
@@ -109,32 +103,6 @@ export default function LaundromatSettingsPage() {
 
                   <div className="pt-4">
                     <Button>Save Operational Settings</Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Services Offered</CardTitle>
-                <CardDescription>
-                  Select the services your facility provides.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form className="space-y-4 max-w-lg">
-                  {services.map((service) => (
-                    <div
-                      key={service.id}
-                      className="flex items-center justify-between rounded-lg border p-3"
-                    >
-                      <Label htmlFor={service.id} className="font-medium">
-                        {service.label}
-                      </Label>
-                      <Switch id={service.id} defaultChecked />
-                    </div>
-                  ))}
-                   <div className="pt-4">
-                    <Button>Save Service Settings</Button>
                   </div>
                 </form>
               </CardContent>

@@ -26,6 +26,7 @@ import {
   CreditCard,
   ChevronRight,
   Bell,
+  Tag,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -53,6 +54,7 @@ const navigationConfig = [
     title: 'Management',
     links: [
        { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
+       { href: '/laundromat/settings/pricing', label: 'Services & Pricing', icon: Tag },
        { href: '/laundromat/resources', label: 'Resources', icon: Book },
        { href: '/laundromat/settings', label: 'Settings', icon: Settings },
     ]

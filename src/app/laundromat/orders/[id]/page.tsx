@@ -10,11 +10,13 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning } from 'lucide-react';
+import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning, DollarSign } from 'lucide-react';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useParams } from 'next/navigation';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 
 const orderData = {
     id: '#YL12345',
@@ -31,7 +33,13 @@ const orderData = {
         { status: 'Intake Completed', time: '10:30 AM'},
         { status: 'Washing Started', time: '11:00 AM'},
     ],
-    notes: 'Customer requested hypoallergenic detergent.'
+    notes: 'Customer requested hypoallergenic detergent.',
+    pricing: {
+        'Wash & Fold': 1.99,
+    },
+    items: [
+        { id: 'wf', name: 'Wash & Fold', model: 'per_kg', price: 1.99, value: 0 },
+    ]
 }
 
 const qcChecklist = [
@@ -46,7 +54,21 @@ export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
     // In a real app, you would fetch the order details based on the orderId
-    const order = orderData;
+    const [order, setOrder] = useState(orderData);
+
+    const handleValueChange = (id: string, value: number) => {
+        const newItems = order.items.map(item => {
+            if (item.id === id) {
+                return {...item, value: value};
+            }
+            return item;
+        });
+        setOrder({...order, items: newItems});
+    }
+
+    const subtotal = order.items.reduce((acc, item) => {
+        return acc + (item.price * item.value);
+    }, 0);
 
 
   return (
@@ -77,19 +99,44 @@ export default function OrderProcessingDetailsPage() {
         <div className="lg:col-span-2 space-y-8">
             <Card>
                 <CardHeader>
-                    <CardTitle>Bags & Items</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                        <DollarSign className="h-5 w-5 text-primary" />
+                        Pricing & Items
+                    </CardTitle>
+                    <CardDescription>
+                        Weigh items or count them to calculate the final price.
+                    </CardDescription>
                 </CardHeader>
-                <CardContent className='space-y-4'>
-                    {order.bags.map(bag => (
-                        <div key={bag.id} className="p-4 border rounded-lg flex justify-between items-center">
-                            <div>
-                                <p className="font-semibold">{bag.id}</p>
-                                <p className="text-sm text-muted-foreground">{bag.items} items</p>
-                                {bag.notes && <p className="text-sm italic text-muted-foreground">Notes: {bag.notes}</p>}
+                <CardContent className="space-y-4">
+                    {order.items.map(item => (
+                        <div key={item.id} className="grid grid-cols-3 items-center gap-4 p-3 border rounded-lg">
+                            <div className="col-span-1">
+                                <p className="font-semibold">{item.name}</p>
+                                <p className="text-xs text-muted-foreground">${item.price.toFixed(2)}/{item.model === 'per_kg' ? 'kg' : 'item'}</p>
                             </div>
-                            <Button variant="outline" size="sm">Edit</Button>
+                             <div className="col-span-1">
+                                <Label htmlFor={`item-${item.id}`} className="sr-only">{item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label>
+                                <Input 
+                                    id={`item-${item.id}`} 
+                                    type="number" 
+                                    placeholder={item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}
+                                    value={item.value || ''}
+                                    onChange={(e) => handleValueChange(item.id, parseFloat(e.target.value) || 0)}
+                                />
+                            </div>
+                            <div className="col-span-1 text-right">
+                                <p className="font-bold text-lg">${(item.price * item.value).toFixed(2)}</p>
+                            </div>
                         </div>
                     ))}
+                    <Separator />
+                     <div className="flex justify-end items-center gap-4">
+                        <div className="text-right">
+                            <p className="text-muted-foreground">Subtotal</p>
+                            <p className="font-bold text-2xl">${subtotal.toFixed(2)}</p>
+                        </div>
+                        <Button>Confirm & Finalize Bill</Button>
+                    </div>
                 </CardContent>
             </Card>
 
