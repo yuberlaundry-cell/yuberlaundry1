@@ -78,10 +78,11 @@ const navigationConfig = [
   {
     title: 'Quality & Risk',
     links: [
-      { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck },
-      { href: '/admin/compliance/risks', label: 'High-Risk Entities', icon: ShieldCheck },
-      { href: '/admin/compliance/documents', label: 'Expiring Documents', icon: ShieldCheck },
-      { href: '/admin/compliance/tasks', label: 'Compliance Tasks', icon: ShieldCheck },
+      { href: '/admin/compliance', label: 'Compliance', icon: ShieldCheck, subMenu: [
+          { href: '/admin/compliance/risks', label: 'High-Risk Entities' },
+          { href: '/admin/compliance/documents', label: 'Expiring Documents' },
+          { href: '/admin/compliance/tasks', label: 'Compliance Tasks' },
+      ]},
       { href: '/admin/fraud', label: 'Fraud Monitoring', icon: Shield },
     ],
   },
@@ -169,19 +170,41 @@ export default function AdminPortalLayout({
                 <CollapsibleContent>
                     <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
                         {section.links.map((item) => (
-                            <SidebarMenuItem key={`${item.href}-${item.label}`}>
-                                <SidebarMenuButton
-                                asChild
-                                tooltip={item.label}
-                                isActive={pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))}
-                                className={cn(item.href === '#' && "opacity-50 pointer-events-none")}
-                                >
-                                <Link href={item.href}>
-                                    <item.icon />
-                                    <span>{item.label}</span>
-                                </Link>
-                                </SidebarMenuButton>
-                            </SidebarMenuItem>
+                            <div key={item.href}>
+                                <SidebarMenuItem>
+                                    <SidebarMenuButton
+                                        asChild
+                                        tooltip={item.label}
+                                        isActive={pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href) && !item.subMenu)}
+                                        className={cn(item.href === '#' && "opacity-50 pointer-events-none")}
+                                    >
+                                        <Link href={item.href}>
+                                            <item.icon />
+                                            <span>{item.label}</span>
+                                        </Link>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                                {item.subMenu && (
+                                    <div className="pl-6 pt-1 pb-2 space-y-1">
+                                        {item.subMenu.map(subItem => (
+                                             <SidebarMenuItem key={subItem.href}>
+                                                 <SidebarMenuButton
+                                                    asChild
+                                                    tooltip={subItem.label}
+                                                    isActive={pathname === subItem.href}
+                                                    variant="ghost"
+                                                    size="sm"
+                                                    className="w-full justify-start"
+                                                >
+                                                    <Link href={subItem.href}>
+                                                        <span>{subItem.label}</span>
+                                                    </Link>
+                                                </SidebarMenuButton>
+                                            </SidebarMenuItem>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         ))}
                     </div>
                 </CollapsibleContent>
