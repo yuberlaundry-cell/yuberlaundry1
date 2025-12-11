@@ -56,6 +56,7 @@ const navigationConfig = [
     title: 'Management',
     links: [
        { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
+       { href: '/laundromat/subscription', label: 'Subscription', icon: Tag },
        { href: '/laundromat/resources', label: 'Resources', icon: Book },
        { href: '/laundromat/settings', label: 'Settings', icon: Settings },
     ]

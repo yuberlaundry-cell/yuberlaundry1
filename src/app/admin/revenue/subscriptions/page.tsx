@@ -19,6 +19,9 @@ import {
   Truck,
   Percent,
   ToggleLeft,
+  MoreVertical,
+  Trash2,
+  Edit,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
@@ -32,12 +35,25 @@ import {
   DialogFooter,
   DialogClose
 } from '@/components/ui/dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 interface Plan {
     name: string;
@@ -46,6 +62,7 @@ interface Plan {
     features: string[];
     active: boolean;
     type: 'Consumer' | 'Business' | 'Laundromat';
+    paystackPlanCode: string;
     limits: {
         // Consumer
         kgIncluded?: number;
@@ -73,6 +90,7 @@ const initialPlans: Plan[] = [
         ],
         active: true,
         type: 'Consumer',
+        paystackPlanCode: 'PLN_xxxxxxxxxxxxxxx',
         limits: {
             kgIncluded: 30,
             deliveryFeeWaiver: true,
@@ -91,6 +109,7 @@ const initialPlans: Plan[] = [
         ],
         active: true,
         type: 'Business',
+        paystackPlanCode: 'PLN_yyyyyyyyyyyyyyy',
         limits: {
             employees: 100,
             driverFeeWaiver: true,
@@ -108,6 +127,7 @@ const initialPlans: Plan[] = [
         ],
         active: true,
         type: 'Laundromat',
+        paystackPlanCode: 'PLN_zzzzzzzzzzzzzzz',
         limits: {
             commissionOverride: 12,
         }
@@ -121,6 +141,7 @@ const initialPlans: Plan[] = [
         ],
         active: false,
         type: 'Consumer',
+        paystackPlanCode: 'PLN_aaaaaaaaaaaaaaa',
         limits: {
             kgIncluded: 15
         }
@@ -137,6 +158,7 @@ export default function SubscriptionsPage() {
     const [plans, setPlans] = useState(initialPlans);
     const [isEditing, setIsEditing] = useState<Plan | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const { toast } = useToast();
 
     const handleEdit = (plan: Plan) => {
         setIsEditing(plan);
@@ -147,6 +169,15 @@ export default function SubscriptionsPage() {
         setIsEditing(null);
         setIsDialogOpen(true);
     };
+    
+    const handleDelete = (planName: string) => {
+        setPlans(prev => prev.filter(p => p.name !== planName));
+        toast({
+            title: "Plan Deleted",
+            description: `The "${planName}" plan has been removed.`,
+            variant: "destructive"
+        })
+    }
 
   return (
     <div className="space-y-6">
@@ -239,7 +270,40 @@ export default function SubscriptionsPage() {
                     </ul>
                 </CardContent>
                 <CardFooter>
-                    <Button variant="outline" className="w-full" onClick={() => handleEdit(plan)}>Edit Plan</Button>
+                    <AlertDialog>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Button variant="outline" className="w-full">
+                                    <MoreVertical className="mr-2"/> Manage Plan
+                                </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                                <DropdownMenuItem onClick={() => handleEdit(plan)}>
+                                    <Edit className="mr-2" /> Edit Plan
+                                </DropdownMenuItem>
+                                <AlertDialogTrigger asChild>
+                                    <DropdownMenuItem className="text-destructive">
+                                        <Trash2 className="mr-2" /> Delete Plan
+                                    </DropdownMenuItem>
+                                </AlertDialogTrigger>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                         <AlertDialogContent>
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    This action cannot be undone. This will permanently delete the
+                                    <span className="font-bold"> {plan.name}</span> plan and may affect existing subscribers.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(plan.name)}>
+                                    Yes, delete plan
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
                 </CardFooter>
             </Card>
             )
@@ -369,7 +433,7 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="paystack-plan-code">Paystack Plan Code</Label>
-                <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" required/>
+                <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" defaultValue={plan?.paystackPlanCode} required/>
             </div>
             <DialogFooter className="sticky bottom-0 bg-background pt-4 pb-0 -mb-6 -mx-6 px-6">
                 <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
