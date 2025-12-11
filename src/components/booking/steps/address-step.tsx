@@ -11,6 +11,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { AddressInput } from '@/components/ui/address-input';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useToast } from '@/hooks/use-toast';
 
 const savedAddresses = [
     { id: 'home', type: 'Home', address: '123 Main St, London, SW1A 0AA' },
@@ -21,6 +22,18 @@ export default function AddressStep() {
     const [selectedPickupAddress, setSelectedPickupAddress] = useState('home');
     const [selectedDeliveryAddress, setSelectedDeliveryAddress] = useState('home');
     const [isSameAddress, setIsSameAddress] = useState(true);
+    const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
+    const { toast } = useToast();
+
+    const handleSaveAddress = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Here you would typically save the address to your backend
+        toast({
+            title: "Address Saved",
+            description: "Your new address has been added.",
+        });
+        setIsAddAddressOpen(false);
+    };
 
     return (
          <div className="space-y-8">
@@ -55,7 +68,7 @@ export default function AddressStep() {
                                         <DialogHeader>
                                             <DialogTitle>Edit Address</DialogTitle>
                                         </DialogHeader>
-                                        <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} />
+                                        <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} onSave={handleSaveAddress} />
                                     </DialogContent>
                                 </Dialog>
                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
@@ -64,7 +77,7 @@ export default function AddressStep() {
                     ))}
                 </RadioGroup>
                 
-                <Dialog>
+                <Dialog open={isAddAddressOpen} onOpenChange={setIsAddAddressOpen}>
                     <DialogTrigger asChild>
                         <Button variant="outline" className="w-full">
                             <Plus className="mr-2 h-4 w-4" /> Add New Address
@@ -75,7 +88,7 @@ export default function AddressStep() {
                             <DialogTitle>Add a New Address</DialogTitle>
                             <DialogDescription>Enter the details for your new address.</DialogDescription>
                         </DialogHeader>
-                        <AddressForm />
+                        <AddressForm onSave={handleSaveAddress} />
                     </DialogContent>
                 </Dialog>
             </div>
@@ -117,7 +130,7 @@ export default function AddressStep() {
                                                 <DialogHeader>
                                                     <DialogTitle>Edit Address</DialogTitle>
                                                 </DialogHeader>
-                                                <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} />
+                                                <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} onSave={handleSaveAddress} />
                                             </DialogContent>
                                         </Dialog>
                                         <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
@@ -136,7 +149,7 @@ export default function AddressStep() {
                                     <DialogTitle>Add a New Delivery Address</DialogTitle>
                                     <DialogDescription>Enter the details for your new address.</DialogDescription>
                                 </DialogHeader>
-                                <AddressForm />
+                                <AddressForm onSave={handleSaveAddress} />
                             </DialogContent>
                         </Dialog>
                     </div>
@@ -146,11 +159,11 @@ export default function AddressStep() {
     )
 }
 
-function AddressForm({ defaultValues }: { defaultValues?: any}) {
+function AddressForm({ defaultValues, onSave }: { defaultValues?: any, onSave: (e: React.FormEvent) => void }) {
     const [selectedAddress, setSelectedAddress] = useState<string>(defaultValues?.street || '');
     
     return (
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={onSave}>
             <div className="space-y-2">
                 <Label htmlFor="street">Street Address</Label>
                 <AddressInput
