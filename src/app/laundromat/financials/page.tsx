@@ -25,6 +25,7 @@ import {
   TrendingUp,
   Search,
   ChevronDown,
+  Settings,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -38,6 +39,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const kpiCards = [
   {
@@ -185,7 +187,12 @@ export default function FinancialsPage() {
                             <p className="text-sm text-muted-foreground">Acct ending in ****5678</p>
                         </div>
                     </div>
-                    <Button variant="outline" className="w-full">Manage Payout Method</Button>
+                    <Button variant="outline" className="w-full" asChild>
+                      <Link href="/laundromat/settings">
+                        <Settings className="mr-2 h-4 w-4" />
+                        Manage Payout Method
+                      </Link>
+                    </Button>
                 </CardContent>
             </Card>
         </div>

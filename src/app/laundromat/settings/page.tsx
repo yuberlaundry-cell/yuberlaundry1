@@ -16,6 +16,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import Link from 'next/link';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function LaundromatSettingsPage() {
   return (
@@ -27,11 +28,11 @@ export default function LaundromatSettingsPage() {
         </p>
       </div>
 
-      <Tabs defaultValue="profile">
+      <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-1 sm:grid-cols-4">
           <TabsTrigger value="profile">Profile</TabsTrigger>
           <TabsTrigger value="operations">Operations</TabsTrigger>
-          <TabsTrigger value="pricing" asChild><Link href="/laundromat/settings/pricing">Services & Pricing</Link></TabsTrigger>
+          <TabsTrigger value="payouts">Payouts</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
@@ -108,6 +109,44 @@ export default function LaundromatSettingsPage() {
               </CardContent>
             </Card>
           </div>
+        </TabsContent>
+         <TabsContent value="payouts">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payout Information</CardTitle>
+              <CardDescription>
+                Manage the bank account where you receive earnings from Paystack.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form className="space-y-6 max-w-lg">
+                <div className="space-y-2">
+                  <Label htmlFor="bank-name">Bank Name</Label>
+                  <Select>
+                    <SelectTrigger id="bank-name">
+                        <SelectValue placeholder="Select your bank"/>
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="gtb">Guaranty Trust Bank</SelectItem>
+                        <SelectItem value="first-bank">First Bank of Nigeria</SelectItem>
+                        <SelectItem value="zenith">Zenith Bank</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                 <div className="space-y-2">
+                  <Label htmlFor="account-number">Account Number</Label>
+                  <Input id="account-number" defaultValue="**** **** **78" />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="account-name">Account Holder Name</Label>
+                  <Input id="account-name" defaultValue="Main St. Laundry Ltd." readOnly />
+                </div>
+                <div className="pt-4">
+                  <Button>Update Payout Details</Button>
+                </div>
+              </form>
+            </CardContent>
+          </Card>
         </TabsContent>
         <TabsContent value="notifications">
            <Card>
