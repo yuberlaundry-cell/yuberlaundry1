@@ -12,6 +12,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Search,
   ChevronDown,
 } from 'lucide-react';
@@ -135,7 +143,7 @@ export default function LaundromatOrdersPage() {
         </CardHeader>
         <CardContent>
           <div className="relative w-full overflow-auto hidden md:block">
-            <table className="w-full caption-bottom text-sm">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Order ID</TableHead>
@@ -151,7 +159,7 @@ export default function LaundromatOrdersPage() {
                         <OrderRow key={order.id} order={order} />
                     ))}
                 </TableBody>
-            </table>
+            </Table>
           </div>
           <div className="grid gap-4 md:hidden">
               {mockOrders.map(order => <OrderCard key={order.id} order={order} />)}
