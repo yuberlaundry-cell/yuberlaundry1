@@ -31,6 +31,7 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
+import { useToast } from '@/hooks/use-toast';
 
 const laundromats = [
     { id: 'L-001', name: 'Speedy Suds', location: 'London, UK', status: 'Active', activeOrders: 25, issueRate: '1.2%', rating: 4.8 },
@@ -48,6 +49,15 @@ const statusColors: { [key: string]: string } = {
 
 
 export default function LaundromatsPage() {
+    const { toast } = useToast();
+
+    const handleGenericAction = (action: string, laundromatName: string) => {
+        toast({
+            title: `${action} Initiated`,
+            description: `The action '${action}' for laundromat ${laundromatName} has been triggered.`,
+        });
+    };
+
   return (
     <div className="space-y-6">
        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -56,7 +66,7 @@ export default function LaundromatsPage() {
                 <p className="text-muted-foreground">Manage and monitor all partner facilities.</p>
             </div>
             <div className="flex gap-2">
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto" onClick={() => handleGenericAction('Add Laundromat', '')}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Laundromat
                 </Button>
             </div>
@@ -121,9 +131,9 @@ export default function LaundromatsPage() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Dashboard</DropdownMenuItem>
-                                <DropdownMenuItem>Edit Details</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive">Deactivate</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => handleGenericAction('View Dashboard', l.name)}>View Dashboard</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => handleGenericAction('Edit Details', l.name)}>Edit Details</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Deactivate', l.name)}>Deactivate</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                    </TableCell>

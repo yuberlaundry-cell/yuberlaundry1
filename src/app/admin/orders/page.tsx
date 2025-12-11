@@ -59,7 +59,14 @@ export default function AdminOrdersPage() {
         title: "Refund Initiated via Paystack",
         description: `A ${amount ? `partial refund of R${amount}` : 'full refund'} for order ${orderId} has been successfully initiated.`,
     });
-  }
+  };
+
+  const handleGenericAction = (action: string, orderId: string) => {
+      toast({
+          title: `${action} Initiated`,
+          description: `The action '${action}' for order ${orderId} has been successfully triggered.`,
+      });
+  };
 
   return (
     <div className="space-y-6">
@@ -68,7 +75,7 @@ export default function AdminOrdersPage() {
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Orders Control</h1>
           <p className="text-muted-foreground">Monitor and manage all transactions on the platform.</p>
         </div>
-        <Button>
+        <Button onClick={() => handleGenericAction('Export Data', 'for all orders')}>
           <Download className="mr-2 h-4 w-4" /> Export Data
         </Button>
       </div>
@@ -142,13 +149,13 @@ export default function AdminOrdersPage() {
                                     </Button>
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
-                                    <DropdownMenuItem>View Order Details</DropdownMenuItem>
+                                    <DropdownMenuItem onSelect={() => handleGenericAction('View Order Details', order.id)}>View Order Details</DropdownMenuItem>
                                      <DialogTrigger asChild>
-                                        <DropdownMenuItem disabled={order.statusCategory === 'cancelled' || order.statusCategory === 'upcoming'}>
+                                        <DropdownMenuItem disabled={order.statusCategory === 'cancelled' || order.statusCategory === 'upcoming'} onSelect={(e) => e.preventDefault()}>
                                             Refund Order
                                         </DropdownMenuItem>
                                     </DialogTrigger>
-                                    <DropdownMenuItem className="text-destructive">Cancel Order</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Cancel Order', order.id)}>Cancel Order</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <DialogContent>
@@ -160,8 +167,9 @@ export default function AdminOrdersPage() {
                                 </DialogHeader>
                                 <form className="space-y-4" onSubmit={(e) => {
                                     handleRefund(e, order.id);
-                                    const closeButton = e.currentTarget.closest('.sm\\:rounded-lg')?.querySelector('button[aria-label="Close"]');
-                                    if(closeButton) (closeButton as HTMLButtonElement).click();
+                                    // This is a trick to close the dialog from within the form
+                                    const closeButton = (e.target as HTMLElement).closest('[role="dialog"]')?.querySelector('[aria-label="Close"]');
+                                    if (closeButton) (closeButton as HTMLButtonElement).click();
                                 }}>
                                     <div className="space-y-2">
                                         <Label htmlFor="refund-amount">Refund Amount (Optional)</Label>

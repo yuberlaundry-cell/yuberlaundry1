@@ -32,6 +32,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
 
 const drivers = [
     { id: 'D-001', name: 'Alex Ray', location: 'London, UK', status: 'Online', activeJobs: 1, acceptanceRate: '98%', rating: 4.9, avatar: 'https://picsum.photos/seed/driver1/40/40' },
@@ -50,6 +51,15 @@ const statusColors: { [key: string]: string } = {
 
 
 export default function DriversPage() {
+  const { toast } = useToast();
+
+  const handleGenericAction = (action: string, driverName: string) => {
+    toast({
+        title: `${action} Initiated`,
+        description: `The action '${action}' for driver ${driverName} has been triggered.`,
+    });
+  };
+
   return (
     <div className="space-y-6">
        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -58,7 +68,7 @@ export default function DriversPage() {
                 <p className="text-muted-foreground">Manage and monitor all drivers on the platform.</p>
             </div>
             <div className="flex gap-2">
-                <Button className="w-full sm:w-auto">
+                <Button className="w-full sm:w-auto" onClick={() => handleGenericAction('Add Driver', '')}>
                     <PlusCircle className="mr-2 h-4 w-4" /> Add Driver
                 </Button>
             </div>
@@ -132,9 +142,9 @@ export default function DriversPage() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Profile</DropdownMenuItem>
-                                <DropdownMenuItem>Send Message</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive">Suspend</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => handleGenericAction('View Profile', d.name)}>View Profile</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => handleGenericAction('Send Message', d.name)}>Send Message</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Suspend', d.name)}>Suspend</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                    </TableCell>
