@@ -73,7 +73,7 @@ export default function ProfilePage() {
                          <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
                             <Building className="h-6 w-6 text-muted-foreground"/>
                             <div>
-                                <p className="font-medium">Bank of Example</p>
+                                <p className="font-medium">Bank of Example (via Paystack)</p>
                                 <p className="text-sm text-muted-foreground">Account ending in **** 5678</p>
                             </div>
                         </div>

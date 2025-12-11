@@ -21,7 +21,7 @@ export default function PaymentMethodsPage() {
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="text-3xl font-bold font-headline">Payment Methods</h1>
-                    <p className="text-muted-foreground">Manage your company's saved payment options.</p>
+                    <p className="text-muted-foreground">Manage your company's saved payment options via Paystack.</p>
                 </div>
                  <Dialog>
                     <DialogTrigger asChild>
@@ -34,7 +34,7 @@ export default function PaymentMethodsPage() {
                         <DialogHeader>
                             <DialogTitle>Add a New Payment Method</DialogTitle>
                             <DialogDescription>
-                                Securely save a new credit or debit card for future billing.
+                                Your card details are securely stored and processed by Paystack.
                             </DialogDescription>
                         </DialogHeader>
                         <form className="space-y-4">

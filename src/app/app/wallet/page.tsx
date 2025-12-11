@@ -32,7 +32,7 @@ const kpiCards = [
 
 const transactions = [
     { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-$25.50'},
-    { date: 'May 10, 2024', description: 'Funds added', amount: '+$50.00'},
+    { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+$50.00'},
     { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+$10.00'},
 ];
 
@@ -75,6 +75,7 @@ export default function WalletPage() {
           <Card>
             <CardHeader>
               <CardTitle>Add Funds</CardTitle>
+               <CardDescription>All payments are processed securely by Paystack.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col sm:flex-row gap-2">
@@ -85,12 +86,6 @@ export default function WalletPage() {
                  <div className="space-y-2">
                     <Label htmlFor="custom-amount">Custom Amount</Label>
                     <Input id="custom-amount" placeholder="$0.00" />
-                 </div>
-                 <div className="space-y-2">
-                    <Label>Payment Method</Label>
-                    <div className="p-4 border rounded-lg bg-muted/50">
-                        <p className="text-sm text-muted-foreground">You will be redirected to Paystack to complete your payment securely.</p>
-                    </div>
                  </div>
             </CardContent>
             <CardFooter>

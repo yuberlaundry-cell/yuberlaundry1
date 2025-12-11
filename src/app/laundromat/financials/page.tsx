@@ -174,14 +174,15 @@ export default function FinancialsPage() {
         <div className="lg:col-span-3 xl:col-span-1">
              <Card>
                 <CardHeader>
-                    <CardTitle>Bank Details</CardTitle>
+                    <CardTitle>Payout Method</CardTitle>
+                    <CardDescription>Earnings are paid out via Paystack.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                      <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
                         <DollarSign className="h-6 w-6 text-muted-foreground"/>
                         <div>
                             <p className="font-medium">Main Street Bank</p>
-                            <p className="text-sm text-muted-foreground">Account ending in **** 5678</p>
+                            <p className="text-sm text-muted-foreground">Acct ending in ****5678</p>
                         </div>
                     </div>
                     <Button variant="outline" className="w-full">Manage Payout Method</Button>
@@ -196,7 +197,7 @@ export default function FinancialsPage() {
                  <div>
                     <CardTitle>Payout History</CardTitle>
                     <CardDescription>
-                        A record of all payouts from Yuber Laundry.
+                        A record of all payouts from Yuber Laundry via Paystack.
                     </CardDescription>
                 </div>
                  <div className="flex items-center gap-2 flex-wrap">

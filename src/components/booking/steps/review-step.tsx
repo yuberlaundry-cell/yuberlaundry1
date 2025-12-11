@@ -16,31 +16,27 @@ export default function ReviewStep() {
     return (
         <div className="space-y-8">
             <div>
-                <h2 className="text-2xl font-bold font-headline">Book Your Service</h2>
-                <p className="text-muted-foreground mt-1">Secure payment to complete your service.</p>
+                <h2 className="text-2xl font-bold font-headline">Review & Place Order</h2>
+                <p className="text-muted-foreground mt-1">Finalize your details before confirming your order.</p>
             </div>
            
             <div className="space-y-6">
-                <h3 className="font-semibold text-lg">Payment</h3>
+                <h3 className="font-semibold text-lg">Payment with Paystack</h3>
                 
                 <div className="p-4 border rounded-lg bg-muted/50 space-y-4">
-                    <h4 className="font-medium">How much do I pay?</h4>
+                    <h4 className="font-medium">How payment works</h4>
                     <div className="space-y-3 text-sm text-muted-foreground">
                         <div className="flex items-start gap-3">
                             <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                            <p>You'll pay nothing when placing this order. No payment required upfront, just review your booking!</p>
+                            <p>You'll pay nothing when placing this order. An authorization may be placed on your card.</p>
                         </div>
                          <div className="flex items-start gap-3">
                             <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                            <p>Your local cleaning partner will check your bags and issue an itemised clothes receipt. You can always check and edit this if needed.</p>
-                        </div>
-                        <div className="flex items-start gap-3">
-                            <Info className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                            <p>You'll pay the order total after we clean your items. Service fee R19.00, minimum order R100.00.</p>
+                            <p>After pickup, our partner laundromat will weigh your items and provide a final itemized receipt.</p>
                         </div>
                         <div className="flex items-start gap-3">
                             <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                            <p>The selected tip will be added to your gross order value. 100% goes directly to your driver.</p>
+                            <p>Your card will be charged via Paystack's secure gateway only after the service is complete.</p>
                         </div>
                     </div>
                 </div>
@@ -53,16 +49,8 @@ export default function ReviewStep() {
                     </div>
                 </div>
 
-                <div className="space-y-2">
-                    <Label htmlFor="gift-card">Have a gift card?</Label>
-                    <div className="flex gap-2">
-                        <Input id="gift-card" placeholder="Enter gift card code" />
-                        <Button variant="outline">Apply</Button>
-                    </div>
-                </div>
-
                 <div className="space-y-3">
-                    <Label>Tip your driver?</Label>
+                    <Label>Add a tip for your driver?</Label>
                      <div className="flex gap-2">
                         {['10%', '15%', '20%', '25%', 'Custom'].map(val => (
                             <Button 
@@ -75,6 +63,7 @@ export default function ReviewStep() {
                             </Button>
                         ))}
                     </div>
+                     <p className="text-xs text-muted-foreground">The selected tip will be added to your order total. 100% goes directly to your driver.</p>
                 </div>
 
                  <div className="flex items-center space-x-2 pt-4">
