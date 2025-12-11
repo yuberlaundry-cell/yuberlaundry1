@@ -29,11 +29,13 @@ import {
     ShieldOff,
     Star,
     TrendingUp,
+    MapPin,
 } from 'lucide-react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { OrderStatusChart } from '@/components/laundromat/order-status-chart';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const laundromatData = {
     'L-001': {
@@ -99,12 +101,35 @@ export default function LaundromatProfilePage() {
                             <h1 className="text-2xl font-bold font-headline">{laundromat.name}</h1>
                             <Badge variant="secondary" className={statusColors[laundromat.status]}>{laundromat.status}</Badge>
                         </div>
-                        <p className="text-muted-foreground">{laundromat.location}</p>
+                         <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                            <MapPin className="h-4 w-4" />
+                            <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(laundromat.location)}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                {laundromat.location}
+                            </a>
+                        </div>
                     </div>
                 </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline" onClick={() => handleAction('View Contract')}><FileText className="mr-2"/> View Contract</Button>
+                    <Dialog>
+                        <DialogTrigger asChild>
+                            <Button variant="outline"><FileText className="mr-2"/> View Contract</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>Partner Contract for {laundromat.name}</DialogTitle>
+                                <DialogDescription>Agreement signed on Jan 15, 2023.</DialogDescription>
+                            </DialogHeader>
+                            <div className="prose prose-sm h-96 overflow-y-auto p-4 border rounded-md text-muted-foreground">
+                                <h4>Yuber Laundry Partner Agreement</h4>
+                                <p>This Partner Agreement ("Agreement") is made and entered into by and between Yuber Laundry ("Company") and {laundromat.name} ("Partner"). This Agreement governs the Partner's participation in the Yuber Laundry network.</p>
+                                <p><strong>1. Services.</strong> The Company will list the Partner on its mobile and web applications, allowing customers to place orders for laundry services to be fulfilled by the Partner. The Company will facilitate pickup and delivery logistics.</p>
+                                <p><strong>2. Partner Obligations.</strong> The Partner agrees to maintain high-quality service standards, including timely processing, proper care of items, and accurate order fulfillment. The Partner will use the provided portal to manage all orders.</p>
+                                <p><strong>3. Commission & Payouts.</strong> The Company will collect a commission on all orders processed through the platform, as defined by the selected Subscription Plan (Partner Tier 1, 12% commission). Payouts for completed orders, minus the commission, will be transferred to the Partner's designated bank account on a bi-weekly basis.</p>
+                                <p>...</p>
+                            </div>
+                        </DialogContent>
+                    </Dialog>
                     <Button variant="outline" asChild><Link href={`/admin/laundromats/${laundromatId}/edit`}><Edit className="mr-2"/> Edit</Link></Button>
                     <Button variant="destructive" onClick={() => handleAction('Deactivate Laundromat')}><ShieldOff className="mr-2"/> Deactivate</Button>
                 </div>
