@@ -11,6 +11,7 @@ import InstructionsStep from "./steps/instructions-step";
 import ReviewStep from "./steps/review-step";
 import ConfirmationStep from "@/app/app/book/confirmation/page";
 import { ShieldQuestion } from "lucide-react";
+import { Progress } from "../ui/progress";
 
 const steps = [
     { id: 1, title: "Address" },
@@ -51,16 +52,22 @@ export function BookingFlow() {
                 return <AddressStep />;
         }
     };
+    
+    const progress = (currentStep / steps.length) * 100;
 
     return (
         <>
-            <div className="col-span-2 p-8 overflow-y-auto">
+            <div className="col-span-3 md:col-span-2 p-4 md:p-8 overflow-y-auto">
                 <div className="max-w-xl mx-auto">
                    {renderStepContent()}
                 </div>
             </div>
-            <div className="col-span-1 bg-muted/50 p-8 overflow-y-auto border-l flex flex-col">
+            <div className="hidden md:block md:col-span-1 bg-muted/50 p-8 overflow-y-auto border-l flex flex-col">
                 <div className="flex-grow">
+                    <div className="space-y-2 mb-8">
+                        <p className="text-sm font-medium">Step {currentStep} of {steps.length}</p>
+                        <Progress value={progress} />
+                    </div>
                     <OrderSummary />
                 </div>
                 <div className="flex justify-between items-center mt-8 pt-6 border-t">
@@ -71,8 +78,24 @@ export function BookingFlow() {
                     {currentStep < steps.length ? (
                          <Button onClick={goToNextStep}>Continue</Button>
                     ) : (
-                        <Button onClick={handlePlaceOrder}>
+                        <Button onClick={handlePlaceOrder} size="lg" className="font-semibold">
                             <ShieldQuestion className="mr-2 h-4 w-4" /> Place Order with Paystack
+                        </Button>
+                    )}
+                </div>
+            </div>
+            {/* Mobile Footer */}
+            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t p-4">
+                 <div className="flex justify-between items-center">
+                    {currentStep > 1 ? (
+                         <Button variant="ghost" onClick={goToPrevStep}>Go Back</Button>
+                    ) : <div></div>}
+                    
+                    {currentStep < steps.length ? (
+                         <Button onClick={goToNextStep}>Continue</Button>
+                    ) : (
+                        <Button onClick={handlePlaceOrder} className="font-semibold">
+                            Place Order
                         </Button>
                     )}
                 </div>
