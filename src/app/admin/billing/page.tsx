@@ -23,12 +23,14 @@ import {
   FileText,
   Search,
   ChevronDown,
+  MoreHorizontal,
 } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import { useRouter } from 'next/navigation';
 
 const invoices = [
     { id: 'INV-ACME-001', company: 'Acme Corp', date: 'Dec 1, 2024', amount: 'R42,500.00', status: 'Paid' },
@@ -45,6 +47,7 @@ const statusColors: { [key: string]: string } = {
 };
 
 export default function B2BBillingPage() {
+    const router = useRouter();
   return (
     <div className="space-y-6">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -127,17 +130,33 @@ export default function B2BBillingPage() {
                 <TableHead>Date</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead><span className="sr-only">Actions</span></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {invoices.map((invoice) => (
-                <TableRow key={invoice.id}>
+                <TableRow key={invoice.id} onClick={() => router.push(`/admin/billing/${invoice.id}`)} className="cursor-pointer">
                   <TableCell className="font-medium">{invoice.id}</TableCell>
                   <TableCell>{invoice.company}</TableCell>
                   <TableCell>{invoice.date}</TableCell>
                   <TableCell>{invoice.amount}</TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={statusColors[invoice.status]}>{invoice.status}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
+                                <MoreHorizontal className="h-4 w-4" />
+                                <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onSelect={() => router.push(`/admin/billing/${invoice.id}`)}>View Details</DropdownMenuItem>
+                            <DropdownMenuItem>Send Reminder</DropdownMenuItem>
+                            <DropdownMenuItem>Mark as Paid</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                   </TableCell>
                 </TableRow>
               ))}
