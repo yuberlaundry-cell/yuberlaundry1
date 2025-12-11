@@ -10,13 +10,13 @@ import Link from "next/link";
 
 export default function ConfirmationStep() {
     return (
-        <div className="flex items-center justify-center h-full">
+        <div className="flex items-center justify-center h-full p-4">
             <Card className="w-full max-w-md text-center shadow-none border-none">
-                <CardContent className="p-8">
+                <CardContent className="p-4 sm:p-8">
                     <div className="flex justify-center mb-4">
-                        <CheckCircle2 className="h-20 w-20 text-green-500" />
+                        <CheckCircle2 className="h-16 w-16 sm:h-20 sm:w-20 text-green-500" />
                     </div>
-                    <h1 className="text-3xl font-bold font-headline">Your laundry is booked!</h1>
+                    <h1 className="text-2xl sm:text-3xl font-bold font-headline">Your laundry is booked!</h1>
                     <p className="text-muted-foreground mt-2">
                         Get ready for the easiest laundry day ever.
                     </p>
