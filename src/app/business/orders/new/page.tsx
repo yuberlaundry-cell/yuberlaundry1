@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useState } from 'react';
@@ -17,7 +18,7 @@ import { AddressInput } from "@/components/ui/address-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 
 const steps = [
@@ -36,8 +37,8 @@ const servicesConfig = [
         preferences: {
             title: 'Please select your preference for Wash & Fold',
             options: [
-                { id: 'mixed', name: 'Mixed Wash', price: 'R39.75 / 15lbs' },
-                { id: 'separate', name: 'Separate Wash', price: 'R79.50 / 30lbs' },
+                { id: 'mixed', name: 'Mixed Wash', price: 'R39.75 / kg' },
+                { id: 'separate', name: 'Separate Wash', price: 'R79.50 / kg' },
             ],
             description: "We'll separate the lights and darks for you."
         },
