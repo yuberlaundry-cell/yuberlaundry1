@@ -50,13 +50,13 @@ const navigationConfig = [
       { href: '/laundromat/processing', label: 'Processing Board', icon: LayoutGrid },
       { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
       { href: '/laundromat/ready', label: 'Ready for Handoff', icon: Truck },
+      { href: '/laundromat/completed', label: 'Completed & Reviews', icon: Star },
     ]
   },
   {
     title: 'Management',
     links: [
        { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
-       { href: '/laundromat/completed', label: 'Completed & Reviews', icon: Star },
        { href: '/laundromat/resources', label: 'Resources', icon: Book },
        { href: '/laundromat/settings', label: 'Settings', icon: Settings },
     ]
