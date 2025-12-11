@@ -1,22 +1,37 @@
 
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { DollarSign, ShoppingCart, CircleHelp } from "lucide-react";
+import { DollarSign, ShoppingCart, CircleHelp, PlusCircle } from "lucide-react";
 import { RecentOrdersTable } from "./recent-orders-table";
 import { Button } from "../ui/button";
 import { Progress } from "../ui/progress";
+import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
+import { mockBusinessEmployees } from "@/lib/mock-data";
 
-const kpiCards = [
-    { title: "Your Orders (Month)", value: "4", icon: ShoppingCart },
-    { title: "Your Spend (Month)", value: "R1,285.50", icon: DollarSign },
-];
 
 export function EmployeeDashboard() {
+    const { user } = useAuth();
+    const employeeData = mockBusinessEmployees.find(e => e.id === user?.id) || mockBusinessEmployees[0];
+
+    const kpiCards = [
+        { title: "Your Orders (Month)", value: "4", icon: ShoppingCart },
+        { title: "Your Spend (Month)", value: `R${(employeeData.allowance.monthly - employeeData.allowance.remaining).toFixed(2)}`, icon: DollarSign },
+    ];
+
+
     return (
         <div className="space-y-8 pb-8">
-            <div>
-                <h1 className="text-3xl font-bold font-headline">Your Dashboard</h1>
-                <p className="text-muted-foreground">Track your personal laundry usage and order history.</p>
+            <div className="flex flex-col md:flex-row gap-4 items-start justify-between">
+                <div>
+                    <h1 className="text-3xl font-bold font-headline">Your Dashboard</h1>
+                    <p className="text-muted-foreground">Track your personal laundry usage and order history.</p>
+                </div>
+                <Button asChild>
+                    <Link href="/business/orders/new">
+                        <PlusCircle className="mr-2" /> New Order
+                    </Link>
+                </Button>
             </div>
             
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -36,9 +51,9 @@ export function EmployeeDashboard() {
                         <CardTitle className="text-sm font-medium">Monthly Allowance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">R715.50 <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
-                        <p className="text-xs text-muted-foreground">of R2000.00</p>
-                        <Progress value={(715.50/2000)*100} className="mt-2" />
+                        <div className="text-2xl font-bold">R{employeeData.allowance.remaining.toFixed(2)} <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
+                        <p className="text-xs text-muted-foreground">of R{employeeData.allowance.monthly.toFixed(2)}</p>
+                        <Progress value={(employeeData.allowance.remaining / employeeData.allowance.monthly)*100} className="mt-2" />
                     </CardContent>
                 </Card>
             </div>

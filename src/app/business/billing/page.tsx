@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 
 const kpiCards = [
     { title: "Outstanding Balance", value: "R0.00", icon: DollarSign },
-    { title: "Last Invoice Amount", value: "R42,500.00", icon: FileText },
+    { title: "Last Invoice Amount", value: "R4,250.00", icon: FileText },
     { title: "Next Billing Date", value: "Jan 1, 2025", icon: Calendar },
 ];
 

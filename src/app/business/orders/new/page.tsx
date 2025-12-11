@@ -20,6 +20,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/use-auth';
 
 const steps = [
   { id: 1, name: 'Employee', icon: User },
@@ -70,13 +71,15 @@ const savedAddresses = [
 
 
 export default function NewBusinessOrderPage() {
-    const [currentStep, setCurrentStep] = useState(1);
-    const [selectedEmployee, setSelectedEmployee] = useState('');
+    const { user } = useAuth();
+    const isAdmin = user?.role === 'business_admin';
+
+    const [currentStep, setCurrentStep] = useState(isAdmin ? 1 : 2);
+    const [selectedEmployee, setSelectedEmployee] = useState(isAdmin ? '' : user?.id || '');
     const [pickupAddress, setPickupAddress] = useState('work');
     const { toast } = useToast();
     const router = useRouter();
 
-    // State for Step 2: Services
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
     const [editingService, setEditingService] = useState<Service | null>(null);
     const [servicePreferences, setServicePreferences] = useState<ServicePreferences>({});
@@ -91,6 +94,11 @@ export default function NewBusinessOrderPage() {
     
     const handlePrev = () => {
         if (currentStep > 1) {
+            // Skip step 1 for non-admins
+            if (!isAdmin && currentStep === 2) {
+                router.push('/business'); // or wherever back should go from step 2 for employees
+                return;
+            }
             setCurrentStep(currentStep - 1);
         }
     };
@@ -146,6 +154,7 @@ export default function NewBusinessOrderPage() {
     const renderStepContent = () => {
         switch (currentStep) {
             case 1:
+                if (!isAdmin) return null; // Should not happen if logic is correct
                 return (
                     <div className="space-y-4">
                         <Label htmlFor="employee">Select Employee</Label>
