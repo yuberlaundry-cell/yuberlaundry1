@@ -63,7 +63,7 @@ export default function PromotionsPage() {
                  <ul className="space-y-3">
                     <li className="flex items-center gap-3 text-sm">
                         <Check className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Up to 30 lbs included per month</span>
+                        <span className="text-muted-foreground">Up to 30 kg included per month</span>
                     </li>
                      <li className="flex items-center gap-3 text-sm">
                         <Check className="h-4 w-4 text-primary" />

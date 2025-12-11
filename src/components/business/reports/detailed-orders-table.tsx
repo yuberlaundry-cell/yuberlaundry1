@@ -68,8 +68,8 @@ export function DetailedOrdersTable() {
                                 <TableCell>{order.pickup}</TableCell>
                                 <TableCell>{order.delivery}</TableCell>
                                 <TableCell className="text-right">
-                                    <div className="font-semibold">${order.cost.toFixed(2)}</div>
-                                    <div className="text-xs text-muted-foreground">Co: ${order.companyShare.toFixed(2)}</div>
+                                    <div className="font-semibold">£{order.cost.toFixed(2)}</div>
+                                    <div className="text-xs text-muted-foreground">Co: £{order.companyShare.toFixed(2)}</div>
                                 </TableCell>
                             </TableRow>
                         ))}

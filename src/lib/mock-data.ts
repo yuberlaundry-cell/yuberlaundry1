@@ -44,7 +44,7 @@ export const mockOrders: Order[] = [
         statusCategory: 'in-progress',
         pickupTime: 'Today, May 13, 12:00 - 14:00',
         deliveryTime: 'Wednesday, May 15, 18:00 - 20:00',
-        price: '$25.50',
+        price: '£25.50',
         pickupAddress: '123 Main St, London, SW1A 0AA',
         deliveryAddress: '123 Main St, London, SW1A 0AA',
         driver: {
@@ -66,8 +66,8 @@ export const mockOrders: Order[] = [
             { title: 'Delivered', timestamp: 'Pending', status: 'pending' },
         ],
         payment: {
-            subtotal: '$22.00',
-            serviceFee: '$3.50',
+            subtotal: '£22.00',
+            serviceFee: '£3.50',
         }
     },
     {
@@ -78,7 +78,7 @@ export const mockOrders: Order[] = [
         statusCategory: 'in-progress',
         pickupTime: 'Yesterday, May 12, 09:00 - 11:00',
         deliveryTime: 'Today, May 13, 16:00 - 18:00',
-        price: '$42.00',
+        price: '£42.00',
         pickupAddress: '456 Business Rd, London, EC1A 1BB',
         deliveryAddress: '456 Business Rd, London, EC1A 1BB',
         driver: {
@@ -100,8 +100,8 @@ export const mockOrders: Order[] = [
             { title: 'Delivered', timestamp: 'Pending', status: 'pending' },
         ],
         payment: {
-            subtotal: '$38.00',
-            serviceFee: '$4.00',
+            subtotal: '£38.00',
+            serviceFee: '£4.00',
         }
     },
     {
@@ -112,7 +112,7 @@ export const mockOrders: Order[] = [
         statusCategory: 'completed',
         pickupTime: 'May 10, 12:00 - 14:00',
         deliveryTime: 'May 12, 18:00 - 20:00',
-        price: '$25.50',
+        price: '£25.50',
         pickupAddress: '123 Main St, London, SW1A 0AA',
         deliveryAddress: '123 Main St, London, SW1A 0AA',
         driver: null,
@@ -129,8 +129,8 @@ export const mockOrders: Order[] = [
             { title: 'Delivered', timestamp: 'May 12, 6:15 PM', status: 'completed' },
         ],
         payment: {
-            subtotal: '$22.00',
-            serviceFee: '$3.50',
+            subtotal: '£22.00',
+            serviceFee: '£3.50',
         }
     },
      {
@@ -141,7 +141,7 @@ export const mockOrders: Order[] = [
         statusCategory: 'upcoming',
         pickupTime: 'Tomorrow, May 14, 09:00 - 11:00',
         deliveryTime: 'Thursday, May 16, 18:00 - 20:00',
-        price: 'Est. $30.00',
+        price: 'Est. £30.00',
         pickupAddress: '789 Pine St, London, W1A 1AA',
         deliveryAddress: '789 Pine St, London, W1A 1AA',
         driver: null,
@@ -158,8 +158,8 @@ export const mockOrders: Order[] = [
             { title: 'Delivered', timestamp: 'Pending', status: 'pending' },
         ],
         payment: {
-            subtotal: 'Est. $26.50',
-            serviceFee: '$3.50',
+            subtotal: 'Est. £26.50',
+            serviceFee: '£3.50',
         }
     },
     {
@@ -170,7 +170,7 @@ export const mockOrders: Order[] = [
         statusCategory: 'cancelled',
         pickupTime: 'May 9, 12:00 - 14:00',
         deliveryTime: 'May 11, 18:00 - 20:00',
-        price: '$0.00',
+        price: '£0.00',
         pickupAddress: '123 Main St, London, SW1A 0AA',
         deliveryAddress: '123 Main St, London, SW1A 0AA',
         driver: null,
@@ -179,8 +179,8 @@ export const mockOrders: Order[] = [
             { title: 'Order Cancelled', timestamp: 'May 9, 11:00 AM', status: 'completed' },
         ],
          payment: {
-            subtotal: '$0.00',
-            serviceFee: '$0.00',
+            subtotal: '£0.00',
+            serviceFee: '£0.00',
         }
     },
 ];

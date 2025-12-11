@@ -31,10 +31,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 const plans = [
     {
         name: "Yuber Plus",
-        price: "$45",
+        price: "£45",
         billingCycle: "monthly",
         features: [
-            "Up to 30 lbs included",
+            "Up to 30 kg included",
             "Free pickup & delivery",
             "Premium detergents",
             "Next-day turnaround"
@@ -43,7 +43,7 @@ const plans = [
     },
     {
         name: "Plus Annual",
-        price: "$450",
+        price: "£450",
         billingCycle: "yearly",
         features: [
             "All Yuber Plus benefits",
@@ -54,10 +54,10 @@ const plans = [
     },
      {
         name: "Yuber Lite (Legacy)",
-        price: "$25",
+        price: "£25",
         billingCycle: "monthly",
         features: [
-            "Up to 15 lbs included",
+            "Up to 15 kg included",
             "Discounted delivery",
         ],
         active: false,
@@ -94,7 +94,7 @@ export default function SubscriptionsPage() {
                     </div>
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="plan-price">Price ($)</Label>
+                            <Label htmlFor="plan-price">Price (£)</Label>
                             <Input id="plan-price" type="number" placeholder="e.g., 99" required/>
                         </div>
                         <div className="space-y-2">

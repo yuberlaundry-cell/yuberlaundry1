@@ -172,10 +172,10 @@ export default function BusinessOrdersPage() {
                                     <TableCell>{order.pickup}</TableCell>
                                     <TableCell>{order.delivery}</TableCell>
                                     <TableCell className="text-right">
-                                        <div className="font-medium">${order.cost.toFixed(2)}</div>
+                                        <div className="font-medium">£{order.cost.toFixed(2)}</div>
                                         {isAdmin && order.employeeShare > 0 && (
                                             <div className="text-xs text-muted-foreground">
-                                                ${order.employeeShare.toFixed(2)} by employee
+                                                £{order.employeeShare.toFixed(2)} by employee
                                             </div>
                                         )}
                                     </TableCell>

@@ -83,7 +83,7 @@ export default function InvoiceDetailsPage() {
                     <div className="grid md:grid-cols-3 gap-4 mb-8 text-center">
                         <Card className="p-4">
                             <CardTitle className="text-sm font-semibold">Amount Due</CardTitle>
-                            <CardDescription className="text-2xl font-bold">${invoice.status === 'Paid' ? '0.00' : invoice.amount.toFixed(2)}</CardDescription>
+                            <CardDescription className="text-2xl font-bold">£{invoice.status === 'Paid' ? '0.00' : invoice.amount.toFixed(2)}</CardDescription>
                         </Card>
                          <Card className="p-4">
                             <CardTitle className="text-sm font-semibold">Due Date</CardTitle>
@@ -112,23 +112,23 @@ export default function InvoiceDetailsPage() {
                                 <TableRow key={index}>
                                     <TableCell className="font-medium">{item.description}</TableCell>
                                     <TableCell className="text-center">{item.quantity}</TableCell>
-                                    <TableCell className="text-right">${item.price.toFixed(2)}</TableCell>
-                                    <TableCell className="text-right">${item.total.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right">£{item.price.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right">£{item.total.toFixed(2)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                          <TableFooter>
                             <TableRow>
                                 <TableCell colSpan={3} className="text-right font-medium">Subtotal</TableCell>
-                                <TableCell className="text-right">${invoice.subtotal.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">£{invoice.subtotal.toFixed(2)}</TableCell>
                             </TableRow>
                              <TableRow>
                                 <TableCell colSpan={3} className="text-right font-medium">Tax (0%)</TableCell>
-                                <TableCell className="text-right">${invoice.tax.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">£{invoice.tax.toFixed(2)}</TableCell>
                             </TableRow>
                              <TableRow className="font-bold text-lg">
                                 <TableCell colSpan={3} className="text-right">Total</TableCell>
-                                <TableCell className="text-right">${invoice.total.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">£{invoice.total.toFixed(2)}</TableCell>
                             </TableRow>
                         </TableFooter>
                     </Table>

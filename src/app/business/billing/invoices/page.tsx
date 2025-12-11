@@ -86,7 +86,7 @@ export default function InvoicesListPage() {
                                     <TableCell className="font-medium">{invoice.id}</TableCell>
                                     <TableCell>{invoice.date}</TableCell>
                                     <TableCell>{invoice.dueDate}</TableCell>
-                                    <TableCell>${invoice.amount.toFixed(2)}</TableCell>
+                                    <TableCell>£{invoice.amount.toFixed(2)}</TableCell>
                                     <TableCell>
                                         <Badge variant="secondary" className={statusColors[invoice.status]}>{invoice.status}</Badge>
                                     </TableCell>

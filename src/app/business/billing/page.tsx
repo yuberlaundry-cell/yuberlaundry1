@@ -12,8 +12,8 @@ import { useAuth } from "@/hooks/use-auth";
 import { useRouter } from "next/navigation";
 
 const kpiCards = [
-    { title: "Outstanding Balance", value: "$0.00", icon: DollarSign },
-    { title: "Last Invoice Amount", value: "$4,250.00", icon: FileText },
+    { title: "Outstanding Balance", value: "£0.00", icon: DollarSign },
+    { title: "Last Invoice Amount", value: "£4,250.00", icon: FileText },
     { title: "Next Billing Date", value: "Jan 1, 2025", icon: Calendar },
 ];
 
@@ -85,7 +85,7 @@ export default function BillingPage() {
                                                 <Link href={`/business/billing/invoices/${invoice.id}`} className="hover:underline">{invoice.id}</Link>
                                             </TableCell>
                                             <TableCell>{invoice.date}</TableCell>
-                                            <TableCell>${invoice.amount.toFixed(2)}</TableCell>
+                                            <TableCell>£{invoice.amount.toFixed(2)}</TableCell>
                                             <TableCell>
                                                 <Badge variant="secondary" className={statusColors[invoice.status]}>{invoice.status}</Badge>
                                             </TableCell>

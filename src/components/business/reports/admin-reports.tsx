@@ -14,10 +14,10 @@ import { ServiceTypeChart } from "./service-type-chart";
 import { TopEmployeesWidget } from "./top-employees-widget";
 
 const kpiCards = [
-    { title: "Total Spend", value: "$1,250.75", change: "+5.2%", icon: DollarSign },
+    { title: "Total Spend", value: "£1,250.75", change: "+5.2%", icon: DollarSign },
     { title: "Total Orders", value: "38", change: "+10", icon: ShoppingCart },
     { title: "Active Employees", value: "8", change: "+1", icon: Users },
-    { title: "Avg. Order Cost", value: "$32.91", change: "-2.1%", icon: BarChart },
+    { title: "Avg. Order Cost", value: "£32.91", change: "-2.1%", icon: BarChart },
 ];
 
 export function AdminReports() {

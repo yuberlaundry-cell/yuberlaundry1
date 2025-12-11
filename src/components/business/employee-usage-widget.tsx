@@ -6,9 +6,9 @@ import { Badge } from "../ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 const employees = [
-    { name: 'Emily Brown', spend: '$512.40', orders: 12, avatar: 'https://picsum.photos/seed/emp1/40/40' },
-    { name: 'Michael Smith', spend: '$480.10', orders: 10, avatar: 'https://picsum.photos/seed/emp2/40/40' },
-    { name: 'Jessica Davis', spend: '$450.90', orders: 11, avatar: 'https://picsum.photos/seed/emp3/40/40' },
+    { name: 'Emily Brown', spend: '£512.40', orders: 12, avatar: 'https://picsum.photos/seed/emp1/40/40' },
+    { name: 'Michael Smith', spend: '£480.10', orders: 10, avatar: 'https://picsum.photos/seed/emp2/40/40' },
+    { name: 'Jessica Davis', spend: '£450.90', orders: 11, avatar: 'https://picsum.photos/seed/emp3/40/40' },
 ];
 
 export function EmployeeUsageWidget() {

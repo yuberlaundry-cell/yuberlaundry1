@@ -128,7 +128,7 @@ export default function EmployeesPage() {
                                         <Badge variant="secondary" className={roleStyles[employee.role]}>{employee.role}</Badge>
                                     </TableCell>
                                     <TableCell>
-                                        <div className="font-medium">${employee.allowance.monthly.toFixed(2)}</div>
+                                        <div className="font-medium">£{employee.allowance.monthly.toFixed(2)}</div>
                                         <div className="text-sm text-muted-foreground">monthly</div>
                                     </TableCell>
                                     <TableCell>

@@ -46,7 +46,7 @@ export function SpendOverTimeChart() {
                     <YAxis
                         tickLine={false}
                         axisLine={false}
-                        tickFormatter={(value) => `$${Number(value) / 1000}k`}
+                        tickFormatter={(value) => `£${Number(value) / 1000}k`}
                     />
                     <ChartTooltip
                         cursor={false}
