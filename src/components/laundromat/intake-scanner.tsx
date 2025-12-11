@@ -66,16 +66,9 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
     } catch (error) {
       console.error('Error accessing camera:', error);
       setHasCameraPermission(false);
-      toast({
-        variant: 'destructive',
-        title: 'Camera Access Denied',
-        description:
-          'Please enable camera permissions in your browser settings to use the scanner.',
-      });
     }
   };
 
-  // Request camera permission when component mounts for the 'scan' step
   useEffect(() => {
     if (step === 'scan') {
       getCameraPermission();
@@ -89,7 +82,6 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
         title: 'Searching for order...',
         description: `Looking up details for order ${manualOrderId}.`,
       });
-      // Simulate finding an order
       setTimeout(() => {
         setStep('confirm');
       }, 1000);
@@ -155,23 +147,27 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
             playsInline
           />
           {hasCameraPermission === false && (
-            <Alert variant="destructive" className="absolute inset-4 z-10">
-              <Camera className="h-4 w-4" />
-              <AlertTitle>Camera Access Required</AlertTitle>
-              <AlertDescription>
-                Please allow camera access in your browser settings.
-              </AlertDescription>
-            </Alert>
+            <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-background/95">
+                <Alert variant="destructive">
+                <Camera className="h-4 w-4" />
+                <AlertTitle>Camera Access Required</AlertTitle>
+                <AlertDescription>
+                    Please allow camera access in your browser settings. You can enter the Order ID manually below if needed.
+                </AlertDescription>
+                </Alert>
+            </div>
           )}
           <div className="absolute inset-8 border-4 border-dashed border-gray-400 rounded-lg" />
         </div>
-        {/* Simulate scan success */}
-        <Button className="w-full" onClick={() => setStep('confirm')}>Simulate Scan</Button>
+        
+        <Button className="w-full" onClick={() => setStep('confirm')} disabled={!hasCameraPermission}>
+          Simulate Scan
+        </Button>
 
         <Separator />
 
         <div>
-            <p className="text-sm text-muted-foreground text-center mb-2">Can't scan?</p>
+            <p className="text-sm text-muted-foreground text-center mb-2">Can't scan or no camera?</p>
              <form className="flex gap-2" onSubmit={handleManualFind}>
                 <Input
                     placeholder="Enter Order ID manually"
@@ -194,3 +190,4 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
   );
 }
 
+    

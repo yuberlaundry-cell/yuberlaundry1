@@ -45,29 +45,24 @@ export default function JobDetailsPage() {
     const [isPhotoOpen, setPhotoOpen] = useState(false);
 
     useEffect(() => {
-        const getCameraPermission = async () => {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: true});
-            setHasCameraPermission(true);
-    
-            if (videoRef.current) {
-              videoRef.current.srcObject = stream;
-            }
-          } catch (error) {
-            console.error('Error accessing camera:', error);
-            setHasCameraPermission(false);
-            toast({
-              variant: 'destructive',
-              title: 'Camera Access Denied',
-              description: 'Please enable camera permissions in your browser settings to use this app.',
-            });
-          }
-        };
-    
-        if(isScanOpen || isPhotoOpen) {
+        if (isScanOpen || isPhotoOpen) {
+            const getCameraPermission = async () => {
+                if (hasCameraPermission) return;
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({video: true});
+                    setHasCameraPermission(true);
+            
+                    if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                    }
+                } catch (error) {
+                    console.error('Error accessing camera:', error);
+                    setHasCameraPermission(false);
+                }
+            };
             getCameraPermission();
         }
-      }, [isScanOpen, isPhotoOpen, toast]);
+      }, [isScanOpen, isPhotoOpen, hasCameraPermission]);
 
 
     const handleNextStep = () => {
@@ -238,3 +233,5 @@ export default function JobDetailsPage() {
         </div>
     )
 }
+
+    
