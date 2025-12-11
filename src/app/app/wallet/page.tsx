@@ -19,10 +19,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Gift, PlusCircle, ShieldQuestion } from 'lucide-react';
+import { CreditCard, Gift, PlusCircle, ShieldQuestion } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const kpiCards = [
     { title: "Available Balance", value: "$15.50" },
@@ -75,18 +82,45 @@ export default function WalletPage() {
           <Card>
             <CardHeader>
               <CardTitle>Add Funds</CardTitle>
-               <CardDescription>All payments are processed securely by Paystack.</CardDescription>
+               <CardDescription>Select an amount and payment method. Payments are processed securely by Paystack.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
                 <div className="flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" className="flex-1">$25</Button>
-                    <Button className="flex-1">$50</Button>
-                    <Button variant="outline" className="flex-1">$100</Button>
+                    <Button variant="outline" className="flex-1 text-lg">$25</Button>
+                    <Button className="flex-1 text-lg">$50</Button>
+                    <Button variant="outline" className="flex-1 text-lg">$100</Button>
                 </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="custom-amount">Custom Amount</Label>
-                    <Input id="custom-amount" placeholder="$0.00" />
-                 </div>
+                <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="custom-amount">Custom Amount</Label>
+                        <Input id="custom-amount" placeholder="$0.00" />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="payment-method">Payment Method</Label>
+                        <Select defaultValue="visa-4242">
+                            <SelectTrigger id="payment-method">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="visa-4242">
+                                    <div className="flex items-center gap-2">
+                                        <CreditCard className="h-4 w-4" /> Visa ending in 4242
+                                    </div>
+                                </SelectItem>
+                                 <SelectItem value="mastercard-5555">
+                                    <div className="flex items-center gap-2">
+                                        <CreditCard className="h-4 w-4" /> Mastercard ending in 5555
+                                    </div>
+                                </SelectItem>
+                                 <SelectItem value="new-card">
+                                     <div className="flex items-center gap-2">
+                                        <PlusCircle className="h-4 w-4" /> Add a new card
+                                    </div>
+                                </SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </div>
             </CardContent>
             <CardFooter>
                  <Button className="w-full">
@@ -142,12 +176,16 @@ export default function WalletPage() {
             </CardHeader>
             <CardContent className="space-y-4">
                  <div className="space-y-2">
+                    <Label htmlFor="gift-amount">Amount</Label>
+                    <Input id="gift-amount" type="number" placeholder="$50.00" />
+                </div>
+                 <div className="space-y-2">
                     <Label htmlFor="recipient-email">Recipient's email or phone</Label>
                     <Input id="recipient-email" placeholder="email@example.com" />
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="gift-message">Optional message</Label>
-                    <Textarea id="gift-message" placeholder="Add a personal message" />
+                    <Textarea id="gift-message" placeholder="Enjoy some clean clothes!" />
                 </div>
                 <Button className="w-full">Send Gift</Button>
             </CardContent>
