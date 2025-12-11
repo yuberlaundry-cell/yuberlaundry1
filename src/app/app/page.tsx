@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { mockOrders } from "@/lib/mock-data";
 import { OrderCard } from "@/components/orders/order-card";
 import { LoyaltyCard } from "@/components/app/loyalty-card";
+import { MonthlySpendChart } from "@/components/app/monthly-spend-chart";
 
 const actionCards = [
     {
@@ -67,6 +68,8 @@ export default function ConsumerDashboard() {
             </Card>
         ))}
       </div>
+      
+      <MonthlySpendChart />
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
