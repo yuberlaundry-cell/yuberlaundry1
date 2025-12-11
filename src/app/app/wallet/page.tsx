@@ -85,41 +85,39 @@ export default function WalletPage() {
                <CardDescription>Select an amount and payment method. Payments are processed securely by Paystack.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="flex flex-col sm:flex-row gap-2">
-                    <Button variant="outline" className="flex-1 text-lg">$25</Button>
-                    <Button className="flex-1 text-lg">$50</Button>
-                    <Button variant="outline" className="flex-1 text-lg">$100</Button>
+                <div className="space-y-2">
+                    <Label>Amount</Label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                        <Button variant="outline" className="flex-1 text-lg">$25</Button>
+                        <Button className="flex-1 text-lg">$50</Button>
+                        <Button variant="outline" className="flex-1 text-lg">$100</Button>
+                        <Input id="custom-amount" placeholder="Custom Amount" className="flex-1 h-12 text-lg" />
+                    </div>
                 </div>
-                <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="custom-amount">Custom Amount</Label>
-                        <Input id="custom-amount" placeholder="$0.00" />
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="payment-method">Payment Method</Label>
-                        <Select defaultValue="visa-4242">
-                            <SelectTrigger id="payment-method">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="visa-4242">
-                                    <div className="flex items-center gap-2">
-                                        <CreditCard className="h-4 w-4" /> Visa ending in 4242
-                                    </div>
-                                </SelectItem>
-                                 <SelectItem value="mastercard-5555">
-                                    <div className="flex items-center gap-2">
-                                        <CreditCard className="h-4 w-4" /> Mastercard ending in 5555
-                                    </div>
-                                </SelectItem>
-                                 <SelectItem value="new-card">
-                                     <div className="flex items-center gap-2">
-                                        <PlusCircle className="h-4 w-4" /> Add a new card
-                                    </div>
-                                </SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="payment-method">Payment Method</Label>
+                    <Select defaultValue="visa-4242">
+                        <SelectTrigger id="payment-method">
+                            <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="visa-4242">
+                                <div className="flex items-center gap-2">
+                                    <CreditCard className="h-4 w-4" /> Visa ending in 4242
+                                </div>
+                            </SelectItem>
+                             <SelectItem value="mastercard-5555">
+                                <div className="flex items-center gap-2">
+                                    <CreditCard className="h-4 w-4" /> Mastercard ending in 5555
+                                </div>
+                            </SelectItem>
+                             <SelectItem value="new-card">
+                                 <div className="flex items-center gap-2">
+                                    <PlusCircle className="h-4 w-4" /> Add a new card
+                                </div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
                 </div>
             </CardContent>
             <CardFooter>
