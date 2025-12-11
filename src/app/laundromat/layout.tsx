@@ -94,7 +94,7 @@ export default function LaundromatPortalLayout({
 
   return (
     <SidebarProvider>
-      <Sidebar>
+      <Sidebar collapsible="none">
         <SidebarHeader className="p-4">
           <div className="flex items-center gap-2">
             <Button
