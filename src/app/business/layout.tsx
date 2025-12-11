@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { LayoutDashboard, Users, ShoppingCart, BarChart, CreditCard, Settings, ChevronRight, FileText } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingCart, BarChart, CreditCard, Settings, ChevronRight, FileText, CircleHelp } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -36,6 +36,7 @@ const adminNavConfig = [
     title: 'Company',
     links: [
        { href: '/business/settings', label: 'Settings', icon: Settings },
+       { href: '/business/support', label: 'Support', icon: CircleHelp },
     ],
   },
 ];
@@ -45,6 +46,7 @@ const employeeNavConfig = [
   { href: '/business/orders', label: 'My Orders', icon: ShoppingCart, isStandalone: true },
   { href: '/business/reports', label: 'My Reports', icon: BarChart, isStandalone: true },
   { href: '/business/settings', label: 'Settings', icon: Settings, isStandalone: true },
+  { href: '/business/support', label: 'Support', icon: CircleHelp, isStandalone: true },
 ]
 
 export default function BusinessPortalLayout({

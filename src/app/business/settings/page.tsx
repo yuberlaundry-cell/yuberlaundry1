@@ -27,9 +27,10 @@ function AdminSettings() {
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="profile">
-                    <TabsList className="grid w-full grid-cols-2">
+                    <TabsList className="grid w-full grid-cols-3">
                         <TabsTrigger value="profile">Company Profile</TabsTrigger>
                         <TabsTrigger value="preferences">Laundry Preferences</TabsTrigger>
+                        <TabsTrigger value="notifications">Notifications</TabsTrigger>
                     </TabsList>
                     <TabsContent value="profile" className="pt-6">
                         <form className="space-y-6 max-w-lg">
@@ -105,6 +106,32 @@ function AdminSettings() {
                             </div>
                             <div className="pt-4">
                                 <Button>Save Preferences</Button>
+                            </div>
+                        </form>
+                    </TabsContent>
+                     <TabsContent value="notifications" className="pt-6">
+                        <form className="space-y-6 max-w-lg">
+                            <div>
+                                <h4 className="font-medium mb-4">Notification Triggers</h4>
+                                <div className="space-y-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="notify-invoice" className="font-normal">New monthly invoice is ready</Label>
+                                        <Switch id="notify-invoice" defaultChecked />
+                                    </div>
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="notify-allowance" className="font-normal">Employee exceeds monthly allowance</Label>
+                                        <Switch id="notify-allowance" defaultChecked />
+                                    </div>
+                                </div>
+                            </div>
+                            <Separator />
+                             <div>
+                                <Label htmlFor="billing-recipients">Billing Recipients</Label>
+                                <p className="text-sm text-muted-foreground">Additional emails to receive billing notifications, separated by commas.</p>
+                                <Input id="billing-recipients" className="mt-2" placeholder="accounting@company.com" />
+                            </div>
+                            <div className="pt-4">
+                                <Button>Save Notifications</Button>
                             </div>
                         </form>
                     </TabsContent>
