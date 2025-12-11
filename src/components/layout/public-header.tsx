@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight } from 'lucide-react';
+import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -51,16 +51,16 @@ const personalMegaMenuItems = {
 
 const businessMegaMenuItems = {
     "Solutions": [
-      { icon: Building, title: "For Hotels", href: "/for-business" },
-      { icon: Briefcase, title: "For Corporates", href: "/for-business" },
-      { icon: Building, title: "For Restaurants", href: "/for-business" },
-      { icon: Building, title: "For Gyms & Salons", href: "/for-business" },
+      { icon: Building, title: "For Hotels", href: "/for-business#solutions" },
+      { icon: Briefcase, title: "For Corporates", href: "/for-business#solutions" },
+      { icon: Utensils, title: "For Restaurants", href: "/for-business#solutions" },
+      { icon: Dumbbell, title: "For Gyms & Salons", href: "/for-business#solutions" },
     ],
     "Platform Features": [
-      { icon: FileText, title: "Centralized Billing", href: "/for-business" },
-      { icon: FileText, title: "Usage Reports", href: "/for-business" },
-      { icon: FileText, title: "Employee Allowances", href: "/for-business" },
-      { icon: FileText, title: "Dedicated Portal", href: "/for-business" },
+      { icon: FileText, title: "Centralized Billing", href: "/for-business#features" },
+      { icon: BarChart, title: "Usage Reports", href: "/for-business#features" },
+      { icon: Users, title: "Employee Allowances", href: "/for-business#features" },
+      { icon: Building, title: "Dedicated Portal", href: "/for-business#features" },
     ],
     "Resources": [
       { icon: Bot, title: "Request a Demo", href: "/for-business#contact" },
@@ -353,6 +353,3 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
-
-    
-    
