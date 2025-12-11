@@ -47,6 +47,8 @@ export default function ConsumerDashboard() {
         <h1 className="text-3xl md:text-4xl font-bold font-headline">Customer Dashboard</h1>
         <p className="text-muted-foreground">Good morning, Jane! Here's a summary of your laundry activities.</p>
       </div>
+
+      <LoyaltyCard />
       
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {actionCards.map(card => (
@@ -64,23 +66,6 @@ export default function ConsumerDashboard() {
                 </Link>
             </Card>
         ))}
-      </div>
-
-       <div className="grid lg:grid-cols-3 gap-8 items-start">
-        <div className="lg:col-span-2">
-            <LoyaltyCard />
-        </div>
-        
-
-        <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Promotions</CardTitle>
-                <Button variant="link" size="sm" asChild><Link href="/app/promotions">View all offers</Link></Button>
-            </CardHeader>
-            <CardContent className="text-center text-muted-foreground py-8">
-                <p>No active promotions.</p>
-            </CardContent>
-        </Card>
       </div>
 
       <Card>
@@ -102,6 +87,16 @@ export default function ConsumerDashboard() {
             )}
         </CardContent>
       </Card>
+
+        <Card>
+            <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Promotions</CardTitle>
+                <Button variant="link" size="sm" asChild><Link href="/app/promotions">View all offers</Link></Button>
+            </CardHeader>
+            <CardContent className="text-center text-muted-foreground py-8">
+                <p>No active promotions.</p>
+            </CardContent>
+        </Card>
     </div>
   );
 }

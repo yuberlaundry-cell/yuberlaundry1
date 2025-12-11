@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle, MoreHorizontal, Search } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -13,10 +13,11 @@ import { Input } from "@/components/ui/input";
 import React from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BookingFlow } from "@/components/booking/booking-flow";
-import { Search } from "lucide-react";
 import { FaqChatbot } from "@/components/faq-chatbot";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Separator } from "@/components/ui/separator";
 
 const desktopNavConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
@@ -28,8 +29,15 @@ const desktopNavConfig = [
 
 const mobileNavItems = [
     { href: '/app', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-    { href: '/app/orders', label: 'Orders', icon: ShoppingCart },
-    { href: '/app/account', label: 'Profile', icon: CircleUserRound },
+    { href: '/app/wallet', label: 'Wallet', icon: Wallet },
+];
+
+const moreMenuItems = [
+    { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
+    { href: '/app/promotions', label: 'Promotions & Subscriptions', icon: Tag },
+    { href: '/app/referrals', label: 'Refer a Friend', icon: ReferralsIcon },
+    { href: '/app/account', label: 'Account Settings', icon: Settings },
+    { href: '/app/support', label: 'Support', icon: LifeBuoy },
 ];
 
 const desktopBottomNavConfig = [
@@ -40,10 +48,11 @@ const desktopBottomNavConfig = [
 
 const BottomNavbar = () => {
     const pathname = usePathname();
+    const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
             <div className="grid h-16 grid-cols-5 w-full">
-                {mobileNavItems.slice(0, 2).map((item) => {
+                {mobileNavItems.map((item) => {
                     const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                     return (
                         <Link
@@ -79,22 +88,31 @@ const BottomNavbar = () => {
                         </DialogContent>
                     </Dialog>
                 </div>
-                 {mobileNavItems.slice(2).map((item) => {
-                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={cn(
-                                "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
-                                isActive && "text-primary"
-                            )}
-                        >
-                            <item.icon className="h-5 w-5" />
-                            <span className="text-xs">{item.label}</span>
-                        </Link>
-                    )
-                })}
+                 <Sheet>
+                    <SheetTrigger asChild>
+                         <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1">
+                            <MoreHorizontal className="h-5 w-5" />
+                            <span className="text-xs">More</span>
+                        </div>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="rounded-t-2xl">
+                        <div className="space-y-2 py-4">
+                            {moreMenuItems.map((item) => (
+                                <Button key={item.href} variant="ghost" className="w-full justify-start text-base py-6" asChild>
+                                    <Link href={item.href}>
+                                        <item.icon className="mr-3 h-5 w-5 text-muted-foreground" />
+                                        {item.label}
+                                    </Link>
+                                </Button>
+                            ))}
+                            <Separator className="my-2"/>
+                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" onClick={logout}>
+                                <LogOut className="mr-3 h-5 w-5 text-muted-foreground" />
+                                Log Out
+                            </Button>
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </div>
         </nav>
     );
@@ -117,15 +135,10 @@ export default function ConsumerPortalLayout({
                  <Link href="/" className="mr-auto">
                     <WashingMachine className="h-7 w-7 text-primary" />
                  </Link>
-                <div className="relative flex-1 md:grow-0">
-                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                <Input
-                    type="search"
-                    placeholder="Search orders, help..."
-                    className="w-full rounded-lg bg-muted pl-8"
-                />
-                </div>
                 <div className="flex items-center gap-2">
+                    <Button variant="ghost" size="icon">
+                        <Search className="h-5 w-5"/>
+                    </Button>
                     <FaqChatbot />
                     <UserNav />
                 </div>
