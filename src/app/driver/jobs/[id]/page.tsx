@@ -76,24 +76,22 @@ export default function JobDetailsPage() {
     }
     
     useEffect(() => {
-        if (isModalOpen && (modalContent === 'scan_photo' || modalContent === 'photo') && hasCameraPermission !== false) {
-            const getCameraPermission = async () => {
-                if (hasCameraPermission) return;
-                try {
-                    const stream = await navigator.mediaDevices.getUserMedia({video: true});
-                    setHasCameraPermission(true);
-            
-                    if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                    }
-                } catch (error) {
-                    console.error('Error accessing camera:', error);
-                    setHasCameraPermission(false);
-                }
-            };
-            getCameraPermission();
+        if (isModalOpen && (modalContent === 'scan_photo' || modalContent === 'photo')) {
+          const getCameraPermission = async () => {
+            try {
+              const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+              setHasCameraPermission(true);
+              if (videoRef.current) {
+                videoRef.current.srcObject = stream;
+              }
+            } catch (error) {
+              console.error('Error accessing camera:', error);
+              setHasCameraPermission(false);
+            }
+          };
+          getCameraPermission();
         }
-      }, [isModalOpen, modalContent, hasCameraPermission]);
+      }, [isModalOpen, modalContent]);
 
 
     const handleNextStep = () => {
