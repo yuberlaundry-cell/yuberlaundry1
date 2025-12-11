@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 export default function SettingsPage() {
     return (
@@ -28,22 +29,103 @@ export default function SettingsPage() {
                     <TabsTrigger value="advanced">Advanced</TabsTrigger>
                 </TabsList>
                 <TabsContent value="general">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>General Settings</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6 max-w-lg">
-                            <div className="space-y-2">
-                                <Label htmlFor="platform-name">Platform Name</Label>
-                                <Input id="platform-name" defaultValue="Yuber Laundry" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="support-email">Support Email</Label>
-                                <Input id="support-email" type="email" defaultValue="support@yuberlaundry.com" />
-                            </div>
-                            <Button>Save General Settings</Button>
-                        </CardContent>
-                    </Card>
+                    <div className="space-y-6">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>General Settings</CardTitle>
+                            </CardHeader>
+                            <CardContent className="space-y-6 max-w-lg">
+                                <div className="space-y-2">
+                                    <Label htmlFor="platform-name">Platform Name</Label>
+                                    <Input id="platform-name" defaultValue="Yuber Laundry" />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="support-email">Support Email</Label>
+                                    <Input id="support-email" type="email" defaultValue="support@yuberlaundry.com" />
+                                </div>
+                                <Button>Save General Settings</Button>
+                            </CardContent>
+                        </Card>
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>Localization & Units</CardTitle>
+                                <CardDescription>Set the default country, currency, and units for the platform.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 max-w-lg">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="country">Default Country</Label>
+                                        <Select defaultValue="GB">
+                                            <SelectTrigger id="country">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="GB">United Kingdom</SelectItem>
+                                                <SelectItem value="US">United States</SelectItem>
+                                                <SelectItem value="CA">Canada</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="currency">Default Currency</Label>
+                                        <Select defaultValue="GBP">
+                                            <SelectTrigger id="currency">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="GBP">GBP (£)</SelectItem>
+                                                <SelectItem value="USD">USD ($)</SelectItem>
+                                                <SelectItem value="CAD">CAD ($)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="locale">Locale</Label>
+                                    <Select defaultValue="en-GB">
+                                        <SelectTrigger id="locale">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="en-GB">English (United Kingdom)</SelectItem>
+                                            <SelectItem value="en-US">English (United States)</SelectItem>
+                                            <SelectItem value="fr-CA">French (Canada)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <Separator/>
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                     <div className="space-y-3">
+                                        <Label>Weight Unit</Label>
+                                        <RadioGroup defaultValue="kg" className="flex gap-4">
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="kg" id="kg"/>
+                                                <Label htmlFor="kg">Kilograms (kg)</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="lbs" id="lbs"/>
+                                                <Label htmlFor="lbs">Pounds (lbs)</Label>
+                                            </div>
+                                        </RadioGroup>
+                                    </div>
+                                     <div className="space-y-3">
+                                        <Label>Distance Unit</Label>
+                                        <RadioGroup defaultValue="km" className="flex gap-4">
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="km" id="km"/>
+                                                <Label htmlFor="km">Kilometers (km)</Label>
+                                            </div>
+                                            <div className="flex items-center space-x-2">
+                                                <RadioGroupItem value="miles" id="miles"/>
+                                                <Label htmlFor="miles">Miles (mi)</Label>
+                                            </div>
+                                        </RadioGroup>
+                                    </div>
+                                </div>
+                                <Button>Save Localization Settings</Button>
+                            </CardContent>
+                        </Card>
+                    </div>
                 </TabsContent>
                  <TabsContent value="integrations">
                     <Card>
