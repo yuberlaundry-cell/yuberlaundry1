@@ -9,6 +9,8 @@ import { MapPin, Building, Home, Briefcase, Plus, Edit, Trash2 } from "lucide-re
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { AddressInput } from '@/components/ui/address-input';
+import { Separator } from '@/components/ui/separator';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const savedAddresses = [
     { id: 'home', type: 'Home', address: '123 Main St, London, SW1A 0AA' },
@@ -16,7 +18,9 @@ const savedAddresses = [
 ];
 
 export default function AddressStep() {
-    const [selectedAddress, setSelectedAddress] = useState('home');
+    const [selectedPickupAddress, setSelectedPickupAddress] = useState('home');
+    const [selectedDeliveryAddress, setSelectedDeliveryAddress] = useState('home');
+    const [isSameAddress, setIsSameAddress] = useState(true);
 
     return (
          <div className="space-y-8">
@@ -25,54 +29,119 @@ export default function AddressStep() {
                 <p className="text-muted-foreground mt-1">Select a saved address or add a new one.</p>
             </div>
 
-            <RadioGroup value={selectedAddress} onValueChange={setSelectedAddress} className="space-y-3">
-                {savedAddresses.map(addr => (
-                    <Label key={addr.id} htmlFor={addr.id} className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                        <div className="flex items-center gap-4">
-                            <RadioGroupItem value={addr.id} id={addr.id} />
-                            <div className="flex items-center gap-3">
-                                {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
-                                <div>
-                                    <p className="font-medium">{addr.type}</p>
-                                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr.address)}`} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:underline" onClick={(e) => e.stopPropagation()}>
-                                        {addr.address}
-                                    </a>
+            <div className="space-y-4">
+                <h3 className="font-semibold text-lg">Pickup Address</h3>
+                <RadioGroup value={selectedPickupAddress} onValueChange={setSelectedPickupAddress} className="space-y-3">
+                    {savedAddresses.map(addr => (
+                        <Label key={addr.id} htmlFor={`pickup-${addr.id}`} className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <div className="flex items-center gap-4">
+                                <RadioGroupItem value={addr.id} id={`pickup-${addr.id}`} />
+                                <div className="flex items-center gap-3">
+                                    {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
+                                    <div>
+                                        <p className="font-medium">{addr.type}</p>
+                                        <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr.address)}`} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:underline" onClick={(e) => e.stopPropagation()}>
+                                            {addr.address}
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <Dialog>
-                                <DialogTrigger asChild>
-                                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}><Edit className="h-4 w-4"/></Button>
-                                </DialogTrigger>
-                                <DialogContent>
-                                    <DialogHeader>
-                                        <DialogTitle>Edit Address</DialogTitle>
-                                    </DialogHeader>
-                                    <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} />
-                                </DialogContent>
-                            </Dialog>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
-                        </div>
-                    </Label>
-                ))}
-            </RadioGroup>
-            
-            <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                        <Plus className="mr-2 h-4 w-4" /> Add New Address
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Add a New Address</DialogTitle>
-                        <DialogDescription>Enter the details for your new address.</DialogDescription>
-                    </DialogHeader>
-                    <AddressForm />
-                </DialogContent>
-            </Dialog>
+                            <div className="flex items-center gap-1">
+                                <Dialog>
+                                    <DialogTrigger asChild>
+                                         <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}><Edit className="h-4 w-4"/></Button>
+                                    </DialogTrigger>
+                                    <DialogContent>
+                                        <DialogHeader>
+                                            <DialogTitle>Edit Address</DialogTitle>
+                                        </DialogHeader>
+                                        <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} />
+                                    </DialogContent>
+                                </Dialog>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
+                            </div>
+                        </Label>
+                    ))}
+                </RadioGroup>
+                
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <Button variant="outline" className="w-full">
+                            <Plus className="mr-2 h-4 w-4" /> Add New Address
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Add a New Address</DialogTitle>
+                            <DialogDescription>Enter the details for your new address.</DialogDescription>
+                        </DialogHeader>
+                        <AddressForm />
+                    </DialogContent>
+                </Dialog>
+            </div>
 
+            <Separator />
+            
+            <div className="space-y-4">
+                <div className="flex items-center space-x-2">
+                    <Checkbox id="same-address" checked={isSameAddress} onCheckedChange={(checked) => setIsSameAddress(Boolean(checked))} />
+                    <Label htmlFor="same-address" className="text-base">
+                        My delivery address is the same as my pickup address.
+                    </Label>
+                </div>
+
+                {!isSameAddress && (
+                    <div className="space-y-4 pt-4">
+                        <h3 className="font-semibold text-lg">Delivery Address</h3>
+                        <RadioGroup value={selectedDeliveryAddress} onValueChange={setSelectedDeliveryAddress} className="space-y-3">
+                            {savedAddresses.map(addr => (
+                                <Label key={addr.id} htmlFor={`delivery-${addr.id}`} className="flex items-center justify-between p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                    <div className="flex items-center gap-4">
+                                        <RadioGroupItem value={addr.id} id={`delivery-${addr.id}`} />
+                                        <div className="flex items-center gap-3">
+                                            {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
+                                            <div>
+                                                <p className="font-medium">{addr.type}</p>
+                                                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr.address)}`} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:underline" onClick={(e) => e.stopPropagation()}>
+                                                    {addr.address}
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-1">
+                                        <Dialog>
+                                            <DialogTrigger asChild>
+                                                 <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}><Edit className="h-4 w-4"/></Button>
+                                            </DialogTrigger>
+                                            <DialogContent>
+                                                <DialogHeader>
+                                                    <DialogTitle>Edit Address</DialogTitle>
+                                                </DialogHeader>
+                                                <AddressForm defaultValues={{ type: addr.type.toLowerCase(), street: addr.address }} />
+                                            </DialogContent>
+                                        </Dialog>
+                                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive hover:text-destructive"><Trash2 className="h-4 w-4"/></Button>
+                                    </div>
+                                </Label>
+                            ))}
+                        </RadioGroup>
+                        <Dialog>
+                            <DialogTrigger asChild>
+                                <Button variant="outline" className="w-full">
+                                    <Plus className="mr-2 h-4 w-4" /> Add New Delivery Address
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Add a New Delivery Address</DialogTitle>
+                                    <DialogDescription>Enter the details for your new address.</DialogDescription>
+                                </DialogHeader>
+                                <AddressForm />
+                            </DialogContent>
+                        </Dialog>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
@@ -123,3 +192,5 @@ function AddressForm({ defaultValues }: { defaultValues?: any}) {
         </form>
     );
 }
+
+    
