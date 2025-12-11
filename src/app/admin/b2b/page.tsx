@@ -44,12 +44,13 @@ import {
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 const companies = [
-    { id: 'COM-001', name: 'Acme Corp', industry: 'Technology', admin: 'John Smith', plan: 'Business Pro', status: 'Active' },
-    { id: 'COM-002', name: 'Stark Industries', industry: 'Defense', admin: 'Tony Stark', plan: 'Enterprise', status: 'Active' },
-    { id: 'COM-003', name: 'Wayne Enterprises', industry: 'Conglomerate', admin: 'Bruce Wayne', plan: 'Business Pro', status: 'Active' },
-    { id: 'COM-004', name: 'Cyberdyne Systems', industry: 'Technology', admin: 'Miles Dyson', plan: 'Onboarding', status: 'Pending' },
+    { id: 'acme-corp', name: 'Acme Corp', industry: 'Technology', admin: 'John Smith', plan: 'Business Pro', status: 'Active' },
+    { id: 'stark-industries', name: 'Stark Industries', industry: 'Defense', admin: 'Tony Stark', plan: 'Enterprise', status: 'Active' },
+    { id: 'wayne-enterprises', name: 'Wayne Enterprises', industry: 'Conglomerate', admin: 'Bruce Wayne', plan: 'Business Pro', status: 'Active' },
+    { id: 'cyberdyne-systems', name: 'Cyberdyne Systems', industry: 'Technology', admin: 'Miles Dyson', plan: 'Onboarding', status: 'Pending' },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -61,6 +62,7 @@ const statusColors: { [key: string]: string } = {
 
 export default function B2BAccountsPage() {
     const { toast } = useToast();
+    const router = useRouter();
     
     const handleAddCompany = (e: React.FormEvent) => {
         e.preventDefault();
@@ -165,7 +167,7 @@ export default function B2BAccountsPage() {
             </TableHeader>
             <TableBody>
               {companies.map((c) => (
-                <TableRow key={c.id} className="cursor-pointer">
+                <TableRow key={c.id} onClick={() => router.push(`/admin/b2b/${c.id}`)} className="cursor-pointer">
                   <TableCell className="font-medium">
                      <div className="flex items-center gap-3">
                         <div className="p-2 bg-muted rounded-md">
@@ -189,7 +191,7 @@ export default function B2BAccountsPage() {
                                 </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Company Details</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={() => router.push(`/admin/b2b/${c.id}`)}>View Company Details</DropdownMenuItem>
                                 <DropdownMenuItem>Manage Employees</DropdownMenuItem>
                                 <DropdownMenuItem className="text-destructive">Suspend Company</DropdownMenuItem>
                             </DropdownMenuContent>
