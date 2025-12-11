@@ -3,7 +3,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { LayoutDashboard, Users, ShoppingCart, BarChart, CreditCard, Settings, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, Users, ShoppingCart, BarChart, CreditCard, Settings, ChevronRight, FileText } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -22,10 +22,14 @@ const adminNavConfig = [
     ],
   },
   {
-    title: 'Analytics',
+    title: 'Finance',
     links: [
       { href: '/business/reports', label: 'Reports', icon: BarChart },
-      { href: '/business/billing', label: 'Billing', icon: CreditCard },
+      { href: '/business/billing', label: 'Billing', icon: CreditCard, subMenu: [
+          { href: '/business/billing/invoices', label: 'Invoices' },
+          { href: '/business/billing/payment-methods', label: 'Payment Methods' },
+          { href: '/business/billing/settings', label: 'Settings' },
+      ]},
     ],
   },
   {
@@ -100,11 +104,12 @@ export default function BusinessPortalLayout({
                 <CollapsibleContent>
                     <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
                         {section.links.map((item) => (
-                            <SidebarMenuItem key={item.href}>
+                           <div key={item.href}>
+                            <SidebarMenuItem>
                                 <SidebarMenuButton
                                 asChild
                                 tooltip={item.label}
-                                isActive={pathname.startsWith(item.href)}
+                                isActive={pathname.startsWith(item.href) && !item.subMenu}
                                 >
                                 <Link href={item.href}>
                                     <item.icon />
@@ -112,6 +117,27 @@ export default function BusinessPortalLayout({
                                 </Link>
                                 </SidebarMenuButton>
                             </SidebarMenuItem>
+                            {item.subMenu && (
+                                <div className="pl-6 pt-1 pb-2 space-y-1">
+                                    {item.subMenu.map(subItem => (
+                                         <SidebarMenuItem key={subItem.href}>
+                                             <SidebarMenuButton
+                                                asChild
+                                                tooltip={subItem.label}
+                                                isActive={pathname === subItem.href}
+                                                variant="ghost"
+                                                size="sm"
+                                                className="w-full justify-start"
+                                            >
+                                                <Link href={subItem.href}>
+                                                    <span>{subItem.label}</span>
+                                                </Link>
+                                            </SidebarMenuButton>
+                                        </SidebarMenuItem>
+                                    ))}
+                                </div>
+                            )}
+                            </div>
                         ))}
                     </div>
                 </CollapsibleContent>
