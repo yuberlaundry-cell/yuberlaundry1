@@ -10,11 +10,39 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Crown, RefreshCw, Star } from 'lucide-react';
+import { Check, Crown, RefreshCw, Star, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import PaystackPop from '@paystack/inline-js';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function PromotionsPage() {
-    const isSubscribed = true;
+    const [isSubscribed, setIsSubscribed] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const { toast } = useToast();
+    const { user } = useAuth();
     
+    const handleSubscribe = () => {
+        setIsProcessing(true);
+        const paystack = new PaystackPop();
+        paystack.newTransaction({
+            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+            email: user?.email || '',
+            amount: 450 * 100, // R450 in kobo
+            currency: 'ZAR',
+            plan: '', // In a real app, you would have a Paystack Plan Code here
+            reference: `yuber_sub_${Date.now()}`,
+            onSuccess: () => {
+                toast({ title: 'Subscription Successful!', description: 'Welcome to Yuber Plus!' });
+                setIsSubscribed(true);
+                setIsProcessing(false);
+            },
+            onClose: () => {
+                setIsProcessing(false);
+            }
+        });
+    };
+
     if (!isSubscribed) {
         return (
              <div className="space-y-8 pb-8">
@@ -24,8 +52,8 @@ export default function PromotionsPage() {
                     Manage your recurring laundry plans.
                     </p>
                 </div>
-                <Card className="flex items-center justify-center h-96">
-                    <CardContent className="text-center">
+                <Card className="flex flex-col items-center justify-center h-96 text-center">
+                    <CardHeader>
                         <div className="flex justify-center mb-4">
                             <div className="bg-secondary rounded-full p-4">
                                 <RefreshCw className="h-8 w-8 text-muted-foreground" />
@@ -33,9 +61,14 @@ export default function PromotionsPage() {
                         </div>
                         <h2 className="text-xl font-semibold">No Subscriptions Found</h2>
                         <p className="text-muted-foreground mt-2 mb-4">
-                            You don't have any active recurring orders.
+                            You don't have any active recurring orders. Why not upgrade to Yuber Plus?
                         </p>
-                        <Button>Set up a recurring order</Button>
+                    </CardHeader>
+                    <CardContent>
+                        <Button onClick={handleSubscribe} disabled={isProcessing}>
+                            {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Crown className="mr-2 h-4 w-4" />}
+                            {isProcessing ? 'Processing...' : 'Subscribe to Yuber Plus'}
+                        </Button>
                     </CardContent>
                 </Card>
             </div>

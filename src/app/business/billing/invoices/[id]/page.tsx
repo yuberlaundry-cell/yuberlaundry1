@@ -8,9 +8,12 @@ import { Separator } from "@/components/ui/separator";
 import { Table, TableBody, TableCell, TableFooter, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useAuth } from "@/hooks/use-auth";
 import { mockInvoices } from "@/lib/mock-data";
-import { ArrowLeft, CreditCard, Download, Mail, Printer } from "lucide-react";
+import { ArrowLeft, CreditCard, Download, Mail, Printer, ShieldQuestion, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import PaystackPop from '@paystack/inline-js';
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const statusColors: { [key: string]: string } = {
     Paid: 'bg-green-100 text-green-800',
@@ -23,6 +26,29 @@ export default function InvoiceDetailsPage() {
     const invoiceId = params.id as string;
     const invoice = mockInvoices.find(i => i.id === invoiceId);
     const { user } = useAuth();
+    const { toast } = useToast();
+    const [isProcessing, setIsProcessing] = useState(false);
+
+    const handlePayInvoice = () => {
+        if (!invoice || !user) return;
+        setIsProcessing(true);
+        const paystack = new PaystackPop();
+        paystack.newTransaction({
+            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+            email: user.email,
+            amount: invoice.total * 100,
+            currency: 'ZAR',
+            ref: invoice.id,
+            onSuccess: () => {
+                toast({ title: 'Payment Successful!', description: `Invoice ${invoice.id} has been paid.` });
+                setIsProcessing(false);
+                // Here you would typically update the invoice status in your backend
+            },
+            onClose: () => {
+                setIsProcessing(false);
+            }
+        });
+    }
 
     if (!invoice) {
         return (
@@ -154,10 +180,16 @@ export default function InvoiceDetailsPage() {
                              <Card className="bg-amber-50 border-amber-200">
                                 <CardContent className="p-4">
                                     <h4 className="font-semibold text-amber-800 mb-2">Payment Options</h4>
-                                     <p className="text-sm text-amber-700 mb-4">Payment will be automatically processed on the due date using the primary payment method on file.</p>
-                                     <Button variant="outline">
-                                        <Mail className="mr-2 h-4 w-4" /> Send Reminder
-                                     </Button>
+                                     <p className="text-sm text-amber-700 mb-4">Payment can be made using the button below.</p>
+                                     <div className="flex gap-2">
+                                        <Button onClick={handlePayInvoice} disabled={isProcessing}>
+                                            {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldQuestion className="mr-2 h-4 w-4"/>}
+                                            {isProcessing ? 'Processing...' : `Pay R${invoice.total.toFixed(2)} Now`}
+                                        </Button>
+                                        <Button variant="outline">
+                                            <Mail className="mr-2 h-4 w-4" /> Send Reminder
+                                        </Button>
+                                     </div>
                                 </CardContent>
                             </Card>
                         )}

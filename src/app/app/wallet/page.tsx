@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CreditCard, Gift, PlusCircle, ShieldQuestion } from 'lucide-react';
+import { CreditCard, Gift, PlusCircle, ShieldQuestion, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -30,6 +30,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import PaystackPop from '@paystack/inline-js';
+import { useAuth } from '@/hooks/use-auth';
+import { useState } from 'react';
 
 const kpiCards = [
     { title: "Available Balance", value: "R150.50" },
@@ -45,14 +48,65 @@ const transactions = [
 
 export default function WalletPage() {
   const { toast } = useToast();
+  const { user } = useAuth();
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText('JANE-DOE-123');
-    toast({
-      title: 'Copied to clipboard!',
-      description: 'Your referral code has been copied.',
+  const [topUpAmount, setTopUpAmount] = useState(500);
+  const [customAmount, setCustomAmount] = useState('');
+  const [isProcessingTopUp, setIsProcessingTopUp] = useState(false);
+  const [isProcessingGift, setIsProcessingGift] = useState(false);
+  const [giftAmount, setGiftAmount] = useState('');
+
+  const handleAddFunds = () => {
+    const amountInKobo = (customAmount ? parseFloat(customAmount) : topUpAmount) * 100;
+    if (isNaN(amountInKobo) || amountInKobo <= 0) {
+        toast({ title: 'Invalid Amount', description: 'Please enter a valid amount to add.', variant: 'destructive'});
+        return;
+    }
+
+    setIsProcessingTopUp(true);
+    const paystack = new PaystackPop();
+    paystack.newTransaction({
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+        email: user?.email || '',
+        amount: amountInKobo,
+        currency: 'ZAR',
+        reference: `yuber_topup_${Date.now()}`,
+        onSuccess: (transaction) => {
+            toast({ title: 'Payment Successful!', description: `R${(amountInKobo / 100).toFixed(2)} has been added to your wallet.` });
+            setIsProcessingTopUp(false);
+        },
+        onClose: () => {
+            setIsProcessingTopUp(false);
+        },
     });
   };
+
+  const handleSendGift = (e: React.FormEvent) => {
+      e.preventDefault();
+      const amount = parseFloat(giftAmount);
+      if (isNaN(amount) || amount <= 0) {
+          toast({ title: 'Invalid Gift Amount', description: 'Please enter a valid amount for the gift card.', variant: 'destructive'});
+          return;
+      }
+      setIsProcessingGift(true);
+      const paystack = new PaystackPop();
+      paystack.newTransaction({
+        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+        email: user?.email || '',
+        amount: amount * 100,
+        currency: 'ZAR',
+        reference: `yuber_gift_${Date.now()}`,
+        onSuccess: (transaction) => {
+            toast({ title: 'Gift Card Sent!', description: `Your gift of R${amount.toFixed(2)} has been sent.` });
+            setIsProcessingGift(false);
+            setGiftAmount('');
+        },
+        onClose: () => {
+            setIsProcessingGift(false);
+        },
+      });
+  }
+
 
   return (
     <div className="space-y-8 pb-8">
@@ -88,10 +142,23 @@ export default function WalletPage() {
                 <div className="space-y-2">
                     <Label>Amount</Label>
                     <div className="flex flex-col sm:flex-row gap-2">
-                        <Button variant="outline" className="flex-1 text-lg">R250</Button>
-                        <Button className="flex-1 text-lg">R500</Button>
-                        <Button variant="outline" className="flex-1 text-lg">R1000</Button>
-                        <Input id="custom-amount" placeholder="Custom Amount" className="flex-1 h-12 text-lg" />
+                        {[250, 500, 1000].map(amount => (
+                            <Button 
+                                key={amount}
+                                variant={topUpAmount === amount && !customAmount ? 'default' : 'outline'}
+                                className="flex-1 text-lg"
+                                onClick={() => { setTopUpAmount(amount); setCustomAmount(''); }}
+                            >
+                                R{amount}
+                            </Button>
+                        ))}
+                        <Input 
+                            id="custom-amount" 
+                            placeholder="Custom Amount" 
+                            className="flex-1 h-12 text-lg" 
+                            value={customAmount}
+                            onChange={(e) => { setCustomAmount(e.target.value); setTopUpAmount(0); }}
+                        />
                     </div>
                 </div>
                  <div className="space-y-2">
@@ -121,8 +188,9 @@ export default function WalletPage() {
                 </div>
             </CardContent>
             <CardFooter>
-                 <Button className="w-full">
-                    <ShieldQuestion className="mr-2 h-4 w-4" /> Add Funds with Paystack
+                 <Button className="w-full" onClick={handleAddFunds} disabled={isProcessingTopUp}>
+                    {isProcessingTopUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldQuestion className="mr-2 h-4 w-4" />}
+                    {isProcessingTopUp ? 'Processing...' : 'Add Funds with Paystack'}
                 </Button>
             </CardFooter>
           </Card>
@@ -169,24 +237,29 @@ export default function WalletPage() {
             </CardContent>
           </Card>
            <Card>
-            <CardHeader>
-                <CardTitle>Send a Gift Card</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <div className="space-y-2">
-                    <Label htmlFor="gift-amount">Amount</Label>
-                    <Input id="gift-amount" type="number" placeholder="R500.00" />
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="recipient-email">Recipient's email or phone</Label>
-                    <Input id="recipient-email" placeholder="email@example.com" />
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="gift-message">Optional message</Label>
-                    <Textarea id="gift-message" placeholder="Enjoy some clean clothes!" />
-                </div>
-                <Button className="w-full">Send Gift</Button>
-            </CardContent>
+            <form onSubmit={handleSendGift}>
+                <CardHeader>
+                    <CardTitle>Send a Gift Card</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div className="space-y-2">
+                        <Label htmlFor="gift-amount">Amount</Label>
+                        <Input id="gift-amount" type="number" placeholder="R500.00" value={giftAmount} onChange={(e) => setGiftAmount(e.target.value)} required />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="recipient-email">Recipient's email or phone</Label>
+                        <Input id="recipient-email" placeholder="email@example.com" required/>
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="gift-message">Optional message</Label>
+                        <Textarea id="gift-message" placeholder="Enjoy some clean clothes!" />
+                    </div>
+                    <Button type="submit" className="w-full" disabled={isProcessingGift}>
+                        {isProcessingGift ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Gift className="mr-2 h-4 w-4" />}
+                        {isProcessingGift ? 'Sending...' : 'Send Gift'}
+                    </Button>
+                </CardContent>
+            </form>
           </Card>
           <Card>
              <CardHeader>
