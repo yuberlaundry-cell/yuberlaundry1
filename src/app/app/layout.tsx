@@ -1,9 +1,10 @@
 
+
 "use client";
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle, MoreHorizontal, Search } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle, MoreHorizontal, Search, Home } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -46,46 +47,56 @@ const BottomNavbar = () => {
     const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
-            <div className="grid h-16 grid-cols-4 w-full">
+            <div className="grid h-16 grid-cols-4 w-full text-xs">
                 <Link
                     href="/app"
                     className={cn(
-                        "flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1",
-                        pathname === "/app" && "text-primary"
+                        "flex flex-col items-center justify-center pt-1",
+                        pathname === "/app" ? "text-primary" : "text-muted-foreground"
                     )}
                 >
-                    <LayoutDashboard className="h-5 w-5" />
-                    <span className="text-xs">Dashboard</span>
+                    <Home className="h-5 w-5" />
+                    <span className="mt-1">Dashboard</span>
                 </Link>
-
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <div className={cn("flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1", pathname.startsWith("/app/book") && "text-primary")}>
-                            <PlusCircle className="h-5 w-5" />
-                            <span className="text-xs">New Order</span>
-                        </div>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-5xl h-screen flex flex-col p-0">
-                        <BookingFlow />
-                    </DialogContent>
-                </Dialog>
 
                 <Link
                     href="/app/wallet"
                     className={cn(
-                        "flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1",
-                        pathname.startsWith("/app/wallet") && "text-primary"
+                        "flex flex-col items-center justify-center pt-1",
+                        pathname.startsWith("/app/wallet") ? "text-primary" : "text-muted-foreground"
                     )}
                 >
                     <Wallet className="h-5 w-5" />
-                    <span className="text-xs">Wallet</span>
+                    <span className="mt-1">Wallet</span>
                 </Link>
+
+                 <Dialog>
+                    <DialogTrigger asChild>
+                         <div className="flex flex-col items-center justify-center pt-1 text-primary font-semibold">
+                            <div className="flex items-center justify-center h-12 w-12 -mt-7 rounded-full bg-primary text-primary-foreground border-4 border-background">
+                                <PlusCircle className="h-6 w-6" />
+                            </div>
+                            <span className="mt-0.5">New Order</span>
+                        </div>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                         <DialogHeader className="p-6 pb-0">
+                            <DialogTitle>Book your laundry</DialogTitle>
+                            <DialogDescription>
+                                Configure your laundry order and schedule a pickup.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid grid-cols-3 flex-1 overflow-hidden">
+                            <BookingFlow />
+                        </div>
+                    </DialogContent>
+                </Dialog>
 
                  <Sheet>
                     <SheetTrigger asChild>
-                         <div className="flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1">
+                         <div className="flex flex-col items-center justify-center pt-1 text-muted-foreground">
                             <MoreHorizontal className="h-5 w-5" />
-                            <span className="text-xs">More</span>
+                            <span className="mt-1">More</span>
                         </div>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="rounded-t-2xl">
@@ -106,7 +117,7 @@ const BottomNavbar = () => {
                             ))}
                             <Separator className="my-2"/>
                              <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" onClick={logout}>
-                                <LogOut className="mr-3 h-5 w-5 text-muted-foreground" />
+                                <LogOut className="mr-3 h-5 w-5" />
                                 Log Out
                             </Button>
                         </div>
@@ -142,7 +153,7 @@ export default function ConsumerPortalLayout({
                     <UserNav />
                 </div>
             </header>
-            <main className="flex-1 p-4 sm:p-6 lg:p-8 mb-16">
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 mb-24">
                  <div className="mx-auto w-full max-w-6xl">
                     {children}
                  </div>
@@ -173,6 +184,12 @@ export default function ConsumerPortalLayout({
                     <Button className="w-full justify-start">New Order</Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
+                      <DialogHeader className="p-6 pb-0 sr-only">
+                        <DialogTitle>Book your laundry</DialogTitle>
+                        <DialogDescription>
+                            Configure your laundry order and schedule a pickup.
+                        </DialogDescription>
+                      </DialogHeader>
                       <BookingFlow />
                   </DialogContent>
                 </Dialog>
