@@ -16,9 +16,12 @@ import {
   PlusCircle,
   Users,
   Box,
+  Truck,
+  Percent,
+  ToggleLeft,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { Check } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -33,6 +36,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 
 interface Plan {
     name: string;
@@ -40,34 +45,44 @@ interface Plan {
     billingCycle: string;
     features: string[];
     active: boolean;
-    type: 'Consumer' | 'Business';
+    type: 'Consumer' | 'Business' | 'Laundromat';
     limits: {
-        employees?: number;
+        // Consumer
         kgIncluded?: number;
-        monthlyAllowance?: number;
-        perOrderLimit?: number;
+        deliveryFeeWaiver?: boolean;
+        platformFeeWaiver?: boolean;
+        discountPercentage?: number;
+
+        // Business
+        employees?: number;
+        driverFeeWaiver?: boolean;
+
+        // Laundromat
+        commissionOverride?: number;
     }
 }
 
 const initialPlans: Plan[] = [
     {
         name: "Yuber Plus",
-        price: "R450",
+        price: "450",
         billingCycle: "monthly",
         features: [
-            "Free pickup & delivery",
             "Premium detergents",
             "Next-day turnaround"
         ],
         active: true,
         type: 'Consumer',
         limits: {
-            kgIncluded: 30
+            kgIncluded: 30,
+            deliveryFeeWaiver: true,
+            platformFeeWaiver: false,
+            discountPercentage: 5,
         }
     },
     {
         name: "Business Pro",
-        price: "R5000",
+        price: "5000",
         billingCycle: "monthly",
         features: [
             "Centralized billing",
@@ -78,13 +93,28 @@ const initialPlans: Plan[] = [
         type: 'Business',
         limits: {
             employees: 100,
-            monthlyAllowance: 2000,
-            perOrderLimit: 500,
+            driverFeeWaiver: true,
+            platformFeeWaiver: true,
+            discountPercentage: 10,
+        }
+    },
+    {
+        name: "Partner Tier 1",
+        price: "1500",
+        billingCycle: "monthly",
+        features: [
+            "Priority support",
+            "Featured on homepage"
+        ],
+        active: true,
+        type: 'Laundromat',
+        limits: {
+            commissionOverride: 12,
         }
     },
      {
         name: "Yuber Lite (Legacy)",
-        price: "R250",
+        price: "250",
         billingCycle: "monthly",
         features: [
             "Discounted delivery",
@@ -96,6 +126,12 @@ const initialPlans: Plan[] = [
         }
     }
 ]
+
+const planTypeIcons = {
+    Consumer: Users,
+    Business: Box,
+    Laundromat: Crown,
+}
 
 export default function SubscriptionsPage() {
     const [plans, setPlans] = useState(initialPlans);
@@ -118,7 +154,7 @@ export default function SubscriptionsPage() {
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Subscription Plans</h1>
           <p className="text-muted-foreground">
-            Manage consumer and business membership tiers and benefits.
+            Manage consumer, business, and laundromat membership tiers and benefits.
           </p>
         </div>
          <Button className="w-full sm:w-auto" onClick={handleAddNew}>
@@ -127,37 +163,73 @@ export default function SubscriptionsPage() {
       </div>
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
-        {plans.map((plan) => (
+        {plans.map((plan) => {
+            const PlanIcon = planTypeIcons[plan.type];
+            return (
             <Card key={plan.name} className={`flex flex-col h-full ${!plan.active ? 'bg-muted/50' : ''}`}>
                 <CardHeader>
-                    <div className="flex justify-between items-center">
-                        <CardTitle className="flex items-center gap-2">
-                            <Crown /> {plan.name}
-                        </CardTitle>
+                    <div className="flex justify-between items-start">
+                        <div>
+                            <CardTitle className="flex items-center gap-2">
+                                <PlanIcon /> {plan.name}
+                            </CardTitle>
+                             <Badge variant="outline" className="w-fit mt-1">{plan.type}</Badge>
+                        </div>
                         <Badge variant={plan.active ? 'default' : 'secondary'}>
                             {plan.active ? 'Active' : 'Inactive'}
                         </Badge>
                     </div>
-                     <Badge variant="outline" className="w-fit">{plan.type}</Badge>
+                    
                     <div className="flex items-baseline pt-2">
-                        <span className="text-3xl font-bold">{plan.price}</span>
-                        <span className="ml-1 text-muted-foreground">/{plan.billingCycle}</span>
+                        <span className="text-3xl font-bold">{plan.price === '0' ? 'Free' : `R${plan.price}`}</span>
+                        {plan.price !== '0' && <span className="ml-1 text-muted-foreground">/{plan.billingCycle}</span>}
                     </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
                     <ul className="space-y-3">
-                        {plan.limits.kgIncluded && (
+                         {plan.limits.kgIncluded && (
                              <li className="flex items-center gap-3 text-sm">
-                                <Box className="h-4 w-4 text-primary" />
+                                <Check className="h-4 w-4 text-primary" />
                                 <span className="text-muted-foreground">Up to <span className="font-semibold text-foreground">{plan.limits.kgIncluded} kg</span> included</span>
                             </li>
                         )}
                         {plan.limits.employees && (
                              <li className="flex items-center gap-3 text-sm">
-                                <Users className="h-4 w-4 text-primary" />
+                                <Check className="h-4 w-4 text-primary" />
                                 <span className="text-muted-foreground">Up to <span className="font-semibold text-foreground">{plan.limits.employees} employees</span></span>
                             </li>
                         )}
+                         {plan.limits.commissionOverride !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                <Check className="h-4 w-4 text-primary" />
+                                <span className="text-muted-foreground"><span className="font-semibold text-foreground">{plan.limits.commissionOverride}%</span> platform commission</span>
+                            </li>
+                        )}
+                         {plan.limits.deliveryFeeWaiver !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                {plan.limits.deliveryFeeWaiver ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
+                                <span className="text-muted-foreground">Delivery Fee Waiver</span>
+                            </li>
+                        )}
+                         {plan.limits.driverFeeWaiver !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                {plan.limits.driverFeeWaiver ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
+                                <span className="text-muted-foreground">Driver Fee Waiver</span>
+                            </li>
+                        )}
+                         {plan.limits.platformFeeWaiver !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                {plan.limits.platformFeeWaiver ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
+                                <span className="text-muted-foreground">Platform Fee Waiver</span>
+                            </li>
+                        )}
+                         {plan.limits.discountPercentage !== undefined && plan.limits.discountPercentage > 0 && (
+                             <li className="flex items-center gap-3 text-sm">
+                                <Check className="h-4 w-4 text-primary" />
+                                <span className="text-muted-foreground"><span className="font-semibold text-foreground">{plan.limits.discountPercentage}% discount</span> on all orders</span>
+                            </li>
+                        )}
+
                         {plan.features.map(feature => (
                             <li key={feature} className="flex items-center gap-3 text-sm">
                                 <Check className="h-4 w-4 text-primary" />
@@ -170,10 +242,11 @@ export default function SubscriptionsPage() {
                     <Button variant="outline" className="w-full" onClick={() => handleEdit(plan)}>Edit Plan</Button>
                 </CardFooter>
             </Card>
-        ))}
+            )
+        })}
       </div>
        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
                 <DialogTitle>{isEditing ? 'Edit Subscription Plan' : 'Create a New Subscription Plan'}</DialogTitle>
                 <DialogDescription>
@@ -188,7 +261,7 @@ export default function SubscriptionsPage() {
 }
 
 function SubscriptionForm({ plan }: { plan: Plan | null }) {
-    const [planType, setPlanType] = useState<'Consumer' | 'Business' | ''>(plan?.type || '');
+    const [planType, setPlanType] = useState<'Consumer' | 'Business' | 'Laundromat' | ''>(plan?.type || '');
     const { toast } = useToast();
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -200,7 +273,7 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
     }
 
     return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
+        <form className="space-y-6 max-h-[70vh] overflow-y-auto pr-6" onSubmit={handleSubmit}>
             <div className="space-y-2">
                 <Label htmlFor="plan-name">Plan Name</Label>
                 <Input id="plan-name" placeholder="e.g., Yuber Premium" defaultValue={plan?.name} required/>
@@ -208,7 +281,7 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="plan-price">Price (R)</Label>
-                    <Input id="plan-price" type="number" placeholder="e.g., 990" defaultValue={plan?.price.replace('R','')} required/>
+                    <Input id="plan-price" type="number" placeholder="e.g., 990, or 0 for free" defaultValue={plan?.price} required/>
                 </div>
                 <div className="space-y-2">
                     <Label htmlFor="plan-cycle">Billing Cycle</Label>
@@ -234,45 +307,78 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
                     <SelectContent>
                         <SelectItem value="Consumer">Consumer</SelectItem>
                         <SelectItem value="Business">Business</SelectItem>
+                        <SelectItem value="Laundromat">Laundromat</SelectItem>
                     </SelectContent>
                 </Select>
             </div>
             {planType === 'Consumer' && (
-                <div className="space-y-2 p-4 border bg-muted/50 rounded-lg">
-                    <Label htmlFor="plan-kg">Kg Included</Label>
-                    <Input id="plan-kg" type="number" placeholder="e.g., 30" defaultValue={plan?.limits.kgIncluded}/>
+                <div className="space-y-4 p-4 border bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold">Consumer Limits & Waivers</h4>
+                    <div className="space-y-2">
+                        <Label htmlFor="plan-kg">Kg Included</Label>
+                        <Input id="plan-kg" type="number" placeholder="e.g., 30" defaultValue={plan?.limits.kgIncluded}/>
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="plan-discount">Discount on all orders (%)</Label>
+                        <Input id="plan-discount" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.discountPercentage}/>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox id="delivery-waiver" defaultChecked={plan?.limits.deliveryFeeWaiver} />
+                        <Label htmlFor="delivery-waiver">Waive Delivery Fee</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                        <Checkbox id="platform-waiver" defaultChecked={plan?.limits.platformFeeWaiver} />
+                        <Label htmlFor="platform-waiver">Waive Platform Service Fee</Label>
+                    </div>
                 </div>
             )}
             {planType === 'Business' && (
                 <div className="space-y-4 p-4 border bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold">Business Limits & Waivers</h4>
                      <div className="space-y-2">
                         <Label htmlFor="plan-employees">Max Employees</Label>
                         <Input id="plan-employees" type="number" placeholder="e.g., 100" defaultValue={plan?.limits.employees}/>
                      </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="plan-allowance">Default Monthly Allowance (R)</Label>
-                        <Input id="plan-allowance" type="number" placeholder="e.g., 2000" defaultValue={plan?.limits.monthlyAllowance}/>
-                     </div>
                       <div className="space-y-2">
-                        <Label htmlFor="plan-order-limit">Default Per-Order Limit (R)</Label>
-                        <Input id="plan-order-limit" type="number" placeholder="e.g., 500" defaultValue={plan?.limits.perOrderLimit}/>
+                        <Label htmlFor="plan-b2b-discount">Discount on all orders (%)</Label>
+                        <Input id="plan-b2b-discount" type="number" placeholder="e.g., 15" defaultValue={plan?.limits.discountPercentage}/>
+                    </div>
+                     <div className="flex items-center space-x-2">
+                        <Checkbox id="b2b-driver-waiver" defaultChecked={plan?.limits.driverFeeWaiver} />
+                        <Label htmlFor="b2b-driver-waiver">Waive Driver Fee</Label>
+                    </div>
+                     <div className="flex items-center space-x-2">
+                        <Checkbox id="b2b-platform-waiver" defaultChecked={plan?.limits.platformFeeWaiver} />
+                        <Label htmlFor="b2b-platform-waiver">Waive Platform Service Fee</Label>
+                    </div>
+                </div>
+            )}
+            {planType === 'Laundromat' && (
+                <div className="space-y-4 p-4 border bg-muted/50 rounded-lg">
+                    <h4 className="font-semibold">Laundromat Benefits</h4>
+                     <div className="space-y-2">
+                        <Label htmlFor="plan-commission">Platform Commission Override (%)</Label>
+                        <Input id="plan-commission" type="number" placeholder="e.g., 12 (default is 15%)" defaultValue={plan?.limits.commissionOverride}/>
                      </div>
                 </div>
             )}
+             <Separator className="my-6"/>
              <div className="space-y-2">
-                <Label htmlFor="plan-features">Features (comma-separated)</Label>
+                <Label htmlFor="plan-features">Additional Features (comma-separated)</Label>
                 <Input id="plan-features" placeholder="Feature 1, Feature 2, ..." defaultValue={plan?.features.join(', ')} required/>
             </div>
             <div className="space-y-2">
                 <Label htmlFor="paystack-plan-code">Paystack Plan Code</Label>
                 <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" required/>
             </div>
-            <DialogFooter>
+            <DialogFooter className="sticky bottom-0 bg-background pt-4 pb-0 -mb-6 -mx-6 px-6">
                 <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
                 <Button type="submit">{plan ? "Save Changes" : "Create Plan"}</Button>
             </DialogFooter>
         </form>
     );
 }
+
+    
 
     
