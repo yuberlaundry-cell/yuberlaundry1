@@ -57,7 +57,7 @@ export default function LaundromatsPage() {
             </div>
             <div className="flex gap-2">
                 <Button className="w-full sm:w-auto">
-                    <PlusCircle /> Add Laundromat
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Laundromat
                 </Button>
             </div>
         </div>
