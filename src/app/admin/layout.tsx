@@ -86,7 +86,7 @@ const navigationConfig = [
           { href: '/admin/compliance/documents', label: 'Expiring Documents' },
           { href: '/admin/compliance/tasks', label: 'Compliance Tasks' },
       ]},
-      { href: '/admin/fraud/overview', label: 'Fraud Monitoring', icon: Shield, subMenu: [
+      { href: '/admin/fraud', label: 'Fraud Monitoring', icon: Shield, subMenu: [
           { href: '/admin/fraud/alerts', label: 'New Alerts' },
           { href: '/admin/fraud/review', label: 'Under Review' },
           { href: '/admin/fraud/blocked', label: 'Blocked Accounts' },
@@ -185,7 +185,7 @@ export default function AdminPortalLayout({
                                         asChild
                                         tooltip={item.label}
                                         isActive={pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href) && !item.subMenu)}
-                                        className={cn(item.href === '#' && "opacity-50 pointer-events-none")}
+                                        className={cn(item.subMenu && "pointer-events-none opacity-50")}
                                     >
                                         <Link href={item.href}>
                                             <item.icon />
