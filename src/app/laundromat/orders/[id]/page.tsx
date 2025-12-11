@@ -93,6 +93,21 @@ export default function OrderProcessingDetailsPage() {
         return acc + (item.price * item.value);
     }, 0);
 
+    const renderActionButtons = () => {
+        switch (order.status) {
+            case 'Washing':
+                return <Button onClick={() => handleMoveStage('Drying')}>Move to Drying</Button>;
+            case 'Drying':
+                return <Button onClick={() => handleMoveStage('Folding/QC')}>Move to Folding/QC</Button>;
+            case 'Folding/QC':
+                return <Button onClick={() => handleMoveStage('Ready')}>Mark as Ready for Handoff</Button>;
+            case 'Ready':
+                return <p className="text-sm font-medium text-green-600">Order is ready for handoff.</p>;
+            default:
+                return null;
+        }
+    };
+
 
   return (
     <div className="space-y-8 pb-8">
@@ -113,8 +128,7 @@ export default function OrderProcessingDetailsPage() {
           <p className="text-muted-foreground mt-1">Status: {order.status}</p>
         </div>
         <div className="flex gap-2">
-            <Button variant="outline" onClick={() => handleMoveStage('Drying')}>Move to Drying</Button>
-            <Button onClick={() => handleMoveStage('Folding/QC')}>Move to Folding/QC</Button>
+            {renderActionButtons()}
         </div>
       </div>
       
@@ -254,5 +268,3 @@ export default function OrderProcessingDetailsPage() {
     </div>
   );
 }
-
-    
