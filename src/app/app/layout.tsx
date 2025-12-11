@@ -44,7 +44,6 @@ const desktopBottomNavConfig = [
 
 const BottomNavbar = () => {
     const pathname = usePathname();
-    const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
             <div className="grid h-16 grid-cols-4 w-full text-xs">
@@ -55,22 +54,13 @@ const BottomNavbar = () => {
                         pathname === "/app" ? "text-primary" : "text-muted-foreground"
                     )}
                 >
-                    <Home className="h-5 w-5" />
-                    <span className="mt-1">Dashboard</span>
+                    <div className="flex flex-col items-center justify-center">
+                        <Home className="h-5 w-5" />
+                        <span className="mt-1">Dashboard</span>
+                    </div>
                 </Link>
 
-                <Link
-                    href="/app/wallet"
-                    className={cn(
-                        "flex flex-col items-center justify-center pt-1",
-                        pathname.startsWith("/app/wallet") ? "text-primary" : "text-muted-foreground"
-                    )}
-                >
-                    <Wallet className="h-5 w-5" />
-                    <span className="mt-1">Wallet</span>
-                </Link>
-
-                 <Dialog>
+                <Dialog>
                     <DialogTrigger asChild>
                          <div className="flex flex-col items-center justify-center pt-1 text-primary font-semibold">
                             <div className="flex items-center justify-center h-12 w-12 -mt-7 rounded-full bg-primary text-primary-foreground border-4 border-background">
@@ -91,12 +81,27 @@ const BottomNavbar = () => {
                         </div>
                     </DialogContent>
                 </Dialog>
+                
+                <Link
+                    href="/app/wallet"
+                    className={cn(
+                        "flex flex-col items-center justify-center pt-1",
+                        pathname.startsWith("/app/wallet") ? "text-primary" : "text-muted-foreground"
+                    )}
+                >
+                    <div className="flex flex-col items-center justify-center">
+                        <Wallet className="h-5 w-5" />
+                        <span className="mt-1">Wallet</span>
+                    </div>
+                </Link>
 
                  <Sheet>
                     <SheetTrigger asChild>
                          <div className="flex flex-col items-center justify-center pt-1 text-muted-foreground">
-                            <MoreHorizontal className="h-5 w-5" />
-                            <span className="mt-1">More</span>
+                            <div className="flex flex-col items-center justify-center">
+                                <MoreHorizontal className="h-5 w-5" />
+                                <span className="mt-1">More</span>
+                            </div>
                         </div>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="rounded-t-2xl">
@@ -116,7 +121,7 @@ const BottomNavbar = () => {
                                 </Button>
                             ))}
                             <Separator className="my-2"/>
-                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" onClick={logout}>
+                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" >
                                 <LogOut className="mr-3 h-5 w-5" />
                                 Log Out
                             </Button>
@@ -168,12 +173,12 @@ export default function ConsumerPortalLayout({
       <Sidebar>
         <SidebarHeader className="p-4">
           <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
-             <Link href="/" className="mr-auto group-data-[collapsible=icon]:mr-0">
+             <Link href="/" className="flex items-center gap-2 group-data-[collapsible=icon]:mr-0">
                 <WashingMachine className="h-7 w-7 text-primary" />
+                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                     <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
+                </div>
              </Link>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-                 <h1 className="font-headline text-lg font-semibold -mb-1">Yuber Laundry</h1>
-            </div>
           </div>
         </SidebarHeader>
         <SidebarContent>
