@@ -31,7 +31,8 @@ import React from 'react';
 
 const navItems = [
   { href: '/driver', label: 'Today', icon: Home },
-  { href: '/driver/jobs', label: 'Jobs', icon: ClipboardList },
+  { href: '/driver/jobs/available', label: 'Available', icon: ClipboardList },
+  { href: '/driver/jobs', label: 'All Jobs', icon: ClipboardList },
   { href: '/driver/earnings', label: 'Earnings', icon: Wallet },
   { href: '/driver/profile', label: 'Profile', icon: CircleUserRound },
 ];
