@@ -15,6 +15,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
 import { Badge } from "../ui/badge";
 import { mockTimeSlots, TimeSlot } from "@/lib/mock-data";
+import { BookingFlow } from "../booking/booking-flow";
 
 const cities = [
     { id: "london", name: "London", country: "United Kingdom" },
@@ -105,7 +106,14 @@ export default function Hero() {
                 </Button>
             )}
 
-            <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
+            <Dialog>
+                <DialogTrigger asChild>
+                    <Button size="lg" className="w-full mt-3">Continue</Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
+                    <BookingFlow />
+                </DialogContent>
+            </Dialog>
             
           </Card>
 
