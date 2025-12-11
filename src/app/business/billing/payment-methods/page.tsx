@@ -38,23 +38,27 @@ export default function PaymentMethodsPage() {
                             </DialogDescription>
                         </DialogHeader>
                         <form className="space-y-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="email">Email Address</Label>
+                                <Input id="email" type="email" placeholder="you@company.com" required />
+                            </div>
                             <div className="space-y-2">
                                 <Label htmlFor="card-number">Card Number</Label>
-                                <Input id="card-number" placeholder="•••• •••• •••• ••••" />
+                                <Input id="card-number" placeholder="•••• •••• •••• ••••" required />
                             </div>
-                            <div className="grid grid-cols-2 gap-4">
+                            <div className="grid grid-cols-3 gap-4">
                                 <div className="space-y-2">
-                                    <Label htmlFor="expiry">Expiry Date</Label>
-                                    <Input id="expiry" placeholder="MM / YY" />
+                                    <Label htmlFor="expiry-month">Expiry Month</Label>
+                                    <Input id="expiry-month" placeholder="MM" required />
+                                </div>
+                                 <div className="space-y-2">
+                                    <Label htmlFor="expiry-year">Expiry Year</Label>
+                                    <Input id="expiry-year" placeholder="YY" required />
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="cvc">CVC</Label>
-                                    <Input id="cvc" placeholder="•••" />
+                                    <Input id="cvc" placeholder="•••" required />
                                 </div>
-                            </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="name">Name on Card</Label>
-                                <Input id="name" placeholder="John Smith" />
                             </div>
                             <Button type="submit" className="w-full">Save Card</Button>
                         </form>
