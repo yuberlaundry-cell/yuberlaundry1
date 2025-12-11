@@ -23,11 +23,6 @@ import { Badge } from '../ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { getRedirectPathForRole } from '@/lib/auth';
 
-const navLinks = [
-  { href: '/pricing', label: 'Pricing' },
-  { href: '#', label: 'Locations' },
-];
-
 const personalMegaMenuItems = {
   "How it works": [
     { icon: Rocket, title: "Schedule Pickup", href: "/#features" },
@@ -173,13 +168,6 @@ export function PublicHeader() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              {navLinks.map((link) => (
-                <NavigationMenuItem key={link.href}>
-                    <NavigationMenuLink asChild className={cn(navigationMenuTriggerStyle(), pathname === link.href ? "text-foreground" : "text-foreground/60")}>
-                      <Link href={link.href}>{link.label}</Link>
-                    </NavigationMenuLink>
-                </NavigationMenuItem>
-              ))}
             </NavigationMenuList>
           </NavigationMenu>
         </div>
@@ -271,20 +259,6 @@ export function PublicHeader() {
                         </AccordionContent>
                     </AccordionItem>
                     </Accordion>
-                    <nav className="flex flex-col space-y-4 mt-4 border-t pt-4">
-                        {navLinks.map((link) => (
-                        <Link
-                            key={link.href}
-                            href={link.href}
-                            className={cn(
-                                "transition-colors hover:text-foreground/80 font-semibold",
-                                pathname === link.href ? "text-foreground" : "text-foreground/80"
-                            )}
-                        >
-                            {link.label}
-                        </Link>
-                        ))}
-                    </nav>
                 </div>
                  {!loading && !user && (
                     <div className="mt-auto border-t pt-4 space-y-2">
