@@ -17,27 +17,29 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { PlusCircle } from 'lucide-react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { MoreHorizontal, PlusCircle, Trash2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useState } from 'react';
 
-const staff = [
-  { name: 'Maria Garcia', role: 'Operator' },
-  { name: 'Tom Jones', role: 'Supervisor' },
+const initialStaff = [
+  { id: 'st-1', name: 'Maria Garcia', role: 'Operator' },
+  { id: 'st-2', name: 'Tom Jones', role: 'Supervisor' },
 ];
 
-const machines = [
+const initialMachines = [
   { id: 'W-01', type: 'Washer', status: 'Available' },
   { id: 'W-02', type: 'Washer', status: 'In Use' },
   { id: 'D-01', type: 'Dryer', status: 'Maintenance' },
 ];
 
-const supplies = [
-    { item: 'Hypoallergenic Detergent', stock: 'Low'},
-    { item: 'Standard Detergent', stock: 'Full'},
-    { item: 'Fabric Softener', stock: 'Medium'},
+const initialSupplies = [
+    { id: 'sup-1', item: 'Hypoallergenic Detergent', stock: 'Low'},
+    { id: 'sup-2', item: 'Standard Detergent', stock: 'Full'},
+    { id: 'sup-3', item: 'Fabric Softener', stock: 'Medium'},
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -50,10 +52,15 @@ const stockColors: { [key: string]: string } = {
   Low: 'bg-red-100 text-red-800',
   Medium: 'bg-amber-100 text-amber-800',
   Full: 'bg-green-100 text-green-800',
+  Empty: 'bg-gray-100 text-gray-800',
 };
 
 
 export default function ResourcesPage() {
+    const [staff, setStaff] = useState(initialStaff);
+    const [machines, setMachines] = useState(initialMachines);
+    const [supplies, setSupplies] = useState(initialSupplies);
+  
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -99,7 +106,10 @@ export default function ResourcesPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button type="submit" className="w-full">Add Staff Member</Button>
+                    <DialogFooter>
+                      <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                      <Button type="submit">Add Staff Member</Button>
+                    </DialogFooter>
                   </form>
                 </DialogContent>
               </Dialog>
@@ -110,13 +120,23 @@ export default function ResourcesPage() {
                   <TableRow>
                     <TableHead>Name</TableHead>
                     <TableHead>Role</TableHead>
+                    <TableHead className="text-right"><span className="sr-only">Actions</span></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {staff.map((s) => (
-                    <TableRow key={s.name}>
+                    <TableRow key={s.id}>
                       <TableCell className="font-medium">{s.name}</TableCell>
                       <TableCell>{s.role}</TableCell>
+                      <TableCell className="text-right">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -154,7 +174,10 @@ export default function ResourcesPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button type="submit" className="w-full">Add Machine</Button>
+                     <DialogFooter>
+                        <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                        <Button type="submit">Add Machine</Button>
+                    </DialogFooter>
                   </form>
                 </DialogContent>
               </Dialog>
@@ -166,6 +189,7 @@ export default function ResourcesPage() {
                     <TableHead>ID</TableHead>
                     <TableHead>Type</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead className="text-right"><span className="sr-only">Actions</span></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -174,9 +198,27 @@ export default function ResourcesPage() {
                       <TableCell className="font-medium">{m.id}</TableCell>
                       <TableCell>{m.type}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className={statusColors[m.status]}>
-                          {m.status}
-                        </Badge>
+                         <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Badge variant="secondary" className={`${statusColors[m.status]} cursor-pointer`}>
+                                {m.status}
+                                </Badge>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem>Available</DropdownMenuItem>
+                                <DropdownMenuItem>In Use</DropdownMenuItem>
+                                <DropdownMenuItem>Maintenance</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                       <TableCell className="text-right">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -216,7 +258,10 @@ export default function ResourcesPage() {
                         </SelectContent>
                       </Select>
                     </div>
-                    <Button type="submit" className="w-full">Add Supply</Button>
+                     <DialogFooter>
+                        <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                        <Button type="submit">Add Supply</Button>
+                    </DialogFooter>
                   </form>
                 </DialogContent>
               </Dialog>
@@ -227,16 +272,36 @@ export default function ResourcesPage() {
                   <TableRow>
                     <TableHead>Item</TableHead>
                     <TableHead>Stock Level</TableHead>
+                    <TableHead className="text-right"><span className="sr-only">Actions</span></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {supplies.map((s) => (
-                    <TableRow key={s.item}>
+                    <TableRow key={s.id}>
                       <TableCell className="font-medium">{s.item}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary" className={stockColors[s.stock]}>
-                          {s.stock}
-                        </Badge>
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Badge variant="secondary" className={`${stockColors[s.stock]} cursor-pointer`}>
+                                {s.stock}
+                                </Badge>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem>Full</DropdownMenuItem>
+                                <DropdownMenuItem>Medium</DropdownMenuItem>
+                                <DropdownMenuItem>Low</DropdownMenuItem>
+                                <DropdownMenuItem>Empty</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
+                      </TableCell>
+                       <TableCell className="text-right">
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem>Edit</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                       </TableCell>
                     </TableRow>
                   ))}
