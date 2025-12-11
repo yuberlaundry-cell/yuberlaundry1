@@ -12,8 +12,10 @@ import {
 import { Button } from '@/components/ui/button';
 import { Check, Truck, User, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/hooks/use-toast';
 
-const allReadyForDriverOrders = [
+const initialDriverOrders = [
   {
     id: '#YL12347',
     customer: 'Acme Corp',
@@ -24,7 +26,7 @@ const allReadyForDriverOrders = [
   },
 ];
 
-const allReadyForPickupOrders = [
+const initialPickupOrders = [
     {
     id: '#YL12351',
     customer: 'Walk-in Customer',
@@ -43,14 +45,27 @@ const allReadyForPickupOrders = [
 
 export default function ReadyForHandoffPage() {
     const [searchTerm, setSearchTerm] = useState('');
+    const [readyForDriverOrders, setReadyForDriverOrders] = useState(initialDriverOrders);
+    const [readyForPickupOrders, setReadyForPickupOrders] = useState(initialPickupOrders);
+    const { toast } = useToast();
 
-    const readyForDriverOrders = allReadyForDriverOrders.filter(
+    const handleHandoff = (orderId: string, type: 'driver' | 'pickup') => {
+        if (type === 'driver') {
+            setReadyForDriverOrders(prev => prev.filter(o => o.id !== orderId));
+            toast({ title: `Order ${orderId} marked as handed to driver.` });
+        } else {
+            setReadyForPickupOrders(prev => prev.filter(o => o.id !== orderId));
+            toast({ title: `Order ${orderId} marked as picked up by customer.` });
+        }
+    }
+
+    const filteredDriverOrders = readyForDriverOrders.filter(
         (order) =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.customer.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    const readyForPickupOrders = allReadyForPickupOrders.filter(
+    const filteredPickupOrders = readyForPickupOrders.filter(
         (order) =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.customer.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,15 +94,18 @@ export default function ReadyForHandoffPage() {
         />
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 items-start">
-        {/* Handoff to Driver */}
-        <div>
-            <div className="flex items-center gap-2 mb-4">
-                <Truck className="h-6 w-6 text-muted-foreground" />
-                <h2 className="text-xl font-semibold">Handoff to Driver</h2>
-            </div>
-            <div className="grid gap-6">
-                {readyForDriverOrders.map((order) => (
+      <Tabs defaultValue="driver">
+        <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="driver" className="flex items-center gap-2">
+                <Truck className="h-5 w-5" /> Handoff to Driver ({filteredDriverOrders.length})
+            </TabsTrigger>
+            <TabsTrigger value="customer" className="flex items-center gap-2">
+                <User className="h-5 w-5" /> Customer Pickup ({filteredPickupOrders.length})
+            </TabsTrigger>
+        </TabsList>
+        <TabsContent value="driver">
+             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                {filteredDriverOrders.map((order) => (
                     <Card key={order.id}>
                         <CardHeader>
                         <CardTitle>{order.id}</CardTitle>
@@ -108,28 +126,22 @@ export default function ReadyForHandoffPage() {
                         </div>
                         </CardContent>
                         <CardFooter>
-                        <Button className="w-full">
+                        <Button className="w-full" onClick={() => handleHandoff(order.id, 'driver')}>
                             <Check className="mr-2" /> Mark as Handed to Driver
                         </Button>
                         </CardFooter>
                     </Card>
                 ))}
-                 {readyForDriverOrders.length === 0 && (
-                    <Card className="text-center text-muted-foreground py-12 border-dashed">
+                 {filteredDriverOrders.length === 0 && (
+                    <Card className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
                         <p>No orders awaiting driver handoff.</p>
                     </Card>
                 )}
             </div>
-        </div>
-
-        {/* Customer Pickup */}
-        <div>
-             <div className="flex items-center gap-2 mb-4">
-                <User className="h-6 w-6 text-muted-foreground" />
-                <h2 className="text-xl font-semibold">Customer Pickup</h2>
-            </div>
-             <div className="grid gap-6">
-                {readyForPickupOrders.map((order) => (
+        </TabsContent>
+         <TabsContent value="customer">
+             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+                {filteredPickupOrders.map((order) => (
                     <Card key={order.id}>
                         <CardHeader>
                         <CardTitle>{order.id}</CardTitle>
@@ -143,20 +155,20 @@ export default function ReadyForHandoffPage() {
                         </div>
                         </CardContent>
                         <CardFooter>
-                        <Button className="w-full">
+                        <Button className="w-full" onClick={() => handleHandoff(order.id, 'pickup')}>
                             <Check className="mr-2" /> Mark as Picked Up
                         </Button>
                         </CardFooter>
                     </Card>
                 ))}
-                 {readyForPickupOrders.length === 0 && (
-                    <Card className="text-center text-muted-foreground py-12 border-dashed">
+                 {filteredPickupOrders.length === 0 && (
+                    <Card className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
                         <p>No orders awaiting customer pickup.</p>
                     </Card>
                 )}
             </div>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
