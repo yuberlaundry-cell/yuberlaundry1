@@ -174,11 +174,11 @@ export default function OrderProcessingDetailsPage() {
                                 <p className="text-xs text-muted-foreground">${item.price.toFixed(2)}/{item.model === 'per_kg' ? 'kg' : 'item'}</p>
                             </div>
                              <div className="col-span-1">
-                                <Label htmlFor={`item-${item.id}`} className="sr-only">{item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label>
+                                <Label htmlFor={`item-${item.id}`} className="text-xs text-muted-foreground">{item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label>
                                 <Input 
                                     id={`item-${item.id}`} 
                                     type="number" 
-                                    placeholder={item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}
+                                    placeholder={item.model === 'per_kg' ? '0.00' : '0'}
                                     value={item.value || ''}
                                     onChange={(e) => handleValueChange(item.id, parseFloat(e.target.value) || 0)}
                                     disabled={order.isBilled}
