@@ -45,7 +45,7 @@ export default function JobDetailsPage() {
     const [isPhotoOpen, setPhotoOpen] = useState(false);
 
     useEffect(() => {
-        if (isScanOpen || isPhotoOpen) {
+        if ((isScanOpen || isPhotoOpen) && hasCameraPermission !== false) {
             const getCameraPermission = async () => {
                 if (hasCameraPermission) return;
                 try {
@@ -233,5 +233,3 @@ export default function JobDetailsPage() {
         </div>
     )
 }
-
-    
