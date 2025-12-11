@@ -8,6 +8,7 @@ import { ListFilter, MapPin, Package, Search, Truck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 const availableJobs = [
     { id: 'PU-124', type: 'Pickup', payout: 'R150.00', distance: '4.0 km', address: '888 Park Ave, London', time: 'ASAP' },
@@ -16,6 +17,7 @@ const availableJobs = [
 
 export default function AvailableJobsPage() {
     const { toast } = useToast();
+    const router = useRouter();
 
     const handleAcceptJob = (jobId: string) => {
         toast({
@@ -23,6 +25,7 @@ export default function AvailableJobsPage() {
             description: `Job ${jobId} has been added to your queue.`,
         });
         // In a real app, this would update state and remove the job from the available list.
+        router.push(`/driver/jobs/${jobId}`);
     }
 
     return (

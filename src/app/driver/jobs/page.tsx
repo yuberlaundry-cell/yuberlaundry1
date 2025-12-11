@@ -8,6 +8,7 @@ import Link from "next/link";
 import { Input } from "@/components/ui/input";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuCheckboxItem } from "@/components/ui/dropdown-menu";
 import { ListFilter, Package, Search, Truck } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const allJobs = [
     { id: 'PU-123', type: 'Pickup', customer: 'Jane Doe', address: '123 Main St, London', time: 'Today, 12:00-14:00', status: 'Assigned' },
@@ -18,6 +19,7 @@ const allJobs = [
 
 
 export default function JobsPage() {
+    const router = useRouter();
     return (
         <div className="space-y-8">
              <div>
@@ -51,7 +53,7 @@ export default function JobsPage() {
 
             <div className="space-y-4">
                 {allJobs.map(job => (
-                     <Card key={job.id}>
+                     <Card key={job.id} className="cursor-pointer hover:border-primary" onClick={() => router.push(`/driver/jobs/${job.id}`)}>
                         <CardHeader>
                             <div className="flex items-center justify-between">
                                 <CardTitle className="flex items-center gap-2 text-base">
@@ -66,11 +68,6 @@ export default function JobsPage() {
                              <p><span className="font-semibold">Address:</span> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.address)}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{job.address}</a></p>
                              <p><span className="font-semibold">Time:</span> {job.time}</p>
                         </CardContent>
-                        <CardFooter>
-                            <Button className="w-full" asChild size="sm">
-                                <Link href={`/driver/jobs/${job.id}`}>View Details</Link>
-                            </Button>
-                        </CardFooter>
                     </Card>
                 ))}
             </div>

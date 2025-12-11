@@ -20,6 +20,7 @@ import {
   Home,
   Wallet,
   WashingMachine,
+  ClipboardPlus,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
@@ -30,8 +31,8 @@ import { Switch } from '@/components/ui/switch';
 import React from 'react';
 
 const navItems = [
-  { href: '/driver', label: 'Today', icon: Home },
-  { href: '/driver/jobs/available', label: 'Available', icon: ClipboardList },
+  { href: '/driver', label: 'Today', icon: Home, exact: true },
+  { href: '/driver/jobs/available', label: 'Available Jobs', icon: ClipboardPlus },
   { href: '/driver/jobs', label: 'All Jobs', icon: ClipboardList },
   { href: '/driver/earnings', label: 'Earnings', icon: Wallet },
   { href: '/driver/profile', label: 'Profile', icon: CircleUserRound },
@@ -69,12 +70,14 @@ export default function DriverPortalLayout({
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            {navItems.map((item) => (
+            {navItems.map((item) => {
+              const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+              return (
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
                   asChild
                   tooltip={item.label}
-                  isActive={pathname === item.href}
+                  isActive={isActive}
                 >
                   <Link href={item.href}>
                     <item.icon />
@@ -82,7 +85,7 @@ export default function DriverPortalLayout({
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-            ))}
+            )})}
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter>
@@ -90,7 +93,7 @@ export default function DriverPortalLayout({
             <Label htmlFor="availability-desktop" className="font-medium group-data-[collapsible=icon]:hidden">
               Online Status
             </Label>
-            <Switch id="availability-desktop" />
+            <Switch id="availability-desktop" defaultChecked/>
           </div>
         </SidebarFooter>
       </Sidebar>
@@ -98,6 +101,12 @@ export default function DriverPortalLayout({
         <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <div className="md:hidden">
             <SidebarTrigger />
+          </div>
+          <div className="flex items-center gap-2 md:hidden">
+            <Label htmlFor="availability-mobile" className="font-medium">
+              Offline
+            </Label>
+            <Switch id="availability-mobile" />
           </div>
           <div className="flex-1" />
           <UserNav />

@@ -7,7 +7,7 @@ import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Ca
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
@@ -34,6 +34,17 @@ const jobData = {
         status: 'Out for Delivery',
         notes: 'Leave with the concierge if not home.',
         laundromatAddress: 'Speedy Suds, 45 Crisp St, London'
+    },
+    'PU-124': {
+        id: 'PU-124',
+        type: 'Pickup',
+        customer: 'Michael Scott',
+        phone: '+44 7777 555555',
+        address: '888 Park Ave, London',
+        time: 'ASAP',
+        status: 'Assigned',
+        notes: 'Call upon arrival.',
+        laundromatAddress: 'Fresh Folds, 12 Laundry Lane, London'
     }
 };
 
@@ -58,6 +69,7 @@ const deliverySteps = [
 export default function JobDetailsPage() {
     const [currentStep, setCurrentStep] = useState(0);
     const params = useParams();
+    const router = useRouter();
     const jobId = params.id as keyof typeof jobData;
     const job = jobData[jobId] || jobData['PU-123'];
     const workflowSteps = job.type === 'Pickup' ? pickupSteps : deliverySteps;
@@ -113,6 +125,11 @@ export default function JobDetailsPage() {
             setCurrentStep(nextStepIndex);
         } else {
             setCurrentStep(workflowSteps.length);
+             toast({
+                title: 'Job Complete!',
+                description: `${job.id} has been marked as complete.`,
+            });
+            setTimeout(() => router.push('/driver'), 1500);
         }
     }
 
@@ -124,7 +141,7 @@ export default function JobDetailsPage() {
         setTimeout(() => {
             toast({
                 title: 'Location Verified',
-                description: 'You are at the delivery address. You can now mark the customer as unavailable.',
+                description: 'You can now mark the customer as unavailable.',
             });
             setDeliveryFailed(true);
             setCurrentStep(workflowSteps.findIndex(s => s.id === 'return_to_laundromat'));
@@ -252,9 +269,9 @@ export default function JobDetailsPage() {
     return (
         <div className="space-y-6 pb-16">
              <Button variant="ghost" asChild className="-ml-4">
-                <Link href="/driver/jobs">
+                <Link href="/driver">
                     <ArrowLeft className="mr-2 h-4 w-4" />
-                    Back to jobs list
+                    Back to Today's Tasks
                 </Link>
             </Button>
             <div>
