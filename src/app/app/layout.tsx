@@ -18,10 +18,9 @@ import { Search } from "lucide-react";
 const navigationConfig = [
   { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
-  { href: '/app/promotions', label: 'My Subscriptions', icon: Tag },
+  { href: '/app/promotions', label: 'Promotions', icon: Tag },
   { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
   { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon },
-  { href: '#', label: 'AI Assistant', icon: Bot, disabled: true },
 ];
 
 const bottomNavConfig = [
@@ -71,7 +70,6 @@ export default function ConsumerPortalLayout({
                 isActive={pathname.startsWith(item.href) && item.href !== '/app' || pathname === item.href}
                 variant="ghost"
                 className="justify-start"
-                disabled={item.disabled}
                 >
                 <Link href={item.href}>
                     <item.icon />
@@ -80,6 +78,9 @@ export default function ConsumerPortalLayout({
                 </SidebarMenuButton>
             </SidebarMenuItem>
             ))}
+             <SidebarMenuItem className="px-2">
+                <FaqChatbot />
+            </SidebarMenuItem>
           </SidebarMenu>
         </SidebarContent>
         <SidebarFooter className="p-2 space-y-1">
