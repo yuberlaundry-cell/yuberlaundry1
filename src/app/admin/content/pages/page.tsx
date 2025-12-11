@@ -59,8 +59,8 @@ const pages = [
   {
     id: 'faq',
     title: 'FAQ Page',
-    description: 'Edit the Q&A content for your FAQ page. Use the format: [Question]\n[Answer]',
-    defaultContent: `[What is Yuber Laundry?]\n[Yuber Laundry is a service that connects you with local laundromats for pickup and delivery of your laundry and dry cleaning.]\n\n[What areas do you service?]\n[We are currently available in major cities across the UK. Enter your postcode on the homepage to see if we service your area.]`,
+    description: 'Edit the Q&A content for your FAQ page. Use the format: [Question]\\n[Answer]',
+    defaultContent: `[What is Yuber Laundry?]\\n[Yuber Laundry is a service that connects you with local laundromats for pickup and delivery of your laundry and dry cleaning.]\\n\\n[What areas do you service?]\\n[We are currently available in major cities across the UK. Enter your postcode on the homepage to see if we service your area.]`,
   },
   {
     id: 'privacy',
