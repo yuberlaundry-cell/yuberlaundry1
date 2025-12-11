@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, ScanLine, Truck, Package, Navigation, Camera, MessageSquare } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, QrCode, ScanLine, Truck, Package, Navigation, Camera, MessageSquare, Signature } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -13,39 +13,66 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
 const jobData = {
-    id: 'PU-123',
-    type: 'Pickup',
-    customer: 'Jane Doe',
-    phone: '+44 7123 456789',
-    address: '123 Main St, London, SW1A 0AA',
-    time: '12:00 - 14:00',
-    status: 'Assigned',
-    notes: 'Gate code is #1234. Beware of the small dog.'
+    'PU-123': {
+        id: 'PU-123',
+        type: 'Pickup',
+        customer: 'Jane Doe',
+        phone: '+44 7123 456789',
+        address: '123 Main St, London, SW1A 0AA',
+        time: '12:00 - 14:00',
+        status: 'Assigned',
+        notes: 'Gate code is #1234. Beware of the small dog.'
+    },
+    'DO-456': {
+        id: 'DO-456',
+        type: 'Delivery',
+        customer: 'John Smith',
+        phone: '+44 7987 654321',
+        address: '456 Business Rd, London, EC1A 1BB',
+        time: '16:00 - 18:00',
+        status: 'Out for Delivery',
+        notes: 'Leave with the concierge if not home.'
+    }
 };
 
 const pickupSteps = [
     { id: 'navigate', label: 'Start Navigation', actionLabel: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Pickup', actionLabel: 'Confirm Arrival' },
     { id: 'scan', label: 'Scan Bag QR Code', actionLabel: 'Scan Code', icon: QrCode },
-    { id: 'photo', label: 'Take Photo', actionLabel: 'Take Photo', icon: Camera },
+    { id: 'photo', label: 'Take Photo of Items', actionLabel: 'Take Photo', icon: Camera },
     { id: 'confirm', label: 'Confirm Items Collected', actionLabel: 'Confirm Pickup' },
-]
+];
+
+const deliverySteps = [
+    { id: 'navigate', label: 'Start Navigation', actionLabel: 'Start Navigation' },
+    { id: 'arrive', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
+    { id: 'photo', label: 'Photo Confirmation', actionLabel: 'Take Photo', icon: Camera },
+    { id: 'signature', label: 'Signature', actionLabel: 'Capture Signature', icon: Signature },
+    { id: 'confirm', label: 'Confirm Handover', actionLabel: 'Confirm Delivery' },
+];
+
 
 export default function JobDetailsPage() {
     const [currentStep, setCurrentStep] = useState(0);
     const params = useParams();
-    const jobId = params.id as string;
-    const job = jobData;
+    const jobId = params.id as keyof typeof jobData;
+    const job = jobData[jobId] || jobData['PU-123'];
+    const workflowSteps = job.type === 'Pickup' ? pickupSteps : deliverySteps;
 
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
     const { toast } = useToast();
     
-    const [isScanOpen, setScanOpen] = useState(false);
-    const [isPhotoOpen, setPhotoOpen] = useState(false);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [modalContent, setModalContent] = useState<'scan' | 'photo' | 'signature' | null>(null);
 
+    const openModal = (type: 'scan' | 'photo' | 'signature') => {
+        setModalContent(type);
+        setModalOpen(true);
+    }
+    
     useEffect(() => {
-        if ((isScanOpen || isPhotoOpen) && hasCameraPermission !== false) {
+        if (isModalOpen && (modalContent === 'scan' || modalContent === 'photo') && hasCameraPermission !== false) {
             const getCameraPermission = async () => {
                 if (hasCameraPermission) return;
                 try {
@@ -62,29 +89,36 @@ export default function JobDetailsPage() {
             };
             getCameraPermission();
         }
-      }, [isScanOpen, isPhotoOpen, hasCameraPermission]);
+      }, [isModalOpen, modalContent, hasCameraPermission]);
 
 
     const handleNextStep = () => {
-        if (currentStep < pickupSteps.length -1) {
+        if (currentStep < workflowSteps.length -1) {
             setCurrentStep(currentStep + 1);
         } else {
-            setCurrentStep(pickupSteps.length);
+            setCurrentStep(workflowSteps.length);
         }
     }
     
-    const renderActionButton = (step: typeof pickupSteps[0], index: number) => {
+    const renderActionButton = (step: typeof workflowSteps[0]) => {
         const ActionIcon = step.icon;
 
-        if (step.id === 'scan') {
+        if (step.id === 'scan' || step.id === 'photo' || step.id === 'signature') {
              return (
-                <Dialog open={isScanOpen} onOpenChange={setScanOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="mt-2 w-full">
-                            {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
+                <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan' | 'photo' | 'signature')}>
+                    {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
+                </Button>
+            );
+        }
+
+        return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
+    }
+
+    const renderModalContent = () => {
+        switch (modalContent) {
+            case 'scan':
+                return (
+                    <>
                         <DialogHeader>
                             <DialogTitle>Scan QR Code</DialogTitle>
                             <DialogDescription>
@@ -100,31 +134,22 @@ export default function JobDetailsPage() {
                                         <Camera className="h-4 w-4" />
                                         <AlertTitle>Camera Access Required</AlertTitle>
                                         <AlertDescription>
-                                            Please enable camera permissions in your browser settings to use the scanner.
+                                            Please enable camera permissions to use the scanner.
                                         </AlertDescription>
                                     </Alert>
                                 </div>
                             )}
                         </div>
-                        <Button onClick={() => { handleNextStep(); setScanOpen(false); }}>Confirm Scan</Button>
-                    </DialogContent>
-                </Dialog>
-            );
-        }
-        
-        if (step.id === 'photo') {
-             return (
-                <Dialog open={isPhotoOpen} onOpenChange={setPhotoOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="mt-2 w-full">
-                             {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
+                        <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Confirm Scan</Button>
+                    </>
+                );
+            case 'photo':
+                return (
+                    <>
                         <DialogHeader>
                             <DialogTitle>Capture Photo</DialogTitle>
                             <DialogDescription>
-                                Take a photo of the items at the pickup location.
+                                Take a photo of the items at the location.
                             </DialogDescription>
                         </DialogHeader>
                           <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
@@ -135,20 +160,35 @@ export default function JobDetailsPage() {
                                         <Camera className="h-4 w-4" />
                                         <AlertTitle>Camera Access Required</AlertTitle>
                                         <AlertDescription>
-                                            Please enable camera permissions in your browser settings to take a photo.
+                                            Please enable camera permissions to take a photo.
                                         </AlertDescription>
                                     </Alert>
                                 </div>
                             )}
                         </div>
-                        <Button onClick={() => { handleNextStep(); setPhotoOpen(false); }}>Capture</Button>
-                    </DialogContent>
-                </Dialog>
-            );
+                        <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Capture</Button>
+                    </>
+                );
+            case 'signature':
+                 return (
+                    <>
+                        <DialogHeader>
+                            <DialogTitle>Capture Signature</DialogTitle>
+                            <DialogDescription>
+                                Ask the customer to sign on the screen to confirm delivery.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="w-full aspect-video bg-muted rounded-lg flex items-center justify-center">
+                            <p className="text-muted-foreground italic">Signature pad placeholder</p>
+                        </div>
+                        <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Confirm Signature</Button>
+                    </>
+                );
+            default:
+                return null;
         }
+    };
 
-        return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
-    }
 
     return (
         <div className="space-y-6 pb-16">
@@ -160,7 +200,7 @@ export default function JobDetailsPage() {
             </Button>
             <div>
                 <h1 className="text-2xl font-bold font-headline">Job Details</h1>
-                <p className="text-muted-foreground">Order ID: {jobId}</p>
+                <p className="text-muted-foreground">Order ID: {job.id}</p>
             </div>
             <div className="grid md:grid-cols-2 gap-8 items-start">
                 <div className="space-y-6">
@@ -168,7 +208,7 @@ export default function JobDetailsPage() {
                         <CardHeader>
                             <CardTitle className="flex items-center gap-2">
                                 {job.type === 'Pickup' ? <Package /> : <Truck />}
-                                Customer & Order Summary
+                                {job.type} Summary
                             </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
@@ -207,28 +247,28 @@ export default function JobDetailsPage() {
                     </CardHeader>
                     <CardContent>
                          <ol className="space-y-4">
-                            {pickupSteps.map((step, index) => (
+                            {workflowSteps.map((step, index) => (
                                 <li key={step.id} className="flex items-start gap-4">
                                     <div className="flex flex-col items-center self-stretch">
                                         <div className={`flex h-8 w-8 items-center justify-center rounded-full ${index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                                             {index < currentStep ? <Check /> : (index === currentStep ? <ScanLine /> : index + 1)}
                                         </div>
-                                        {index < pickupSteps.length -1 && <div className={`w-px flex-1 my-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
+                                        {index < workflowSteps.length -1 && <div className={`w-px flex-1 my-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
                                     </div>
                                     <div className="flex-1 pt-1.5">
                                         <p className={`font-medium ${index <= currentStep ? 'text-foreground' : 'text-muted-foreground'}`}>{step.label}</p>
                                         
-                                        {index === currentStep && renderActionButton(step, index)}
+                                        {index === currentStep && renderActionButton(step)}
                                         
                                     </div>
                                 </li>
                             ))}
                         </ol>
-                        {currentStep === pickupSteps.length && (
+                        {currentStep === workflowSteps.length && (
                              <div className="mt-6 flex items-center gap-3 rounded-lg border border-green-500 bg-green-50 p-4 text-green-800">
                                 <Check className="h-6 w-6" />
                                 <div>
-                                    <h4 className="font-semibold">Job Complete!</h4>
+                                    <h4 className="font-semibold">{job.type} Complete!</h4>
                                     <p className="text-sm">This job has been marked as completed.</p>
                                 </div>
                             </div>
@@ -236,6 +276,13 @@ export default function JobDetailsPage() {
                     </CardContent>
                 </Card>
             </div>
+             <Dialog open={isModalOpen} onOpenChange={setModalOpen}>
+                <DialogContent>
+                   {renderModalContent()}
+                </DialogContent>
+            </Dialog>
         </div>
     )
 }
+
+    
