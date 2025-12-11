@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import Link from 'next/link';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const columns = [
   {
@@ -56,6 +57,12 @@ const columns = [
         customer: 'John Smith',
         service: 'Dry Cleaning',
         sla: 'Due in 1h',
+      },
+       {
+        id: '#YL12352',
+        customer: 'Alice',
+        service: 'Wash & Fold',
+        sla: 'Due in 2h',
       },
     ],
   },
@@ -125,7 +132,9 @@ export default function ProcessingPage() {
           Manage orders through the laundry lifecycle.
         </p>
       </div>
-      <ScrollArea className="flex-grow w-full">
+
+      {/* Desktop Kanban Board */}
+      <ScrollArea className="flex-grow w-full hidden md:block">
         <div className="flex gap-6 pb-4">
           {columns.map((column) => (
             <div
@@ -154,6 +163,34 @@ export default function ProcessingPage() {
         </div>
         <ScrollBar orientation="horizontal" />
       </ScrollArea>
+      
+      {/* Mobile/Tablet Tabs */}
+      <div className="md:hidden">
+         <Tabs defaultValue={columns[0].id} className="w-full">
+            <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4 h-auto">
+                {columns.map(column => (
+                    <TabsTrigger key={column.id} value={column.id} className="flex gap-2">
+                        <column.icon className="h-4 w-4" /> {column.title} ({column.orders.length})
+                    </TabsTrigger>
+                ))}
+            </TabsList>
+            {columns.map(column => (
+                <TabsContent key={column.id} value={column.id}>
+                    <div className="space-y-4 pt-4">
+                         {column.orders.map((order) => (
+                            <OrderCard key={order.id} order={order} />
+                        ))}
+                         {column.orders.length === 0 && (
+                            <div className="text-center text-muted-foreground py-16 border-2 border-dashed rounded-lg">
+                                <p>No orders in this stage.</p>
+                            </div>
+                        )}
+                    </div>
+                </TabsContent>
+            ))}
+        </Tabs>
+      </div>
+
     </div>
   );
 }

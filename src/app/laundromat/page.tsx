@@ -11,7 +11,6 @@ import {
 import {
   AlertCircle,
   Clock,
-  CreditCard,
   Package,
   PackageCheck,
   PackageOpen,
@@ -74,10 +73,10 @@ export default function LaundromatDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-3 xl:col-span-2">
           <OrderStatusChart />
         </div>
-        <div className="space-y-8">
+        <div className="space-y-8 lg:col-span-3 xl:col-span-1">
           <Card>
             <CardHeader>
               <CardTitle>Alerts &amp; Insights</CardTitle>

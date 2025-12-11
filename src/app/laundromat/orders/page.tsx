@@ -2,7 +2,7 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,14 +10,6 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import {
   Search,
@@ -35,7 +27,6 @@ const mockOrders = [
     {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold', pickup: 'Today, 1pm', sla: 'Due in 24h'},
 ];
 
-
 const statusColors: { [key: string]: string } = {
   'Ready': 'bg-green-100 text-green-800',
   'Washing': 'bg-blue-100 text-blue-800',
@@ -44,10 +35,54 @@ const statusColors: { [key: string]: string } = {
   'Intake': 'bg-gray-100 text-gray-800',
 };
 
+const OrderRow = ({ order }: { order: typeof mockOrders[0]}) => {
+    const router = useRouter();
+    return (
+        <TableRow
+            key={order.id}
+            className="hidden md:table-row cursor-pointer"
+            onClick={() =>
+                router.push(`/laundromat/orders/${order.id.replace("#","")}`)
+            }
+        >
+            <TableCell className="font-medium">{order.id}</TableCell>
+            <TableCell>{order.customer}</TableCell>
+            <TableCell>{order.service}</TableCell>
+            <TableCell>
+            <Badge variant="secondary" className={statusColors[order.status]}>
+                {order.status}
+            </Badge>
+            </TableCell>
+            <TableCell>{order.pickup}</TableCell>
+            <TableCell>{order.sla}</TableCell>
+        </TableRow>
+    )
+}
+
+const OrderCard = ({ order }: { order: typeof mockOrders[0] }) => {
+    const router = useRouter();
+    return (
+        <Card className="md:hidden" onClick={() => router.push(`/laundromat/orders/${order.id.replace("#","")}`)}>
+             <CardHeader>
+                <div className="flex items-center justify-between">
+                    <CardTitle className="text-base">{order.id}</CardTitle>
+                     <Badge variant="secondary" className={statusColors[order.status]}>
+                        {order.status}
+                    </Badge>
+                </div>
+                <CardDescription>{order.customer}</CardDescription>
+            </CardHeader>
+            <CardContent className="text-sm space-y-1">
+                <p><span className="font-medium">Service:</span> {order.service}</p>
+                <p><span className="font-medium">Pickup:</span> {order.pickup}</p>
+                <p><span className="font-medium">SLA:</span> {order.sla}</p>
+            </CardContent>
+        </Card>
+    )
+}
+
 
 export default function LaundromatOrdersPage() {
-    const router = useRouter();
-
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -99,40 +134,28 @@ export default function LaundromatOrdersPage() {
           </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Service</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Pickup</TableHead>
-                <TableHead>SLA</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {mockOrders.map((order) => (
-                <TableRow
-                  key={order.id}
-                  className="cursor-pointer"
-                  onClick={() =>
-                    router.push(`/laundromat/orders/${order.id.replace("#","")}`)
-                  }
-                >
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                   <TableCell>{order.customer}</TableCell>
-                   <TableCell>{order.service}</TableCell>
-                  <TableCell>
-                    <Badge variant="secondary" className={statusColors[order.status]}>
-                      {order.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>{order.pickup}</TableCell>
-                  <TableCell>{order.sla}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+          <div className="relative w-full overflow-auto hidden md:block">
+            <table className="w-full caption-bottom text-sm">
+                <TableHeader>
+                    <TableRow>
+                        <TableHead>Order ID</TableHead>
+                        <TableHead>Customer</TableHead>
+                        <TableHead>Service</TableHead>
+                        <TableHead>Status</TableHead>
+                        <TableHead>Pickup</TableHead>
+                        <TableHead>SLA</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {mockOrders.map((order) => (
+                        <OrderRow key={order.id} order={order} />
+                    ))}
+                </TableBody>
+            </table>
+          </div>
+          <div className="grid gap-4 md:hidden">
+              {mockOrders.map(order => <OrderCard key={order.id} order={order} />)}
+          </div>
         </CardContent>
       </Card>
     </div>

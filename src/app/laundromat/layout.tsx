@@ -25,6 +25,7 @@ import {
   ClipboardCheck,
   CreditCard,
   ChevronRight,
+  Bell,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -34,7 +35,7 @@ import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import React from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { cn } from '@/lib/utils';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const navigationConfig = [
   { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },
@@ -56,6 +57,12 @@ const navigationConfig = [
        { href: '/laundromat/settings', label: 'Settings', icon: Settings },
     ]
   }
+];
+
+const notifications = [
+    { title: 'New order #YL12350 arrived', description: 'Driver David L. just dropped off 3 bags.'},
+    { title: 'Machine W-02 cycle finished', description: 'Washer is ready for the next load.'},
+    { title: 'Low Supply: Standard Detergent', description: 'Stock is below 20%. Consider reordering.'},
 ];
 
 export default function LaundromatPortalLayout({
@@ -167,6 +174,27 @@ export default function LaundromatPortalLayout({
             <Label htmlFor="facility-status">Open</Label>
           </div>
           <div className="flex-1" />
+           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="relative">
+                    <Bell />
+                    <span className="absolute top-0 right-0 flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                    </span>
+                </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-80">
+                <div className="p-2 font-semibold">Notifications</div>
+                <DropdownMenuSeparator />
+                {notifications.map((n, i) => (
+                    <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
+                       <div className="font-medium">{n.title}</div>
+                       <div className="text-xs text-muted-foreground">{n.description}</div>
+                    </DropdownMenuItem>
+                ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <UserNav />
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
