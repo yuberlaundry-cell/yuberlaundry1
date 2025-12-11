@@ -17,8 +17,11 @@ export default function OrderDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
     
+    // Find the original order from the mock data
     const originalOrder = mockOrders.find(o => o.id === orderId);
 
+    // CRITICAL FIX: Initialize state with a deep copy of the order.
+    // This prevents any attempt to mutate the original read-only mock data.
     const [order, setOrder] = React.useState(() => {
         if (!originalOrder) return null;
         return JSON.parse(JSON.stringify(originalOrder));
@@ -30,7 +33,8 @@ export default function OrderDetailsPage() {
         setOrder(prevOrder => {
             if (!prevOrder) return null;
 
-            // Create a fresh, deep copy for this update to avoid mutating read-only objects
+            // Now, prevOrder is already a mutable copy, but we continue to
+            // use best practices by creating a new copy for the update.
             const newOrderState = JSON.parse(JSON.stringify(prevOrder));
             const newTimeline = newOrderState.timeline;
             
