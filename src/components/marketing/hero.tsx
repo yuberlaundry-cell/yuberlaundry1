@@ -5,11 +5,12 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
 import { Card } from "../ui/card";
-import { MapPin, Search, Smartphone } from "lucide-react";
+import { MapPin, Search, Smartphone, Sparkles, CheckCircle, Package } from "lucide-react";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AddressInput } from "../ui/address-input";
 import { useToast } from "@/hooks/use-toast";
+import { Badge } from "../ui/badge";
 
 const serviceableCities = ['london', 'manchester', 'birmingham'];
 
@@ -20,9 +21,9 @@ export default function Hero() {
   const [isServiceable, setIsServiceable] = useState<boolean | null>(null);
 
   const heroImage = {
-      imageUrl: "https://images.unsplash.com/photo-1582735689365-27f72f895995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080",
+      imageUrl: "https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
       description: "A smiling woman holding a Yuber Laundry bag",
-      imageHint: "laundry bag"
+      imageHint: "smiling woman laundry bag"
   };
 
   const handleAddressSelect = (address: { description: string }) => {
@@ -93,16 +94,40 @@ export default function Hero() {
             </Button>
 
           </div>
-          <div className="relative hidden lg:block">
+          <div className="relative hidden lg:block aspect-[4/5]">
               <Image
                   src={heroImage.imageUrl}
                   alt={heroImage.description}
                   data-ai-hint={heroImage.imageHint}
-                  width={600}
-                  height={750}
-                  className="object-cover rounded-2xl aspect-[4/5]"
+                  fill
+                  className="object-cover rounded-2xl"
                   priority
               />
+              <Card className="absolute top-6 right-6 p-3 backdrop-blur-sm bg-background/50 shadow-lg">
+                <div className="flex items-center gap-3">
+                  <div className="p-2 bg-muted rounded-full">
+                    <Package className="h-5 w-5 text-muted-foreground"/>
+                  </div>
+                   <div>
+                      <p className="font-semibold">Orders: Received</p>
+                      <p className="text-sm text-muted-foreground">10 items</p>
+                   </div>
+                </div>
+              </Card>
+               <Card className="absolute bottom-6 left-6 right-6 p-3 backdrop-blur-sm bg-background/80 shadow-lg">
+                <div className="flex items-center justify-between">
+                   <div className="flex items-center gap-3">
+                     <div className="p-2 bg-green-100 rounded-full text-green-700">
+                        <Sparkles className="h-5 w-5"/>
+                      </div>
+                      <div>
+                          <p className="font-semibold">Dry Cleaning</p>
+                          <p className="text-sm text-muted-foreground">Next available: Tue, 2pm</p>
+                      </div>
+                   </div>
+                   <Badge className="font-bold">+ R99.00</Badge>
+                </div>
+              </Card>
           </div>
         </div>
       </div>

@@ -45,7 +45,7 @@ export default function HomepageContentPage() {
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="hero-image">Hero Image URL</Label>
-                        <Input id="hero-image" defaultValue="https://images.unsplash.com/photo-1582735689365-27f72f895995?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTI4MTQyNXww&ixlib=rb-4.1.0&q=80&w=1080" />
+                        <Input id="hero-image" defaultValue="https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080" />
                     </div>
                 </CardContent>
             </Card>
