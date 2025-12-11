@@ -135,11 +135,11 @@ export default function LaundromatSettingsPage() {
                 </div>
                  <div className="space-y-2">
                   <Label htmlFor="account-number">Account Number</Label>
-                  <Input id="account-number" defaultValue="**** **** **78" />
+                  <Input id="account-number" placeholder="Enter NUBAN account number" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="account-name">Account Holder Name</Label>
-                  <Input id="account-name" defaultValue="Main St. Laundry Ltd." readOnly />
+                  <Input id="account-name" placeholder="Name will be verified via Paystack" readOnly />
                 </div>
                 <div className="pt-4">
                   <Button>Save Payout Information</Button>
