@@ -1,12 +1,10 @@
-
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, User, ShoppingBag, Calendar, Check } from "lucide-react";
+import { ArrowLeft, User, ShoppingBag, Calendar, Check, Waves, Shirt } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
@@ -19,6 +17,8 @@ import { AddressInput } from "@/components/ui/address-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
 
 const steps = [
   { id: 1, name: 'Employee', icon: User },
@@ -28,10 +28,39 @@ const steps = [
 ];
 
 const servicesConfig = [
-  { id: 'wash-fold', name: 'Wash & Fold' },
-  { id: 'dry-cleaning', name: 'Dry Cleaning' },
-  { id: 'ironing', name: 'Ironing' },
+    {
+        id: 'wash',
+        name: 'Wash & Fold',
+        icon: Waves,
+        description: 'For everyday laundry, bedsheets and towels.',
+        preferences: {
+            title: 'Please select your preference for Wash & Fold',
+            options: [
+                { id: 'mixed', name: 'Mixed Wash', price: 'R39.75 / 15lbs' },
+                { id: 'separate', name: 'Separate Wash', price: 'R79.50 / 30lbs' },
+            ],
+            description: "We'll separate the lights and darks for you."
+        },
+        addOns: [
+            { id: 'high-temp', name: 'High temperature wash', description: "Items will be washed at a higher temperature. Please check labels before selecting." }
+        ]
+    },
+    {
+        id: 'dry-cleaning',
+        name: 'Dry Cleaning',
+        icon: Shirt,
+        description: 'For delicate items that require special care.',
+    },
 ];
+
+type Service = typeof servicesConfig[0];
+type ServicePreferences = {
+    [key: string]: {
+        washType?: string;
+        highTemp?: boolean;
+    }
+}
+
 
 const savedAddresses = [
     { id: 'home', type: 'Employee Home', address: '123 Main St, London, SW1A 0AA' },
@@ -45,6 +74,13 @@ export default function NewBusinessOrderPage() {
     const [pickupAddress, setPickupAddress] = useState('work');
     const { toast } = useToast();
     const router = useRouter();
+
+    // State for Step 2: Services
+    const [selectedServices, setSelectedServices] = useState<string[]>([]);
+    const [editingService, setEditingService] = useState<Service | null>(null);
+    const [servicePreferences, setServicePreferences] = useState<ServicePreferences>({});
+    const [tempWashPref, setTempWashPref] = useState<string | undefined>(undefined);
+    const [tempHighTemp, setTempHighTemp] = useState<boolean>(false);
 
     const handleNext = () => {
         if (currentStep < steps.length) {
@@ -64,6 +100,44 @@ export default function NewBusinessOrderPage() {
             description: "The new order has been placed and the employee has been notified.",
         });
         router.push('/business/orders');
+    }
+
+    const openServiceDialog = (service: Service) => {
+        const currentPrefs = servicePreferences[service.id];
+        setTempWashPref(currentPrefs?.washType || service.preferences?.options[0].id);
+        setTempHighTemp(currentPrefs?.highTemp || false);
+        setEditingService(service);
+    };
+
+    const toggleService = (serviceId: string) => {
+        const service = servicesConfig.find(s => s.id === serviceId);
+        if (!service) return;
+
+        if (service.preferences || service.addOns) {
+            openServiceDialog(service);
+        } else {
+            setSelectedServices(prev =>
+                prev.includes(serviceId)
+                    ? prev.filter(id => id !== serviceId)
+                    : [...prev, serviceId]
+            );
+        }
+    }
+
+    const handleConfirmPreferences = () => {
+        if (editingService) {
+            setServicePreferences(prev => ({
+                ...prev,
+                [editingService.id]: {
+                    washType: tempWashPref,
+                    highTemp: tempHighTemp,
+                }
+            }));
+            if (!selectedServices.includes(editingService.id)) {
+                setSelectedServices(prev => [...prev, editingService.id]);
+            }
+            setEditingService(null);
+        }
     }
     
     const progress = (currentStep / steps.length) * 100;
@@ -91,13 +165,84 @@ export default function NewBusinessOrderPage() {
             case 2:
                 return (
                      <div className="space-y-4">
-                        <Label>Services</Label>
-                        {servicesConfig.map(service => (
-                            <div key={service.id} className="flex items-center space-x-2 p-3 border rounded-md">
-                                <Checkbox id={service.id} />
-                                <Label htmlFor={service.id} className="font-normal cursor-pointer flex-grow">{service.name}</Label>
-                            </div>
-                        ))}
+                        <div className="rounded-lg border">
+                            {servicesConfig.map((service, index) => (
+                                <div key={service.id}>
+                                    <div className="p-4 flex items-start gap-4">
+                                        <div className="p-3 bg-muted rounded-full">
+                                            <service.icon className="h-5 w-5 text-muted-foreground" />
+                                        </div>
+                                        <div className="flex-grow">
+                                            <p className="font-semibold">{service.name}</p>
+                                            <p className="text-sm text-muted-foreground">{service.description}</p>
+                                        </div>
+                                        <Button
+                                            variant={selectedServices.includes(service.id) ? 'outline' : 'default'}
+                                            onClick={() => toggleService(service.id)}
+                                        >
+                                            {selectedServices.includes(service.id) ? 'Edit' : 'Add'}
+                                        </Button>
+                                    </div>
+                                    {index < servicesConfig.length - 1 && <Separator />}
+                                </div>
+                            ))}
+                        </div>
+                        <Dialog open={!!editingService} onOpenChange={(isOpen) => !isOpen && setEditingService(null)}>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>{editingService?.preferences?.title}</DialogTitle>
+                                </DialogHeader>
+                                <div className="space-y-4 pt-4">
+                                    {editingService?.preferences && (
+                                        <>
+                                            <RadioGroup
+                                                value={tempWashPref}
+                                                onValueChange={setTempWashPref}
+                                                className="grid grid-cols-2 gap-4"
+                                            >
+                                                {editingService.preferences.options.map(opt => (
+                                                    <Label key={opt.id} htmlFor={opt.id} className="block p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary text-center">
+                                                        <RadioGroupItem value={opt.id} id={opt.id} className="sr-only" />
+                                                        <p className="font-semibold">{opt.name}</p>
+                                                        <p className="text-sm text-muted-foreground">{opt.price}</p>
+                                                    </Label>
+                                                ))}
+                                            </RadioGroup>
+                                            <p className="text-sm text-muted-foreground">{editingService.preferences.description}</p>
+                                        </>
+                                    )}
+                                    {editingService?.addOns && editingService.addOns.length > 0 && (
+                                        <>
+                                            <Separator />
+                                            <div className="space-y-3">
+                                                {editingService.addOns.map(addOn => (
+                                                    <Label key={addOn.id} htmlFor={addOn.id} className="flex items-start gap-4 p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                                        <Checkbox
+                                                            id={addOn.id}
+                                                            checked={tempHighTemp}
+                                                            onCheckedChange={(checked) => setTempHighTemp(Boolean(checked))}
+                                                            className="mt-1"
+                                                        />
+                                                        <div>
+                                                            <div className="flex items-center gap-2">
+                                                                <p className="font-semibold">{addOn.name}</p>
+                                                                <Badge variant="secondary" className="bg-blue-100 text-blue-800">Free</Badge>
+                                                            </div>
+                                                            <p className="text-sm text-muted-foreground">{addOn.description}</p>
+                                                        </div>
+                                                    </Label>
+                                                ))}
+                                            </div>
+                                        </>
+                                    )}
+                                </div>
+                                <DialogFooter>
+                                    <Button className="w-full mt-4" size="lg" onClick={handleConfirmPreferences}>
+                                    {selectedServices.includes(editingService?.id || '') ? 'Save Changes' : 'Add Service'}
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
                     </div>
                 )
             case 3:
