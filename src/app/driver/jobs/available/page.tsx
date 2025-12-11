@@ -10,8 +10,8 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { useToast } from "@/hooks/use-toast";
 
 const availableJobs = [
-    { id: 'PU-124', type: 'Pickup', payout: '$15.00', distance: '2.5 mi', address: '888 Park Ave, London', time: 'ASAP' },
-    { id: 'DO-457', type: 'Delivery', payout: '$12.50', distance: '1.8 mi', address: '999 Ocean Dr, London', time: '18:00-19:00' },
+    { id: 'PU-124', type: 'Pickup', payout: '£15.00', distance: '4.0 km', address: '888 Park Ave, London', time: 'ASAP' },
+    { id: 'DO-457', type: 'Delivery', payout: '£12.50', distance: '2.9 km', address: '999 Ocean Dr, London', time: '18:00-19:00' },
 ];
 
 export default function AvailableJobsPage() {

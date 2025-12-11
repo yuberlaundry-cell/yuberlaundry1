@@ -73,11 +73,11 @@ export default function ConsumerDashboard() {
             <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className="text-2xl font-bold">R15.50</p>
+                    <p className="text-2xl font-bold">£15.50</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Referral Credits</p>
-                    <p className="text-2xl font-bold">R0.00</p>
+                    <p className="text-2xl font-bold">£0.00</p>
                 </div>
                 <div className="p-4 rounded-lg bg-muted/50 text-center">
                     <p className="text-sm text-muted-foreground">Loyalty Points</p>

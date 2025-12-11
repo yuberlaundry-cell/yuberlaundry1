@@ -1,3 +1,4 @@
+
 import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -8,24 +9,24 @@ import { Badge } from "@/components/ui/badge";
 const pricingTiers = [
     {
         name: "Pay as you go",
-        price: "$1.75",
-        unit: "per lb",
+        price: "£2.50",
+        unit: "per kg",
         description: "Perfect for occasional use. No commitment.",
         features: ["Wash & Fold", "Standard detergent", "2-day turnaround", "Online tracking"],
         cta: "Schedule Pickup"
     },
     {
         name: "Plus Subscription",
-        price: "$45",
+        price: "£45",
         unit: "per month",
         description: "Best value for regulars. Save on every order.",
-        features: ["Up to 30 lbs included", "Free pickup & delivery", "Premium detergents", "Next-day turnaround"],
+        features: ["Up to 20kg included", "Free pickup & delivery", "Premium detergents", "Next-day turnaround"],
         cta: "Subscribe Now",
         popular: true
     },
     {
         name: "Dry Cleaning",
-        price: "From $5",
+        price: "From £5",
         unit: "per item",
         description: "For your delicate and special care items.",
         features: ["Shirts, suits, dresses", "Specialty item care", "Eco-friendly cleaning", "Itemized receipts"],
