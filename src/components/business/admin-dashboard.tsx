@@ -43,7 +43,15 @@ export function AdminDashboard() {
 
             <div className="grid lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2">
-                    <SpendChart />
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Spend Over Time</CardTitle>
+                            <CardDescription>Company-wide spending for the last 6 months.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                             <SpendChart />
+                        </CardContent>
+                    </Card>
                 </div>
                 <div className="space-y-8">
                      <Card>

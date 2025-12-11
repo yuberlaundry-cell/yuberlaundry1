@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import React from "react";
 
 const adminNavConfig = [
   { href: '/business', label: 'Dashboard', icon: LayoutDashboard, isStandalone: true },
@@ -48,9 +49,18 @@ export default function BusinessPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user } = useAuth();
+  const { user, loading } = useAuth();
   const isAdmin = user?.role === 'business_admin';
   const navigationConfig = isAdmin ? adminNavConfig : employeeNavConfig;
+
+    if (loading || !user) {
+        return (
+            <div className="flex flex-col items-center justify-center min-h-screen bg-background">
+                <WashingMachine className="h-12 w-12 text-primary animate-spin" />
+                <p className="mt-4 text-muted-foreground">Loading your portal...</p>
+            </div>
+        );
+    }
   
   return (
     <SidebarProvider>
