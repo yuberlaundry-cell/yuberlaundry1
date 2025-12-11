@@ -64,7 +64,8 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
       }
       setHasCameraPermission(true);
     } catch (error) {
-      console.error('Error accessing camera:', error);
+      // Don't log the expected "NotAllowedError" to the console.
+      // The UI will show a friendly message.
       setHasCameraPermission(false);
     }
   };
@@ -160,14 +161,14 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
           <div className="absolute inset-8 border-4 border-dashed border-gray-400 rounded-lg" />
         </div>
         
-        <Button className="w-full" onClick={() => setStep('confirm')} disabled={!hasCameraPermission}>
+        <Button className="w-full" onClick={() => setStep('confirm')} disabled={hasCameraPermission !== true}>
           Simulate Scan
         </Button>
 
         <Separator />
 
         <div>
-            <p className="text-sm text-muted-foreground text-center mb-2">Or enter the ID manually</p>
+            <p className="text-sm text-muted-foreground text-center mb-2">Can't scan or no camera?</p>
              <form className="flex gap-2" onSubmit={handleManualFind}>
                 <Input
                     placeholder="Enter Order ID"
