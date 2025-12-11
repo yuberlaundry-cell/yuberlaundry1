@@ -1,5 +1,6 @@
 
 'use client';
+import { useState } from 'react';
 import {
   Card,
   CardContent,
@@ -8,11 +9,11 @@ import {
   CardTitle,
   CardFooter
 } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Check, Truck, User } from 'lucide-react';
+import { Check, Truck, User, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
-const readyForDriverOrders = [
+const allReadyForDriverOrders = [
   {
     id: '#YL12347',
     customer: 'Acme Corp',
@@ -23,7 +24,7 @@ const readyForDriverOrders = [
   },
 ];
 
-const readyForPickupOrders = [
+const allReadyForPickupOrders = [
     {
     id: '#YL12351',
     customer: 'Walk-in Customer',
@@ -41,6 +42,21 @@ const readyForPickupOrders = [
 ];
 
 export default function ReadyForHandoffPage() {
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const readyForDriverOrders = allReadyForDriverOrders.filter(
+        (order) =>
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    const readyForPickupOrders = allReadyForPickupOrders.filter(
+        (order) =>
+        order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        order.customer.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -50,6 +66,17 @@ export default function ReadyForHandoffPage() {
         <p className="text-muted-foreground">
           Coordinate handoff of completed orders to drivers and customers.
         </p>
+      </div>
+
+       <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+        <Input
+          type="search"
+          placeholder="Search by Order ID or Customer Name..."
+          className="w-full rounded-lg bg-background pl-10 h-12 text-base"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
 
       <div className="grid lg:grid-cols-2 gap-8 items-start">
