@@ -15,6 +15,48 @@ const pages = [
     defaultContent: `Founded in 2023, Yuber Laundry was born from a simple idea: laundry is a chore that no one enjoys. We saw an opportunity to use technology to connect people with local, professional laundromats, creating a seamless experience from pickup to delivery. We believe in supporting local businesses while providing a world-class service to our customers.`,
   },
   {
+    id: 'services',
+    title: 'Services',
+    description: 'Edit the content for your services page.',
+    defaultContent: `We offer a range of services to meet your laundry needs. From standard wash & fold to delicate dry cleaning, we've got you covered.`,
+  },
+  {
+    id: 'coverage',
+    title: 'Coverage',
+    description: 'Edit the content for your coverage page.',
+    defaultContent: `We are constantly expanding our service areas. Currently, we operate in major metropolitan areas. Enter your address on the homepage to see if we're in your neighborhood.`,
+  },
+  {
+    id: 'careers',
+    title: 'Careers',
+    description: 'Edit the content for your careers page.',
+    defaultContent: `Join our mission to make laundry day obsolete. We're hiring for a variety of roles. Check back soon for open positions.`,
+  },
+  {
+    id: 'press',
+    title: 'Press',
+    description: 'Edit the content for your press page.',
+    defaultContent: `For all press inquiries, please contact us at press@yuberlaundry.com.`,
+  },
+  {
+    id: 'blog',
+    title: 'Blog',
+    description: 'Edit the content for your blog page.',
+    defaultContent: `Welcome to the Yuber Laundry blog! Stay tuned for laundry tips, company news, and more.`,
+  },
+  {
+    id: 'contact',
+    title: 'Contact Us',
+    description: 'Edit the content for your contact page.',
+    defaultContent: `Have a question? The best way to reach us is through our Help Center or by emailing support@yuberlaundry.com.`,
+  },
+  {
+    id: 'partnerships',
+    title: 'Partnerships',
+    description: 'Edit the content for your partnerships page.',
+    defaultContent: `We partner with local laundromats and businesses to provide the best service possible. Interested in partnering with us? Contact partnerships@yuberlaundry.com.`,
+  },
+  {
     id: 'faq',
     title: 'FAQ Page',
     description: 'Edit the Q&A content for your FAQ page. Use the format: [Question]\n[Answer]',

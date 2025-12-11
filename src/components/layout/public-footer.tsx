@@ -6,26 +6,26 @@ import { Button } from '../ui/button';
 const footerLinks = {
   Product: [
     { name: "Pricing", href: "/pricing" },
-    { name: "Services", href: "#" },
-    { name: "Coverage", href: "#" },
-    { name: "App", href: "#" },
+    { name: "Services", href: "/services" },
+    { name: "Coverage", href: "/coverage" },
+    { name: "App", href: "/#download" },
   ],
   Company: [
     { name: "About us", href: "/about" },
-    { name: "Careers", href: "#" },
-    { name: "Press", href: "#" },
-    { name: "Blog", href: "#" },
+    { name: "Careers", href: "/careers" },
+    { name: "Press", href: "/press" },
+    { name: "Blog", href: "/blog" },
   ],
   Resources: [
     { name: "FAQ", href: "/faq" },
     { name: "Help Center", href: "/faq" },
-    { name: "Contact Us", href: "#" },
-    { name: "Partnerships", href: "#" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "Partnerships", href: "/partnerships" },
   ],
   Business: [
-    { name: "Corporate", href: "/for-business" },
-    { name: "Hotels", href: "/for-business" },
-    { name: "Restaurants", href: "/for-business" },
+    { name: "For Business", href: "/for-business" },
+    { name: "For Hotels", href: "/for-business#solutions" },
+    { name: "For Restaurants", href: "/for-business#solutions" },
   ],
 };
 
@@ -33,7 +33,7 @@ export function PublicFooter() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="border-t bg-card text-foreground">
+    <footer className="border-t bg-card text-foreground" id="footer">
       <div className="container mx-auto px-6 sm:px-8 py-12 md:py-16">
         <div className="grid grid-cols-2 md:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1 mb-6 md:mb-0">
@@ -57,13 +57,12 @@ export function PublicFooter() {
           ))}
         </div>
         
-        <div className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
+        <div id="download" className="mt-12 border-t pt-8 flex flex-col md:flex-row justify-between items-center space-y-8 md:space-y-0">
           <div className="text-sm text-muted-foreground order-2 md:order-1 text-center md:text-left">
             <p>&copy; {currentYear} Yuber Laundry Ltd. All rights reserved.</p>
             <div className="flex space-x-4 mt-2 justify-center md:justify-start">
               <Link href="/terms" className="hover:text-foreground">Website T&Cs</Link>
               <Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link>
-              <Link href="#" className="hover:text-foreground">Cookie Policy</Link>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 order-1 md:order-2">
