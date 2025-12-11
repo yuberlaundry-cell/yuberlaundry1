@@ -37,6 +37,13 @@ export default function PaymentMethodsPage() {
                                 Your card details are securely stored and processed by Paystack.
                             </DialogDescription>
                         </DialogHeader>
+                        {/* 
+                            In a real application, this form would be replaced by the Paystack Inline SDK.
+                            You would use the NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY from environment variables
+                            to initialize Paystack and show the payment popup.
+                            e.g., using a library like 'react-paystack':
+                            <PaystackButton publicKey={process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY} ... />
+                        */}
                         <form className="space-y-4">
                              <div className="space-y-2">
                                 <Label htmlFor="email">Email Address</Label>

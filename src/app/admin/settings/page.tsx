@@ -131,16 +131,23 @@ export default function SettingsPage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>API Integrations</CardTitle>
-                             <CardDescription>Manage keys for third-party services.</CardDescription>
+                             <CardDescription>Manage keys for third-party services. Keys are stored as secure environment variables.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6 max-w-lg">
+                             <div className="space-y-2">
+                                <Label htmlFor="paystack-public">Paystack Public Key</Label>
+                                <Input id="paystack-public" type="text" defaultValue="pk_test_xxxxxxxxxxxxxxxx" />
+                                <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
+                            </div>
                             <div className="space-y-2">
                                 <Label htmlFor="paystack-secret">Paystack Secret Key</Label>
                                 <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
+                                <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="google-maps-key">Google Maps API Key</Label>
                                 <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
+                                <p className="text-xs text-muted-foreground">Used for address autocomplete and navigation.</p>
                             </div>
                             <Button>Save Integration Keys</Button>
                         </CardContent>

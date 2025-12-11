@@ -6,9 +6,13 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 
-// It's crucial to store your Paystack secret key in environment variables
-// and not hardcode it in your application.
+// The SECRET key is used for backend operations and signature verification.
+// It MUST be kept secret and stored in environment variables.
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || '';
+
+// The PUBLIC key is used on the frontend to initialize transactions.
+// It is safe to be exposed in client-side code.
+const PAYSTACK_PUBLIC_KEY = process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '';
 
 export async function POST(req: Request) {
   // 1. Verify the webhook signature to ensure the request is from Paystack
@@ -36,7 +40,7 @@ export async function POST(req: Request) {
 
   // 3. Handle the event based on its type
   // Business logic should handle different currencies (data.currency) and amounts (data.amount).
-  // The amount is in the subunit of the currency (e.g., kobo for NGN, cents for USD).
+  // The amount is in the subunit of the currency (e.g., kobo for NGN, cents for USD, etc.).
   switch (event.event) {
     case 'charge.success':
       console.log(`Payment successful for ${data.amount} ${data.currency}. Ref: ${data.reference}`);
