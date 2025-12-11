@@ -38,6 +38,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import React from 'react';
 
 const statusColors: { [key: string]: string } = {
   'upcoming': 'bg-blue-100 text-blue-800',
