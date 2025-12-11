@@ -9,6 +9,7 @@ import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
 const jobData = {
@@ -43,43 +44,37 @@ export default function JobDetailsPage() {
     const [isScanOpen, setScanOpen] = useState(false);
     const [isPhotoOpen, setPhotoOpen] = useState(false);
 
-    const getCameraPermission = async () => {
-        if (hasCameraPermission) return true;
-        if (typeof navigator.mediaDevices?.getUserMedia !== 'function') {
-            console.error('getUserMedia is not supported in this browser.');
-            setHasCameraPermission(false);
-            return false;
-        }
-        try {
+    useEffect(() => {
+        const getCameraPermission = async () => {
+          try {
             const stream = await navigator.mediaDevices.getUserMedia({video: true});
             setHasCameraPermission(true);
-
+    
             if (videoRef.current) {
-                videoRef.current.srcObject = stream;
+              videoRef.current.srcObject = stream;
             }
-            return true;
-        } catch (error) {
+          } catch (error) {
             console.error('Error accessing camera:', error);
             setHasCameraPermission(false);
             toast({
-                variant: 'destructive',
-                title: 'Camera Access Denied',
-                description: 'Please enable camera permissions in your browser settings to use this feature.',
+              variant: 'destructive',
+              title: 'Camera Access Denied',
+              description: 'Please enable camera permissions in your browser settings to use this app.',
             });
-            return false;
-        }
-    };
-
-    useEffect(() => {
+          }
+        };
+    
         if(isScanOpen || isPhotoOpen) {
             getCameraPermission();
         }
-    }, [isScanOpen, isPhotoOpen]);
+      }, [isScanOpen, isPhotoOpen, toast]);
 
 
     const handleNextStep = () => {
         if (currentStep < pickupSteps.length -1) {
             setCurrentStep(currentStep + 1);
+        } else {
+            setCurrentStep(pickupSteps.length);
         }
     }
     
@@ -103,13 +98,18 @@ export default function JobDetailsPage() {
                         </DialogHeader>
                          <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
                             <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
+                            <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
                             {hasCameraPermission === false && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
-                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
-                                    <p className="text-center">Camera access is required to scan QR codes.</p>
+                                <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-background/95">
+                                    <Alert variant="destructive">
+                                        <Camera className="h-4 w-4" />
+                                        <AlertTitle>Camera Access Required</AlertTitle>
+                                        <AlertDescription>
+                                            Please enable camera permissions in your browser settings to use the scanner.
+                                        </AlertDescription>
+                                    </Alert>
                                 </div>
                             )}
-                            <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
                         </div>
                         <Button onClick={() => { handleNextStep(); setScanOpen(false); }}>Confirm Scan</Button>
                     </DialogContent>
@@ -134,10 +134,15 @@ export default function JobDetailsPage() {
                         </DialogHeader>
                           <div className="relative w-full aspect-video bg-black rounded-lg flex items-center justify-center overflow-hidden">
                             <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
-                            {hasCameraPermission === false && (
-                                <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 text-white p-4">
-                                    <Camera className="h-12 w-12 text-gray-500 mb-4" />
-                                    <p className="text-center">Camera access is required to take photos.</p>
+                             {hasCameraPermission === false && (
+                                <div className="absolute inset-0 z-10 flex items-center justify-center p-4 bg-background/95">
+                                    <Alert variant="destructive">
+                                        <Camera className="h-4 w-4" />
+                                        <AlertTitle>Camera Access Required</AlertTitle>
+                                        <AlertDescription>
+                                            Please enable camera permissions in your browser settings to take a photo.
+                                        </AlertDescription>
+                                    </Alert>
                                 </div>
                             )}
                         </div>

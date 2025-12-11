@@ -31,63 +31,26 @@ export default function IntakePage() {
         </p>
       </div>
 
-      <div className="grid lg:grid-cols-2 gap-8 items-start">
-        <div className="space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Start New Intake</CardTitle>
-              <CardDescription>
-                Begin the check-in process for any type of order drop-off.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="w-full h-12 text-base">
-                    <ScanLine className="mr-2" /> Start Intake
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-md">
-                   <IntakeFlow />
-                </DialogContent>
-              </Dialog>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="lg:sticky top-24 space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Arriving Soon via Driver</CardTitle>
-              <CardDescription>
-                This order is scheduled for imminent drop-off by a driver.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="font-semibold text-lg">{orderToCome.id}</h3>
-                    <p className="text-muted-foreground">
-                      {orderToCome.customer}
-                    </p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {orderToCome.bags} bags
-                  </p>
-                </div>
-                <p className="text-sm text-primary font-medium mt-2">
-                  {orderToCome.service}
-                </p>
-              </div>
-              <Separator />
-               <Button className="w-full" disabled>
-                  <CheckCircle className="mr-2" /> Awaiting Drop-off
+      <Card>
+        <CardHeader>
+          <CardTitle>Start New Intake</CardTitle>
+          <CardDescription>
+            Begin the check-in process for any type of order drop-off.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full h-12 text-base">
+                <ScanLine className="mr-2" /> Start Intake
               </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
+            </DialogTrigger>
+            <DialogContent className="max-w-md">
+               <IntakeFlow />
+            </DialogContent>
+          </Dialog>
+        </CardContent>
+      </Card>
     </div>
   );
 }
