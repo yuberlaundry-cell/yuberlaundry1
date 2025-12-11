@@ -7,12 +7,13 @@ import Link from "next/link";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Label } from "@/components/ui/label";
 import { Card } from "../ui/card";
-import { Smartphone, Heart, MapPin, Search, Check } from "lucide-react";
+import { Smartphone, MapPin, Search, Check, Shirt } from "lucide-react";
 import React from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { ScrollArea } from "../ui/scroll-area";
 import { cn } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 const cities = [
     { id: "london", name: "London", country: "United Kingdom" },
@@ -84,26 +85,20 @@ export default function Hero() {
                     </DialogContent>
                 </Dialog>
             </div>
-            {isExpanded ? (
-                <>
-                    <RadioGroup defaultValue="time-2" className="space-y-3">
-                        <Label htmlFor="time-1" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="time-1" id="time-1" />
-                            <span className="ml-4 font-medium">Today, 12:00 - 15:00</span>
-                        </Label>
-                        <Label htmlFor="time-2" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="time-2" id="time-2" />
-                            <span className="ml-4 font-medium">Today, 19:00 - 22:00</span>
-                        </Label>
-                    </RadioGroup>
-                    <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
-                    <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
-                </>
-            ) : (
-                 <Button size="lg" className="w-full h-14 text-lg" onClick={() => setIsExpanded(true)}>
-                    <Heart className="mr-2 h-5 w-5"/> Schedule your pickup
-                </Button>
-            )}
+            
+            <RadioGroup defaultValue="time-2" className="space-y-3">
+                <Label htmlFor="time-1" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                    <RadioGroupItem value="time-1" id="time-1" />
+                    <span className="ml-4 font-medium">Today, 12:00 - 15:00</span>
+                </Label>
+                <Label htmlFor="time-2" className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                    <RadioGroupItem value="time-2" id="time-2" />
+                    <span className="ml-4 font-medium">Today, 19:00 - 22:00</span>
+                </Label>
+            </RadioGroup>
+            <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
+            <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
+            
           </Card>
 
           <Button size="lg" variant="secondary" className="mt-6 rounded-full font-bold bg-foreground text-background hover:bg-foreground/80">
@@ -122,8 +117,23 @@ export default function Hero() {
                 className="object-cover rounded-2xl aspect-[4/5]"
                 priority
             />
+             <Card className="absolute -top-4 right-4 p-3 shadow-lg flex items-center gap-2">
+                <p className="font-semibold text-sm">Orders</p>
+                <Badge variant="secondary">Personal, 15 items</Badge>
+            </Card>
+            <Card className="absolute bottom-16 -left-12 p-3 shadow-lg flex items-center gap-3">
+                <div className="p-2 bg-green-100 text-green-700 rounded-lg">
+                    <Shirt className="h-5 w-5" />
+                </div>
+                <div>
+                    <p className="font-semibold text-sm">Dry Cleaning + R24.50</p>
+                    <p className="text-xs text-muted-foreground">Tomorrow, 2pm</p>
+                </div>
+            </Card>
         </div>
       </div>
     </section>
   );
 }
+
+    

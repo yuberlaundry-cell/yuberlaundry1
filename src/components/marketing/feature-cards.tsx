@@ -15,8 +15,8 @@ const features = [
     badgeValue: '15 items',
     badgeIcon: ShoppingBasket,
     bgColor: 'bg-amber-100',
-    imageUrl: 'https://picsum.photos/seed/feature1/600/800',
-    imageHint: 'scheduling booking',
+    imageUrl: 'https://images.unsplash.com/photo-1593121184920-951e4445a435?w=800&q=80',
+    imageHint: 'man with luggage',
   },
   {
     title: 'Professional',
@@ -27,8 +27,8 @@ const features = [
     badgeValue: '-R255.50',
     badgeIcon: SparklesIcon,
     bgColor: 'bg-gray-200',
-    imageUrl: 'https://picsum.photos/seed/feature2/600/800',
-    imageHint: 'folded clothes'
+    imageUrl: 'https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=800&q=80',
+    imageHint: 'folded towels'
   },
   {
     title: 'Delivery',
@@ -39,14 +39,14 @@ const features = [
     badgeValue: '+ R50.00 tip',
     badgeIcon: Truck,
     bgColor: 'bg-slate-800',
-    imageUrl: 'https://picsum.photos/seed/feature3/600/800',
-    imageHint: 'delivery courier'
+    imageUrl: 'https://images.unsplash.com/photo-1586528116311-069242114950?w=800&q=80',
+    imageHint: 'delivery at door'
   },
 ];
 
 export default function FeatureCards() {
   return (
-    <section className="py-12 sm:py-16 md:py-24 bg-background">
+    <section className="py-12 sm:py-16 md:py-24 bg-card/50">
       <div className="container mx-auto px-4">
         <div className="grid gap-8 md:grid-cols-3">
           {features.map((feature) => (
@@ -82,3 +82,5 @@ export default function FeatureCards() {
     </section>
   );
 }
+
+    

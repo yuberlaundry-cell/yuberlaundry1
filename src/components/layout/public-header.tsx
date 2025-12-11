@@ -25,6 +25,7 @@ import { getRedirectPathForRole } from '@/lib/auth';
 
 const navLinks = [
   { href: '/pricing', label: 'Pricing' },
+  { href: '#', label: 'Locations' },
 ];
 
 const personalMegaMenuItems = {
@@ -33,7 +34,7 @@ const personalMegaMenuItems = {
     { icon: Shirt, title: "We Clean", href: "/#features" },
     { icon: Bike, title: "Fast Delivery", href: "/#features" },
     { icon: Shirt, title: "Pricing", href: "/pricing" },
-    { icon: Smartphone, title: "Download App", href: "#" },
+    { icon: Smartphone, title: "Download App", href: "#footer" },
   ],
   "Plans & Features": [
     { icon: Sparkles, title: "Yuber Plus", href: "/app/promotions", popular: true },
@@ -353,3 +354,5 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
+
+    
