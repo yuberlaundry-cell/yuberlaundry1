@@ -9,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { mockOrders } from "@/lib/mock-data";
 import { OrderCard } from "@/components/orders/order-card";
 import { LoyaltyCard } from "@/components/app/loyalty-card";
-import { MonthlySpendChart } from "@/components/app/monthly-spend-chart";
 
 const actionCards = [
     {
@@ -68,20 +67,6 @@ export default function ConsumerDashboard() {
         ))}
       </div>
       
-      <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-            <MonthlySpendChart />
-        </div>
-        <Card className="flex flex-col items-center justify-center text-center p-6 bg-accent/10 border-accent/30">
-            <div className="p-3 bg-background rounded-full border mb-3">
-                <Zap className="h-6 w-6 text-accent" />
-            </div>
-            <p className="text-3xl font-bold font-headline">18.5 hours</p>
-            <p className="text-muted-foreground">of life returned to you 🙌</p>
-        </Card>
-      </div>
-
-
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle>Recent orders</CardTitle>
