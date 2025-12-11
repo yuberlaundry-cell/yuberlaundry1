@@ -5,6 +5,13 @@ import React, { createContext, useContext, useState, ReactNode, useCallback } fr
 
 export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Completed' | 'Cancelled';
 
+export interface LaundromatOrderItem {
+    id: string;
+    name: string;
+    model: string;
+    price: number;
+    value: number;
+}
 export interface LaundromatOrder {
   id: string;
   customer: string;
@@ -16,12 +23,14 @@ export interface LaundromatOrder {
   readyTime?: string;
   driver?: string;
   rating?: number;
+  items?: LaundromatOrderItem[];
+  isBilled?: boolean;
 }
 
 
 const initialOrders: LaundromatOrder[] = [
-    {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold', pickup: 'Today, 10am', sla: 'Due in 3h', bags: 2, readyTime: 'Today, 2:15 PM', driver: 'Assigned (David L.)', rating: 5},
-    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning', pickup: 'Today, 9am', sla: 'Due in 1h', bags: 1, readyTime: 'Today, 1:00 PM', driver: 'Unassigned', rating: 4},
+    {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold', pickup: 'Today, 10am', sla: 'Due in 3h', bags: 2, readyTime: 'Today, 2:15 PM', driver: 'Assigned (David L.)', rating: 5, items: [{id: 'wash-fold', name: 'Wash & Fold', model: 'per_kg', price: 1.99, value: 0}]},
+    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning', pickup: 'Today, 9am', sla: 'Due in 1h', bags: 1, readyTime: 'Today, 1:00 PM', driver: 'Unassigned', rating: 4, items: [{id: 'dry-cleaning', name: 'Dry Cleaning', model: 'per_item', price: 8.50, value: 0}]},
     {id: '#YL12347', customer: 'Acme Corp', status: 'Ready', service: 'Wash & Fold', pickup: 'Yesterday', sla: 'Completed', bags: 5, readyTime: 'Today, 2:15 PM', driver: 'Assigned (David L.)'},
     {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing', pickup: 'Today, 11am', sla: 'Due in 5h', bags: 3, readyTime: 'Today, 4:00 PM', driver: 'Unassigned'},
     {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold', pickup: 'Today, 1pm', sla: 'Due in 24h', bags: 2, readyTime: 'Tomorrow, 1:00 PM', driver: 'Unassigned'},
@@ -33,6 +42,8 @@ interface LaundromatOrdersContextType {
   orders: LaundromatOrder[];
   updateOrderStatus: (orderId: string, newStatus: LaundromatOrderStatus) => void;
   getOrderById: (orderId: string) => LaundromatOrder | undefined;
+  addOrder: (order: Omit<LaundromatOrder, 'timeline'>) => void;
+  updateOrder: (order: Partial<LaundromatOrder> & Pick<LaundromatOrder, 'id'>) => void;
 }
 
 const LaundromatOrdersContext = createContext<LaundromatOrdersContextType | undefined>(undefined);
@@ -52,9 +63,21 @@ export const LaundromatOrdersProvider = ({ children }: { children: ReactNode }) 
     return orders.find(order => order.id === orderId);
   }, [orders]);
 
+  const addOrder = useCallback((order: LaundromatOrder) => {
+    setOrders(prevOrders => [order, ...prevOrders]);
+  }, []);
+
+  const updateOrder = useCallback((updatedOrder: Partial<LaundromatOrder> & Pick<LaundromatOrder, 'id'>) => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === updatedOrder.id ? { ...order, ...updatedOrder } : order
+      )
+    );
+  }, []);
+
 
   return (
-    <LaundromatOrdersContext.Provider value={{ orders, updateOrderStatus, getOrderById }}>
+    <LaundromatOrdersContext.Provider value={{ orders, updateOrderStatus, getOrderById, addOrder, updateOrder }}>
       {children}
     </LaundromatOrdersContext.Provider>
   );
@@ -67,3 +90,5 @@ export const useLaundromatOrders = () => {
   }
   return context;
 };
+
+    

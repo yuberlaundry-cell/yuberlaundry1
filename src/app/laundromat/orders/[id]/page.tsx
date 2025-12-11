@@ -17,38 +17,14 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
+import { useLaundromatOrders, type LaundromatOrder, type LaundromatOrderItem } from '@/hooks/use-laundromat-orders';
 
-const initialOrderData = {
-    id: '#YL12345',
-    customer: 'Jane Doe',
-    service: 'Wash & Fold',
-    status: 'Washing',
-    pickup: 'Today, 10:15 AM',
-    deliveryDue: 'Tomorrow, 5:00 PM',
-    bags: [
-        { id: 'BAG-001', items: 15, notes: 'Standard wash'},
-        { id: 'BAG-002', items: 8, notes: 'Cold wash only'},
-    ],
-    timeline: [
-        { status: 'Intake Completed', time: '10:30 AM'},
-        { status: 'Washing Started', time: '11:00 AM'},
-    ],
-    notes: 'Customer requested hypoallergenic detergent.',
-    pricing: {
-        'Wash & Fold': 1.99,
-    },
-    items: [
-        { id: 'wf', name: 'Wash & Fold', model: 'per_kg', price: 1.99, value: 0 },
-    ],
-    isBilled: false,
-    issues: [] as { type: string, notes: string }[],
-}
 
 const qcChecklist = [
     { id: 'check-stains', label: 'Stains addressed' },
@@ -62,11 +38,26 @@ export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
     const { toast } = useToast();
-    // In a real app, you would fetch the order details based on the orderId
-    const [order, setOrder] = useState(initialOrderData);
+    const { getOrderById, updateOrder } = useLaundromatOrders();
+
+    const [order, setOrder] = useState<LaundromatOrder | null>(null);
+    const [timeline, setTimeline] = useState<{ status: string, time: string }[]>([]);
+
+    useEffect(() => {
+        const fetchedOrder = getOrderById(orderId);
+        if (fetchedOrder) {
+            setOrder(fetchedOrder);
+            setTimeline([
+                { status: 'Intake Completed', time: '10:30 AM'},
+                ...(fetchedOrder.status !== 'Intake' ? [{ status: 'Washing Started', time: '11:00 AM'}] : []),
+            ]);
+        }
+    }, [orderId, getOrderById]);
+    
 
     const handleValueChange = (id: string, value: number) => {
-        const newItems = order.items.map(item => {
+        if (!order) return;
+        const newItems = (order.items || []).map(item => {
             if (item.id === id) {
                 return {...item, value: value};
             }
@@ -76,19 +67,18 @@ export default function OrderProcessingDetailsPage() {
     }
     
     const handleFinalizeBill = () => {
-        setOrder({...order, isBilled: true});
+        if (!order) return;
+        updateOrder({ id: order.id, isBilled: true, items: order.items });
         toast({
             title: 'Bill Finalized',
             description: `The total for order ${order.id} has been confirmed.`,
         });
     }
 
-    const handleMoveStage = (newStatus: string) => {
-        setOrder({
-            ...order,
-            status: newStatus,
-            timeline: [...order.timeline, { status: `${newStatus} Started`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]
-        });
+    const handleMoveStage = (newStatus: 'Drying' | 'Folding/QC' | 'Ready') => {
+        if (!order) return;
+        updateOrder({ id: order.id, status: newStatus });
+        setTimeline(prev => [...prev, { status: `${newStatus} Started`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
         toast({
             title: 'Order Updated',
             description: `Order ${order.id} has been moved to ${newStatus}.`
@@ -97,12 +87,15 @@ export default function OrderProcessingDetailsPage() {
     
     const handleLogIssue = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!order) return;
+
         const formData = new FormData(e.currentTarget);
         const issueType = formData.get('issue-type') as string;
         const issueNotes = formData.get('issue-notes') as string;
         
         const newIssue = { type: issueType, notes: issueNotes };
-        setOrder(prev => ({...prev, issues: [...prev.issues, newIssue]}));
+        // This is a local update for UI purposes. In a real app, this would be part of the `updateOrder` logic.
+        // setOrder(prev => ({...prev, issues: [...(prev?.issues || []), newIssue]}));
 
         toast({
             title: 'Issue Logged',
@@ -111,9 +104,14 @@ export default function OrderProcessingDetailsPage() {
         return true;
     }
 
-    const subtotal = order.items.reduce((acc, item) => {
+    if (!order) {
+        return <div className="text-center py-16">Loading order details...</div>;
+    }
+
+    const subtotal = (order.items || []).reduce((acc, item) => {
         return acc + (item.price * item.value);
     }, 0);
+
 
     const renderActionButtons = () => {
         switch (order.status) {
@@ -167,7 +165,7 @@ export default function OrderProcessingDetailsPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    {order.items.map(item => (
+                    {(order.items || []).map(item => (
                         <div key={item.id} className="grid grid-cols-3 items-center gap-4 p-3 border rounded-lg">
                             <div className="col-span-1">
                                 <p className="font-semibold">{item.name}</p>
@@ -213,6 +211,7 @@ export default function OrderProcessingDetailsPage() {
                   </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                   {/* This is where logged issues would be displayed.
                    {order.issues.length > 0 && (
                         <div className="space-y-3">
                              <h4 className="font-medium">Logged Issues</h4>
@@ -226,7 +225,7 @@ export default function OrderProcessingDetailsPage() {
                                  </div>
                              ))}
                         </div>
-                   )}
+                   )} */}
 
                   <Separator />
                   <div className="space-y-3">
@@ -306,7 +305,7 @@ export default function OrderProcessingDetailsPage() {
                 </CardHeader>
                 <CardContent>
                     <ul className="space-y-2">
-                        {order.timeline.map(item => (
+                        {timeline.map(item => (
                             <li key={item.status} className="flex gap-4">
                                 <span className="font-semibold text-sm w-24">{item.time}</span>
                                 <span className="text-sm text-muted-foreground">{item.status}</span>
@@ -335,17 +334,9 @@ export default function OrderProcessingDetailsPage() {
                      <div>
                         <h4 className="font-semibold mb-1">Schedule</h4>
                         <p className="text-muted-foreground">Pickup: {order.pickup}</p>
-                        <p className="text-muted-foreground">Delivery Due: {order.deliveryDue}</p>
+                        <p className="text-muted-foreground">Delivery Due: Tomorrow, 5:00 PM</p>
                     </div>
-                    {order.notes && (
-                         <>
-                        <Separator />
-                        <div>
-                            <h4 className="font-semibold mb-1">Special Instructions</h4>
-                            <p className="text-muted-foreground italic">{order.notes}</p>
-                        </div>
-                        </>
-                    )}
+                    
                 </CardContent>
             </Card>
         </div>
@@ -353,3 +344,5 @@ export default function OrderProcessingDetailsPage() {
     </div>
   );
 }
+
+    

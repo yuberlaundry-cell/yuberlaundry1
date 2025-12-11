@@ -11,6 +11,7 @@ import { Checkbox } from '../ui/checkbox';
 import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 
 const servicesConfig = [
   { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 1.99 },
@@ -28,13 +29,29 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const [orderItems, setOrderItems] = useState<{ id: string; name: string; model: string; price: number; value: number }[]>([]);
   const [newOrderId, setNewOrderId] = useState('');
   const { toast } = useToast();
+  const { addOrder } = useLaundromatOrders();
 
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => setStep((s) => s - 1);
   
   const handleCreateOrder = () => {
-    const generatedId = `W-${Math.floor(100000 + Math.random() * 900000)}`;
+    const generatedId = `#W-${Math.floor(10000 + Math.random() * 90000)}`;
     setNewOrderId(generatedId);
+    
+    const serviceSummary = orderItems.map(item => item.name).join(', ');
+
+    addOrder({
+        id: generatedId,
+        customer: customer.name,
+        service: serviceSummary,
+        status: 'Intake',
+        pickup: new Date().toLocaleDateString(),
+        sla: 'Due in 24h',
+        bags: orderItems.length,
+        items: orderItems, // Make sure to pass the items with their values
+        isBilled: true, // Walk-in orders are billed on the spot
+    });
+
     toast({
         title: `Order ${generatedId} Created`,
         description: 'The order for ' + customer.name + ' is now in the system.',
@@ -242,3 +259,5 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
 
   return <div className="flex flex-col h-full">{renderStep()}</div>;
 }
+
+    
