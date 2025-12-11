@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { ArrowLeft, Building, Check, DollarSign, Mail, Percent, Phone, User, Wand2, StepForward } from 'lucide-react';
+import { ArrowLeft, Building, Check, DollarSign, Mail, Percent, Phone, User, Wand2, StepForward, FileText, Crown } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
@@ -13,12 +13,21 @@ import { Separator } from '@/components/ui/separator';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 const steps = [
   { id: 1, name: 'Facility Details', icon: Building },
   { id: 2, name: 'Primary Contact', icon: User },
-  { id: 3, name: 'Financials', icon: DollarSign },
-  { id: 4, name: 'Confirmation', icon: Check },
+  { id: 3, name: 'Subscription', icon: Crown },
+  { id: 4, name: 'Financials', icon: DollarSign },
+  { id: 5, name: 'Contract', icon: FileText },
+  { id: 6, name: 'Confirmation', icon: Check },
+];
+
+const laundromatPlans = [
+    { name: "Free Tier", price: "0", commission: "15%", features: ["Standard Listing", "Basic Support"] },
+    { name: "Partner Tier 1", price: "1500", commission: "12%", features: ["Priority Support", "Featured on Homepage"] },
 ];
 
 export default function NewLaundromatPage() {
@@ -66,7 +75,7 @@ export default function NewLaundromatPage() {
       </div>
 
        <div className="flex items-center justify-center mb-8">
-          <div className="flex w-full max-w-lg items-center">
+          <div className="flex w-full max-w-2xl items-center">
             {steps.map((step, index) => (
               <>
                 <div key={step.id} className="flex flex-col items-center text-center">
@@ -132,6 +141,26 @@ export default function NewLaundromatPage() {
                     )}
                     {currentStep === 3 && (
                         <div className="space-y-6">
+                            <RadioGroup defaultValue="free-tier" className="grid sm:grid-cols-2 gap-4">
+                                {laundromatPlans.map(plan => (
+                                    <Label key={plan.name} htmlFor={plan.name} className="block p-6 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                        <RadioGroupItem value={plan.name.toLowerCase().replace(' ', '-')} id={plan.name} className="sr-only"/>
+                                        <h3 className="font-bold text-xl">{plan.name}</h3>
+                                        <p className="text-3xl font-bold my-2">R{plan.price}<span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                                        <Separator className="my-4"/>
+                                        <ul className="space-y-2 text-sm text-muted-foreground">
+                                            {plan.features.map(feature => (
+                                                <li key={feature} className="flex items-center gap-2 justify-center"><Check className="h-4 w-4 text-green-500" /> {feature}</li>
+                                            ))}
+                                            <li className="flex items-center gap-2 justify-center"><Check className="h-4 w-4 text-green-500" /> {plan.commission} Platform Commission</li>
+                                        </ul>
+                                    </Label>
+                                ))}
+                            </RadioGroup>
+                        </div>
+                    )}
+                    {currentStep === 4 && (
+                        <div className="space-y-6">
                              <div className="space-y-2">
                                 <Label htmlFor="commission-model">Commission Model</Label>
                                 <Select defaultValue="default">
@@ -192,7 +221,26 @@ export default function NewLaundromatPage() {
                             </div>
                         </div>
                     )}
-                    {currentStep === 4 && (
+                    {currentStep === 5 && (
+                        <div className="space-y-6">
+                            <h3 className="font-medium text-lg">Partner Contract Agreement</h3>
+                            <div className="prose prose-sm h-64 overflow-y-auto p-4 border rounded-md text-muted-foreground">
+                                <h4>Yuber Laundry Partner Agreement</h4>
+                                <p>This Partner Agreement ("Agreement") is made and entered into by and between Yuber Laundry ("Company") and the undersigned laundromat facility ("Partner"). This Agreement governs the Partner's participation in the Yuber Laundry network.</p>
+                                <p><strong>1. Services.</strong> The Company will list the Partner on its mobile and web applications, allowing customers to place orders for laundry services to be fulfilled by the Partner. The Company will facilitate pickup and delivery logistics.</p>
+                                <p><strong>2. Partner Obligations.</strong> The Partner agrees to maintain high-quality service standards, including timely processing, proper care of items, and accurate order fulfillment. The Partner will use the provided portal to manage all orders.</p>
+                                <p><strong>3. Commission & Payouts.</strong> The Company will collect a commission on all orders processed through the platform, as defined by the selected Subscription Plan. Payouts for completed orders, minus the commission, will be transferred to the Partner's designated bank account on a bi-weekly basis.</p>
+                                <p>...</p>
+                            </div>
+                             <div className="flex items-center space-x-2">
+                                <Checkbox id="terms-agree" required/>
+                                <Label htmlFor="terms-agree">
+                                    I confirm that the partner has reviewed and agreed to the Yuber Laundry Partner Agreement.
+                                </Label>
+                            </div>
+                        </div>
+                    )}
+                    {currentStep === 6 && (
                         <div className="text-center p-8">
                              <div className="flex justify-center mb-4">
                                 <div className="p-4 rounded-full bg-green-100 text-green-700">
@@ -207,17 +255,17 @@ export default function NewLaundromatPage() {
                 </CardContent>
                 <Separator />
                 <div className="p-6 flex justify-between">
-                    {currentStep > 1 && currentStep < steps.length && (
+                    {currentStep > 1 && (
                         <Button variant="outline" type="button" onClick={handlePrev}>Previous</Button>
                     )}
                     {currentStep < steps.length - 1 && <div />}
-                    {currentStep < steps.length -1 && (
+                    {currentStep < steps.length - 1 && (
                          <Button type="submit">
                             Next <StepForward className="ml-2 h-4 w-4" />
                         </Button>
                     )}
-                    {currentStep === steps.length - 1 && (
-                        <Button type="submit">
+                     {currentStep === steps.length - 1 && (
+                         <Button type="submit">
                            Next <Wand2 className="ml-2 h-4 w-4" />
                         </Button>
                     )}
