@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell } from 'lucide-react';
+import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell, BarChart, Users } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
