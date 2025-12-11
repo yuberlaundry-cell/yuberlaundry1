@@ -33,6 +33,7 @@ import {
 import { Area, AreaChart, CartesianGrid, XAxis } from 'recharts';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
+import Link from 'next/link';
 
 const kpiCards = [
   {
@@ -40,24 +41,28 @@ const kpiCards = [
     value: '8',
     icon: ShieldAlert,
     description: '2 drivers, 6 laundromats',
+    href: '#'
   },
   {
     title: 'Documents Expiring Soon',
     value: '14',
     icon: CalendarClock,
     description: 'Next 30 days',
+    href: '#'
   },
   {
     title: 'Open Compliance Tasks',
     value: '21',
     icon: FileCheck,
     description: '5 overdue',
+    href: '#'
   },
   {
     title: 'Fraud Alerts (7d)',
     value: '4',
     icon: AlertOctagon,
     description: '2 requiring review',
+    href: '#'
   },
 ];
 
@@ -111,16 +116,18 @@ export default function CompliancePage() {
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         {kpiCards.map((card) => (
-          <Card key={card.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-              <card.icon className="h-4 w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <p className="text-xs text-muted-foreground">{card.description}</p>
-            </CardContent>
-          </Card>
+          <Link key={card.title} href={card.href}>
+            <Card className="hover:border-primary/80 transition-colors">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+                <card.icon className="h-4 w-4 text-muted-foreground" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">{card.value}</div>
+                <p className="text-xs text-muted-foreground">{card.description}</p>
+              </CardContent>
+            </Card>
+          </Link>
         ))}
       </div>
 
