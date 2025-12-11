@@ -59,7 +59,7 @@ export default function DriversPage() {
             </div>
             <div className="flex gap-2">
                 <Button className="w-full sm:w-auto">
-                    <PlusCircle /> Add Driver
+                    <PlusCircle className="mr-2 h-4 w-4" /> Add Driver
                 </Button>
             </div>
         </div>
