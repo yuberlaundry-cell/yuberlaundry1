@@ -127,9 +127,9 @@ export default function LaundromatSettingsPage() {
                         <SelectValue placeholder="Select your bank"/>
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="gtb">Guaranty Trust Bank</SelectItem>
-                        <SelectItem value="first-bank">First Bank of Nigeria</SelectItem>
-                        <SelectItem value="zenith">Zenith Bank</SelectItem>
+                        <SelectItem value="058">Guaranty Trust Bank</SelectItem>
+                        <SelectItem value="011">First Bank of Nigeria</SelectItem>
+                        <SelectItem value="057">Zenith Bank</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
