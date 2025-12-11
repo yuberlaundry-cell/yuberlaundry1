@@ -1,29 +1,26 @@
 
 'use client';
 
+import { useAuth } from '@/hooks/use-auth';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { useAuth } from "@/hooks/use-auth";
 import { Separator } from "@/components/ui/separator";
 import { useState } from "react";
 import { AddressInput } from "@/components/ui/address-input";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useToast } from '@/hooks/use-toast';
 
-export default function BusinessSettingsPage() {
+function AdminSettings() {
     const { user } = useAuth();
     const [address, setAddress] = useState('456 Corporate Ave, London');
     
     return (
-        <div className="space-y-8 pb-8">
-            <div>
-                <h1 className="text-3xl font-bold font-headline">Company Settings</h1>
-                <p className="text-muted-foreground">Manage your company's profile, preferences, and billing.</p>
-            </div>
-
-            <Card>
+        <div className="space-y-8">
+             <Card>
                 <CardHeader>
                     <CardTitle>Company Profile</CardTitle>
                     <CardDescription>Update your company's information.</CardDescription>
@@ -43,7 +40,6 @@ export default function BusinessSettingsPage() {
                                 onChange={(e) => setAddress(e.target.value)}
                                 onAddressSelect={(addr) => {
                                     setAddress(addr.description);
-                                    console.log("Selected coordinates:", addr.coordinates);
                                 }}
                             />
                         </div>
@@ -104,6 +100,98 @@ export default function BusinessSettingsPage() {
                     </form>
                 </CardContent>
             </Card>
+        </div>
+    );
+}
+
+
+function EmployeeSettings() {
+    const { user } = useAuth();
+    const { toast } = useToast();
+    const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`;
+
+    const handleSaveProfile = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Profile Saved",
+            description: "Your information has been updated successfully.",
+        });
+    }
+
+    return (
+        <div className="space-y-8">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Your Profile</CardTitle>
+                    <CardDescription>This is your personal information for your business account.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-8">
+                    <div className="flex items-center gap-4">
+                        <Avatar className="h-20 w-20">
+                            <AvatarImage src={user?.avatarUrl} />
+                            <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
+                        </Avatar>
+                        <div className="flex gap-2">
+                            <Button variant="outline">Change photo</Button>
+                        </div>
+                    </div>
+
+                     <form className="space-y-6" onSubmit={handleSaveProfile}>
+                        <div className="grid md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <Label htmlFor="full-name">Full Name</Label>
+                                <Input id="full-name" defaultValue={`${user?.firstName} ${user?.lastName}`} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" type="email" defaultValue={user?.email} readOnly />
+                            </div>
+                        </div>
+                        <Button type="submit">Save Changes</Button>
+                    </form>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle>Notification Settings</CardTitle>
+                    <CardDescription>How you receive updates about your orders.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                            <Label htmlFor="email-notifications" className="text-base">Email Notifications</Label>
+                            <p className="text-sm text-muted-foreground">Receive updates via email about your order status.</p>
+                        </div>
+                        <Switch id="email-notifications" defaultChecked />
+                    </div>
+                     <div className="flex items-center justify-between rounded-lg border p-4">
+                        <div className="space-y-0.5">
+                            <Label htmlFor="sms-notifications" className="text-base">SMS Notifications</Label>
+                             <p className="text-sm text-muted-foreground">Get text messages for important updates like delivery ETAs.</p>
+                        </div>
+                        <Switch id="sms-notifications" />
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+export default function BusinessSettingsPage() {
+    const { user } = useAuth();
+    const isAdmin = user?.role === 'business_admin';
+    
+    return (
+        <div className="space-y-8 pb-8">
+            <div>
+                <h1 className="text-3xl font-bold font-headline">
+                    {isAdmin ? "Company Settings" : "Your Settings"}
+                </h1>
+                <p className="text-muted-foreground">
+                    {isAdmin ? "Manage your company's profile, preferences, and billing." : "Manage your personal profile and notification settings."}
+                </p>
+            </div>
+            {isAdmin ? <AdminSettings /> : <EmployeeSettings />}
         </div>
     );
 }
