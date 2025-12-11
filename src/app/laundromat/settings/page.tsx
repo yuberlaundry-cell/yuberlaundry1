@@ -148,17 +148,32 @@ export default function LaundromatSettingsPage() {
             <CardContent>
               <form className="space-y-6 max-w-lg">
                 <div className="space-y-2">
+                    <Label htmlFor="payout-country">Payout Country</Label>
+                    <Select name="payout-country" required>
+                        <SelectTrigger id="payout-country">
+                            <SelectValue placeholder="Select a country"/>
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="ZA">South Africa</SelectItem>
+                            <SelectItem value="NG">Nigeria</SelectItem>
+                            <SelectItem value="GH">Ghana</SelectItem>
+                            <SelectItem value="KE">Kenya</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    <p className="text-xs text-muted-foreground">The list of banks will be populated based on the selected country.</p>
+                </div>
+                <div className="space-y-2">
                   <Label htmlFor="bank-name">Bank Name</Label>
                   <Select name="bank-code">
                     <SelectTrigger id="bank-name">
                         <SelectValue placeholder="Select your bank"/>
                     </SelectTrigger>
                     <SelectContent>
-                        <SelectItem value="058">Guaranty Trust Bank</SelectItem>
-                        <SelectItem value="011">First Bank of Nigeria</SelectItem>
-                        <SelectItem value="057">Zenith Bank</SelectItem>
-                        <SelectItem value="044">Access Bank</SelectItem>
-                        <SelectItem value="standard-bank">Standard Bank (South Africa)</SelectItem>
+                        <SelectItem value="standard-bank-za">Standard Bank (South Africa)</SelectItem>
+                        <SelectItem value="fnb-za">First National Bank (South Africa)</SelectItem>
+                        <SelectItem value="absa-za">ABSA (South Africa)</SelectItem>
+                        <SelectItem value="gtb-ng">Guaranty Trust Bank (Nigeria)</SelectItem>
+                        <SelectItem value="zenith-ng">Zenith Bank (Nigeria)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
