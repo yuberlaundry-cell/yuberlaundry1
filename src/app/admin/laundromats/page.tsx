@@ -134,8 +134,8 @@ export default function LaundromatsPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem onSelect={() => router.push(`/admin/laundromats/${l.id}`)}>View Dashboard</DropdownMenuItem>
-                                <DropdownMenuItem onSelect={() => handleGenericAction('Edit Details', l.name)}>Edit Details</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Deactivate', l.name)}>Deactivate</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={(e) => { e.stopPropagation(); handleGenericAction('Edit Details', l.name)}}>Edit Details</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive" onSelect={(e) => { e.stopPropagation(); handleGenericAction('Deactivate', l.name)}}>Deactivate</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                    </TableCell>

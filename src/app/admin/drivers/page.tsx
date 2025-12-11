@@ -145,8 +145,8 @@ export default function DriversPage() {
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
                                 <DropdownMenuItem onSelect={() => router.push(`/admin/drivers/${d.id}`)}>View Profile</DropdownMenuItem>
-                                <DropdownMenuItem onSelect={() => handleGenericAction('Send Message', d.name)}>Send Message</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Suspend', d.name)}>Suspend</DropdownMenuItem>
+                                <DropdownMenuItem onSelect={(e) => {e.stopPropagation(); handleGenericAction('Send Message', d.name)}}>Send Message</DropdownMenuItem>
+                                <DropdownMenuItem className="text-destructive" onSelect={(e) => {e.stopPropagation(); handleGenericAction('Suspend', d.name)}}>Suspend</DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
                    </TableCell>

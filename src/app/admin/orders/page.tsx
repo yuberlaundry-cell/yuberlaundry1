@@ -158,7 +158,7 @@ export default function AdminOrdersPage() {
                                             Refund Order
                                         </DropdownMenuItem>
                                     </DialogTrigger>
-                                    <DropdownMenuItem className="text-destructive" onSelect={() => handleGenericAction('Cancel Order', order.id)}>Cancel Order</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive" onSelect={(e) => { e.stopPropagation(); handleGenericAction('Cancel Order', order.id); }}>Cancel Order</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                             <DialogContent>
