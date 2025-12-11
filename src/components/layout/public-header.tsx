@@ -36,13 +36,13 @@ const personalMegaMenuItems = {
     { icon: Smartphone, title: "Download App", href: "#" },
   ],
   "Plans & Features": [
-    { icon: Sparkles, title: "Yuber Plus", href: "/pricing", popular: true },
-    { icon: Sparkles, title: "Sustainability", href: "#" },
-    { icon: Gift, title: "Gift Cards", href: "#" },
+    { icon: Sparkles, title: "Yuber Plus", href: "/app/promotions", popular: true },
+    { icon: Sparkles, title: "Sustainability", href: "/about" },
+    { icon: Gift, title: "Gift Cards", href: "/app/wallet" },
     { icon: Users, title: "Referral Program", href: "/app/referrals" },
   ],
   "Support": [
-    { icon: CircleHelp, title: "Help Centre", href: "/faq" },
+    { icon: CircleHelp, title: "Help Centre", href: "/app/support" },
     { icon: Mail, title: "Contact Us", href: "/faq" },
     { icon: MessageSquare, title: "FAQs", href: "/faq" },
     { icon: Star, title: "Reviews", href: "#" },
