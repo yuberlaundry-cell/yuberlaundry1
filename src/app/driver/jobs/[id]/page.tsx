@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building, Ban, UserX } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useParams } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -32,7 +32,8 @@ const jobData = {
         address: '456 Business Rd, London, EC1A 1BB',
         time: '16:00 - 18:00',
         status: 'Out for Delivery',
-        notes: 'Leave with the concierge if not home.'
+        notes: 'Leave with the concierge if not home.',
+        laundromatAddress: 'Speedy Suds, 45 Crisp St, London'
     }
 };
 
@@ -46,11 +47,11 @@ const pickupSteps = [
 ];
 
 const deliverySteps = [
-    { id: 'navigate', label: 'Start Navigation to Customer', actionLabel: 'Start Navigation' },
+    { id: 'navigate', label: 'Navigate to Customer', actionLabel: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
-    { id: 'photo', label: 'Photo Confirmation', actionLabel: 'Take Photo', icon: Camera },
-    { id: 'signature', label: 'Signature', actionLabel: 'Capture Signature', icon: Signature },
-    { id: 'confirm', label: 'Confirm Handover', actionLabel: 'Confirm Delivery' },
+    { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: Signature },
+    { id: 'complete', label: 'Job Complete', actionLabel: '' },
+    { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat' },
 ];
 
 
@@ -60,6 +61,7 @@ export default function JobDetailsPage() {
     const jobId = params.id as keyof typeof jobData;
     const job = jobData[jobId] || jobData['PU-123'];
     const workflowSteps = job.type === 'Pickup' ? pickupSteps : deliverySteps;
+    const [deliveryFailed, setDeliveryFailed] = useState(false);
 
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -95,17 +97,59 @@ export default function JobDetailsPage() {
 
 
     const handleNextStep = () => {
+        const nextStepIndex = currentStep + 1;
+        
+        // Skip the return step if delivery was successful
+        if (job.type === 'Delivery' && !deliveryFailed && workflowSteps[nextStepIndex]?.id === 'return_to_laundromat') {
+            setCurrentStep(workflowSteps.findIndex(s => s.id === 'complete'));
+            return;
+        }
+
+        // Skip the completion step if delivery failed
+        if (job.type === 'Delivery' && deliveryFailed && workflowSteps[nextStepIndex]?.id === 'complete') {
+             setCurrentStep(workflowSteps.findIndex(s => s.id === 'return_to_laundromat'));
+            return;
+        }
+
         if (currentStep < workflowSteps.length -1) {
-            setCurrentStep(currentStep + 1);
+            setCurrentStep(nextStepIndex);
         } else {
             setCurrentStep(workflowSteps.length);
         }
+    }
+
+    const handleCustomerNotAvailable = () => {
+        toast({
+            title: 'Verifying Location...',
+            description: 'Please wait while we confirm you are at the delivery address.',
+        });
+        setTimeout(() => {
+            toast({
+                title: 'Location Verified',
+                description: 'You are at the delivery address. You can now mark the customer as unavailable.',
+            });
+            setDeliveryFailed(true);
+            setCurrentStep(workflowSteps.findIndex(s => s.id === 'return_to_laundromat'));
+        }, 1500);
     }
     
     const renderActionButton = (step: typeof workflowSteps[0]) => {
         const ActionIcon = step.icon;
 
-        if (step.id === 'scan_photo' || step.id === 'photo' || step.id === 'signature') {
+        if (step.id === 'confirm_or_fail') {
+             return (
+                <div className="mt-2 space-y-2">
+                    <Button className="w-full" onClick={() => openModal('signature')}>
+                        <Signature className="mr-2" /> {step.actionLabel}
+                    </Button>
+                    <Button variant="destructive" className="w-full" onClick={handleCustomerNotAvailable}>
+                        <UserX className="mr-2" /> Customer Not Available
+                    </Button>
+                </div>
+            );
+        }
+
+        if (step.id === 'scan_photo' || step.id === 'photo' || (step.icon && step.id !== 'confirm_or_fail')) {
              return (
                 <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan_photo' | 'photo' | 'signature')}>
                     {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
@@ -113,10 +157,10 @@ export default function JobDetailsPage() {
             );
         }
         
-        if (step.id === 'navigate_laundromat' && job.type === 'Pickup' && job.laundromatAddress) {
-            return (
+        if (step.id === 'navigate_laundromat' || (step.id === 'return_to_laundromat' && job.type === 'Delivery')) {
+             return (
                  <Button variant="outline" className="w-full mt-2" asChild>
-                    <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.laundromatAddress)}`} target="_blank" rel="noopener noreferrer">
+                    <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.laundromatAddress || '')}`} target="_blank" rel="noopener noreferrer">
                         <Navigation className="mr-2"/> {step.actionLabel}
                     </a>
                 </Button>
@@ -204,6 +248,8 @@ export default function JobDetailsPage() {
         }
     };
 
+    const isJobComplete = currentStep === workflowSteps.length || workflowSteps[currentStep].id === 'complete' || workflowSteps[currentStep].id === 'return_to_laundromat';
+    const finalStep = workflowSteps[currentStep];
 
     return (
         <div className="space-y-6 pb-16">
@@ -255,7 +301,7 @@ export default function JobDetailsPage() {
                             </Button>
                         </CardContent>
                     </Card>
-                    {job.type === 'Pickup' && currentStep >= 4 && (
+                    {(job.type === 'Pickup' && currentStep >= 4 || finalStep?.id === 'return_to_laundromat') && (
                          <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
@@ -280,29 +326,38 @@ export default function JobDetailsPage() {
                     </CardHeader>
                     <CardContent>
                          <ol className="space-y-4">
-                            {workflowSteps.map((step, index) => (
+                            {workflowSteps.filter(s => s.id !== 'complete' && s.id !== 'return_to_laundromat' || s.id === finalStep?.id ).map((step, index) => {
+                                const stepIndex = workflowSteps.findIndex(s => s.id === step.id);
+                                const isCurrent = stepIndex === currentStep;
+                                const isCompleted = stepIndex < currentStep || (isJobComplete && finalStep?.id !== step.id);
+
+                                if (job.type === 'Delivery' && ((deliveryFailed && step.id === 'complete') || (!deliveryFailed && step.id === 'return_to_laundromat'))) {
+                                    return null;
+                                }
+
+                                return (
                                 <li key={step.id} className="flex items-start gap-4">
                                     <div className="flex flex-col items-center self-stretch">
-                                        <div className={`flex h-8 w-8 items-center justify-center rounded-full ${index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-                                            {index < currentStep ? <Check /> : (step.icon ? <step.icon className="h-4 w-4" /> : index + 1)}
+                                        <div className={`flex h-8 w-8 items-center justify-center rounded-full ${isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+                                            {isCompleted ? <Check /> : (step.icon ? <step.icon className="h-4 w-4" /> : index + 1)}
                                         </div>
-                                        {index < workflowSteps.length -1 && <div className={`w-px flex-1 my-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
+                                        {index < workflowSteps.length -1 && step.id !== 'confirm_or_fail' && <div className={`w-px flex-1 my-1 ${isCompleted ? 'bg-primary' : 'bg-border'}`} />}
                                     </div>
                                     <div className="flex-1 pt-1.5">
-                                        <p className={`font-medium ${index <= currentStep ? 'text-foreground' : 'text-muted-foreground'}`}>{step.label}</p>
+                                        <p className={`font-medium ${!isCompleted && !isCurrent ? 'text-muted-foreground' : 'text-foreground'}`}>{step.label}</p>
                                         
-                                        {index === currentStep && renderActionButton(step)}
+                                        {isCurrent && renderActionButton(step)}
                                         
                                     </div>
                                 </li>
-                            ))}
+                            )})}
                         </ol>
-                        {currentStep === workflowSteps.length && (
-                             <div className="mt-6 flex items-center gap-3 rounded-lg border border-green-500 bg-green-50 p-4 text-green-800">
-                                <Check className="h-6 w-6" />
+                        {isJobComplete && finalStep && (
+                             <div className={`mt-6 flex items-center gap-3 rounded-lg border p-4 ${finalStep.id === 'return_to_laundromat' ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-green-500 bg-green-50 text-green-800'}`}>
+                                {finalStep.id === 'return_to_laundromat' ? <Ban className="h-6 w-6"/> : <Check className="h-6 w-6" />}
                                 <div>
-                                    <h4 className="font-semibold">{job.type} Job Complete!</h4>
-                                    <p className="text-sm">This job has been marked as completed.</p>
+                                    <h4 className="font-semibold">{finalStep.id === 'return_to_laundromat' ? 'Delivery Failed' : `${job.type} Job Complete!`}</h4>
+                                    <p className="text-sm">{finalStep.id === 'return_to_laundromat' ? 'Please return items to the laundromat.' : 'This job has been marked as completed.'}</p>
                                 </div>
                             </div>
                         )}
