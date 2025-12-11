@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, ScanLine, Truck, Package, Navigation, Camera, MessageSquare, Signature } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
@@ -21,7 +21,8 @@ const jobData = {
         address: '123 Main St, London, SW1A 0AA',
         time: '12:00 - 14:00',
         status: 'Assigned',
-        notes: 'Gate code is #1234. Beware of the small dog.'
+        notes: 'Gate code is #1234. Beware of the small dog.',
+        laundromatAddress: 'Speedy Suds, 45 Crisp St, London'
     },
     'DO-456': {
         id: 'DO-456',
@@ -36,15 +37,16 @@ const jobData = {
 };
 
 const pickupSteps = [
-    { id: 'navigate', label: 'Start Navigation', actionLabel: 'Start Navigation' },
+    { id: 'navigate', label: 'Start Navigation to Customer', actionLabel: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Pickup', actionLabel: 'Confirm Arrival' },
-    { id: 'scan', label: 'Scan Bag QR Code', actionLabel: 'Scan Code', icon: QrCode },
-    { id: 'photo', label: 'Take Photo of Items', actionLabel: 'Take Photo', icon: Camera },
-    { id: 'confirm', label: 'Confirm Items Collected', actionLabel: 'Confirm Pickup' },
+    { id: 'scan_photo', label: 'Scan Bags or Take Photo', actionLabel: 'Scan/Photograph Items', icon: Camera },
+    { id: 'confirm_collection', label: 'Confirm Items Collected', actionLabel: 'Confirm Collection' },
+    { id: 'navigate_laundromat', label: 'Deliver to Laundromat', actionLabel: 'Navigate to Laundromat' },
+    { id: 'confirm_handoff', label: 'Confirm Laundromat Handoff', actionLabel: 'Confirm Handoff' },
 ];
 
 const deliverySteps = [
-    { id: 'navigate', label: 'Start Navigation', actionLabel: 'Start Navigation' },
+    { id: 'navigate', label: 'Start Navigation to Customer', actionLabel: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
     { id: 'photo', label: 'Photo Confirmation', actionLabel: 'Take Photo', icon: Camera },
     { id: 'signature', label: 'Signature', actionLabel: 'Capture Signature', icon: Signature },
@@ -64,15 +66,15 @@ export default function JobDetailsPage() {
     const { toast } = useToast();
     
     const [isModalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState<'scan' | 'photo' | 'signature' | null>(null);
+    const [modalContent, setModalContent] = useState<'scan_photo' | 'photo' | 'signature' | null>(null);
 
-    const openModal = (type: 'scan' | 'photo' | 'signature') => {
+    const openModal = (type: 'scan_photo' | 'photo' | 'signature') => {
         setModalContent(type);
         setModalOpen(true);
     }
     
     useEffect(() => {
-        if (isModalOpen && (modalContent === 'scan' || modalContent === 'photo') && hasCameraPermission !== false) {
+        if (isModalOpen && (modalContent === 'scan_photo' || modalContent === 'photo') && hasCameraPermission !== false) {
             const getCameraPermission = async () => {
                 if (hasCameraPermission) return;
                 try {
@@ -103,12 +105,22 @@ export default function JobDetailsPage() {
     const renderActionButton = (step: typeof workflowSteps[0]) => {
         const ActionIcon = step.icon;
 
-        if (step.id === 'scan' || step.id === 'photo' || step.id === 'signature') {
+        if (step.id === 'scan_photo' || step.id === 'photo' || step.id === 'signature') {
              return (
-                <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan' | 'photo' | 'signature')}>
+                <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan_photo' | 'photo' | 'signature')}>
                     {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
                 </Button>
             );
+        }
+        
+        if (step.id === 'navigate_laundromat' && job.type === 'Pickup' && job.laundromatAddress) {
+            return (
+                 <Button variant="outline" className="w-full mt-2" asChild>
+                    <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.laundromatAddress)}`} target="_blank" rel="noopener noreferrer">
+                        <Navigation className="mr-2"/> {step.actionLabel}
+                    </a>
+                </Button>
+            )
         }
 
         return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
@@ -116,13 +128,13 @@ export default function JobDetailsPage() {
 
     const renderModalContent = () => {
         switch (modalContent) {
-            case 'scan':
+            case 'scan_photo':
                 return (
                     <>
                         <DialogHeader>
-                            <DialogTitle>Scan QR Code</DialogTitle>
+                            <DialogTitle>Scan QR Code or Take Photo</DialogTitle>
                             <DialogDescription>
-                                Center the QR code on the customer's bag in the frame.
+                                Scan the QR code on the bag. If it's a new customer without a QR code, take a photo of the bags instead.
                             </DialogDescription>
                         </DialogHeader>
                          <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
@@ -134,13 +146,16 @@ export default function JobDetailsPage() {
                                         <Camera className="h-4 w-4" />
                                         <AlertTitle>Camera Access Required</AlertTitle>
                                         <AlertDescription>
-                                            Please enable camera permissions to use the scanner.
+                                            Please enable camera permissions to use the scanner or camera.
                                         </AlertDescription>
                                     </Alert>
                                 </div>
                             )}
                         </div>
-                        <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Confirm Scan</Button>
+                        <div className="grid grid-cols-2 gap-2">
+                             <Button variant="secondary" onClick={() => { handleNextStep(); setModalOpen(false); }}>Use Photo</Button>
+                             <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Confirm Scan</Button>
+                        </div>
                     </>
                 );
             case 'photo':
@@ -233,13 +248,31 @@ export default function JobDetailsPage() {
                                     <p className="text-sm italic text-muted-foreground bg-muted p-2 rounded-md border">{job.notes}</p>
                                 </div>
                             )}
-                            <Button variant="outline" className="w-full" asChild>
+                             <Button variant="outline" className="w-full" asChild>
                                 <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.address)}`} target="_blank" rel="noopener noreferrer">
                                     <Navigation className="mr-2"/> Open in Maps
                                 </a>
                             </Button>
                         </CardContent>
                     </Card>
+                    {job.type === 'Pickup' && currentStep >= 4 && (
+                         <Card>
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2">
+                                    <Building />
+                                    Laundromat Drop-off
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center gap-3">
+                                    <MapPin className="h-5 w-5 text-muted-foreground"/>
+                                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.laundromatAddress || '')}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                        {job.laundromatAddress}
+                                    </a>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    )}
                 </div>
                 <Card className="md:sticky top-24">
                      <CardHeader>
@@ -251,7 +284,7 @@ export default function JobDetailsPage() {
                                 <li key={step.id} className="flex items-start gap-4">
                                     <div className="flex flex-col items-center self-stretch">
                                         <div className={`flex h-8 w-8 items-center justify-center rounded-full ${index <= currentStep ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
-                                            {index < currentStep ? <Check /> : (index === currentStep ? <ScanLine /> : index + 1)}
+                                            {index < currentStep ? <Check /> : (step.icon ? <step.icon className="h-4 w-4" /> : index + 1)}
                                         </div>
                                         {index < workflowSteps.length -1 && <div className={`w-px flex-1 my-1 ${index < currentStep ? 'bg-primary' : 'bg-border'}`} />}
                                     </div>
@@ -268,7 +301,7 @@ export default function JobDetailsPage() {
                              <div className="mt-6 flex items-center gap-3 rounded-lg border border-green-500 bg-green-50 p-4 text-green-800">
                                 <Check className="h-6 w-6" />
                                 <div>
-                                    <h4 className="font-semibold">{job.type} Complete!</h4>
+                                    <h4 className="font-semibold">{job.type} Job Complete!</h4>
                                     <p className="text-sm">This job has been marked as completed.</p>
                                 </div>
                             </div>
@@ -284,5 +317,3 @@ export default function JobDetailsPage() {
         </div>
     )
 }
-
-    
