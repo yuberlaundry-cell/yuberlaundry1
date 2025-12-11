@@ -29,6 +29,9 @@ import {
   CreditCard,
   Percent,
   Crown,
+  Map,
+  Clock,
+  Waypoints
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -53,6 +56,14 @@ const navigationConfig = [
       { href: '/admin/orders', label: 'Orders Control', icon: ShoppingCart },
       { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
       { href: '/admin/drivers', label: 'Driver Fleet', icon: Truck },
+    ],
+  },
+   {
+    title: 'Logistics & Routing',
+    links: [
+      { href: '/admin/logistics/slots', label: 'Time Slots', icon: Clock },
+      { href: '/admin/logistics/zones', label: 'Service Zones', icon: Map },
+      { href: '/admin/logistics/routing', label: 'Routing Rules', icon: Waypoints },
     ],
   },
   {
