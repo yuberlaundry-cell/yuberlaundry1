@@ -16,9 +16,11 @@ import { RateExperienceCard } from "@/components/orders/rate-experience-card";
 export default function OrderDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
+    
+    // Find the original order from the mock data
     const originalOrder = mockOrders.find(o => o.id === orderId);
 
-    // Create a deep copy of the order to make it mutable
+    // Deep clone the order data into state to make it mutable
     const [order, setOrder] = React.useState(() => {
         if (!originalOrder) return null;
         return JSON.parse(JSON.stringify(originalOrder));
@@ -28,24 +30,18 @@ export default function OrderDetailsPage() {
     const [progress, setProgress] = React.useState(25);
 
     const handleSimulate = () => {
-        if (!order) return;
-
-        setProgress(prev => {
-            const next = prev + 25;
-            if (next > 100) return 100;
-            return next;
-        });
-
-        // Create a new order object with the updated timeline
         setOrder(prevOrder => {
             if (!prevOrder) return null;
 
-            const newTimeline = [...prevOrder.timeline];
-            const pendingStepIndex = newTimeline.findIndex(e => e.status === 'pending');
+            // Create a new mutable copy for this update
+            const newOrderState = JSON.parse(JSON.stringify(prevOrder));
+            const newTimeline = newOrderState.timeline;
+            
+            const pendingStepIndex = newTimeline.findIndex((e: any) => e.status === 'pending');
 
             if (pendingStepIndex > -1) {
                 if (pendingStepIndex > 0) {
-                    newTimeline[pendingStepIndex-1].status = 'completed';
+                    newTimeline[pendingStepIndex - 1].status = 'completed';
                 }
                 newTimeline[pendingStepIndex].status = 'in-progress';
             } else {
@@ -54,8 +50,11 @@ export default function OrderDetailsPage() {
                     newTimeline[lastStepIndex].status = 'completed';
                 }
             }
+            
+            // Also update the overall progress bar
+            setProgress(prev => Math.min(prev + 25, 100));
 
-            return { ...prevOrder, timeline: newTimeline };
+            return newOrderState;
         });
     }
     
@@ -67,8 +66,7 @@ export default function OrderDetailsPage() {
         );
     }
 
-    const isDelivered = order.timeline.every(e => e.status === 'completed');
-
+    const isDelivered = order.timeline.every((e: any) => e.status === 'completed');
 
     return (
         <div className="space-y-6">
