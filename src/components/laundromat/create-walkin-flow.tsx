@@ -39,6 +39,13 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
     handleNext();
   }
 
+  const handlePrint = (type: 'Receipt' | 'Bag Tags') => {
+    toast({
+        title: `Printing ${type}...`,
+        description: `Your ${type.toLowerCase()} have been sent to the printer.`,
+    });
+  }
+
   const handleItemValueChange = (id: string, value: number) => {
     setOrderItems(orderItems.map(item => item.id === id ? { ...item, value } : item));
   };
@@ -212,10 +219,10 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                 <div className="space-y-4 py-4 text-center">
                     <p className="text-muted-foreground">Attach the printed tags to the customer's bags. You can now find this order in the main queue.</p>
                     <div className="grid grid-cols-2 gap-2">
-                        <Button className="w-full" variant="outline">
+                        <Button className="w-full" variant="outline" onClick={() => handlePrint('Receipt')}>
                             <Printer className="mr-2" /> Print Receipt
                         </Button>
-                        <Button className="w-full">
+                        <Button className="w-full" onClick={() => handlePrint('Bag Tags')}>
                             <Printer className="mr-2" /> Print Bag Tags
                         </Button>
                     </div>
@@ -232,4 +239,3 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
 
   return <div className="flex flex-col h-full">{renderStep()}</div>;
 }
-
