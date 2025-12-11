@@ -31,7 +31,8 @@ import {
   Crown,
   Map,
   Clock,
-  Waypoints
+  Waypoints,
+  FileText,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -87,6 +88,13 @@ const navigationConfig = [
       { href: '/admin/api-status', label: 'API Status', icon: BadgeInfo },
        { href: '/admin/health', label: 'System Health', icon: HeartPulse },
     ],
+  },
+  {
+    title: 'Content Management',
+    links: [
+        { href: '/admin/content/homepage', label: 'Homepage', icon: FileText },
+        { href: '/admin/content/pages', label: 'Site Pages', icon: FileText },
+    ]
   },
   {
     title: 'Users & Config',
@@ -162,7 +170,7 @@ export default function AdminPortalLayout({
                                 <SidebarMenuButton
                                 asChild
                                 tooltip={item.label}
-                                isActive={pathname === item.href}
+                                isActive={pathname === item.href || (item.href !== '/admin' && pathname.startsWith(item.href))}
                                 className={cn(item.href === '#' && "opacity-50 pointer-events-none")}
                                 >
                                 <Link href={item.href}>

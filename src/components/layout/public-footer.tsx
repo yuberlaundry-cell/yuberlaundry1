@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Smartphone, Store } from 'lucide-react';
 import { Button } from '../ui/button';
@@ -60,8 +61,8 @@ export function PublicFooter() {
           <div className="text-sm text-muted-foreground order-2 md:order-1 text-center md:text-left">
             <p>&copy; {currentYear} Yuber Laundry Ltd. All rights reserved.</p>
             <div className="flex space-x-4 mt-2 justify-center md:justify-start">
-              <Link href="#" className="hover:text-foreground">Website T&Cs</Link>
-              <Link href="#" className="hover:text-foreground">Privacy Policy</Link>
+              <Link href="/terms" className="hover:text-foreground">Website T&Cs</Link>
+              <Link href="/privacy" className="hover:text-foreground">Privacy Policy</Link>
               <Link href="#" className="hover:text-foreground">Cookie Policy</Link>
             </div>
           </div>
