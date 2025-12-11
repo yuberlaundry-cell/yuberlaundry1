@@ -33,6 +33,7 @@ import {
   Clock,
   Waypoints,
   FileText,
+  UserCog,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -108,6 +109,7 @@ const navigationConfig = [
     title: 'Users & Config',
     links: [
       { href: '/admin/users', label: 'User Management', icon: Users },
+      { href: '/admin/roles', label: 'Roles & Permissions', icon: UserCog },
       { href: '/admin/settings', label: 'Platform Settings', icon: Settings },
     ],
   },
