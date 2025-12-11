@@ -30,7 +30,7 @@ import { LoyaltyCard } from '@/components/app/loyalty-card';
 
 const transactions = [
     { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-R255.50', points: '+2550 pts'},
-    { date: 'May 10, 2024', description: 'Redeemed: R50 Voucher', amount: '', points: '-1000 pts'},
+    { date: 'May 10, 2024', description: 'Redeemed: R50 Voucher', amount: '', points: '-5000 pts'},
     { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+R500.00', points: ''},
     { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+R100.00', points: '+1000 pts'},
 ];
