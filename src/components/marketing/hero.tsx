@@ -20,12 +20,6 @@ export default function Hero() {
   const [selectedAddress, setSelectedAddress] = useState('');
   const [isServiceable, setIsServiceable] = useState<boolean | null>(null);
 
-  const heroImage = {
-      imageUrl: "https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      description: "A smiling woman holding a Yuber Laundry bag",
-      imageHint: "smiling woman laundry bag"
-  };
-
   const handleAddressSelect = (address: { description: string }) => {
     const addressLower = address.description.toLowerCase();
     setSelectedAddress(address.description);
@@ -96,9 +90,9 @@ export default function Hero() {
           </div>
           <div className="relative hidden lg:block aspect-[4/5]">
               <Image
-                  src={heroImage.imageUrl}
-                  alt={heroImage.description}
-                  data-ai-hint={heroImage.imageHint}
+                  src="https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080"
+                  alt="A smiling black woman holding a branded laundry bag"
+                  data-ai-hint="smiling black woman laundry bag"
                   fill
                   className="object-cover rounded-2xl"
                   priority
