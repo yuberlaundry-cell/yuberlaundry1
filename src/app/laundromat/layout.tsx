@@ -48,7 +48,6 @@ const navigationConfig = [
       { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
       { href: '/laundromat/orders', label: 'All Orders', icon: Package },
       { href: '/laundromat/processing', label: 'Processing Board', icon: LayoutGrid },
-      { href: '/laundromat/qc', label: 'Quality Control', icon: ClipboardCheck },
       { href: '/laundromat/ready', label: 'Ready for Handoff', icon: Truck },
       { href: '/laundromat/completed', label: 'Completed & Reviews', icon: Star },
     ]
