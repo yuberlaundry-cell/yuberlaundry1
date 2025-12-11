@@ -18,6 +18,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { PlusCircle } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const staff = [
   { name: 'Maria Garcia', role: 'Operator' },
@@ -69,7 +73,36 @@ export default function ResourcesPage() {
           <Card>
             <CardHeader className='flex-row items-center justify-between'>
               <CardTitle>Staff Management</CardTitle>
-              <Button size="sm"><PlusCircle className="mr-2"/> Add Staff</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm"><PlusCircle className="mr-2"/> Add Staff</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Staff Member</DialogTitle>
+                  </DialogHeader>
+                  <form className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="staff-name">Name</Label>
+                      <Input id="staff-name" placeholder="e.g. John Doe" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="staff-role">Role</Label>
+                      <Select>
+                        <SelectTrigger id="staff-role">
+                          <SelectValue placeholder="Select a role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="operator">Operator</SelectItem>
+                          <SelectItem value="supervisor">Supervisor</SelectItem>
+                          <SelectItem value="cleaner">Cleaner</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button type="submit" className="w-full">Add Staff Member</Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               <Table>
@@ -95,7 +128,36 @@ export default function ResourcesPage() {
           <Card>
             <CardHeader  className='flex-row items-center justify-between'>
               <CardTitle>Machine Status</CardTitle>
-              <Button size="sm"><PlusCircle className="mr-2"/> Add Machine</Button>
+               <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm"><PlusCircle className="mr-2"/> Add Machine</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Machine</DialogTitle>
+                  </DialogHeader>
+                  <form className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="machine-id">Machine ID</Label>
+                      <Input id="machine-id" placeholder="e.g. W-03" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="machine-type">Type</Label>
+                      <Select>
+                        <SelectTrigger id="machine-type">
+                          <SelectValue placeholder="Select a type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="washer">Washer</SelectItem>
+                          <SelectItem value="dryer">Dryer</SelectItem>
+                          <SelectItem value="press">Press</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button type="submit" className="w-full">Add Machine</Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               <Table>
@@ -127,7 +189,37 @@ export default function ResourcesPage() {
            <Card>
             <CardHeader  className='flex-row items-center justify-between'>
               <CardTitle>Supply Inventory</CardTitle>
-              <Button size="sm"><PlusCircle className="mr-2"/> Add Supply</Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                  <Button size="sm"><PlusCircle className="mr-2"/> Add Supply</Button>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle>Add New Supply Item</DialogTitle>
+                  </DialogHeader>
+                  <form className="space-y-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="supply-item">Item Name</Label>
+                      <Input id="supply-item" placeholder="e.g. Stain Remover" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="supply-stock">Stock Level</Label>
+                      <Select>
+                        <SelectTrigger id="supply-stock">
+                          <SelectValue placeholder="Select a stock level" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="full">Full</SelectItem>
+                          <SelectItem value="medium">Medium</SelectItem>
+                          <SelectItem value="low">Low</SelectItem>
+                          <SelectItem value="empty">Empty</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <Button type="submit" className="w-full">Add Supply</Button>
+                  </form>
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
               <Table>
