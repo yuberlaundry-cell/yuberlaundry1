@@ -11,7 +11,7 @@ import { usePathname } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { Input } from "@/components/ui/input";
 import React from "react";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { BookingFlow } from "@/components/booking/booking-flow";
 import { Search } from "lucide-react";
 import { FaqChatbot } from "@/components/faq-chatbot";
@@ -67,7 +67,15 @@ const BottomNavbar = () => {
                            </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
-                             <BookingFlow />
+                            <DialogHeader className="p-6 pb-0">
+                                <DialogTitle>Book your laundry</DialogTitle>
+                                <DialogDescription>
+                                    Configure your laundry order and schedule a pickup.
+                                </DialogDescription>
+                            </DialogHeader>
+                             <div className="grid grid-cols-3 flex-1 overflow-hidden">
+                                <BookingFlow />
+                            </div>
                         </DialogContent>
                     </Dialog>
                 </div>
@@ -153,6 +161,12 @@ export default function ConsumerPortalLayout({
                     <Button className="w-full justify-start">New Order</Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
+                    <DialogHeader className="p-6 pb-0 col-span-3">
+                        <DialogTitle>Book your laundry</DialogTitle>
+                        <DialogDescription>
+                            Configure your laundry order and schedule a pickup.
+                        </DialogDescription>
+                    </DialogHeader>
                       <BookingFlow />
                   </DialogContent>
                 </Dialog>

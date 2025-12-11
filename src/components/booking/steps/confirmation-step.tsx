@@ -10,7 +10,7 @@ import Link from "next/link";
 
 export default function ConfirmationStep() {
     return (
-        <div className="flex items-center justify-center h-full p-4">
+        <div className="flex items-center justify-center h-full p-4 col-span-3">
             <Card className="w-full max-w-md text-center shadow-none border-none">
                 <CardContent className="p-4 sm:p-8">
                     <div className="flex justify-center mb-4">

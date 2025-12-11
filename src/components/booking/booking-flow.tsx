@@ -9,7 +9,7 @@ import ScheduleStep from "./steps/schedule-step";
 import ServicesStep from "./steps/services-step";
 import InstructionsStep from "./steps/instructions-step";
 import ReviewStep from "./steps/review-step";
-import ConfirmationStep from "@/app/app/book/confirmation/page";
+import ConfirmationStep from "./steps/confirmation-step";
 import { Loader2, ShieldQuestion } from "lucide-react";
 import { Progress } from "../ui/progress";
 import PaystackPop from "@paystack/inline-js";
@@ -132,7 +132,7 @@ export function BookingFlow() {
                 </div>
             </div>
             {/* Mobile Footer */}
-            <div className="md:hidden fixed bottom-0 left-0 right-0 bg-background border-t p-4">
+            <div className="md:hidden fixed bottom-16 left-0 right-0 bg-background border-t p-4">
                  <div className="flex justify-between items-center">
                     {currentStep > 1 ? (
                          <Button variant="ghost" onClick={goToPrevStep}>Go Back</Button>
