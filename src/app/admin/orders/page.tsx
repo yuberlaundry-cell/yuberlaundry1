@@ -55,8 +55,8 @@ export default function AdminOrdersPage() {
     const amount = formData.get('refund-amount') as string;
     
     toast({
-        title: "Refund Initiated",
-        description: `A ${amount ? `partial refund of $${amount}` : 'full refund'} for order ${orderId} has been initiated via Paystack.`,
+        title: "Refund Initiated via Paystack",
+        description: `A ${amount ? `partial refund of $${amount}` : 'full refund'} for order ${orderId} has been successfully initiated.`,
     });
   }
 
