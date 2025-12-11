@@ -1,6 +1,6 @@
 
 'use client';
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import {
   Card,
   CardContent,
@@ -30,20 +30,20 @@ export default function ReadyForHandoffPage() {
         }
     }
 
-    const readyForDriverOrders = orders.filter(o => o.status === 'Ready');
-    const readyForPickupOrders = orders.filter(o => o.status === 'Ready'); // In a real app this might be different
+    const readyForDriverOrders = useMemo(() => orders.filter(o => o.status === 'Ready'), [orders]);
+    const readyForPickupOrders = useMemo(() => orders.filter(o => o.status === 'Ready'), [orders]); // In a real app this might be different
 
-    const filteredDriverOrders = readyForDriverOrders.filter(
+    const filteredDriverOrders = useMemo(() => readyForDriverOrders.filter(
         (order) =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.customer.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    ), [readyForDriverOrders, searchTerm]);
 
-    const filteredPickupOrders = readyForPickupOrders.filter(
+    const filteredPickupOrders = useMemo(() => readyForPickupOrders.filter(
         (order) =>
         order.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
         order.customer.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    ), [readyForPickupOrders, searchTerm]);
 
 
   return (
