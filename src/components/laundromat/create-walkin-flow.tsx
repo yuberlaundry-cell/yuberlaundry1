@@ -259,5 +259,3 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
 
   return <div className="flex flex-col h-full">{renderStep()}</div>;
 }
-
-    
