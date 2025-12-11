@@ -13,94 +13,94 @@ import { useState } from "react";
 import { AddressInput } from "@/components/ui/address-input";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 function AdminSettings() {
     const { user } = useAuth();
     const [address, setAddress] = useState('456 Corporate Ave, London');
     
     return (
-        <div className="space-y-8">
-             <Card>
-                <CardHeader>
-                    <CardTitle>Company Profile</CardTitle>
-                    <CardDescription>Update your company's information.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form className="space-y-6 max-w-lg">
-                        <div className="space-y-2">
-                            <Label htmlFor="company-name">Company Name</Label>
-                            <Input id="company-name" defaultValue={user?.companyName} />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="company-address">Company Address</Label>
-                            <AddressInput
-                                id="company-address"
-                                placeholder="e.g., 456 Corporate Ave, London"
-                                value={address}
-                                onChange={(e) => setAddress(e.target.value)}
-                                onAddressSelect={(addr) => {
-                                    setAddress(addr.description);
-                                }}
-                            />
-                        </div>
-                        <div className="pt-4">
-                            <Button>Save Profile</Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-
-            <Card>
-                <CardHeader>
-                    <CardTitle>Laundry Preferences</CardTitle>
-                    <CardDescription>Set default preferences for all company orders.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    <form className="space-y-6 max-w-lg">
-                        <div className="space-y-4">
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="detergent">Default Detergent</Label>
-                                <Select defaultValue="standard">
-                                    <SelectTrigger id="detergent" className="w-[200px]">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="standard">Standard</SelectItem>
-                                        <SelectItem value="hypoallergenic">Hypoallergenic</SelectItem>
-                                        <SelectItem value="eco-friendly">Eco-friendly</SelectItem>
-                                    </SelectContent>
-                                </Select>
+        <Card>
+            <CardHeader>
+                <CardTitle>Company Settings</CardTitle>
+                <CardDescription>Manage your company's profile and default laundry preferences.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <Tabs defaultValue="profile">
+                    <TabsList className="grid w-full grid-cols-2">
+                        <TabsTrigger value="profile">Company Profile</TabsTrigger>
+                        <TabsTrigger value="preferences">Laundry Preferences</TabsTrigger>
+                    </TabsList>
+                    <TabsContent value="profile" className="pt-6">
+                        <form className="space-y-6 max-w-lg">
+                            <div className="space-y-2">
+                                <Label htmlFor="company-name">Company Name</Label>
+                                <Input id="company-name" defaultValue={user?.companyName} />
                             </div>
-                            <div className="flex items-center justify-between">
-                                <Label htmlFor="water-temp">Default Water Temperature</Label>
-                                <Select defaultValue="warm">
-                                    <SelectTrigger id="water-temp" className="w-[200px]">
-                                        <SelectValue />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="cold">Cold</SelectItem>
-                                        <SelectItem value="warm">Warm</SelectItem>
-                                        <SelectItem value="hot">Hot</SelectItem>
-                                    </SelectContent>
-                                </Select>
+                            <div className="space-y-2">
+                                <Label htmlFor="company-address">Company Address</Label>
+                                <AddressInput
+                                    id="company-address"
+                                    placeholder="e.g., 456 Corporate Ave, London"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                    onAddressSelect={(addr) => {
+                                        setAddress(addr.description);
+                                    }}
+                                />
                             </div>
-                        </div>
-                         <Separator />
-                        <div className="space-y-2">
-                            <div className="flex items-center space-x-2">
-                                <Switch id="employee-notes" />
-                                <Label htmlFor="employee-notes">
-                                Allow employees to add notes to their own orders.
-                                </Label>
+                            <div className="pt-4">
+                                <Button>Save Profile</Button>
                             </div>
-                        </div>
-                        <div className="pt-4">
-                            <Button>Save Preferences</Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
+                        </form>
+                    </TabsContent>
+                    <TabsContent value="preferences" className="pt-6">
+                        <form className="space-y-6 max-w-lg">
+                            <div className="space-y-4">
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="detergent">Default Detergent</Label>
+                                    <Select defaultValue="standard">
+                                        <SelectTrigger id="detergent" className="w-[200px]">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="standard">Standard</SelectItem>
+                                            <SelectItem value="hypoallergenic">Hypoallergenic</SelectItem>
+                                            <SelectItem value="eco-friendly">Eco-friendly</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <Label htmlFor="water-temp">Default Water Temperature</Label>
+                                    <Select defaultValue="warm">
+                                        <SelectTrigger id="water-temp" className="w-[200px]">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="cold">Cold</SelectItem>
+                                            <SelectItem value="warm">Warm</SelectItem>
+                                            <SelectItem value="hot">Hot</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+                            <Separator />
+                            <div className="space-y-2">
+                                <div className="flex items-center space-x-2">
+                                    <Switch id="employee-notes" />
+                                    <Label htmlFor="employee-notes">
+                                    Allow employees to add notes to their own orders.
+                                    </Label>
+                                </div>
+                            </div>
+                            <div className="pt-4">
+                                <Button>Save Preferences</Button>
+                            </div>
+                        </form>
+                    </TabsContent>
+                </Tabs>
+            </CardContent>
+        </Card>
     );
 }
 
@@ -119,61 +119,69 @@ function EmployeeSettings() {
     }
 
     return (
-        <div className="space-y-8">
-            <Card>
-                <CardHeader>
-                    <CardTitle>Your Profile</CardTitle>
-                    <CardDescription>This is your personal information for your business account.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-8">
-                    <div className="flex items-center gap-4">
-                        <Avatar className="h-20 w-20">
-                            <AvatarImage src={user?.avatarUrl} />
-                            <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
-                        </Avatar>
-                        <div className="flex gap-2">
-                            <Button variant="outline">Change photo</Button>
+        <Tabs defaultValue="profile">
+            <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="profile">Your Profile</TabsTrigger>
+                <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            </TabsList>
+            <TabsContent value="profile">
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Your Profile</CardTitle>
+                        <CardDescription>This is your personal information for your business account.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-8">
+                        <div className="flex items-center gap-4">
+                            <Avatar className="h-20 w-20">
+                                <AvatarImage src={user?.avatarUrl} />
+                                <AvatarFallback className="text-3xl">{initials}</AvatarFallback>
+                            </Avatar>
+                            <div className="flex gap-2">
+                                <Button variant="outline">Change photo</Button>
+                            </div>
                         </div>
-                    </div>
 
-                     <form className="space-y-6" onSubmit={handleSaveProfile}>
-                        <div className="grid md:grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <Label htmlFor="full-name">Full Name</Label>
-                                <Input id="full-name" defaultValue={`${user?.firstName} ${user?.lastName}`} />
+                        <form className="space-y-6" onSubmit={handleSaveProfile}>
+                            <div className="grid md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <Label htmlFor="full-name">Full Name</Label>
+                                    <Input id="full-name" defaultValue={`${user?.firstName} ${user?.lastName}`} />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="email">Email</Label>
+                                    <Input id="email" type="email" defaultValue={user?.email} readOnly />
+                                </div>
                             </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="email">Email</Label>
-                                <Input id="email" type="email" defaultValue={user?.email} readOnly />
+                            <Button type="submit">Save Changes</Button>
+                        </form>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+            <TabsContent value="notifications">
+                <Card className="mt-6">
+                    <CardHeader>
+                        <CardTitle>Notification Settings</CardTitle>
+                        <CardDescription>How you receive updates about your orders.</CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="flex items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                                <Label htmlFor="email-notifications" className="text-base">Email Notifications</Label>
+                                <p className="text-sm text-muted-foreground">Receive updates via email about your order status.</p>
                             </div>
+                            <Switch id="email-notifications" defaultChecked />
                         </div>
-                        <Button type="submit">Save Changes</Button>
-                    </form>
-                </CardContent>
-            </Card>
-             <Card>
-                <CardHeader>
-                    <CardTitle>Notification Settings</CardTitle>
-                    <CardDescription>How you receive updates about your orders.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                     <div className="flex items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                            <Label htmlFor="email-notifications" className="text-base">Email Notifications</Label>
-                            <p className="text-sm text-muted-foreground">Receive updates via email about your order status.</p>
+                        <div className="flex items-center justify-between rounded-lg border p-4">
+                            <div className="space-y-0.5">
+                                <Label htmlFor="sms-notifications" className="text-base">SMS Notifications</Label>
+                                <p className="text-sm text-muted-foreground">Get text messages for important updates like delivery ETAs.</p>
+                            </div>
+                            <Switch id="sms-notifications" />
                         </div>
-                        <Switch id="email-notifications" defaultChecked />
-                    </div>
-                     <div className="flex items-center justify-between rounded-lg border p-4">
-                        <div className="space-y-0.5">
-                            <Label htmlFor="sms-notifications" className="text-base">SMS Notifications</Label>
-                             <p className="text-sm text-muted-foreground">Get text messages for important updates like delivery ETAs.</p>
-                        </div>
-                        <Switch id="sms-notifications" />
-                    </div>
-                </CardContent>
-            </Card>
-        </div>
+                    </CardContent>
+                </Card>
+            </TabsContent>
+        </Tabs>
     );
 }
 
