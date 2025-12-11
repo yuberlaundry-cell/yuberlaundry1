@@ -35,6 +35,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
+import { Label } from '@/components/ui/label';
 
 const driverData = {
     'D-001': {
