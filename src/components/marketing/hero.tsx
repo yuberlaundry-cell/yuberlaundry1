@@ -35,6 +35,8 @@ export default function Hero() {
       imageHint: "laundry bag"
   };
 
+  const displayedSlots = isExpanded ? timeSlots : timeSlots.slice(0, 3);
+
   return (
     <section className="container mx-auto px-4 py-12 sm:py-16 md:py-24">
       <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -89,14 +91,20 @@ export default function Hero() {
             </div>
             
             <RadioGroup defaultValue={timeSlots[0].value} className="space-y-3">
-                {timeSlots.map(slot => (
+                {displayedSlots.map(slot => (
                      <Label key={slot.value} htmlFor={slot.value} className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
                         <RadioGroupItem value={slot.value} id={slot.value} />
                         <span className="ml-4 font-medium">{slot.label}</span>
                     </Label>
                 ))}
             </RadioGroup>
-            <Button variant="link" className="mt-3 w-full text-primary">See all available times</Button>
+
+            {timeSlots.length > 3 && !isExpanded && (
+                <Button variant="link" className="mt-3 w-full text-primary" onClick={() => setIsExpanded(true)}>
+                    See all available times
+                </Button>
+            )}
+
             <Button size="lg" className="w-full mt-3" asChild><Link href="/auth/register">Continue</Link></Button>
             
           </Card>
