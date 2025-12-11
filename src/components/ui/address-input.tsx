@@ -14,29 +14,47 @@ interface AddressInputProps extends React.InputHTMLAttributes<HTMLInputElement> 
 }
 
 const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
-  ({ className, onAddressSelect, ...props }, ref) => {
+  ({ className, onAddressSelect, value, onChange, ...props }, ref) => {
     const [suggestions, setSuggestions] = useState<google.maps.places.AutocompletePrediction[]>([]);
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
     const autocompleteService = useRef<google.maps.places.AutocompleteService | null>(null);
     const geocoder = useRef<google.maps.Geocoder | null>(null);
+    const internalValue = (props as any).defaultValue || '';
+    
+    const controlledValue = value === undefined ? internalValue : value;
 
     useEffect(() => {
       const loadGoogleMapsScript = () => {
         if (window.google && window.google.maps && window.google.maps.places) {
-            setIsScriptLoaded(true);
+          setIsScriptLoaded(true);
+          return;
+        }
+
+        const scriptId = 'google-maps-script';
+        if (document.getElementById(scriptId)) {
+            // Another instance of this component is already loading the script.
+            // We can wait for it to be loaded.
+            const checkInterval = setInterval(() => {
+                if (window.google && window.google.maps && window.google.maps.places) {
+                    setIsScriptLoaded(true);
+                    clearInterval(checkInterval);
+                }
+            }, 100);
             return;
         }
-        
+
         const script = document.createElement('script');
+        script.id = scriptId;
         script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
         script.async = true;
+        script.defer = true;
         script.onload = () => setIsScriptLoaded(true);
         document.head.appendChild(script);
       };
 
       loadGoogleMapsScript();
     }, []);
-
+    
     useEffect(() => {
         if (isScriptLoaded && !autocompleteService.current) {
             autocompleteService.current = new window.google.maps.places.AutocompleteService();
@@ -46,10 +64,13 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
     
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const value = event.target.value;
-      if (autocompleteService.current && value) {
+      if (onChange) {
+        onChange(event);
+      }
+      const inputValue = event.target.value;
+      if (autocompleteService.current && inputValue) {
         autocompleteService.current.getPlacePredictions(
-          { input: value },
+          { input: inputValue },
           (predictions, status) => {
             if (status === window.google.maps.places.PlacesServiceStatus.OK && predictions) {
               setSuggestions(predictions);
@@ -75,9 +96,6 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
                         place_id: suggestion.place_id,
                         coordinates,
                     });
-                     // Simulate saving coordinates
-                    console.log('Address selected:', suggestion.description);
-                    console.log('Coordinates to be saved in background:', coordinates);
                     setSuggestions([]);
                 }
             });
@@ -89,6 +107,7 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
         <Input
           ref={ref}
           type="text"
+          value={controlledValue}
           onChange={handleInputChange}
           className={cn('pr-10', className)}
           {...props}
