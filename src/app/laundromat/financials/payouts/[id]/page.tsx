@@ -16,15 +16,18 @@ const payoutData = {
     period: 'May 1 - May 14, 2024',
     status: 'Completed',
     totalOrders: 152,
+    platformEarnings: 2018.24,
+    walkinEarnings: 700.00,
     grossEarnings: 2718.24,
-    commission: -407.74,
-    netPayout: 2310.50
+    commission: -302.74, // 15% of platform earnings
+    netPayout: 2415.50
 };
 
 const orders = [
-    { id: '#YL12345', date: 'May 1, 2024', service: 'Wash & Fold', amount: 25.50 },
-    { id: '#YL12346', date: 'May 1, 2024', service: 'Dry Cleaning', amount: 42.00 },
-    { id: '#YL12347', date: 'May 2, 2024', service: 'Wash & Fold', amount: 31.20 },
+    { id: '#YL12345', date: 'May 1, 2024', service: 'Wash & Fold', amount: 25.50, source: 'Platform' },
+    { id: '#W-54321', date: 'May 1, 2024', service: 'Wash & Fold', amount: 22.00, source: 'Walk-in' },
+    { id: '#YL12346', date: 'May 1, 2024', service: 'Dry Cleaning', amount: 42.00, source: 'Platform' },
+    { id: '#YL12347', date: 'May 2, 2024', service: 'Wash & Fold', amount: 31.20, source: 'Platform' },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -79,12 +82,16 @@ export default function PayoutDetailsPage() {
                                     <TableCell className="text-right">${payout.grossEarnings.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><FileText/> From {payout.totalOrders} orders</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">${payout.grossEarnings.toFixed(2)}</TableCell>
+                                    <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><FileText/> From Platform Orders</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">${payout.platformEarnings.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><Percent/> Platform Commission (15%)</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">-${Math.abs(payout.commission).toFixed(2)}</TableCell>
+                                    <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><FileText/> From Walk-in Orders</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">${payout.walkinEarnings.toFixed(2)}</TableCell>
+                                </TableRow>
+                                 <TableRow>
+                                    <TableCell className="font-medium flex items-center gap-2 text-muted-foreground"><Percent/> Platform Commission (15%)</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">(${Math.abs(payout.commission).toFixed(2)})</TableCell>
                                 </TableRow>
                                 <TableRow className="font-bold text-lg border-t-2">
                                     <TableCell>Net Payout</TableCell>
@@ -102,7 +109,7 @@ export default function PayoutDetailsPage() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Order ID</TableHead>
-                                        <TableHead>Date</TableHead>
+                                        <TableHead>Source</TableHead>
                                         <TableHead>Service</TableHead>
                                         <TableHead className="text-right">Amount</TableHead>
                                     </TableRow>
@@ -111,11 +118,13 @@ export default function PayoutDetailsPage() {
                                     {orders.map(order => (
                                         <TableRow key={order.id}>
                                             <TableCell className="font-medium">
-                                                <Link href={`/laundromat/orders/${order.id.replace('#', '')}`} className="hover:underline text-primary">
+                                                <Link href={`/laundromat/orders/${order.id.replace(/[^0-9]/g, '')}`} className="hover:underline text-primary">
                                                     {order.id}
                                                 </Link>
                                             </TableCell>
-                                            <TableCell>{order.date}</TableCell>
+                                            <TableCell>
+                                                <Badge variant={order.source === 'Platform' ? 'default' : 'secondary'}>{order.source}</Badge>
+                                            </TableCell>
                                             <TableCell>{order.service}</TableCell>
                                             <TableCell className="text-right">${order.amount.toFixed(2)}</TableCell>
                                         </TableRow>
@@ -138,6 +147,10 @@ export default function PayoutDetailsPage() {
                             <div className="flex justify-between items-center text-sm">
                                 <p className="text-muted-foreground">Payout Date</p>
                                 <p className="font-medium">{payout.date}</p>
+                            </div>
+                             <div className="flex justify-between items-center text-sm">
+                                <p className="text-muted-foreground">Total Orders</p>
+                                <p className="font-medium">{payout.totalOrders}</p>
                             </div>
                             <Separator />
                             <div className="flex items-center gap-3">
