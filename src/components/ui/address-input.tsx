@@ -25,22 +25,22 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
 
     useEffect(() => {
       const loadGoogleMapsScript = () => {
-        if (window.google && window.google.maps && window.google.maps.places) {
-          setIsScriptLoaded(true);
-          return;
-        }
-
         const scriptId = 'google-maps-script';
-        if (document.getElementById(scriptId)) {
-            // Another instance of this component is already loading the script.
-            // We can wait for it to be loaded.
-            const checkInterval = setInterval(() => {
+        
+        // If script is already loaded or in the process of loading, don't add it again.
+        if (window.google?.maps?.places || document.getElementById(scriptId)) {
+          if (window.google?.maps?.places) {
+            setIsScriptLoaded(true);
+          } else {
+            // If the script tag exists but the API isn't ready, wait for it.
+             const checkInterval = setInterval(() => {
                 if (window.google && window.google.maps && window.google.maps.places) {
                     setIsScriptLoaded(true);
                     clearInterval(checkInterval);
                 }
             }, 100);
-            return;
+          }
+          return;
         }
 
         const script = document.createElement('script');
@@ -111,6 +111,7 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
           onChange={handleInputChange}
           className={cn('pr-10', className)}
           {...props}
+          disabled={!isScriptLoaded || props.disabled}
         />
         {suggestions.length > 0 && (
           <ul className="absolute z-10 w-full mt-1 bg-background border rounded-md shadow-lg">
