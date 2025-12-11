@@ -16,20 +16,23 @@ const services = [
   { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask },
 ];
 
-export function CreateWalkinFlow() {
+interface CreateWalkinFlowProps {
+    onComplete: () => void;
+    onBack: () => void;
+}
+
+export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) {
   const [step, setStep] = useState(1);
   const [customer, setCustomer] = useState({ name: '', phone: '' });
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const { toast } = useToast();
 
   const handleNext = () => setStep((s) => s + 1);
-  const handleBack = () => setStep((s) => s - 1);
-
+  
   const handleCreateOrder = () => {
-    // Logic to create order would go here
     toast({
         title: 'Order #W-54321 Created',
-        description: 'Bag tags have been sent to the printer.',
+        description: 'The order for ' + customer.name + ' is now in the system.',
     });
     handleNext();
   }
@@ -65,9 +68,7 @@ export function CreateWalkinFlow() {
               </div>
             </div>
             <DialogFooter>
-              <DialogClose asChild>
-                 <Button variant="ghost">Cancel</Button>
-              </DialogClose>
+              <Button variant="ghost" onClick={onBack}>Back to Intake Type</Button>
               <Button onClick={handleNext} disabled={!customer.name || !customer.phone}>Continue</Button>
             </DialogFooter>
           </>
@@ -77,13 +78,13 @@ export function CreateWalkinFlow() {
           <>
             <DialogHeader>
               <DialogTitle>Select Services</DialogTitle>
-              <DialogDescription>Step 2: Choose services and specify items.</DialogDescription>
+              <DialogDescription>Step 2: Choose services for {customer.name}.</DialogDescription>
             </DialogHeader>
             <div className="space-y-4 py-4">
                 {services.map((service) => (
                     <div key={service.id} className="flex items-center gap-4 p-4 border rounded-lg">
                         <Checkbox 
-                            id={service.id} 
+                            id={`walkin-${service.id}`}
                             checked={selectedServices.includes(service.id)}
                             onCheckedChange={(checked) => {
                                 if (checked) {
@@ -93,7 +94,7 @@ export function CreateWalkinFlow() {
                                 }
                             }}
                         />
-                        <Label htmlFor={service.id} className="flex items-center gap-3 cursor-pointer">
+                        <Label htmlFor={`walkin-${service.id}`} className="flex items-center gap-3 cursor-pointer flex-grow">
                              <div className="bg-primary/10 text-primary p-3 rounded-lg">
                                 <service.icon className="h-5 w-5" />
                             </div>
@@ -108,7 +109,7 @@ export function CreateWalkinFlow() {
                 </div>
             </div>
             <DialogFooter>
-              <Button variant="ghost" onClick={handleBack}>Back</Button>
+              <Button variant="ghost" onClick={() => setStep(1)}>Back</Button>
               <Button onClick={handleCreateOrder} disabled={selectedServices.length === 0}>Create Order & Print Tags</Button>
             </DialogFooter>
           </>
@@ -124,15 +125,13 @@ export function CreateWalkinFlow() {
                     <DialogDescription>The order for {customer.name} has been successfully created.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4 text-center">
-                    <p className="text-muted-foreground">Attach the printed tags to the customer's bags.</p>
+                    <p className="text-muted-foreground">Attach the printed tags to the customer's bags. You can now find this order in the main queue.</p>
                      <Button className="w-full">
-                        <Printer className="mr-2" /> Print Bag Tags Again
+                        <Printer className="mr-2" /> Print Bag Tags
                     </Button>
                 </div>
                  <DialogFooter className="sm:justify-center">
-                    <DialogClose asChild>
-                        <Button>Done</Button>
-                    </DialogClose>
+                    <Button onClick={onComplete} className="w-full">Finish Intake</Button>
                 </DialogFooter>
              </>
          )

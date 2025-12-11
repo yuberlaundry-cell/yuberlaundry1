@@ -9,82 +9,25 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
-import { Textarea } from '@/components/ui/textarea';
-import { Camera, CheckCircle, ScanLine, Search, UserPlus } from 'lucide-react';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { useState, useRef, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { CreateWalkinFlow } from '@/components/laundromat/create-walkin-flow';
-
+import { ScanLine, UserPlus, CheckCircle } from 'lucide-react';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { IntakeFlow } from '@/components/laundromat/intake-flow';
 
 const orderToCome = {
   id: '#YL12345',
   customer: 'Jane Doe',
   service: 'Wash & Fold',
   bags: 2,
-  notes: 'Customer requested hypoallergenic detergent.',
 };
 
 export default function IntakePage() {
-    const { toast } = useToast();
-    const [isScannerOpen, setScannerOpen] = useState(false);
-    const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-    const [manualOrderId, setManualOrderId] = useState('');
-
-    const getCameraPermission = async () => {
-        if (hasCameraPermission) return true;
-        if (typeof navigator.mediaDevices?.getUserMedia !== 'function') {
-            console.error('getUserMedia is not supported in this browser.');
-            setHasCameraPermission(false);
-            return false;
-        }
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({video: true});
-            setHasCameraPermission(true);
-
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-            return true;
-        } catch (error) {
-            console.error('Error accessing camera:', error);
-            setHasCameraPermission(false);
-            toast({
-                variant: 'destructive',
-                title: 'Camera Access Denied',
-                description: 'Please enable camera permissions in your browser settings to use the scanner.',
-            });
-            return false;
-        }
-    };
-
-    useEffect(() => {
-        if(isScannerOpen) {
-            getCameraPermission();
-        }
-    }, [isScannerOpen]);
-
-    const handleFindOrder = (e: React.FormEvent) => {
-      e.preventDefault();
-      if (manualOrderId) {
-        toast({
-          title: 'Searching for order...',
-          description: `Looking up details for order ${manualOrderId}.`
-        })
-      }
-    }
-
   return (
     <div className="space-y-8 pb-8">
       <div>
         <h1 className="text-3xl font-bold font-headline">Order Intake</h1>
         <p className="text-muted-foreground">
-          Scan or manually enter order IDs to check-in items.
+          Check-in driver drop-offs, customer drop-offs, and walk-ins.
         </p>
       </div>
 
@@ -92,82 +35,22 @@ export default function IntakePage() {
         <div className="space-y-8">
           <Card>
             <CardHeader>
-              <CardTitle>In-Store Drop-off</CardTitle>
+              <CardTitle>Start New Intake</CardTitle>
               <CardDescription>
-                Create a new order for a walk-in customer.
+                Begin the check-in process for any type of order drop-off.
               </CardDescription>
             </CardHeader>
             <CardContent>
               <Dialog>
                 <DialogTrigger asChild>
-                  <Button className="w-full">
-                    <UserPlus className="mr-2" /> Create Walk-in Order
+                  <Button className="w-full h-12 text-base">
+                    <ScanLine className="mr-2" /> Start Intake
                   </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-2xl min-h-[70vh]">
-                  <CreateWalkinFlow />
+                <DialogContent className="max-w-md">
+                   <IntakeFlow />
                 </DialogContent>
               </Dialog>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle>Scan QR Code (Driver Drop-off)</CardTitle>
-              <CardDescription>
-                Use the camera to scan the QR code on the order bag.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-               <Dialog open={isScannerOpen} onOpenChange={setScannerOpen}>
-                    <DialogTrigger asChild>
-                        <Button className="w-full">
-                            <ScanLine className="mr-2" /> Start Scanner
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Scan Order QR Code</DialogTitle>
-                            <DialogDescription>
-                                Center the QR code on the order bag inside the frame.
-                            </DialogDescription>
-                        </DialogHeader>
-                         <div className="relative w-full aspect-square bg-black rounded-lg flex items-center justify-center overflow-hidden">
-                            <video ref={videoRef} className="w-full h-full object-cover" autoPlay muted playsInline />
-                            {hasCameraPermission === false && (
-                                <Alert variant="destructive" className="absolute inset-4">
-                                  <Camera className="h-4 w-4" />
-                                  <AlertTitle>Camera Access Required</AlertTitle>
-                                  <AlertDescription>
-                                    Please allow camera access to use this feature.
-                                  </AlertDescription>
-                                </Alert>
-                            )}
-                            <div className="absolute top-8 bottom-8 left-8 right-8 border-4 border-dashed border-gray-400 rounded-lg"/>
-                        </div>
-                        <Button onClick={() => setScannerOpen(false)}>Close Scanner</Button>
-                    </DialogContent>
-                </Dialog>
-            </CardContent>
-          </Card>
-           <Card>
-            <CardHeader>
-              <CardTitle>Manual Entry</CardTitle>
-               <CardDescription>
-                If a QR code is not available, enter the order ID manually.
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <form className="flex gap-2" onSubmit={handleFindOrder}>
-                  <Input 
-                    placeholder="Enter Order ID, e.g., #YL12345" 
-                    value={manualOrderId}
-                    onChange={(e) => setManualOrderId(e.target.value)}
-                  />
-                  <Button type="submit">
-                      <Search className="mr-2 h-4 w-4" />
-                      Find Order
-                  </Button>
-              </form>
             </CardContent>
           </Card>
         </div>
@@ -176,29 +59,31 @@ export default function IntakePage() {
           <Card>
             <CardHeader>
               <CardTitle>Arriving Soon via Driver</CardTitle>
-               <CardDescription>
-                This order is scheduled for drop-off.
+              <CardDescription>
+                This order is scheduled for imminent drop-off by a driver.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-                <div>
-                    <div className="flex justify-between items-start">
-                        <div>
-                             <h3 className="font-semibold text-lg">{orderToCome.id}</h3>
-                             <p className="text-muted-foreground">{orderToCome.customer}</p>
-                        </div>
-                        <p className="text-sm text-muted-foreground">{orderToCome.bags} bags</p>
-                    </div>
-                    <p className="text-sm text-primary font-medium mt-2">{orderToCome.service}</p>
+              <div>
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-semibold text-lg">{orderToCome.id}</h3>
+                    <p className="text-muted-foreground">
+                      {orderToCome.customer}
+                    </p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {orderToCome.bags} bags
+                  </p>
                 </div>
-                 <Separator />
-                <div className="space-y-2">
-                    <Label>Intake Notes</Label>
-                    <Textarea placeholder="e.g., Stain on blue shirt, missing one sock." />
-                </div>
-                <Button className="w-full">
-                    <CheckCircle className="mr-2" /> Confirm Intake
-                </Button>
+                <p className="text-sm text-primary font-medium mt-2">
+                  {orderToCome.service}
+                </p>
+              </div>
+              <Separator />
+               <Button className="w-full" disabled>
+                  <CheckCircle className="mr-2" /> Awaiting Drop-off
+              </Button>
             </CardContent>
           </Card>
         </div>
