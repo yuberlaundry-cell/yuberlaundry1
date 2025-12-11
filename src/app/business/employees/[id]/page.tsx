@@ -43,7 +43,7 @@ export default function EmployeeDetailsPage() {
 
     const kpiCards = [
         { title: "Total Orders", value: employee.totalOrders, icon: ShoppingCart },
-        { title: "Total Spend", value: `£${employee.totalSpend.toFixed(2)}`, icon: DollarSign },
+        { title: "Total Spend", value: `R${employee.totalSpend.toFixed(2)}`, icon: DollarSign },
         { title: "Avg. Turnaround", value: `${employee.avgTurnaround} hours`, icon: BarChart2 }
     ]
 
@@ -101,15 +101,15 @@ export default function EmployeeDetailsPage() {
                             <div>
                                 <div className="flex justify-between text-sm mb-1">
                                     <p className="font-medium">Monthly Allowance</p>
-                                    <p><span className="font-bold">£{employee.allowance.remaining.toFixed(2)}</span> remaining</p>
+                                    <p><span className="font-bold">R{employee.allowance.remaining.toFixed(2)}</span> remaining</p>
                                 </div>
                                 <Progress value={allowanceProgress} />
-                                <p className="text-xs text-muted-foreground mt-1">Used £{allowanceUsed.toFixed(2)} of £{employee.allowance.monthly.toFixed(2)}</p>
+                                <p className="text-xs text-muted-foreground mt-1">Used R{allowanceUsed.toFixed(2)} of R{employee.allowance.monthly.toFixed(2)}</p>
                             </div>
                             <Separator/>
                             <div className="flex justify-between items-center text-sm">
                                 <p className="font-medium">Per-Order Limit</p>
-                                <p className="font-bold">£{employee.allowance.perOrder.toFixed(2)}</p>
+                                <p className="font-bold">R{employee.allowance.perOrder.toFixed(2)}</p>
                             </div>
                             <Button variant="outline" className="w-full">Edit Allowance</Button>
                         </CardContent>
@@ -152,7 +152,7 @@ export default function EmployeeDetailsPage() {
                                             <TableCell className="font-medium">{order.id}</TableCell>
                                             <TableCell>{order.date}</TableCell>
                                             <TableCell><Badge variant="secondary" className={orderStatusColors[order.status]}>{order.status}</Badge></TableCell>
-                                            <TableCell className="text-right">£{order.cost.toFixed(2)}</TableCell>
+                                            <TableCell className="text-right">R{order.cost.toFixed(2)}</TableCell>
                                          </TableRow>
                                     ))}
                                 </TableBody>

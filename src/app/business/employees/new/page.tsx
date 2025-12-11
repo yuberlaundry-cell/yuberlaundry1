@@ -70,12 +70,12 @@ export default function NewEmployeePage() {
 
                         <div className="grid sm:grid-cols-2 gap-4">
                              <div className="space-y-2">
-                                <Label htmlFor="monthly-allowance">Monthly Allowance (£)</Label>
-                                <Input id="monthly-allowance" type="number" placeholder="e.g., 200" />
+                                <Label htmlFor="monthly-allowance">Monthly Allowance (R)</Label>
+                                <Input id="monthly-allowance" type="number" placeholder="e.g., 2000" />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="per-order-limit">Per-Order Limit (£) (optional)</Label>
-                                <Input id="per-order-limit" type="number" placeholder="e.g., 50" />
+                                <Label htmlFor="per-order-limit">Per-Order Limit (R) (optional)</Label>
+                                <Input id="per-order-limit" type="number" placeholder="e.g., 500" />
                             </div>
                         </div>
                          <div className="space-y-2">

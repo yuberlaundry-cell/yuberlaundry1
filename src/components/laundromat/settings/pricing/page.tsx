@@ -23,10 +23,10 @@ import {
 } from '@/components/ui/select';
 
 const services = [
-  { id: 'wash-fold', name: 'Wash & Fold', enabled: true, model: 'per_kg', price: 1.99 },
+  { id: 'wash-fold', name: 'Wash & Fold', enabled: true, model: 'per_kg', price: 40.00 },
   { id: 'dry-cleaning', name: 'Dry Cleaning', enabled: true, model: 'per_item', price: 0 },
-  { id: 'ironing', name: 'Ironing', enabled: true, model: 'per_item', price: 3.50 },
-  { id: 'bedding', name: 'Bedding & Duvets', enabled: false, model: 'per_item', price: 25.00 },
+  { id: 'ironing', name: 'Ironing', enabled: true, model: 'per_item', price: 25.00 },
+  { id: 'bedding', name: 'Bedding & Duvets', enabled: false, model: 'per_item', price: 150.00 },
   { id: 'repairs', name: 'Repairs & Alterations', enabled: false, model: 'per_item', price: 0 },
 ];
 
@@ -73,7 +73,7 @@ export default function PricingSettingsPage() {
                                     </SelectContent>
                                 </Select>
                                  <div className="relative w-full sm:w-[120px]">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">£</span>
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground">R</span>
                                     <Input 
                                         type="number" 
                                         defaultValue={service.price.toFixed(2)} 

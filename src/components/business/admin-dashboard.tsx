@@ -9,7 +9,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 
 const kpiCards = [
-    { title: "Total Spend (Month)", value: "£4,250", change: "+12%", icon: DollarSign },
+    { title: "Total Spend (Month)", value: "R42,500", change: "+12%", icon: DollarSign },
     { title: "Total Orders (Month)", value: "128", change: "+8%", icon: ShoppingCart },
     { title: "Active Employees", value: "42", change: "-2", icon: Users },
     { title: "Overdue Invoices", value: "3", change: "+1", icon: AlertCircle, color: "text-destructive" },

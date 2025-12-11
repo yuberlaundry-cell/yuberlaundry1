@@ -97,7 +97,7 @@ export default function OrdersPage() {
                                 </div>
                                 <div>
                                     <p className="text-sm text-muted-foreground">Total Spent</p>
-                                    <p className="text-2xl font-bold">$1,245.50</p>
+                                    <p className="text-2xl font-bold">R12,450.50</p>
                                 </div>
                             </div>
                             <div>

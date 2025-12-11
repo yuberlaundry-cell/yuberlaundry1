@@ -128,22 +128,22 @@ export default function BusinessOrderDetailsPage() {
                         <CardContent className="space-y-2 text-sm">
                            <div className="flex justify-between">
                                 <p className="text-muted-foreground">Services Subtotal</p>
-                                <p>£{order.cost.toFixed(2)}</p>
+                                <p>R{order.cost.toFixed(2)}</p>
                            </div>
                            <Separator/>
                             <div className="flex justify-between font-bold">
                                 <p>Total Cost</p>
-                                <p>£{order.cost.toFixed(2)}</p>
+                                <p>R{order.cost.toFixed(2)}</p>
                            </div>
                            {isAdmin && (
                             <>
                                 <div className="flex justify-between text-muted-foreground">
                                     <p>Company Contribution</p>
-                                    <p>£{order.companyShare.toFixed(2)}</p>
+                                    <p>R{order.companyShare.toFixed(2)}</p>
                                 </div>
                                 <div className="flex justify-between text-muted-foreground">
                                     <p>Employee Contribution</p>
-                                    <p>£{order.employeeShare.toFixed(2)}</p>
+                                    <p>R{order.employeeShare.toFixed(2)}</p>
                                 </div>
                             </>
                            )}

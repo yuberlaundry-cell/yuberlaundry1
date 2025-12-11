@@ -57,7 +57,7 @@ export default function AdminOrdersPage() {
     
     toast({
         title: "Refund Initiated via Paystack",
-        description: `A ${amount ? `partial refund of $${amount}` : 'full refund'} for order ${orderId} has been successfully initiated.`,
+        description: `A ${amount ? `partial refund of R${amount}` : 'full refund'} for order ${orderId} has been successfully initiated.`,
     });
   }
 

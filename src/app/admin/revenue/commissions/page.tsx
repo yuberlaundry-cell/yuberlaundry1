@@ -43,7 +43,7 @@ import {
 
 const overrides = [
   { id: 'L-001', name: 'Speedy Suds', type: 'Percentage', value: '18%', default: '20%' },
-  { id: 'L-004', name: 'City Cleaners', type: 'Hybrid', value: '£1.00 + 12%', default: '20%' },
+  { id: 'L-004', name: 'City Cleaners', type: 'Hybrid', value: 'R10.00 + 12%', default: '20%' },
 ];
 
 export default function CommissionsPage() {

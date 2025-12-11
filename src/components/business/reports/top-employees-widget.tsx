@@ -36,7 +36,7 @@ export function TopEmployeesWidget() {
                                     </div>
                                 </TableCell>
                                 <TableCell>{employee.totalOrders}</TableCell>
-                                <TableCell className="text-right font-semibold">£{employee.totalSpend.toFixed(2)}</TableCell>
+                                <TableCell className="text-right font-semibold">R{employee.totalSpend.toFixed(2)}</TableCell>
                              </TableRow>
                         ))}
                     </TableBody>

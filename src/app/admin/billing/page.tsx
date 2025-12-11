@@ -31,10 +31,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { Calendar } from '@/components/ui/calendar';
 
 const invoices = [
-    { id: 'INV-ACME-001', company: 'Acme Corp', date: 'Dec 1, 2024', amount: '£4,250.00', status: 'Paid' },
-    { id: 'INV-STARK-023', company: 'Stark Industries', date: 'Dec 1, 2024', amount: '£12,800.00', status: 'Paid' },
-    { id: 'INV-WAYNE-045', company: 'Wayne Enterprises', date: 'Dec 5, 2024', amount: '£8,500.00', status: 'Due' },
-    { id: 'INV-OSCORP-007', company: 'Oscorp', date: 'Nov 15, 2024', amount: '£3,200.00', status: 'Overdue' },
+    { id: 'INV-ACME-001', company: 'Acme Corp', date: 'Dec 1, 2024', amount: 'R42,500.00', status: 'Paid' },
+    { id: 'INV-STARK-023', company: 'Stark Industries', date: 'Dec 1, 2024', amount: 'R128,800.00', status: 'Paid' },
+    { id: 'INV-WAYNE-045', company: 'Wayne Enterprises', date: 'Dec 5, 2024', amount: 'R85,500.00', status: 'Due' },
+    { id: 'INV-OSCORP-007', company: 'Oscorp', date: 'Nov 15, 2024', amount: 'R32,200.00', status: 'Overdue' },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -62,7 +62,7 @@ export default function B2BBillingPage() {
               <DollarSign className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">£11,700.00</div>
+              <div className="text-2xl font-bold">R117,700.00</div>
               <p className="text-xs text-muted-foreground">Across 2 invoices</p>
             </CardContent>
           </Card>
@@ -73,7 +73,7 @@ export default function B2BBillingPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-bold text-destructive">1</div>
-               <p className="text-xs text-muted-foreground">Totaling £3,200.00</p>
+               <p className="text-xs text-muted-foreground">Totaling R32,200.00</p>
             </CardContent>
           </Card>
       </div>

@@ -44,19 +44,19 @@ import Link from 'next/link';
 const kpiCards = [
   {
     title: 'Upcoming Payout',
-    value: '$2,450.75',
+    value: 'R41,153.20',
     icon: DollarSign,
     description: 'Scheduled for June 1, 2024',
   },
   {
     title: 'Last Payout',
-    value: '$2,310.50',
+    value: 'R40,500.50',
     icon: TrendingUp,
     description: 'Paid on May 15, 2024',
   },
   {
     title: 'YTD Earnings',
-    value: '$25,830.00',
+    value: 'R250,830.00',
     icon: DollarSign,
     description: 'After platform fees',
   },
@@ -66,21 +66,21 @@ const payoutHistory = [
   {
     id: 'PAY-24-05-15',
     date: 'May 15, 2024',
-    amount: '$2,310.50',
+    amount: 'R40,500.50',
     status: 'Completed',
     period: 'May 1-14',
   },
   {
     id: 'PAY-24-05-01',
     date: 'May 1, 2024',
-    amount: '$2,250.00',
+    amount: 'R39,250.00',
     status: 'Completed',
     period: 'April 15-30',
   },
   {
     id: 'PAY-24-04-15',
     date: 'April 15, 2024',
-    amount: '$2,410.20',
+    amount: 'R42,410.20',
     status: 'Completed',
     period: 'April 1-14',
   },
@@ -94,11 +94,11 @@ const statusColors: { [key: string]: string } = {
 };
 
 const chartData = [
-    { month: "Jan", earnings: 4000 },
-    { month: "Feb", earnings: 3000 },
-    { month: "Mar", earnings: 5000 },
-    { month: "Apr", earnings: 4500 },
-    { month: "May", earnings: 6000 },
+    { month: "Jan", earnings: 40000 },
+    { month: "Feb", earnings: 38000 },
+    { month: "Mar", earnings: 45000 },
+    { month: "Apr", earnings: 44500 },
+    { month: "May", earnings: 41000 },
 ];
 const chartConfig = {
     earnings: {
@@ -161,7 +161,7 @@ export default function FinancialsPage() {
                              <YAxis
                                 tickLine={false}
                                 axisLine={false}
-                                tickFormatter={(value) => `$${Number(value) / 1000}k`}
+                                tickFormatter={(value) => `R${Number(value) / 1000}k`}
                             />
                             <ChartTooltip
                                 cursor={false}

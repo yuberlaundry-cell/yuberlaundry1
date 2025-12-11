@@ -53,19 +53,19 @@ const kpiCards = [
   },
   {
     title: 'Platform Revenue (MoM)',
-    value: '$125,430',
+    value: 'R1.25M',
     icon: DollarSign,
     description: '+15.2% from last month',
   },
 ];
 
 const revenueData = [
-  { month: 'Jan', revenue: 4000 },
-  { month: 'Feb', revenue: 3000 },
-  { month: 'Mar', revenue: 5000 },
-  { month: 'Apr', revenue: 4500 },
-  { month: 'May', revenue: 6000 },
-  { month: 'Jun', revenue: 7000 },
+  { month: 'Jan', revenue: 400000 },
+  { month: 'Feb', revenue: 300000 },
+  { month: 'Mar', revenue: 500000 },
+  { month: 'Apr', revenue: 450000 },
+  { month: 'May', revenue: 600000 },
+  { month: 'Jun', revenue: 700000 },
 ];
 
 const chartConfig = {

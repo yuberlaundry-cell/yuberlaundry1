@@ -7,13 +7,13 @@ import { Separator } from "@/components/ui/separator";
 import { Download, Mail, CreditCard } from "lucide-react";
 
 const receiptItems = [
-    { name: "Mixed Laundry (12 lbs)", price: "$23.88" },
-    { name: "Bedding (5.5 lbs)", price: "$14.85" },
-    { name: "Add-on: Special Detergent", price: "$5.00" },
+    { name: "Mixed Laundry (12 kg)", price: "R238.80" },
+    { name: "Bedding (5.5 kg)", price: "R148.50" },
+    { name: "Add-on: Special Detergent", price: "R50.00" },
 ];
 
-const subtotal = 43.73;
-const serviceFee = 2.50;
+const subtotal = 437.30;
+const serviceFee = 25.00;
 const total = subtotal + serviceFee;
 
 export function LiveReceiptCard() {
@@ -33,17 +33,17 @@ export function LiveReceiptCard() {
                  <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                         <p className="text-muted-foreground">Subtotal</p>
-                        <p>${subtotal.toFixed(2)}</p>
+                        <p>R{subtotal.toFixed(2)}</p>
                     </div>
                      <div className="flex justify-between">
                         <p className="text-muted-foreground">Service Fee</p>
-                        <p>${serviceFee.toFixed(2)}</p>
+                        <p>R{serviceFee.toFixed(2)}</p>
                     </div>
                 </div>
                  <Separator className="my-4" />
                 <div className="flex justify-between items-center font-bold text-lg mb-4">
                     <p>Total to be charged</p>
-                    <p>${total.toFixed(2)}</p>
+                    <p>R{total.toFixed(2)}</p>
                 </div>
                 <div className="grid grid-cols-2 gap-2 mb-4">
                     <Button variant="outline"><Download className="mr-2 h-4 w-4"/> Download</Button>

@@ -8,7 +8,7 @@ import { Progress } from "../ui/progress";
 
 const kpiCards = [
     { title: "Your Orders (Month)", value: "4", icon: ShoppingCart },
-    { title: "Your Spend (Month)", value: "£128.50", icon: DollarSign },
+    { title: "Your Spend (Month)", value: "R1,285.50", icon: DollarSign },
 ];
 
 export function EmployeeDashboard() {
@@ -36,9 +36,9 @@ export function EmployeeDashboard() {
                         <CardTitle className="text-sm font-medium">Monthly Allowance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">£71.50 <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
-                        <p className="text-xs text-muted-foreground">of £200.00</p>
-                        <Progress value={(71.50/200)*100} className="mt-2" />
+                        <div className="text-2xl font-bold">R715.50 <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
+                        <p className="text-xs text-muted-foreground">of R2000.00</p>
+                        <Progress value={(715.50/2000)*100} className="mt-2" />
                     </CardContent>
                 </Card>
             </div>

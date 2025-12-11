@@ -36,7 +36,7 @@ export default function ConfirmationStep() {
                             </div>
                              <div className="flex justify-between">
                                 <p className="text-muted-foreground">Est. Total:</p>
-                                <p className="font-medium">£24.50</p>
+                                <p className="font-medium">R245.50</p>
                             </div>
                         </div>
                     </div>

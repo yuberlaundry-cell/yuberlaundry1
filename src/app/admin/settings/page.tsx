@@ -54,11 +54,12 @@ export default function SettingsPage() {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     <div className="space-y-2">
                                         <Label htmlFor="country">Default Country</Label>
-                                        <Select defaultValue="GB">
+                                        <Select defaultValue="ZA">
                                             <SelectTrigger id="country">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem value="ZA">South Africa</SelectItem>
                                                 <SelectItem value="GB">United Kingdom</SelectItem>
                                                 <SelectItem value="US">United States</SelectItem>
                                                 <SelectItem value="CA">Canada</SelectItem>
@@ -67,11 +68,12 @@ export default function SettingsPage() {
                                     </div>
                                     <div className="space-y-2">
                                         <Label htmlFor="currency">Default Currency</Label>
-                                        <Select defaultValue="GBP">
+                                        <Select defaultValue="ZAR">
                                             <SelectTrigger id="currency">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
+                                                <SelectItem value="ZAR">ZAR (R)</SelectItem>
                                                 <SelectItem value="GBP">GBP (£)</SelectItem>
                                                 <SelectItem value="USD">USD ($)</SelectItem>
                                                 <SelectItem value="CAD">CAD ($)</SelectItem>
@@ -81,11 +83,12 @@ export default function SettingsPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="locale">Locale</Label>
-                                    <Select defaultValue="en-GB">
+                                    <Select defaultValue="en-ZA">
                                         <SelectTrigger id="locale">
                                             <SelectValue />
                                         </SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem value="en-ZA">English (South Africa)</SelectItem>
                                             <SelectItem value="en-GB">English (United Kingdom)</SelectItem>
                                             <SelectItem value="en-US">English (United States)</SelectItem>
                                             <SelectItem value="fr-CA">French (Canada)</SelectItem>

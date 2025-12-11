@@ -23,7 +23,7 @@ export function InvoiceCard() {
                     <CheckCircle2 className="h-6 w-6 text-green-500" />
                     <div>
                         <h3 className="font-semibold">Order Complete</h3>
-                        <p className="text-sm text-muted-foreground">Total Paid: $25.50 on May 12</p>
+                        <p className="text-sm text-muted-foreground">Total Paid: R255.50 on May 12</p>
                     </div>
                 </div>
                 <Button className="w-full" onClick={handleDownload}>

@@ -32,15 +32,15 @@ import {
 } from '@/components/ui/select';
 
 const kpiCards = [
-    { title: "Available Balance", value: "£15.50" },
-    { title: "Referral Credits", value: "£50.00" },
-    { title: "Loyalty Points", value: "1,245", description: "Equal to £12.45" },
+    { title: "Available Balance", value: "R150.50" },
+    { title: "Referral Credits", value: "R500.00" },
+    { title: "Loyalty Points", value: "1,245", description: "Equal to R124.50" },
 ];
 
 const transactions = [
-    { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-£25.50'},
-    { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+£50.00'},
-    { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+£10.00'},
+    { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-R255.50'},
+    { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+R500.00'},
+    { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+R100.00'},
 ];
 
 export default function WalletPage() {
@@ -88,9 +88,9 @@ export default function WalletPage() {
                 <div className="space-y-2">
                     <Label>Amount</Label>
                     <div className="flex flex-col sm:flex-row gap-2">
-                        <Button variant="outline" className="flex-1 text-lg">£25</Button>
-                        <Button className="flex-1 text-lg">£50</Button>
-                        <Button variant="outline" className="flex-1 text-lg">£100</Button>
+                        <Button variant="outline" className="flex-1 text-lg">R250</Button>
+                        <Button className="flex-1 text-lg">R500</Button>
+                        <Button variant="outline" className="flex-1 text-lg">R1000</Button>
                         <Input id="custom-amount" placeholder="Custom Amount" className="flex-1 h-12 text-lg" />
                     </div>
                 </div>
@@ -164,7 +164,7 @@ export default function WalletPage() {
                 <CardTitle>Loyalty Points</CardTitle>
             </CardHeader>
             <CardContent>
-                <p className="text-sm text-muted-foreground">You have <span className="font-bold text-foreground">1,245 points</span> available. Conversion rate is 100 points = £1.00.</p>
+                <p className="text-sm text-muted-foreground">You have <span className="font-bold text-foreground">1,245 points</span> available. Conversion rate is 10 points = R1.00.</p>
                 <Button className="w-full mt-4">Redeem Points</Button>
             </CardContent>
           </Card>
@@ -175,7 +175,7 @@ export default function WalletPage() {
             <CardContent className="space-y-4">
                  <div className="space-y-2">
                     <Label htmlFor="gift-amount">Amount</Label>
-                    <Input id="gift-amount" type="number" placeholder="£50.00" />
+                    <Input id="gift-amount" type="number" placeholder="R500.00" />
                 </div>
                  <div className="space-y-2">
                     <Label htmlFor="recipient-email">Recipient's email or phone</Label>
@@ -195,7 +195,7 @@ export default function WalletPage() {
             </CardHeader>
              <CardContent>
                 <Button variant="outline" className="w-full">Set Up Auto Top-up</Button>
-            </CardContent>
+             </CardContent>
           </Card>
         </div>
       </div>

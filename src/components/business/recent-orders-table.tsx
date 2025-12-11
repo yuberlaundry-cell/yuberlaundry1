@@ -54,7 +54,7 @@ export function RecentOrdersTable() {
                                 </TableCell>
                                 <TableCell>{order.pickup}</TableCell>
                                 <TableCell>{order.delivery}</TableCell>
-                                <TableCell className="text-right">£{order.cost.toFixed(2)}</TableCell>
+                                <TableCell className="text-right">R{order.cost.toFixed(2)}</TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

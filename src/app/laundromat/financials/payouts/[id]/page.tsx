@@ -16,11 +16,11 @@ const payoutData = {
     period: 'May 1 - May 14, 2024',
     status: 'Completed',
     totalOrders: 152,
-    platformEarnings: 2018.24,
-    walkinEarnings: 700.00,
-    grossEarnings: 2718.24,
-    commission: -302.74, // 15% of platform earnings
-    netPayout: 2415.50
+    platformEarnings: 40180.24,
+    walkinEarnings: 7000.00,
+    grossEarnings: 47180.24,
+    commission: -6027.04, // 15% of platform earnings
+    netPayout: 41153.20
 };
 
 const orders = [
@@ -79,23 +79,23 @@ export default function PayoutDetailsPage() {
                             <Table>
                                 <TableRow className="border-0">
                                     <TableCell className="font-medium flex items-center gap-2"><Banknote/> Gross Earnings</TableCell>
-                                    <TableCell className="text-right">£{payout.grossEarnings.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right">R{payout.grossEarnings.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><FileText/> From Platform Orders</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">£{payout.platformEarnings.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">R{payout.platformEarnings.toFixed(2)}</TableCell>
                                 </TableRow>
                                 <TableRow>
                                     <TableCell className="font-medium flex items-center gap-2 text-muted-foreground pl-10"><FileText/> From Walk-in Orders</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">£{payout.walkinEarnings.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">R{payout.walkinEarnings.toFixed(2)}</TableCell>
                                 </TableRow>
                                  <TableRow>
                                     <TableCell className="font-medium flex items-center gap-2 text-muted-foreground"><Percent/> Platform Commission (15%)</TableCell>
-                                    <TableCell className="text-right text-muted-foreground">(£{Math.abs(payout.commission).toFixed(2)})</TableCell>
+                                    <TableCell className="text-right text-muted-foreground">(R{Math.abs(payout.commission).toFixed(2)})</TableCell>
                                 </TableRow>
                                 <TableRow className="font-bold text-lg border-t-2">
                                     <TableCell>Net Payout</TableCell>
-                                    <TableCell className="text-right">£{payout.netPayout.toFixed(2)}</TableCell>
+                                    <TableCell className="text-right">R{payout.netPayout.toFixed(2)}</TableCell>
                                 </TableRow>
                             </Table>
                         </CardContent>
@@ -126,7 +126,7 @@ export default function PayoutDetailsPage() {
                                                 <Badge variant={order.source === 'Platform' ? 'default' : 'secondary'}>{order.source}</Badge>
                                             </TableCell>
                                             <TableCell>{order.service}</TableCell>
-                                            <TableCell className="text-right">£{order.amount.toFixed(2)}</TableCell>
+                                            <TableCell className="text-right">R{order.amount.toFixed(2)}</TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

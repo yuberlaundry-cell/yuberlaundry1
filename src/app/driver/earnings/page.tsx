@@ -9,20 +9,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 const earningsSummary = [
-    { title: "Today's Earnings", amount: "$85.50" },
-    { title: "This Week", amount: "$450.75" },
-    { title: "This Month", amount: "$1,820.00" },
+    { title: "Today's Earnings", amount: "R850.50" },
+    { title: "This Week", amount: "R4,500.75" },
+    { title: "This Month", amount: "R18,200.00" },
 ];
 
 const jobs = [
-    { id: 'PU-123', date: 'Today', base: '$10.00', tip: '$5.00', total: '$15.00'},
-    { id: 'DO-455', date: 'Yesterday', base: '$12.00', tip: '$2.50', total: '$14.50'},
-    { id: 'PU-122', date: 'Yesterday', base: '$10.00', tip: '$0.00', total: '$10.00'},
+    { id: 'PU-123', date: 'Today', base: 'R100.00', tip: 'R50.00', total: 'R150.00'},
+    { id: 'DO-455', date: 'Yesterday', base: 'R120.00', tip: 'R25.50', total: 'R145.50'},
+    { id: 'PU-122', date: 'Yesterday', base: 'R100.00', tip: 'R0.00', total: 'R100.00'},
 ];
 
 const payouts = [
-    { date: 'May 10, 2024', amount: '$430.25', status: 'Paid'},
-    { date: 'May 3, 2024', amount: '$510.50', status: 'Paid'},
+    { date: 'May 10, 2024', amount: 'R4,300.25', status: 'Paid'},
+    { date: 'May 3, 2024', amount: 'R5,100.50', status: 'Paid'},
 ];
 
 export default function EarningsPage() {

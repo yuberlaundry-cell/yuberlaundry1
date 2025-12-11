@@ -169,7 +169,7 @@ export default function OrderProcessingDetailsPage() {
                         <div key={item.id} className="grid grid-cols-3 items-center gap-4 p-3 border rounded-lg">
                             <div className="col-span-1">
                                 <p className="font-semibold">{item.name}</p>
-                                <p className="text-xs text-muted-foreground">${item.price.toFixed(2)}/{item.model === 'per_kg' ? 'kg' : 'item'}</p>
+                                <p className="text-xs text-muted-foreground">R{item.price.toFixed(2)}/{item.model === 'per_kg' ? 'kg' : 'item'}</p>
                             </div>
                              <div className="col-span-1">
                                 <Label htmlFor={`item-${item.id}`} className="text-xs text-muted-foreground">{item.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label>
@@ -183,7 +183,7 @@ export default function OrderProcessingDetailsPage() {
                                 />
                             </div>
                             <div className="col-span-1 text-right">
-                                <p className="font-bold text-lg">${(item.price * item.value).toFixed(2)}</p>
+                                <p className="font-bold text-lg">R{(item.price * item.value).toFixed(2)}</p>
                             </div>
                         </div>
                     ))}
@@ -191,7 +191,7 @@ export default function OrderProcessingDetailsPage() {
                      <div className="flex justify-end items-center gap-4">
                         <div className="text-right">
                             <p className="text-muted-foreground">Subtotal</p>
-                            <p className="font-bold text-2xl">${subtotal.toFixed(2)}</p>
+                            <p className="font-bold text-2xl">R{subtotal.toFixed(2)}</p>
                         </div>
                         <Button onClick={handleFinalizeBill} disabled={order.isBilled}>
                             {order.isBilled ? 'Bill Finalized' : 'Confirm & Finalize Bill'}
@@ -344,5 +344,4 @@ export default function OrderProcessingDetailsPage() {
     </div>
   );
 }
-
     

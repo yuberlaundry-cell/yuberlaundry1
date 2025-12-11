@@ -1,7 +1,7 @@
 // This is a placeholder for your Paystack webhook handler.
 // In a real application, you would verify the webhook signature
 // and handle various events (charge.success, subscription.create, etc.)
-// to update your database and application state.
+// to update your database and application state based on the currency and amount.
 
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
@@ -32,27 +32,26 @@ export async function POST(req: Request) {
 
   // 2. Parse the event payload
   const event = JSON.parse(body);
+  const data = event.data;
 
   // 3. Handle the event based on its type
-  // This is where you would add your business logic.
-  // For example, update an order status, provision a service, etc.
+  // Business logic should handle different currencies (data.currency) and amounts (data.amount).
+  // The amount is in the subunit of the currency (e.g., kobo for NGN, cents for USD).
   switch (event.event) {
     case 'charge.success':
-      const transactionData = event.data;
-      console.log(`Payment successful for transaction: ${transactionData.reference}`);
+      console.log(`Payment successful for ${data.amount} ${data.currency}. Ref: ${data.reference}`);
       // Example: Fulfill order, update payment status in your DB.
+      // Use data.currency to correctly interpret the amount.
       break;
     
     case 'subscription.create':
-      const subscriptionData = event.data;
-      console.log(`Subscription created: ${subscriptionData.subscription_code}`);
-      // Example: Activate subscription features for the user.
+      console.log(`Subscription created for ${data.plan.name} at ${data.amount} ${data.plan.currency}.`);
+      // Example: Activate subscription features for the user based on the plan code and currency.
       break;
 
     case 'refund.processed':
-        const refundData = event.data;
-        console.log(`Refund processed for transaction: ${refundData.transaction_reference}`);
-        // Example: Update order to reflect the refund.
+        console.log(`Refund of ${data.amount} ${data.currency} processed for transaction: ${data.transaction_reference}`);
+        // Example: Update order to reflect the refund, using the correct currency.
         break;
         
     // Add other cases for events you want to handle, e.g.:

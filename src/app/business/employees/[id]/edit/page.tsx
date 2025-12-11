@@ -86,11 +86,11 @@ export default function EditEmployeePage() {
 
                         <div className="grid sm:grid-cols-2 gap-4">
                              <div className="space-y-2">
-                                <Label htmlFor="monthly-allowance">Monthly Allowance (£)</Label>
+                                <Label htmlFor="monthly-allowance">Monthly Allowance (R)</Label>
                                 <Input id="monthly-allowance" type="number" defaultValue={employee.allowance.monthly} />
                             </div>
                             <div className="space-y-2">
-                                <Label htmlFor="per-order-limit">Per-Order Limit (£) (optional)</Label>
+                                <Label htmlFor="per-order-limit">Per-Order Limit (R) (optional)</Label>
                                 <Input id="per-order-limit" type="number" defaultValue={employee.allowance.perOrder} />
                             </div>
                         </div>

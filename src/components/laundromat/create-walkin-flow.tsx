@@ -14,8 +14,8 @@ import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 
 const servicesConfig = [
-  { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 1.99 },
-  { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, model: 'per_item', price: 8.50 },
+  { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 40.00 },
+  { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, model: 'per_item', price: 80.00 },
 ];
 
 interface CreateWalkinFlowProps {
@@ -110,7 +110,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                 <Input
                   id="customer-phone"
                   type="tel"
-                  placeholder="+44 7123 456789"
+                  placeholder="+27 71 123 4567"
                   value={customer.phone}
                   onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
                 />
@@ -144,7 +144,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                                 </div>
                                 <div>
                                     <p className="font-semibold">{service.name}</p>
-                                    <p className="text-xs text-muted-foreground">${service.price}/{service.model === 'per_kg' ? 'kg' : 'item'}</p>
+                                    <p className="text-xs text-muted-foreground">R{service.price}/{service.model === 'per_kg' ? 'kg' : 'item'}</p>
                                 </div>
                             </Label>
                         </div>
@@ -167,15 +167,15 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                 <div className="space-y-1 text-sm">
                     <div className="flex justify-between">
                         <p className="text-muted-foreground">Subtotal</p>
-                        <p className="font-medium">${subtotal.toFixed(2)}</p>
+                        <p className="font-medium">R{subtotal.toFixed(2)}</p>
                     </div>
                      <div className="flex justify-between">
                         <p className="text-muted-foreground">Tax</p>
-                        <p className="font-medium">${tax.toFixed(2)}</p>
+                        <p className="font-medium">R{tax.toFixed(2)}</p>
                     </div>
                      <div className="flex justify-between font-bold text-base">
                         <p>Total</p>
-                        <p>${total.toFixed(2)}</p>
+                        <p>R{total.toFixed(2)}</p>
                     </div>
                 </div>
             </div>
@@ -190,7 +190,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
           <>
             <DialogHeader>
               <DialogTitle>Payment</DialogTitle>
-              <DialogDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">${total.toFixed(2)}</span>.</DialogDescription>
+              <DialogDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</DialogDescription>
             </DialogHeader>
              <div className="space-y-4 py-4">
                 <RadioGroup defaultValue="cash" className="space-y-3">

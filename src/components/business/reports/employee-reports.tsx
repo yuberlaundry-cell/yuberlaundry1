@@ -9,7 +9,7 @@ import { SpendOverTimeChart } from "./spend-over-time-chart";
 
 const kpiCards = [
     { title: "Your Orders (This Month)", value: "4", icon: ShoppingCart },
-    { title: "Your Spend (This Month)", value: "£128.50", icon: DollarSign },
+    { title: "Your Spend (This Month)", value: "R1,285.50", icon: DollarSign },
 ];
 
 export function EmployeeReports() {
@@ -37,9 +37,9 @@ export function EmployeeReports() {
                         <CardTitle className="text-sm font-medium">Monthly Allowance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">£71.50 <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
-                        <p className="text-xs text-muted-foreground">of £200.00</p>
-                        <Progress value={(71.50/200)*100} className="mt-2" />
+                        <div className="text-2xl font-bold">R715.50 <span className="text-sm font-normal text-muted-foreground">remaining</span></div>
+                        <p className="text-xs text-muted-foreground">of R2000.00</p>
+                        <Progress value={(715.50/2000)*100} className="mt-2" />
                     </CardContent>
                 </Card>
             </div>

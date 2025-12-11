@@ -6,12 +6,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 const chartData = [
-  { month: "July", company: 1800, employee: 250 },
-  { month: "August", company: 2100, employee: 300 },
-  { month: "September", company: 1900, employee: 200 },
-  { month: "October", company: 2500, employee: 450 },
-  { month: "November", company: 2300, employee: 350 },
-  { month: "December", company: 2250, employee: 400 },
+  { month: "July", company: 18000, employee: 2500 },
+  { month: "August", company: 21000, employee: 3000 },
+  { month: "September", company: 19000, employee: 2000 },
+  { month: "October", company: 25000, employee: 4500 },
+  { month: "November", company: 23000, employee: 3500 },
+  { month: "December", company: 22500, employee: 4000 },
 ]
 
 const chartConfig = {
@@ -43,10 +43,10 @@ export function SpendOverTimeChart() {
                         axisLine={false}
                         tickFormatter={(value) => value.slice(0, 3)}
                     />
-                    <YAxis
+                     <YAxis
                         tickLine={false}
                         axisLine={false}
-                        tickFormatter={(value) => `£${Number(value) / 1000}k`}
+                        tickFormatter={(value) => `R${Number(value) / 1000}k`}
                     />
                     <ChartTooltip
                         cursor={false}

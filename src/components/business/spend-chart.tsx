@@ -5,12 +5,12 @@ import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Legend } from "recharts"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
 const chartData = [
-  { month: "July", company: 3800, employee: 400 },
-  { month: "August", company: 4100, employee: 500 },
-  { month: "September", company: 3900, employee: 350 },
-  { month: "October", company: 4500, employee: 600 },
-  { month: "November", company: 4300, employee: 550 },
-  { month: "December", company: 4250, employee: 500 },
+  { month: "July", company: 38000, employee: 4000 },
+  { month: "August", company: 41000, employee: 5000 },
+  { month: "September", company: 39000, employee: 3500 },
+  { month: "October", company: 45000, employee: 6000 },
+  { month: "November", company: 43000, employee: 5500 },
+  { month: "December", company: 42500, employee: 5000 },
 ]
 
 const chartConfig = {
@@ -39,7 +39,7 @@ export function SpendChart() {
                  <YAxis
                     tickLine={false}
                     axisLine={false}
-                    tickFormatter={(value) => `£${Number(value) / 1000}k`}
+                    tickFormatter={(value) => `R${Number(value) / 1000}k`}
                 />
                 <ChartTooltip
                     cursor={false}

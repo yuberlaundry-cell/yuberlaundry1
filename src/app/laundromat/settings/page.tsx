@@ -142,7 +142,7 @@ export default function LaundromatSettingsPage() {
             <CardHeader>
               <CardTitle>Payout Information</CardTitle>
               <CardDescription>
-                Manage the bank account where you receive earnings from Paystack.
+                Manage the bank account where you receive earnings from Paystack. This should correspond to your business's country and currency.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -158,13 +158,13 @@ export default function LaundromatSettingsPage() {
                         <SelectItem value="011">First Bank of Nigeria</SelectItem>
                         <SelectItem value="057">Zenith Bank</SelectItem>
                         <SelectItem value="044">Access Bank</SelectItem>
-                        <SelectItem value="033">United Bank For Africa</SelectItem>
+                        <SelectItem value="standard-bank">Standard Bank (South Africa)</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                  <div className="space-y-2">
                   <Label htmlFor="account-number">Account Number</Label>
-                  <Input id="account-number" placeholder="Enter NUBAN account number" />
+                  <Input id="account-number" placeholder="Enter account number" />
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="account-name">Account Holder Name</Label>
