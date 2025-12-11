@@ -117,9 +117,9 @@ export default function InvoiceDetailsPage() {
                         </Card>
                         <Card className="p-4">
                             <CardTitle className="text-sm font-semibold">Status</CardTitle>
-                            <CardDescription>
-                                <Badge variant="secondary" className={`text-lg ${statusColors[invoice.status]}`}>{invoice.status}</Badge>
-                            </CardDescription>
+                            <div className="text-lg">
+                                <Badge variant="secondary" className={`text-base ${statusColors[invoice.status]}`}>{invoice.status}</Badge>
+                            </div>
                         </Card>
                     </div>
 
