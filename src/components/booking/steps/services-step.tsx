@@ -57,10 +57,12 @@ export default function ServicesStep() {
         if (!service) return;
 
         if (selectedServices.includes(serviceId)) {
+            // If service is already selected, open dialog to edit preferences if they exist
             if (service.preferences) {
                 setEditingService(service);
             }
         } else {
+            // If service is not selected, open dialog if preferences exist, otherwise just add it
              if (service.preferences) {
                 setEditingService(service);
             } else {
@@ -71,6 +73,7 @@ export default function ServicesStep() {
     
     const handleConfirmPreferences = () => {
         if (editingService) {
+            // If the service isn't already in the list, add it
             if (!selectedServices.includes(editingService.id)) {
                 setSelectedServices(prev => [...prev, editingService.id]);
             }
@@ -119,7 +122,7 @@ export default function ServicesStep() {
                     <div className="space-y-4 pt-4">
                         {editingService?.preferences && (
                             <>
-                                <RadioGroup defaultValue={editingService.preferences.options[1].id} className="grid grid-cols-2 gap-4">
+                                <RadioGroup defaultValue={editingService.preferences.options[0].id} className="grid grid-cols-2 gap-4">
                                     {editingService.preferences.options.map(opt => (
                                         <Label key={opt.id} htmlFor={opt.id} className="block p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary text-center">
                                             <RadioGroupItem value={opt.id} id={opt.id} className="sr-only" />
