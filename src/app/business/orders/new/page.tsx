@@ -18,6 +18,7 @@ import { Separator } from "@/components/ui/separator";
 import { AddressInput } from "@/components/ui/address-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from '@/components/ui/input';
 
 const steps = [
   { id: 1, name: 'Employee', icon: User },
