@@ -36,6 +36,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Progress } from '@/components/ui/progress';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/hooks/use-toast';
 
 const driverData = {
     'D-001': {
@@ -81,6 +82,14 @@ export default function DriverProfilePage() {
     const params = useParams();
     const driverId = params.id as keyof typeof driverData;
     const driver = driverData[driverId] || driverData['D-001'];
+    const { toast } = useToast();
+
+    const handleAction = (action: string) => {
+        toast({
+            title: `${action} driver: ${driver.name}`,
+            description: `The action has been queued and will be processed shortly.`,
+        });
+    }
 
     return (
         <div className="space-y-6">
@@ -107,9 +116,9 @@ export default function DriverProfilePage() {
                 </div>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Button variant="outline"><MessageSquare className="mr-2"/> Message</Button>
-                    <Button variant="outline"><Edit className="mr-2"/> Edit</Button>
-                    <Button variant="destructive"><ShieldOff className="mr-2"/> Suspend</Button>
+                    <Button variant="outline" onClick={() => handleAction('Message')}><MessageSquare className="mr-2"/> Message</Button>
+                    <Button variant="outline" asChild><Link href={`/admin/drivers/${driverId}/edit`}><Edit className="mr-2"/> Edit</Link></Button>
+                    <Button variant="destructive" onClick={() => handleAction('Suspend')}><ShieldOff className="mr-2"/> Suspend</Button>
                 </div>
             </div>
 
@@ -200,3 +209,5 @@ export default function DriverProfilePage() {
         </div>
     )
 }
+
+    
