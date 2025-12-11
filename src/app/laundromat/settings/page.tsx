@@ -142,7 +142,7 @@ export default function LaundromatSettingsPage() {
                   <Input id="account-name" defaultValue="Main St. Laundry Ltd." readOnly />
                 </div>
                 <div className="pt-4">
-                  <Button>Update Payout Details</Button>
+                  <Button>Save Payout Information</Button>
                 </div>
               </form>
             </CardContent>
