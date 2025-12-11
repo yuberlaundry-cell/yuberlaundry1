@@ -17,9 +17,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import Link from 'next/link';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useState } from 'react';
+import { AddressInput } from '@/components/ui/address-input';
 
 export default function LaundromatSettingsPage() {
-  const address = "100 Laundry Lane, London, UK";
+  const [address, setAddress] = useState("100 Laundry Lane, London, UK");
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -53,12 +55,15 @@ export default function LaundromatSettingsPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
-                  <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(address)}`} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:underline">
-                    <Input
+                  <AddressInput
                       id="address"
-                      defaultValue="100 Laundry Lane, London, UK"
-                    />
-                  </a>
+                      value={address}
+                      onChange={(e) => setAddress(e.target.value)}
+                      onAddressSelect={(addr) => {
+                          setAddress(addr.description);
+                          console.log("Selected coordinates:", addr.coordinates);
+                      }}
+                  />
                 </div>
                 <div className="pt-4">
                   <Button>Save Facility Details</Button>
