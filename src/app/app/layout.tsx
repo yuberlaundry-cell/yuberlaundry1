@@ -4,7 +4,7 @@
 
 import { SidebarProvider, Sidebar, SidebarHeader, SidebarContent, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarInset, SidebarFooter } from "@/components/ui/sidebar";
 import { UserNav } from "@/components/layout/user-nav";
-import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle, MoreHorizontal, Search, Home } from 'lucide-react';
+import { ShoppingCart, Wallet, Tag, Settings, LifeBuoy, LogOut, Bot, Users as ReferralsIcon, LayoutDashboard, CircleUserRound, PlusCircle, MoreHorizontal, Search, Home, Bell } from 'lucide-react';
 import { WashingMachine } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -19,6 +19,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 
 const moreMenuItems = [
     { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
@@ -39,6 +40,12 @@ const desktopNavConfig = [
 const desktopBottomNavConfig = [
     { href: '/app/account', label: 'Settings', icon: Settings },
     { href: '/app/support', label: 'Support', icon: LifeBuoy },
+];
+
+const notifications = [
+    { title: 'Order #YL12346 is out for delivery!', description: 'Your driver, Sarah K., is on the way.'},
+    { title: 'Your order #YL12345 is now being washed.', description: 'You can track its progress in the app.'},
+    { title: 'Promo Code Applied', description: 'You\'ve received 20% off your next order.'},
 ];
 
 
@@ -151,10 +158,27 @@ export default function ConsumerPortalLayout({
                     <WashingMachine className="h-7 w-7 text-primary" />
                  </Link>
                 <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="icon">
-                        <Search className="h-5 w-5"/>
-                    </Button>
-                    <FaqChatbot />
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon" className="relative">
+                              <Bell />
+                              <span className="absolute top-1 right-1 flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                              </span>
+                          </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-80">
+                          <div className="p-2 font-semibold">Notifications</div>
+                          <DropdownMenuSeparator />
+                          {notifications.map((n, i) => (
+                              <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
+                                <div className="font-medium">{n.title}</div>
+                                <div className="text-xs text-muted-foreground">{n.description}</div>
+                              </DropdownMenuItem>
+                          ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                     <UserNav />
                 </div>
             </header>
@@ -259,6 +283,27 @@ export default function ConsumerPortalLayout({
               />
             </div>
             <div className="flex-1" />
+             <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                      <Bell />
+                      <span className="absolute top-1 right-1 flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                      </span>
+                  </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80">
+                  <div className="p-2 font-semibold">Notifications</div>
+                  <DropdownMenuSeparator />
+                  {notifications.map((n, i) => (
+                      <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
+                        <div className="font-medium">{n.title}</div>
+                        <div className="text-xs text-muted-foreground">{n.description}</div>
+                      </DropdownMenuItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             <UserNav />
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
