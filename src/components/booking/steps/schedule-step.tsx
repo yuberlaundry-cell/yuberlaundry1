@@ -26,35 +26,22 @@ export default function ScheduleStep() {
                  {/* Collection Section */}
                 <div className="space-y-4">
                     <h3 className="font-semibold text-lg">Collection time</h3>
-                    <div className="space-y-2">
-                        <Label htmlFor="collection-type">Collection From</Label>
-                         <Select defaultValue="personal">
-                            <SelectTrigger id="collection-type">
-                                <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="personal">Collect from me in person</SelectItem>
-                                <SelectItem value="concierge">Leave with concierge</SelectItem>
-                                <SelectItem value="outside">Leave outside</SelectItem>
-                            </SelectContent>
-                        </Select>
-                    </div>
-                     <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="collection-date">Date</Label>
+                            <Label htmlFor="collection-date">Select day</Label>
                             <Select value={collectionDay} onValueChange={setCollectionDay}>
                                 <SelectTrigger id="collection-date">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="today">Today, 10 December</SelectItem>
-                                    <SelectItem value="tomorrow">Tomorrow, 11 December</SelectItem>
+                                    <SelectItem value="today">Today</SelectItem>
+                                    <SelectItem value="tomorrow">Tomorrow</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="collection-time">Time</Label>
-                             <Select defaultValue={collectionSlots[0].value}>
+                            <Label htmlFor="collection-time">Select time</Label>
+                             <Select defaultValue={collectionSlots.length > 0 ? collectionSlots[0].value : undefined}>
                                 <SelectTrigger id="collection-time">
                                     <SelectValue />
                                 </SelectTrigger>
@@ -66,40 +53,40 @@ export default function ScheduleStep() {
                             </Select>
                         </div>
                     </div>
-                </div>
-
-                {/* Delivery Section */}
-                <div className="space-y-4">
-                    <h3 className="font-semibold text-lg">Delivery Time</h3>
-                    <div className="space-y-2">
-                        <Label htmlFor="delivery-type">Deliver To</Label>
+                     <div className="space-y-2">
+                        <Label htmlFor="collection-type">Driver instructions</Label>
                          <Select defaultValue="personal">
-                            <SelectTrigger id="delivery-type">
+                            <SelectTrigger id="collection-type">
                                 <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="personal">Deliver to me in person</SelectItem>
+                                <SelectItem value="personal">Collect from me in person</SelectItem>
                                 <SelectItem value="concierge">Leave with concierge</SelectItem>
                                 <SelectItem value="outside">Leave outside</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
+                </div>
+
+                {/* Delivery Section */}
+                <div className="space-y-4">
+                    <h3 className="font-semibold text-lg">Delivery time</h3>
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
-                            <Label htmlFor="delivery-date">Date</Label>
+                            <Label htmlFor="delivery-date">Select day</Label>
                             <Select value={deliveryDay} onValueChange={setDeliveryDay}>
                                 <SelectTrigger id="delivery-date">
                                     <SelectValue />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="today">Today, 10 December</SelectItem>
-                                    <SelectItem value="tomorrow">Tomorrow, 11 December</SelectItem>
+                                    <SelectItem value="today">Today</SelectItem>
+                                    <SelectItem value="tomorrow">Tomorrow</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
                         <div className="space-y-2">
-                            <Label htmlFor="delivery-time">Time</Label>
-                             <Select defaultValue={deliverySlots[0].value}>
+                            <Label htmlFor="delivery-time">Select time</Label>
+                             <Select defaultValue={deliverySlots.length > 0 ? deliverySlots[0].value : undefined}>
                                 <SelectTrigger id="delivery-time">
                                     <SelectValue />
                                 </SelectTrigger>
@@ -110,6 +97,19 @@ export default function ScheduleStep() {
                                 </SelectContent>
                             </Select>
                         </div>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="delivery-type">Driver instructions</Label>
+                         <Select defaultValue="personal">
+                            <SelectTrigger id="delivery-type">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="personal">Deliver to me in person</SelectItem>
+                                <SelectItem value="concierge">Leave with concierge</SelectItem>
+                                <SelectItem value="outside">Leave outside</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                 </div>
                 
@@ -122,22 +122,14 @@ export default function ScheduleStep() {
                 {/* Frequency */}
                 <div className="space-y-4">
                     <Label className="font-semibold text-lg">Frequency</Label>
-                    <RadioGroup defaultValue="once" className="grid grid-cols-2 gap-2">
-                        <Label htmlFor="freq-once" className="block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                    <RadioGroup defaultValue="once" className="grid grid-cols-2 gap-4">
+                        <Label htmlFor="freq-once" className="block p-4 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
                             <RadioGroupItem value="once" id="freq-once" className="sr-only"/>
-                            <span className="font-medium text-sm">Just once</span>
+                            <span className="font-medium text-base">Just once</span>
                         </Label>
-                        <Label htmlFor="freq-weekly" className="block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                        <Label htmlFor="freq-weekly" className="block p-4 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
                             <RadioGroupItem value="weekly" id="freq-weekly" className="sr-only"/>
-                            <span className="font-medium text-sm">Weekly</span>
-                        </Label>
-                        <Label htmlFor="freq-2-weeks" className="block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="2-weeks" id="freq-2-weeks" className="sr-only"/>
-                            <span className="font-medium text-sm">Every 2 weeks</span>
-                        </Label>
-                        <Label htmlFor="freq-4-weeks" className="block p-3 border rounded-lg cursor-pointer text-center hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="4-weeks" id="freq-4-weeks" className="sr-only"/>
-                            <span className="font-medium text-sm">Every 4 weeks</span>
+                            <span className="font-medium text-base">Every two weeks</span>
                         </Label>
                     </RadioGroup>
                 </div>
