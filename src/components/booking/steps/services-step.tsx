@@ -13,8 +13,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 
 const services = [
-    { 
-        id: 'wash', 
+    {
+        id: 'wash',
         name: 'Wash',
         icon: Waves,
         description: 'From R3.49 / per item',
@@ -31,8 +31,8 @@ const services = [
             { id: 'high-temp', name: 'High temperature', description: "Items upgrade to wash at a higher temperature. Check labels before selecting this option." }
         ]
     },
-    { 
-        id: 'dry-cleaning', 
+    {
+        id: 'dry-cleaning',
         name: 'Dry Cleaning',
         icon: Shirt,
         description: 'From R5.49 / per item',
@@ -41,6 +41,12 @@ const services = [
 ];
 
 type Service = typeof services[0];
+type ServicePreferences = {
+    [key: string]: {
+        washType?: string;
+        highTemp?: boolean;
+    }
+}
 
 const nextSteps = [
     { icon: Box, text: "Prepare your bags" },
@@ -51,32 +57,54 @@ const nextSteps = [
 export default function ServicesStep() {
     const [selectedServices, setSelectedServices] = useState<string[]>([]);
     const [editingService, setEditingService] = useState<Service | null>(null);
+    const [servicePreferences, setServicePreferences] = useState<ServicePreferences>({});
+    
+    // Temporary state for the dialog
+    const [tempWashPref, setTempWashPref] = useState<string | undefined>(undefined);
+    const [tempHighTemp, setTempHighTemp] = useState<boolean>(false);
+
+    const openServiceDialog = (service: Service) => {
+        // Initialize dialog state with existing preferences or defaults
+        const currentPrefs = servicePreferences[service.id];
+        setTempWashPref(currentPrefs?.washType || service.preferences?.options[0].id);
+        setTempHighTemp(currentPrefs?.highTemp || false);
+        setEditingService(service);
+    };
 
     const toggleService = (serviceId: string) => {
         const service = services.find(s => s.id === serviceId);
         if (!service) return;
 
-        if (selectedServices.includes(serviceId)) {
-            // If service is already selected, open dialog to edit preferences if they exist
-            if (service.preferences) {
-                setEditingService(service);
-            }
+        // If the service has preferences, always open the dialog
+        if (service.preferences) {
+            openServiceDialog(service);
         } else {
-            // If service is not selected, open dialog if preferences exist, otherwise just add it
-             if (service.preferences) {
-                setEditingService(service);
-            } else {
-                setSelectedServices(prev => [...prev, serviceId]);
-            }
+            // For services without preferences, just toggle them in the list
+            setSelectedServices(prev =>
+                prev.includes(serviceId)
+                    ? prev.filter(id => id !== serviceId)
+                    : [...prev, serviceId]
+            );
         }
     }
-    
+
     const handleConfirmPreferences = () => {
         if (editingService) {
-            // If the service isn't already in the list, add it
+            // Save the temporary preferences to the main state
+            setServicePreferences(prev => ({
+                ...prev,
+                [editingService.id]: {
+                    washType: tempWashPref,
+                    highTemp: tempHighTemp,
+                }
+            }));
+            
+            // If the service isn't already in the selected list, add it
             if (!selectedServices.includes(editingService.id)) {
                 setSelectedServices(prev => [...prev, editingService.id]);
             }
+
+            // Close the dialog
             setEditingService(null);
         }
     }
@@ -101,7 +129,7 @@ export default function ServicesStep() {
                                     <p className="text-sm text-muted-foreground">{service.details}</p>
                                     <Button variant="link" className="p-0 h-auto text-primary">See prices</Button>
                                 </div>
-                                <Button 
+                                <Button
                                     variant={selectedServices.includes(service.id) ? 'outline' : 'default'}
                                     onClick={() => toggleService(service.id)}
                                 >
@@ -122,7 +150,11 @@ export default function ServicesStep() {
                     <div className="space-y-4 pt-4">
                         {editingService?.preferences && (
                             <>
-                                <RadioGroup defaultValue={editingService.preferences.options[0].id} className="grid grid-cols-2 gap-4">
+                                <RadioGroup
+                                    value={tempWashPref}
+                                    onValueChange={setTempWashPref}
+                                    className="grid grid-cols-2 gap-4"
+                                >
                                     {editingService.preferences.options.map(opt => (
                                         <Label key={opt.id} htmlFor={opt.id} className="block p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary text-center">
                                             <RadioGroupItem value={opt.id} id={opt.id} className="sr-only" />
@@ -140,7 +172,12 @@ export default function ServicesStep() {
                                 <div className="space-y-3">
                                     {editingService.addOns.map(addOn => (
                                         <Label key={addOn.id} htmlFor={addOn.id} className="flex items-start gap-4 p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                                            <Checkbox id={addOn.id} className="mt-1" />
+                                            <Checkbox
+                                                id={addOn.id}
+                                                checked={tempHighTemp}
+                                                onCheckedChange={(checked) => setTempHighTemp(Boolean(checked))}
+                                                className="mt-1"
+                                            />
                                             <div>
                                                 <div className="flex items-center gap-2">
                                                     <p className="font-semibold">{addOn.name}</p>
@@ -155,7 +192,9 @@ export default function ServicesStep() {
                         )}
                     </div>
                     <DialogFooter>
-                         <Button className="w-full mt-4" size="lg" onClick={handleConfirmPreferences}>Add Service</Button>
+                         <Button className="w-full mt-4" size="lg" onClick={handleConfirmPreferences}>
+                           {selectedServices.includes(editingService?.id || '') ? 'Save Changes' : 'Add Service'}
+                         </Button>
                     </DialogFooter>
                 </DialogContent>
             </Dialog>
