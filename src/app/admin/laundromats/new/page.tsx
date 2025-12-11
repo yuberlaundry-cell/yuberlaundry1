@@ -144,9 +144,36 @@ export default function NewLaundromatPage() {
                                     </SelectContent>
                                 </Select>
                             </div>
-                             <div className="space-y-2">
-                                <Label htmlFor="payout-details">Payout Bank Account Details</Label>
-                                <Input id="payout-details" placeholder="Enter bank details (handled by Paystack)" required />
+                            <Separator />
+                            <div>
+                                <h4 className="font-medium text-lg mb-1">Payout Details</h4>
+                                <p className="text-sm text-muted-foreground mb-4">Enter the bank details where payouts will be sent via Paystack.</p>
+                                <div className="space-y-4">
+                                     <div className="space-y-2">
+                                        <Label htmlFor="bank-name">Bank Name</Label>
+                                        <Select name="bank-code" required>
+                                            <SelectTrigger id="bank-name">
+                                                <SelectValue placeholder="Select a bank"/>
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="058">Guaranty Trust Bank</SelectItem>
+                                                <SelectItem value="011">First Bank of Nigeria</SelectItem>
+                                                <SelectItem value="057">Zenith Bank</SelectItem>
+                                                <SelectItem value="044">Access Bank</SelectItem>
+                                                <SelectItem value="standard-bank">Standard Bank (South Africa)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="account-number">Account Number</Label>
+                                        <Input id="account-number" placeholder="Enter account number" required />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="account-name">Account Holder Name</Label>
+                                        <Input id="account-name" placeholder="Name is verified via Paystack" readOnly />
+                                        <p className="text-xs text-muted-foreground">Account name is automatically verified and populated.</p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -191,4 +218,3 @@ export default function NewLaundromatPage() {
     </div>
   )
 }
-
