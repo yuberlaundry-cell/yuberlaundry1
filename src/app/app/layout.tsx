@@ -19,25 +19,20 @@ import { cn } from "@/lib/utils";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { Separator } from "@/components/ui/separator";
 
-const desktopNavConfig = [
-  { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
-  { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
-  { href: '/app/promotions', label: 'Promotions', icon: Tag },
-  { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
-  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon },
-];
-
-const mobileNavItems = [
-    { href: '/app', label: 'Dashboard', icon: LayoutDashboard, exact: true },
-    { href: '/app/wallet', label: 'Wallet', icon: Wallet },
-];
-
 const moreMenuItems = [
     { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
     { href: '/app/promotions', label: 'Promotions & Subscriptions', icon: Tag },
     { href: '/app/referrals', label: 'Refer a Friend', icon: ReferralsIcon },
     { href: '/app/account', label: 'Account Settings', icon: Settings },
     { href: '/app/support', label: 'Support', icon: LifeBuoy },
+];
+
+const desktopNavConfig = [
+  { href: '/app', label: 'Dashboard', icon: LayoutDashboard },
+  { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
+  { href: '/app/promotions', label: 'Promotions', icon: Tag },
+  { href: '/app/wallet', label: 'My Wallet', icon: Wallet },
+  { href: '/app/referrals', label: 'Referrals', icon: ReferralsIcon },
 ];
 
 const desktopBottomNavConfig = [
@@ -55,7 +50,7 @@ const BottomNavbar = () => {
                 <Link
                     href="/app"
                     className={cn(
-                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                        "flex flex-col items-center justify-center text-muted-foreground pt-1",
                         pathname === "/app" && "text-primary"
                     )}
                 >
@@ -65,7 +60,7 @@ const BottomNavbar = () => {
                 <Link
                     href="/app/wallet"
                     className={cn(
-                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                        "flex flex-col items-center justify-center text-muted-foreground pt-1",
                         pathname.startsWith("/app/wallet") && "text-primary"
                     )}
                 >
@@ -75,10 +70,9 @@ const BottomNavbar = () => {
                 
                 <Dialog>
                     <DialogTrigger asChild>
-                        <div className="flex flex-col items-center justify-center gap-1 text-primary pt-1">
-                            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg">
-                                <PlusCircle className="h-6 w-6" />
-                            </div>
+                        <div className="flex flex-col items-center justify-center text-primary pt-1">
+                             <PlusCircle className="h-6 w-6" />
+                             <span className="text-xs">New Order</span>
                         </div>
                     </DialogTrigger>
                     <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
@@ -95,7 +89,7 @@ const BottomNavbar = () => {
                 </Dialog>
                  <Sheet>
                     <SheetTrigger asChild>
-                         <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1">
+                         <div className="flex flex-col items-center justify-center text-muted-foreground pt-1">
                             <MoreHorizontal className="h-5 w-5" />
                             <span className="text-xs">More</span>
                         </div>
@@ -142,7 +136,7 @@ export default function ConsumerPortalLayout({
   if (isMobile) {
     return (
         <>
-             <header className="sticky top-0 z-40 flex h-16 items-center gap-4 border-b bg-background px-4 sm:px-6">
+             <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6">
                  <Link href="/" className="mr-auto">
                     <WashingMachine className="h-7 w-7 text-primary" />
                  </Link>
