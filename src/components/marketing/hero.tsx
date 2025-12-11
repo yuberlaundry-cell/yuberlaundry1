@@ -91,7 +91,7 @@ export default function Hero() {
                 </Dialog>
             </div>
             
-            <RadioGroup defaultValue={timeSlots[0].value} className="space-y-3">
+            <RadioGroup defaultValue={timeSlots.length > 0 ? timeSlots[0].value : undefined} className="space-y-3">
                 {displayedSlots.map(slot => (
                      <Label key={slot.value} htmlFor={slot.value} className="flex items-center p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
                         <RadioGroupItem value={slot.value} id={slot.value} />
@@ -110,8 +110,16 @@ export default function Hero() {
                 <DialogTrigger asChild>
                     <Button size="lg" className="w-full mt-3">Continue</Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
-                    <BookingFlow />
+                <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                    <DialogHeader className="p-6 pb-0 hidden">
+                        <DialogTitle>Book your laundry</DialogTitle>
+                        <DialogDescription>
+                            Configure your laundry order and schedule a pickup.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid grid-cols-3 flex-1 overflow-hidden">
+                        <BookingFlow />
+                    </div>
                 </DialogContent>
             </Dialog>
             
