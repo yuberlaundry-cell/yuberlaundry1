@@ -175,7 +175,7 @@ export default function FinancialsPage() {
              <Card>
                 <CardHeader>
                     <CardTitle>Payout Method</CardTitle>
-                    <CardDescription>Earnings are paid out via Paystack.</CardDescription>
+                    <CardDescription>Earnings are paid out to your bank account via Paystack.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
                      <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
