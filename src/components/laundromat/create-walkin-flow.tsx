@@ -26,14 +26,17 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const [step, setStep] = useState(1);
   const [customer, setCustomer] = useState({ name: '', phone: '' });
   const [orderItems, setOrderItems] = useState<{ id: string; name: string; model: string; price: number; value: number }[]>([]);
+  const [newOrderId, setNewOrderId] = useState('');
   const { toast } = useToast();
 
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => setStep((s) => s - 1);
   
   const handleCreateOrder = () => {
+    const generatedId = `W-${Math.floor(100000 + Math.random() * 900000)}`;
+    setNewOrderId(generatedId);
     toast({
-        title: 'Order #W-54321 Created',
+        title: `Order ${generatedId} Created`,
         description: 'The order for ' + customer.name + ' is now in the system.',
     });
     handleNext();
@@ -213,7 +216,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                     <div className="p-4 rounded-full bg-green-100 text-green-700 mb-4">
                         <CheckCircle className="h-10 w-10" />
                     </div>
-                    <DialogTitle>Order #W-54321 Created</DialogTitle>
+                    <DialogTitle>Order {newOrderId} Created</DialogTitle>
                     <DialogDescription>The order for {customer.name} has been successfully created and is marked as paid.</DialogDescription>
                 </DialogHeader>
                 <div className="space-y-4 py-4 text-center">
