@@ -33,6 +33,7 @@ const mobileNavItems = [
 ];
 
 const moreMenuItems = [
+    { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
     { href: '/app/promotions', label: 'Promotions & Subscriptions', icon: Tag },
     { href: '/app/referrals', label: 'Refer a Friend', icon: ReferralsIcon },
     { href: '/app/account', label: 'Account Settings', icon: Settings },
@@ -50,7 +51,7 @@ const BottomNavbar = () => {
     const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
-            <div className="grid h-16 grid-cols-5 w-full">
+            <div className="grid h-16 grid-cols-4 w-full">
                 <Link
                     href="/app"
                     className={cn(
@@ -72,38 +73,26 @@ const BottomNavbar = () => {
                     <span className="text-xs">Wallet</span>
                 </Link>
                 
-                <div className="flex justify-center items-center">
-                     <Dialog>
-                        <DialogTrigger asChild>
-                           <div className="flex flex-col items-center justify-center gap-1 text-primary pt-1 relative -top-3">
-                               <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg">
-                                 <PlusCircle className="h-7 w-7" />
-                               </div>
-                           </div>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
-                            <DialogHeader className="p-6 pb-0">
-                                <DialogTitle>Book your laundry</DialogTitle>
-                                <DialogDescription>
-                                    Configure your laundry order and schedule a pickup.
-                                </DialogDescription>
-                            </DialogHeader>
-                             <div className="grid grid-cols-3 flex-1 overflow-hidden">
-                                <BookingFlow />
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <div className="flex flex-col items-center justify-center gap-1 text-primary pt-1">
+                            <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary text-primary-foreground shadow-lg">
+                                <PlusCircle className="h-6 w-6" />
                             </div>
-                        </DialogContent>
-                    </Dialog>
-                </div>
-                 <Link
-                    href="/app/orders"
-                    className={cn(
-                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
-                        pathname.startsWith("/app/orders") && "text-primary"
-                    )}
-                >
-                    <ShoppingCart className="h-5 w-5" />
-                    <span className="text-xs">My Orders</span>
-                </Link>
+                        </div>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                        <DialogHeader className="p-6 pb-0">
+                            <DialogTitle>Book your laundry</DialogTitle>
+                            <DialogDescription>
+                                Configure your laundry order and schedule a pickup.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid grid-cols-3 flex-1 overflow-hidden">
+                            <BookingFlow />
+                        </div>
+                    </DialogContent>
+                </Dialog>
                  <Sheet>
                     <SheetTrigger asChild>
                          <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1">
