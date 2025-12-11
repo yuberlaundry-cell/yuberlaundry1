@@ -33,6 +33,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-// Triggering a reload to fix a Turbopack chunk error.
-
 export default nextConfig;

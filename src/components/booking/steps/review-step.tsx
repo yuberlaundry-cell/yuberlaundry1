@@ -6,12 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle2, Info } from "lucide-react";
+import { CheckCircle2, Info, Loader2 } from "lucide-react";
 import { useState } from "react";
 
 
-export default function ReviewStep() {
+export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) {
     const [tip, setTip] = useState('15%');
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     return (
         <div className="space-y-8">
@@ -44,8 +45,8 @@ export default function ReviewStep() {
                 <div className="space-y-2">
                     <Label htmlFor="promo-code">Promo code</Label>
                     <div className="flex gap-2">
-                        <Input id="promo-code" placeholder="Enter promo code" />
-                        <Button variant="outline">Apply</Button>
+                        <Input id="promo-code" placeholder="Enter promo code" disabled={isProcessing} />
+                        <Button variant="outline" disabled={isProcessing}>Apply</Button>
                     </div>
                 </div>
 
@@ -58,6 +59,7 @@ export default function ReviewStep() {
                                 variant={tip === val ? 'default' : 'outline'}
                                 onClick={() => setTip(val)}
                                 className="flex-1"
+                                disabled={isProcessing}
                             >
                                 {val}
                             </Button>
@@ -67,7 +69,7 @@ export default function ReviewStep() {
                 </div>
 
                  <div className="flex items-center space-x-2 pt-4">
-                    <Checkbox id="terms" />
+                    <Checkbox id="terms" checked={agreedToTerms} onCheckedChange={(checked) => setAgreedToTerms(Boolean(checked))} disabled={isProcessing}/>
                     <Label htmlFor="terms" className="text-sm font-normal text-muted-foreground">
                         I have read and agree to the <a href="#" className="underline hover:text-primary">Terms</a> and <a href="#" className="underline hover:text-primary">Privacy Policy</a>.
                     </Label>
