@@ -16,17 +16,17 @@ import {
 } from '@/components/ui/chart';
 
 const chartData = [
-  { month: 'Dec', spend: 255 },
-  { month: 'Jan', spend: 305 },
-  { month: 'Feb', spend: 237 },
-  { month: 'Mar', spend: 173 },
-  { month: 'Apr', spend: 209 },
-  { month: 'May', spend: 214 },
+  { month: 'Dec', hours: 4 },
+  { month: 'Jan', hours: 5 },
+  { month: 'Feb', hours: 3.5 },
+  { month: 'Mar', hours: 2.5 },
+  { month: 'Apr', hours: 3 },
+  { month: 'May', hours: 3.5 },
 ];
 
 const chartConfig = {
-  spend: {
-    label: 'Spend (R)',
+  hours: {
+    label: 'Hours Saved',
     color: 'hsl(var(--primary))',
   },
 };
@@ -35,8 +35,8 @@ export function MonthlySpendChart() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Monthly Spend</CardTitle>
-        <CardDescription>Spending summary for the last 6 months.</CardDescription>
+        <CardTitle>Total Laundry Hours Saved</CardTitle>
+        <CardDescription>An estimate of the time you've reclaimed each month.</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="h-[200px] w-full">
@@ -51,13 +51,13 @@ export function MonthlySpendChart() {
             <YAxis
                 tickLine={false}
                 axisLine={false}
-                tickFormatter={(value) => `R${value}`}
+                tickFormatter={(value) => `${value}h`}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dot" />}
             />
-            <Bar dataKey="spend" fill="var(--color-spend)" radius={4} />
+            <Bar dataKey="hours" fill="var(--color-hours)" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>

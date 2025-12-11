@@ -3,7 +3,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
-import { ArrowRight, ShoppingCart, RefreshCw, CalendarClock, Wallet, LifeBuoy } from "lucide-react";
+import { ArrowRight, ShoppingCart, RefreshCw, CalendarClock, Wallet, LifeBuoy, Zap } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { mockOrders } from "@/lib/mock-data";
@@ -69,7 +69,19 @@ export default function ConsumerDashboard() {
         ))}
       </div>
       
-      <MonthlySpendChart />
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-2">
+            <MonthlySpendChart />
+        </div>
+        <Card className="flex flex-col items-center justify-center text-center p-6 bg-accent/10 border-accent/30">
+            <div className="p-3 bg-background rounded-full border mb-3">
+                <Zap className="h-6 w-6 text-accent" />
+            </div>
+            <p className="text-3xl font-bold font-headline">18.5 hours</p>
+            <p className="text-muted-foreground">of life returned to you 🙌</p>
+        </Card>
+      </div>
+
 
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
@@ -97,7 +109,7 @@ export default function ConsumerDashboard() {
                 <Button variant="link" size="sm" asChild><Link href="/app/promotions">View all offers</Link></Button>
             </CardHeader>
             <CardContent className="text-center text-muted-foreground py-8">
-                <p>No active promotions.</p>
+                <p>No active promotions available.</p>
             </CardContent>
         </Card>
     </div>
