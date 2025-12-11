@@ -9,9 +9,12 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Switch } from "@/components/ui/switch";
 import { useAuth } from "@/hooks/use-auth";
 import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
+import { AddressInput } from "@/components/ui/address-input";
 
 export default function BusinessSettingsPage() {
     const { user } = useAuth();
+    const [address, setAddress] = useState('456 Corporate Ave, London');
     
     return (
         <div className="space-y-8 pb-8">
@@ -33,7 +36,16 @@ export default function BusinessSettingsPage() {
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="company-address">Company Address</Label>
-                            <Input id="company-address" placeholder="e.g., 456 Corporate Ave, London" />
+                            <AddressInput
+                                id="company-address"
+                                placeholder="e.g., 456 Corporate Ave, London"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                onAddressSelect={(addr) => {
+                                    setAddress(addr.description);
+                                    console.log("Selected coordinates:", addr.coordinates);
+                                }}
+                            />
                         </div>
                         <div className="pt-4">
                             <Button>Save Profile</Button>

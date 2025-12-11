@@ -8,9 +8,12 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useAuth } from "@/hooks/use-auth";
 import { Separator } from "@/components/ui/separator";
+import { AddressInput } from "@/components/ui/address-input";
+import { useState } from "react";
 
 export default function BillingSettingsPage() {
     const { user } = useAuth();
+    const [address, setAddress] = useState('456 Corporate Ave');
     
     return (
         <div className="space-y-8 pb-8">
@@ -38,7 +41,16 @@ export default function BillingSettingsPage() {
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="address">Billing Address</Label>
-                            <Input id="address" placeholder="e.g., 456 Corporate Ave" />
+                            <AddressInput 
+                                id="address"
+                                placeholder="e.g., 456 Corporate Ave"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                onAddressSelect={(addr) => {
+                                    setAddress(addr.description);
+                                    console.log("Selected coordinates:", addr.coordinates);
+                                }}
+                            />
                         </div>
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="space-y-2">

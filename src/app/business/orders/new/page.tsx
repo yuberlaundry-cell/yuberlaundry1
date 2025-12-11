@@ -11,6 +11,8 @@ import { mockBusinessEmployees } from "@/lib/mock-data";
 import { ArrowLeft, CalendarIcon, Shirt, ShoppingBag, VenetianMask } from "lucide-react";
 import Link from "next/link";
 import { Checkbox } from "@/components/ui/checkbox";
+import { AddressInput } from "@/components/ui/address-input";
+import { useState } from "react";
 
 const services = [
     { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, description: "Per lb, standard service" },
@@ -19,6 +21,7 @@ const services = [
 ];
 
 export default function NewBusinessOrderPage() {
+    const [pickupAddress, setPickupAddress] = useState('');
 
     return (
         <div className="space-y-8 pb-8">
@@ -87,7 +90,16 @@ export default function NewBusinessOrderPage() {
 
                          <div className="space-y-2">
                             <Label htmlFor="pickup-address">Pickup Address</Label>
-                            <Input id="pickup-address" placeholder="123 Main St, Anytown, USA" />
+                            <AddressInput 
+                                id="pickup-address" 
+                                placeholder="123 Main St, Anytown, USA"
+                                value={pickupAddress}
+                                onChange={(e) => setPickupAddress(e.target.value)}
+                                onAddressSelect={(addr) => {
+                                    setPickupAddress(addr.description);
+                                    console.log("Selected coordinates:", addr.coordinates);
+                                }}
+                            />
                         </div>
 
                          <div className="space-y-2">
