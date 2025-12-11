@@ -8,50 +8,57 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
+import React, { useState, useEffect } from 'react';
 
 const allPermissions = {
   'Platform': [
-    'access_superadmin_portal',
-    'manage_all_users',
-    'manage_roles_permissions',
-    'impersonate_users',
-    'view_global_dashboard',
-    'manage_platform_settings',
-    'manage_integrations',
-    'manage_feature_flags',
-    'view_system_health',
+    { id: 'access_superadmin_portal', label: 'Access Superadmin Portal' },
+    { id: 'view_global_dashboard', label: 'View Global Dashboard' },
+    { id: 'manage_all_users', label: 'Manage All Users (Invite, Suspend)' },
+    { id: 'manage_roles_permissions', label: 'Manage Roles & Permissions' },
+    { id: 'impersonate_users', label: 'Impersonate Users' },
+    { id: 'manage_platform_settings', label: 'Manage Platform Settings' },
+    { id: 'manage_integrations', label: 'Manage Integrations (Paystack, Google Maps)' },
+    { id: 'manage_feature_flags', label: 'Manage Feature Flags' },
+    { id: 'view_system_health', label: 'View System Health & API Status' },
+    { id: 'view_all_orders', label: 'View All Platform Orders' },
+    { id: 'manage_all_laundromats', label: 'Manage All Laundromats' },
+    { id: 'manage_all_drivers', label: 'Manage All Drivers' },
   ],
   'Content Management': [
-    'manage_marketing_content',
-    'manage_faq',
-    'manage_legal_pages',
+    { id: 'manage_marketing_content', label: 'Manage Marketing Content (Homepage)' },
+    { id: 'manage_faq', label: 'Manage FAQ Page' },
+    { id: 'manage_legal_pages', label: 'Manage Legal Pages (Privacy, T&Cs)' },
   ],
   'Consumer': [
-    'access_consumer_portal',
-    'book_manage_own_orders',
-    'view_own_order_history',
-    'manage_own_payment_methods',
-    'manage_own_subscriptions',
+    { id: 'access_consumer_portal', label: 'Access Consumer Portal' },
+    { id: 'book_manage_own_orders', label: 'Book & Manage Own Orders' },
+    { id: 'view_own_order_history', label: 'View Own Order History' },
+    { id: 'manage_own_payment_methods', label: 'Manage Own Payment Methods' },
+    { id: 'manage_own_subscriptions', label: 'Manage Own Subscriptions' },
+    { id: 'use_referral_system', label: 'Use Referral System' },
   ],
   'Business': [
-    'access_business_portal',
-    'manage_company_employees',
-    'view_company_orders',
-    'view_company_reports',
-    'manage_company_billing',
-    'set_employee_allowances',
+    { id: 'access_business_portal', label: 'Access Business Portal' },
+    { id: 'manage_company_employees', label: 'Manage Company Employees' },
+    { id: 'view_company_orders', label: 'View All Company Orders' },
+    { id: 'view_company_reports', label: 'View Company-wide Reports' },
+    { id: 'manage_company_billing', label: 'Manage Company Billing & Invoices' },
+    { id: 'set_employee_allowances', label: 'Set Employee Spending Allowances' },
   ],
   'Driver': [
-    'access_driver_portal',
-    'view_accept_jobs',
-    'update_job_status',
-    'view_own_earnings',
+    { id: 'access_driver_portal', label: 'Access Driver Portal' },
+    { id: 'view_accept_jobs', label: 'View & Accept Available Jobs' },
+    { id: 'update_job_status', label: 'Update Job Status (Arrived, Collected, Delivered)' },
+    { id: 'view_own_earnings', label: 'View Own Earnings & Payouts' },
+    { id: 'chat_with_support', label: 'Chat with Support' },
   ],
   'Laundromat': [
-    'access_laundromat_portal',
-    'manage_facility_orders',
-    'manage_facility_resources',
-    'view_facility_financials',
+    { id: 'access_laundromat_portal', label: 'Access Laundromat Portal' },
+    { id: 'manage_facility_orders', label: 'Manage Facility Orders (Intake, Processing)' },
+    { id: 'manage_facility_resources', label: 'Manage Facility Resources (Staff, Machines)' },
+    { id: 'view_facility_financials', label: 'View Facility Financials & Payouts' },
+    { id: 'manage_facility_settings', label: 'Manage Facility Settings' },
   ],
 };
 
@@ -62,9 +69,20 @@ const rolesAndPermissions = [
     description: 'Has unrestricted access to all platform features and settings.',
     permissions: [
       'access_superadmin_portal',
+      'view_global_dashboard',
       'manage_all_users',
       'manage_roles_permissions',
       'impersonate_users',
+      'manage_platform_settings',
+      'manage_integrations',
+      'manage_feature_flags',
+      'view_system_health',
+      'view_all_orders',
+      'manage_all_laundromats',
+      'manage_all_drivers',
+      'manage_marketing_content',
+      'manage_faq',
+      'manage_legal_pages'
     ],
   },
   {
@@ -75,6 +93,8 @@ const rolesAndPermissions = [
       'book_manage_own_orders',
       'view_own_order_history',
       'manage_own_payment_methods',
+      'manage_own_subscriptions',
+      'use_referral_system',
     ],
   },
   {
@@ -85,6 +105,7 @@ const rolesAndPermissions = [
       'view_accept_jobs',
       'update_job_status',
       'view_own_earnings',
+      'chat_with_support',
     ],
   },
   {
@@ -96,6 +117,17 @@ const rolesAndPermissions = [
       'manage_facility_resources',
     ],
   },
+   {
+    role: 'Laundromat Supervisor',
+    description: 'A manager at a partner laundry facility with extended permissions.',
+    permissions: [
+      'access_laundromat_portal',
+      'manage_facility_orders',
+      'manage_facility_resources',
+      'view_facility_financials',
+      'manage_facility_settings',
+    ],
+  },
   {
     role: 'Business Admin',
     description: 'Manages a company account.',
@@ -105,6 +137,7 @@ const rolesAndPermissions = [
       'view_company_orders',
       'view_company_reports',
       'manage_company_billing',
+      'set_employee_allowances',
     ],
   },
   {
@@ -154,31 +187,16 @@ export default function RolesPage() {
                       <Edit className="mr-2 h-4 w-4" /> Manage Permissions
                     </Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-2xl">
+                  <DialogContent className="max-w-3xl">
                     <DialogHeader>
                       <DialogTitle>Manage Permissions for {role.role}</DialogTitle>
                       <DialogDescription>
                         Select the permissions this role should have access to.
                       </DialogDescription>
                     </DialogHeader>
-                    <form className="space-y-6 max-h-[60vh] overflow-y-auto pr-6">
-                      {Object.entries(allPermissions).map(([category, perms]) => (
-                        <div key={category}>
-                            <h3 className="font-semibold text-lg mb-2">{category}</h3>
-                            <div className="space-y-3">
-                              {perms.map(p => (
-                                <div key={p} className="flex items-center space-x-2">
-                                  <Checkbox id={`${role.role}-${p}`} defaultChecked={role.permissions.includes(p)} />
-                                  <Label htmlFor={`${role.role}-${p}`} className="font-normal">{formatPermission(p)}</Label>
-                                </div>
-                              ))}
-                            </div>
-                            <Separator className="mt-4" />
-                        </div>
-                      ))}
-                    </form>
+                    <PermissionForm initialPermissions={role.permissions} />
                      <DialogFooter>
-                        <Button type="submit">Save Permissions</Button>
+                        <Button type="submit" form="permission-form">Save Permissions</Button>
                     </DialogFooter>
                   </DialogContent>
                 </Dialog>
@@ -189,3 +207,65 @@ export default function RolesPage() {
     </div>
   );
 }
+
+function PermissionForm({ initialPermissions }: { initialPermissions: string[] }) {
+    const [checkedState, setCheckedState] = useState<Record<string, boolean>>(() => {
+        const state: Record<string, boolean> = {};
+        for (const category of Object.values(allPermissions)) {
+            for (const perm of category) {
+                state[perm.id] = initialPermissions.includes(perm.id);
+            }
+        }
+        return state;
+    });
+
+    const handleCategoryCheck = (categoryKey: keyof typeof allPermissions, isChecked: boolean) => {
+        const categoryPerms = allPermissions[categoryKey].map(p => p.id);
+        const newState = { ...checkedState };
+        categoryPerms.forEach(permId => {
+            newState[permId] = isChecked;
+        });
+        setCheckedState(newState);
+    };
+
+    return (
+        <form id="permission-form" className="space-y-6 max-h-[60vh] overflow-y-auto pr-6">
+            {Object.entries(allPermissions).map(([category, perms]) => {
+                const categoryPermIds = perms.map(p => p.id);
+                const isAllChecked = categoryPermIds.every(id => checkedState[id]);
+                const isIndeterminate = categoryPermIds.some(id => checkedState[id]) && !isAllChecked;
+
+                return (
+                    <div key={category}>
+                        <div className="flex items-center gap-3 bg-muted -ml-6 -mr-6 px-6 py-2 sticky top-0">
+                            <Checkbox 
+                                id={`category-${category}`}
+                                onCheckedChange={(checked) => handleCategoryCheck(category as keyof typeof allPermissions, checked as boolean)}
+                                checked={isAllChecked}
+                                // The native checkbox doesn't have a visual indeterminate state in shadcn by default,
+                                // but the logic is here if we were to customize it.
+                            />
+                            <Label htmlFor={`category-${category}`} className="font-semibold text-lg">{category}</Label>
+                        </div>
+                        <div className="space-y-3 mt-4">
+                            {perms.map(p => (
+                                <div key={p.id} className="flex items-center space-x-2 ml-2">
+                                    <Checkbox 
+                                        id={p.id}
+                                        checked={checkedState[p.id] || false}
+                                        onCheckedChange={(checked) => {
+                                            setCheckedState(prev => ({ ...prev, [p.id]: checked }));
+                                        }}
+                                    />
+                                    <Label htmlFor={p.id} className="font-normal">{p.label}</Label>
+                                </div>
+                            ))}
+                        </div>
+                        <Separator className="mt-6" />
+                    </div>
+                );
+            })}
+        </form>
+    );
+}
+
