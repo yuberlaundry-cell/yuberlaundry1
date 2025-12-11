@@ -33,7 +33,6 @@ const mobileNavItems = [
 ];
 
 const moreMenuItems = [
-    { href: '/app/orders', label: 'My Orders', icon: ShoppingCart },
     { href: '/app/promotions', label: 'Promotions & Subscriptions', icon: Tag },
     { href: '/app/referrals', label: 'Refer a Friend', icon: ReferralsIcon },
     { href: '/app/account', label: 'Account Settings', icon: Settings },
@@ -51,23 +50,28 @@ const BottomNavbar = () => {
     const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
-            <div className="grid h-16 grid-cols-4 w-full">
-                {mobileNavItems.map((item) => {
-                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
-                    return (
-                        <Link
-                            key={item.href}
-                            href={item.href}
-                            className={cn(
-                                "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
-                                isActive && "text-primary"
-                            )}
-                        >
-                            <item.icon className="h-5 w-5" />
-                            <span className="text-xs">{item.label}</span>
-                        </Link>
-                    )
-                })}
+            <div className="grid h-16 grid-cols-5 w-full">
+                <Link
+                    href="/app"
+                    className={cn(
+                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                        pathname === "/app" && "text-primary"
+                    )}
+                >
+                    <LayoutDashboard className="h-5 w-5" />
+                    <span className="text-xs">Dashboard</span>
+                </Link>
+                <Link
+                    href="/app/wallet"
+                    className={cn(
+                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                        pathname.startsWith("/app/wallet") && "text-primary"
+                    )}
+                >
+                    <Wallet className="h-5 w-5" />
+                    <span className="text-xs">Wallet</span>
+                </Link>
+                
                 <div className="flex justify-center items-center">
                      <Dialog>
                         <DialogTrigger asChild>
@@ -88,6 +92,16 @@ const BottomNavbar = () => {
                         </DialogContent>
                     </Dialog>
                 </div>
+                 <Link
+                    href="/app/orders"
+                    className={cn(
+                        "flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1",
+                        pathname.startsWith("/app/orders") && "text-primary"
+                    )}
+                >
+                    <ShoppingCart className="h-5 w-5" />
+                    <span className="text-xs">My Orders</span>
+                </Link>
                  <Sheet>
                     <SheetTrigger asChild>
                          <div className="flex flex-col items-center justify-center gap-1 text-muted-foreground pt-1">
@@ -96,7 +110,7 @@ const BottomNavbar = () => {
                         </div>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="rounded-t-2xl">
-                         <SheetHeader>
+                        <SheetHeader>
                             <SheetTitle className="sr-only">More Options</SheetTitle>
                             <SheetDescription className="sr-only">
                                 Access additional menu items like orders, promotions, referrals, settings, and support.
