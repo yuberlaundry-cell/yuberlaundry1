@@ -179,7 +179,9 @@ export default function JobDetailsPage() {
                             <Separator />
                             <div className="flex items-center gap-3">
                                 <MapPin className="h-5 w-5 text-muted-foreground"/>
-                                <p>{job.address}</p>
+                                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.address)}`} target="_blank" rel="noopener noreferrer" className="hover:underline">
+                                    {job.address}
+                                </a>
                             </div>
                             <div className="flex items-center gap-3">
                                 <Phone className="h-5 w-5 text-muted-foreground"/>
@@ -191,7 +193,11 @@ export default function JobDetailsPage() {
                                     <p className="text-sm italic text-muted-foreground bg-muted p-2 rounded-md border">{job.notes}</p>
                                 </div>
                             )}
-                            <Button variant="outline" className="w-full"><Navigation className="mr-2"/> Open in Maps</Button>
+                            <Button variant="outline" className="w-full" asChild>
+                                <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.address)}`} target="_blank" rel="noopener noreferrer">
+                                    <Navigation className="mr-2"/> Open in Maps
+                                </a>
+                            </Button>
                         </CardContent>
                     </Card>
                 </div>

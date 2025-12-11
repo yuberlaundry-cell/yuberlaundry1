@@ -33,14 +33,16 @@ export default function AddressStep() {
                                 {addr.type === 'Home' ? <Home className="h-5 w-5 text-muted-foreground" /> : <Briefcase className="h-5 w-5 text-muted-foreground" />}
                                 <div>
                                     <p className="font-medium">{addr.type}</p>
-                                    <p className="text-sm text-muted-foreground">{addr.address}</p>
+                                    <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(addr.address)}`} target="_blank" rel="noopener noreferrer" className="text-sm text-muted-foreground hover:underline" onClick={(e) => e.stopPropagation()}>
+                                        {addr.address}
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div className="flex items-center gap-1">
                             <Dialog>
                                 <DialogTrigger asChild>
-                                     <Button variant="ghost" size="icon" className="h-8 w-8"><Edit className="h-4 w-4"/></Button>
+                                     <Button variant="ghost" size="icon" className="h-8 w-8" onClick={(e) => e.stopPropagation()}><Edit className="h-4 w-4"/></Button>
                                 </DialogTrigger>
                                 <DialogContent>
                                     <DialogHeader>
@@ -110,4 +112,3 @@ function AddressForm({ defaultValues }: { defaultValues?: any}) {
         </form>
     );
 }
-

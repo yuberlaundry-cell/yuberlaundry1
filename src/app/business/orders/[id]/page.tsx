@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -106,13 +107,17 @@ export default function BusinessOrderDetailsPage() {
                             <Separator/>
                             <div>
                                 <h4 className="font-semibold mb-1">Pickup</h4>
-                                <p className="text-muted-foreground">{order.pickupAddress}</p>
+                                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.pickupAddress)}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:underline">
+                                    {order.pickupAddress}
+                                </a>
                                 <p className="text-muted-foreground">{order.pickup}</p>
                             </div>
                             <Separator />
                              <div>
                                 <h4 className="font-semibold mb-1">Delivery</h4>
-                                <p className="text-muted-foreground">{order.deliveryAddress}</p>
+                                <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(order.deliveryAddress)}`} target="_blank" rel="noopener noreferrer" className="text-muted-foreground hover:underline">
+                                    {order.deliveryAddress}
+                                </a>
                                 <p className="text-muted-foreground">{order.delivery}</p>
                             </div>
                         </CardContent>

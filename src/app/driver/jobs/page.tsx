@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -62,6 +63,7 @@ export default function JobsPage() {
                         </CardHeader>
                         <CardContent className="text-sm space-y-1">
                              <p><span className="font-semibold">Customer:</span> {job.customer}</p>
+                             <p><span className="font-semibold">Address:</span> <a href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(job.address)}`} target="_blank" rel="noopener noreferrer" className="hover:underline">{job.address}</a></p>
                              <p><span className="font-semibold">Time:</span> {job.time}</p>
                         </CardContent>
                         <CardFooter>
