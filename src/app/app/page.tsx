@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { mockOrders } from "@/lib/mock-data";
 import { OrderCard } from "@/components/orders/order-card";
+import { LoyaltyCard } from "@/components/app/loyalty-card";
 
 const actionCards = [
     {
@@ -66,33 +67,10 @@ export default function ConsumerDashboard() {
       </div>
 
        <div className="grid lg:grid-cols-3 gap-8 items-start">
-        <Card className="lg:col-span-2">
-            <CardHeader>
-                <CardTitle>Wallet</CardTitle>
-            </CardHeader>
-            <CardContent className="grid sm:grid-cols-3 gap-6 items-center">
-                <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground">Balance</p>
-                    <p className="text-2xl font-bold">R150.50</p>
-                </div>
-                <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground">Referral Credits</p>
-                    <p className="text-2xl font-bold">R0.00</p>
-                </div>
-                <div className="p-4 rounded-lg bg-muted/50 text-center">
-                    <p className="text-sm text-muted-foreground">Loyalty Points</p>
-                    <p className="text-2xl font-bold">120 pts</p>
-                </div>
-            </CardContent>
-             <CardFooter className="flex-wrap gap-2 border-t pt-4">
-                <Button asChild>
-                    <Link href="/app/wallet">Add Funds</Link>
-                </Button>
-                <Button variant="outline" asChild>
-                    <Link href="/app/wallet">View History</Link>
-                </Button>
-             </CardFooter>
-        </Card>
+        <div className="lg:col-span-2">
+            <LoyaltyCard />
+        </div>
+        
 
         <Card>
             <CardHeader className="flex flex-row items-center justify-between">

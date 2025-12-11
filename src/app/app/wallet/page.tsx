@@ -23,18 +23,10 @@ import { CreditCard, Gift, PlusCircle, ShieldQuestion, Loader2, Star, CheckCircl
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import PaystackPop from '@paystack/inline-js';
 import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
-import { Progress } from '@/components/ui/progress';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { LoyaltyCard } from '@/components/app/loyalty-card';
 
 const transactions = [
     { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-R255.50', points: '+2550 pts'},
@@ -43,13 +35,6 @@ const transactions = [
     { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+R100.00', points: '+1000 pts'},
 ];
 
-const rewards = [
-    { name: 'R50 Off Your Next Order', cost: 5000 },
-    { name: 'Free Delivery', cost: 2500 },
-    { name: 'Free Ironing (5 items)', cost: 7500 },
-    { name: 'Plant a Tree', cost: 1000 },
-]
-
 export default function WalletPage() {
   const { toast } = useToast();
   const { user } = useAuth();
@@ -57,10 +42,6 @@ export default function WalletPage() {
   const [topUpAmount, setTopUpAmount] = useState(500);
   const [customAmount, setCustomAmount] = useState('');
   const [isProcessingTopUp, setIsProcessingTopUp] = useState(false);
-  const [isProcessingGift, setIsProcessingGift] = useState(false);
-  const [giftAmount, setGiftAmount] = useState('');
-  const [points, setPoints] = useState(1245);
-  const nextRewardTier = 5000;
 
   const handleAddFunds = () => {
     const amountInKobo = (customAmount ? parseFloat(customAmount) : topUpAmount) * 100;
@@ -87,43 +68,6 @@ export default function WalletPage() {
     });
   };
 
-  const handleSendGift = (e: React.FormEvent) => {
-      e.preventDefault();
-      const amount = parseFloat(giftAmount);
-      if (isNaN(amount) || amount <= 0) {
-          toast({ title: 'Invalid Gift Amount', description: 'Please enter a valid amount for the gift card.', variant: 'destructive'});
-          return;
-      }
-      setIsProcessingGift(true);
-      const paystack = new PaystackPop();
-      paystack.newTransaction({
-        key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
-        email: user?.email || '',
-        amount: amount * 100,
-        currency: 'ZAR',
-        reference: `yuber_gift_${Date.now()}`,
-        onSuccess: (transaction) => {
-            toast({ title: 'Gift Card Sent!', description: `Your gift of R${amount.toFixed(2)} has been sent.` });
-            setIsProcessingGift(false);
-            setGiftAmount('');
-        },
-        onClose: () => {
-            setIsProcessingGift(false);
-        },
-      });
-  }
-
-  const handleRedeem = (cost: number, rewardName: string) => {
-      if (points >= cost) {
-          setPoints(currentPoints => currentPoints - cost);
-          toast({
-              title: "Reward Redeemed!",
-              description: `You've successfully redeemed "${rewardName}".`,
-          });
-      }
-  }
-
-
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -134,62 +78,9 @@ export default function WalletPage() {
       </div>
       
        <div className="grid lg:grid-cols-3 gap-8">
-            <Card className="lg:col-span-2">
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-yellow-500 fill-yellow-500"/> Loyalty Points</CardTitle>
-                </CardHeader>
-                <CardContent>
-                    <div className="grid sm:grid-cols-2 gap-6 items-center">
-                        <div className="p-4 rounded-lg bg-muted/50 text-center">
-                            <p className="text-sm text-muted-foreground">Your Points Balance</p>
-                            <p className="text-4xl font-bold">{points.toLocaleString()}</p>
-                        </div>
-                        <div>
-                             <div className="mb-1 flex justify-between items-baseline">
-                                <p className="text-sm font-medium">Next Reward</p>
-                                <p className="text-sm font-bold text-muted-foreground">
-                                    {(nextRewardTier - points).toLocaleString()} pts to go
-                                </p>
-                            </div>
-                            <Progress value={(points / nextRewardTier) * 100} />
-                            <p className="text-xs text-muted-foreground mt-1">You're on your way to a R50 voucher!</p>
-                        </div>
-                    </div>
-                </CardContent>
-                <CardFooter>
-                     <Dialog>
-                        <DialogTrigger asChild>
-                            <Button className="w-full">Redeem Points</Button>
-                        </DialogTrigger>
-                        <DialogContent>
-                            <DialogHeader>
-                                <DialogTitle>Redeem Your Points</DialogTitle>
-                                <DialogDescription>You have {points.toLocaleString()} points. Choose a reward to claim.</DialogDescription>
-                            </DialogHeader>
-                            <div className="space-y-3 py-4">
-                                {rewards.map(reward => (
-                                    <Card key={reward.name} className="p-4">
-                                        <div className="flex justify-between items-center">
-                                            <div>
-                                                <p className="font-semibold">{reward.name}</p>
-                                                <p className="text-sm text-muted-foreground">{reward.cost.toLocaleString()} points</p>
-                                            </div>
-                                            <Button 
-                                                variant="outline"
-                                                size="sm"
-                                                onClick={() => handleRedeem(reward.cost, reward.name)}
-                                                disabled={points < reward.cost}
-                                            >
-                                                Redeem
-                                            </Button>
-                                        </div>
-                                    </Card>
-                                ))}
-                            </div>
-                        </DialogContent>
-                    </Dialog>
-                </CardFooter>
-            </Card>
+            <div className="lg:col-span-2">
+                <LoyaltyCard />
+            </div>
 
             <div className="space-y-8">
                 <Card>
