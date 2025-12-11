@@ -38,6 +38,7 @@ import { Switch } from '@/components/ui/switch';
 import React from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
 
 const navigationConfig = [
   { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },
@@ -55,8 +56,7 @@ const navigationConfig = [
     title: 'Management',
     links: [
        { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
-       { href: '/laundromat/settings/pricing', label: 'Services & Pricing', icon: Tag },
-       { href: '/laundromat/completed', label: 'Reviews & Ratings', icon: Star },
+       { href: '/laundromat/completed', label: 'Completed & Reviews', icon: Star },
        { href: '/laundromat/resources', label: 'Resources', icon: Book },
        { href: '/laundromat/settings', label: 'Settings', icon: Settings },
     ]
@@ -97,116 +97,118 @@ export default function LaundromatPortalLayout({
   }
 
   return (
-    <SidebarProvider>
-      <Sidebar collapsible="none">
-        <SidebarHeader className="p-4">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="group-data-[collapsible=icon]:hidden"
-            >
-              <Link href="/" className="mr-auto">
-                <WashingMachine className="h-7 w-7 text-primary" />
-              </Link>
-            </Button>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-              <h1 className="font-headline text-lg font-semibold -mb-1">
-                Main St. Laundry
-              </h1>
-              <p className="text-xs text-muted-foreground">Facility Portal</p>
+    <LaundromatOrdersProvider>
+      <SidebarProvider>
+        <Sidebar collapsible="none">
+          <SidebarHeader className="p-4">
+            <div className="flex items-center gap-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                asChild
+                className="group-data-[collapsible=icon]:hidden"
+              >
+                <Link href="/" className="mr-auto">
+                  <WashingMachine className="h-7 w-7 text-primary" />
+                </Link>
+              </Button>
+              <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                <h1 className="font-headline text-lg font-semibold -mb-1">
+                  Main St. Laundry
+                </h1>
+                <p className="text-xs text-muted-foreground">Facility Portal</p>
+              </div>
             </div>
-          </div>
-        </SidebarHeader>
-        <SidebarContent>
-          <SidebarMenu>
-            {navigationConfig.map((section) => {
-              if (section.isStandalone) {
+          </SidebarHeader>
+          <SidebarContent>
+            <SidebarMenu>
+              {navigationConfig.map((section) => {
+                if (section.isStandalone) {
+                  return (
+                    <SidebarMenuItem key={section.href}>
+                      <SidebarMenuButton
+                        asChild
+                        tooltip={section.label}
+                        isActive={pathname === section.href}
+                      >
+                        <Link href={section.href}>
+                          <section.icon />
+                          <span>{section.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                }
                 return (
-                  <SidebarMenuItem key={section.href}>
-                    <SidebarMenuButton
-                      asChild
-                      tooltip={section.label}
-                      isActive={pathname === section.href}
-                    >
-                      <Link href={section.href}>
-                        <section.icon />
-                        <span>{section.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+                  <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href))} className="group/collapsible">
+                    <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
+                      <span className="truncate group-data-[collapsible=icon]:hidden">{section.title}</span>
+                      <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden" />
+                  </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
+                        {section.links.map((item) => (
+                          <SidebarMenuItem key={item.href}>
+                            <SidebarMenuButton
+                              asChild
+                              tooltip={item.label}
+                              isActive={pathname.startsWith(item.href)}
+                            >
+                              <Link href={item.href}>
+                                <item.icon />
+                                <span>{item.label}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        ))}
+                      </div>
+                    </CollapsibleContent>
+                  </Collapsible>
                 );
-              }
-              return (
-                <Collapsible key={section.title} defaultOpen={section.links.some(l => pathname.startsWith(l.href))} className="group/collapsible">
-                   <CollapsibleTrigger className="group/trigger w-full flex items-center justify-between px-3 py-2 text-sm font-semibold text-muted-foreground hover:text-foreground [&[data-state=open]>svg]:rotate-90">
-                    <span className="truncate group-data-[collapsible=icon]:hidden">{section.title}</span>
-                    <ChevronRight className="h-4 w-4 transition-transform duration-200 group-data-[collapsible=icon]:hidden" />
-                </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <div className="py-1 pl-4 border-l ml-[18px] group-data-[collapsible=icon]:ml-0 group-data-[collapsible=icon]:pl-0 group-data-[collapsible=icon]:border-l-0">
-                      {section.links.map((item) => (
-                        <SidebarMenuItem key={item.href}>
-                          <SidebarMenuButton
-                            asChild
-                            tooltip={item.label}
-                            isActive={pathname.startsWith(item.href)}
-                          >
-                            <Link href={item.href}>
-                              <item.icon />
-                              <span>{item.label}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      ))}
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-              );
-            })}
-          </SidebarMenu>
-        </SidebarContent>
-      </Sidebar>
-      <SidebarInset>
-        <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <div className="md:hidden">
-            <SidebarTrigger />
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch id="facility-status" defaultChecked />
-            <Label htmlFor="facility-status">Open</Label>
-          </div>
-          <div className="flex-1" />
-           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="relative">
-                    <Bell />
-                    <span className="absolute top-0 right-0 flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-                    </span>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-80">
-                <div className="p-2 font-semibold">Notifications</div>
-                <DropdownMenuSeparator />
-                {notifications.map((n, i) => (
-                    <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
-                       <div className="font-medium">{n.title}</div>
-                       <div className="text-xs text-muted-foreground">{n.description}</div>
-                    </DropdownMenuItem>
-                ))}
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <UserNav />
-        </header>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
-            <div className="mx-auto w-full max-w-6xl">
-                {children}
+              })}
+            </SidebarMenu>
+          </SidebarContent>
+        </Sidebar>
+        <SidebarInset>
+          <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
+            <div className="md:hidden">
+              <SidebarTrigger />
             </div>
-        </main>
-      </SidebarInset>
-    </SidebarProvider>
+            <div className="flex items-center space-x-2">
+              <Switch id="facility-status" defaultChecked />
+              <Label htmlFor="facility-status">Open</Label>
+            </div>
+            <div className="flex-1" />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="relative">
+                      <Bell />
+                      <span className="absolute top-0 right-0 flex h-2 w-2">
+                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                      </span>
+                  </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-80">
+                  <div className="p-2 font-semibold">Notifications</div>
+                  <DropdownMenuSeparator />
+                  {notifications.map((n, i) => (
+                      <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
+                        <div className="font-medium">{n.title}</div>
+                        <div className="text-xs text-muted-foreground">{n.description}</div>
+                      </DropdownMenuItem>
+                  ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <UserNav />
+          </header>
+          <main className="flex-1 p-4 sm:p-6 lg:p-8">
+              <div className="mx-auto w-full max-w-6xl">
+                  {children}
+              </div>
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
+    </LaundromatOrdersProvider>
   );
 }

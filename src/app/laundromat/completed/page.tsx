@@ -27,30 +27,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-
-const completedOrders = [
-  {
-    orderId: '#YL12347',
-    customer: 'Acme Corp',
-    service: 'Wash & Fold',
-    completedDate: 'Today',
-    rating: 5,
-  },
-  {
-    orderId: '#YL12344',
-    customer: 'Jane Doe',
-    service: 'Wash & Fold',
-    completedDate: 'Yesterday',
-    rating: 4,
-  },
-  {
-    orderId: '#YL12343',
-    customer: 'John Smith',
-    service: 'Dry Cleaning',
-    completedDate: 'Yesterday',
-    rating: 5,
-  },
-];
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
+import { useMemo } from 'react';
 
 const RatingStars = ({ rating }: { rating: number }) => {
   return (
@@ -68,6 +46,24 @@ const RatingStars = ({ rating }: { rating: number }) => {
 };
 
 export default function CompletedOrdersPage() {
+  const { orders } = useLaundromatOrders();
+  
+  const completedOrders = useMemo(() => orders.filter(o => o.status === 'Completed'), [orders]);
+
+  const totalCompleted = completedOrders.length;
+  const averageRating = useMemo(() => {
+    if (completedOrders.length === 0) return 0;
+    const totalRating = completedOrders.reduce((acc, order) => acc + (order.rating || 0), 0);
+    const ratedOrders = completedOrders.filter(o => o.rating).length;
+    return ratedOrders > 0 ? totalRating / ratedOrders : 0;
+  }, [completedOrders]);
+  const positiveFeedback = useMemo(() => {
+    if (completedOrders.length === 0) return 0;
+    const positiveReviews = completedOrders.filter(o => o.rating && o.rating >= 4).length;
+    const ratedOrders = completedOrders.filter(o => o.rating).length;
+    return ratedOrders > 0 ? (positiveReviews / ratedOrders) * 100 : 0;
+  }, [completedOrders]);
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -83,21 +79,21 @@ export default function CompletedOrdersPage() {
         <Card>
           <CardHeader>
             <CardTitle>Total Completed</CardTitle>
-            <CardDescription>256</CardDescription>
+            <CardDescription>{totalCompleted}</CardDescription>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle>Average Rating</CardTitle>
             <CardDescription className="flex items-center gap-1">
-              4.8 <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+              {averageRating.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
             </CardDescription>
           </CardHeader>
         </Card>
         <Card>
           <CardHeader>
             <CardTitle>Positive Feedback</CardTitle>
-            <CardDescription>99.2%</CardDescription>
+            <CardDescription>{positiveFeedback.toFixed(1)}%</CardDescription>
           </CardHeader>
         </Card>
       </div>
@@ -137,13 +133,13 @@ export default function CompletedOrdersPage() {
             </TableHeader>
             <TableBody>
               {completedOrders.map((order) => (
-                <TableRow key={order.orderId}>
-                  <TableCell className="font-medium">{order.orderId}</TableCell>
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.id}</TableCell>
                   <TableCell>{order.customer}</TableCell>
                   <TableCell>{order.service}</TableCell>
-                  <TableCell>{order.completedDate}</TableCell>
+                  <TableCell>{order.readyTime || new Date().toLocaleDateString()}</TableCell>
                   <TableCell>
-                    <RatingStars rating={order.rating} />
+                    {order.rating ? <RatingStars rating={order.rating} /> : <span className="text-muted-foreground">N/A</span>}
                   </TableCell>
                 </TableRow>
               ))}

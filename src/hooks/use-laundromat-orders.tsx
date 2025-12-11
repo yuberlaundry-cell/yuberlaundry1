@@ -1,0 +1,69 @@
+
+'use client';
+
+import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
+
+export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Completed' | 'Cancelled';
+
+export interface LaundromatOrder {
+  id: string;
+  customer: string;
+  status: LaundromatOrderStatus;
+  service: string;
+  pickup: string;
+  sla: string;
+  bags?: number;
+  readyTime?: string;
+  driver?: string;
+  rating?: number;
+}
+
+
+const initialOrders: LaundromatOrder[] = [
+    {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold', pickup: 'Today, 10am', sla: 'Due in 3h', bags: 2, readyTime: 'Today, 2:15 PM', driver: 'Assigned (David L.)', rating: 5},
+    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning', pickup: 'Today, 9am', sla: 'Due in 1h', bags: 1, readyTime: 'Today, 1:00 PM', driver: 'Unassigned', rating: 4},
+    {id: '#YL12347', customer: 'Acme Corp', status: 'Ready', service: 'Wash & Fold', pickup: 'Yesterday', sla: 'Completed', bags: 5, readyTime: 'Today, 2:15 PM', driver: 'Assigned (David L.)'},
+    {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing', pickup: 'Today, 11am', sla: 'Due in 5h', bags: 3, readyTime: 'Today, 4:00 PM', driver: 'Unassigned'},
+    {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold', pickup: 'Today, 1pm', sla: 'Due in 24h', bags: 2, readyTime: 'Tomorrow, 1:00 PM', driver: 'Unassigned'},
+    {id: '#YL12350', customer: 'Wonderland Inc.', status: 'Ready', service: 'Bedding', bags: 12, readyTime: 'Today, 3:00 PM', pickup: 'Today, 10am', sla: 'Completed'},
+    {id: '#YL12351', customer: 'Walk-in Customer', service: 'Wash & Fold', bags: 2, readyTime: 'Today, 3:30 PM', status: 'Ready', pickup: 'Today, 11am', sla: 'Completed'},
+];
+
+interface LaundromatOrdersContextType {
+  orders: LaundromatOrder[];
+  updateOrderStatus: (orderId: string, newStatus: LaundromatOrderStatus) => void;
+  getOrderById: (orderId: string) => LaundromatOrder | undefined;
+}
+
+const LaundromatOrdersContext = createContext<LaundromatOrdersContextType | undefined>(undefined);
+
+export const LaundromatOrdersProvider = ({ children }: { children: ReactNode }) => {
+  const [orders, setOrders] = useState<LaundromatOrder[]>(initialOrders);
+
+  const updateOrderStatus = useCallback((orderId: string, newStatus: LaundromatOrderStatus) => {
+    setOrders(prevOrders =>
+      prevOrders.map(order =>
+        order.id === orderId ? { ...order, status: newStatus } : order
+      )
+    );
+  }, []);
+
+  const getOrderById = useCallback((orderId: string) => {
+    return orders.find(order => order.id === orderId);
+  }, [orders]);
+
+
+  return (
+    <LaundromatOrdersContext.Provider value={{ orders, updateOrderStatus, getOrderById }}>
+      {children}
+    </LaundromatOrdersContext.Provider>
+  );
+};
+
+export const useLaundromatOrders = () => {
+  const context = useContext(LaundromatOrdersContext);
+  if (context === undefined) {
+    throw new Error('useLaundromatOrders must be used within a LaundromatOrdersProvider');
+  }
+  return context;
+};

@@ -14,50 +14,24 @@ import { Check, Truck, User, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-
-const initialDriverOrders = [
-  {
-    id: '#YL12347',
-    customer: 'Acme Corp',
-    service: 'Wash & Fold',
-    bags: 5,
-    readyTime: 'Today, 2:15 PM',
-    driver: 'Assigned (David L.)',
-  },
-];
-
-const initialPickupOrders = [
-    {
-    id: '#YL12351',
-    customer: 'Walk-in Customer',
-    service: 'Wash & Fold',
-    bags: 2,
-    readyTime: 'Today, 3:30 PM',
-  },
-   {
-    id: '#YL12350',
-    customer: 'Wonderland Inc.',
-    service: 'Bedding',
-    bags: 12,
-    readyTime: 'Today, 3:00 PM',
-  },
-];
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 
 export default function ReadyForHandoffPage() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [readyForDriverOrders, setReadyForDriverOrders] = useState(initialDriverOrders);
-    const [readyForPickupOrders, setReadyForPickupOrders] = useState(initialPickupOrders);
+    const { orders, updateOrderStatus } = useLaundromatOrders();
     const { toast } = useToast();
 
     const handleHandoff = (orderId: string, type: 'driver' | 'pickup') => {
+        updateOrderStatus(orderId, 'Completed');
         if (type === 'driver') {
-            setReadyForDriverOrders(prev => prev.filter(o => o.id !== orderId));
             toast({ title: `Order ${orderId} marked as handed to driver.` });
         } else {
-            setReadyForPickupOrders(prev => prev.filter(o => o.id !== orderId));
             toast({ title: `Order ${orderId} marked as picked up by customer.` });
         }
     }
+
+    const readyForDriverOrders = orders.filter(o => o.status === 'Ready');
+    const readyForPickupOrders = orders.filter(o => o.status === 'Ready'); // In a real app this might be different
 
     const filteredDriverOrders = readyForDriverOrders.filter(
         (order) =>
