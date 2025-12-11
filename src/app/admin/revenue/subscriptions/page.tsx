@@ -83,7 +83,7 @@ export default function SubscriptionsPage() {
                 <DialogHeader>
                     <DialogTitle>Create a New Subscription Plan</DialogTitle>
                     <DialogDescription>
-                        Define a new membership tier for customers.
+                        Define a new membership tier for customers. This should correspond to a plan in Paystack.
                     </DialogDescription>
                 </DialogHeader>
                 <form className="space-y-4">
@@ -104,6 +104,10 @@ export default function SubscriptionsPage() {
                      <div className="space-y-2">
                         <Label htmlFor="plan-features">Features (comma-separated)</Label>
                         <Input id="plan-features" placeholder="Feature 1, Feature 2, ..." />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="paystack-plan-code">Paystack Plan Code</Label>
+                        <Input id="paystack-plan-code" placeholder="e.g., PLN_xxxxxxxxxxxxxxx" />
                     </div>
                     <Button type="submit" className="w-full">Create Plan</Button>
                 </form>
