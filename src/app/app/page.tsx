@@ -51,17 +51,16 @@ export default function ConsumerDashboard() {
 
       <LoyaltyCard />
       
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2">
         {actionCards.map(card => (
             <Card key={card.title} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
                 <Link href={card.href} className="flex flex-col h-full">
-                    <CardHeader className="flex flex-row items-center gap-4 space-y-0">
-                        <div className="bg-primary/10 p-3 rounded-lg text-primary">
-                            <card.icon className="h-6 w-6" />
+                    <CardHeader className="flex flex-row items-center gap-3 space-y-0 p-4">
+                        <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                            <card.icon className="h-5 w-5" />
                         </div>
                         <div>
                             <CardTitle className="text-base">{card.title}</CardTitle>
-                            <CardDescription className="text-xs">{card.description}</CardDescription>
                         </div>
                     </CardHeader>
                 </Link>

@@ -75,9 +75,11 @@ const BottomNavbar = () => {
                 <div className="flex justify-center items-center">
                      <Dialog>
                         <DialogTrigger asChild>
-                           <Button size="icon" className="w-14 h-14 rounded-full -translate-y-4 shadow-lg">
-                                <PlusCircle className="h-7 w-7" />
-                           </Button>
+                           <div className="flex flex-col items-center justify-center gap-1 text-primary pt-1 relative -top-3">
+                               <div className="flex items-center justify-center w-14 h-14 rounded-full bg-primary text-primary-foreground shadow-lg">
+                                 <PlusCircle className="h-7 w-7" />
+                               </div>
+                           </div>
                         </DialogTrigger>
                         <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
                             <DialogHeader className="p-6 pb-0">
