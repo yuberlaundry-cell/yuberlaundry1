@@ -21,7 +21,7 @@ import {
   MoreHorizontal,
   PlusCircle,
   Search,
-  Percent,
+  Trash2,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -40,6 +40,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const defaultRules = [
     { id: 'rule-1', name: 'Platform Fee', appliesTo: 'Laundromat', model: 'Percentage', value: '15%' },
@@ -47,9 +48,14 @@ const defaultRules = [
     { id: 'rule-3', name: 'Service Fee', appliesTo: 'Customer', model: 'Percentage', value: '5%' },
 ];
 
+const laundromats = [
+    { id: 'L-001', name: 'Speedy Suds'},
+    { id: 'L-004', name: 'City Cleaners'},
+];
+
 const overrides = [
-  { id: 'L-001', name: 'Speedy Suds', overriddenRule: 'Platform Fee', type: 'Percentage', value: '12%', default: '15%' },
-  { id: 'L-004', name: 'City Cleaners', overriddenRule: 'Platform Fee', type: 'Hybrid', value: 'R10.00 + 10%', default: '15%' },
+  { id: 'override-1', laundromatId: 'L-001', laundromatName: 'Speedy Suds', overriddenRule: 'Platform Fee', type: 'Percentage', value: '12%', default: '15%' },
+  { id: 'override-2', laundromatId: 'L-004', laundromatName: 'City Cleaners', overriddenRule: 'Platform Fee', type: 'Hybrid', value: 'R10.00 + 10%', default: '15%' },
 ];
 
 export default function CommissionsPage() {
@@ -79,9 +85,19 @@ export default function CommissionsPage() {
                   override is in place.
                 </CardDescription>
               </div>
-              <Button>
-                <PlusCircle className="mr-2" /> Add Rule
-              </Button>
+              <Dialog>
+                <DialogTrigger asChild>
+                    <Button>
+                        <PlusCircle className="mr-2" /> Add Rule
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Add New Default Rule</DialogTitle>
+                    </DialogHeader>
+                    <DefaultRuleForm />
+                </DialogContent>
+              </Dialog>
             </CardHeader>
             <CardContent>
                 <Table>
@@ -102,17 +118,27 @@ export default function CommissionsPage() {
                                 <TableCell>{rule.model}</TableCell>
                                 <TableCell className="font-semibold">{rule.value}</TableCell>
                                 <TableCell className="text-right">
-                                     <DropdownMenu>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button aria-haspopup="true" size="icon" variant="ghost">
-                                                <MoreHorizontal className="h-4 w-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>Edit Rule</DropdownMenuItem>
-                                            <DropdownMenuItem className="text-destructive">Delete Rule</DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                     <Dialog>
+                                        <DropdownMenu>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                                    <MoreHorizontal className="h-4 w-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DialogTrigger asChild>
+                                                    <DropdownMenuItem>Edit Rule</DropdownMenuItem>
+                                                </DialogTrigger>
+                                                <DropdownMenuItem className="text-destructive">Delete Rule</DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                         <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Edit Default Rule</DialogTitle>
+                                            </DialogHeader>
+                                            <DefaultRuleForm rule={rule} />
+                                        </DialogContent>
+                                     </Dialog>
                                 </TableCell>
                             </TableRow>
                         ))}
@@ -137,9 +163,19 @@ export default function CommissionsPage() {
                             className="w-full rounded-lg bg-background pl-8 md:w-[200px] lg:w-[320px]"
                         />
                     </div>
-                    <Button>
-                        <PlusCircle /> Add Override
-                    </Button>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                             <Button>
+                                <PlusCircle /> Add Override
+                            </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Add Laundromat Override</DialogTitle>
+                            </DialogHeader>
+                            <OverrideRuleForm />
+                        </DialogContent>
+                    </Dialog>
                 </div>
             </CardHeader>
             <CardContent>
@@ -158,29 +194,33 @@ export default function CommissionsPage() {
                 <TableBody>
                   {overrides.map((o) => (
                     <TableRow key={o.id}>
-                      <TableCell className="font-medium">{o.name}</TableCell>
+                      <TableCell className="font-medium">{o.laundromatName}</TableCell>
                       <TableCell><Badge variant="secondary">{o.overriddenRule}</Badge></TableCell>
                       <TableCell className="font-semibold">{o.value}</TableCell>
                       <TableCell className="text-muted-foreground">{o.default}</TableCell>
                       <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button
-                              aria-haspopup="true"
-                              size="icon"
-                              variant="ghost"
-                            >
-                              <MoreHorizontal className="h-4 w-4" />
-                              <span className="sr-only">Toggle menu</span>
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem>Edit Override</DropdownMenuItem>
-                            <DropdownMenuItem className="text-destructive">
-                              Remove Override
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
+                         <Dialog>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                        <span className="sr-only">Toggle menu</span>
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DialogTrigger asChild>
+                                        <DropdownMenuItem>Edit Override</DropdownMenuItem>
+                                    </DialogTrigger>
+                                    <DropdownMenuItem className="text-destructive">Remove Override</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Edit Laundromat Override</DialogTitle>
+                                </DialogHeader>
+                                <OverrideRuleForm override={o} />
+                            </DialogContent>
+                        </Dialog>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -193,3 +233,97 @@ export default function CommissionsPage() {
     </div>
   );
 }
+
+function DefaultRuleForm({ rule }: { rule?: typeof defaultRules[0] }) {
+    return (
+        <form className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="rule-name">Rule Name</Label>
+                <Input id="rule-name" placeholder="e.g. Platform Fee" defaultValue={rule?.name} />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="applies-to">Applies To</Label>
+                <Select name="applies-to" defaultValue={rule?.appliesTo}>
+                    <SelectTrigger id="applies-to">
+                        <SelectValue placeholder="Select who this fee applies to" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Customer">Customer</SelectItem>
+                        <SelectItem value="Laundromat">Laundromat</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="commission-model">Model</Label>
+                <Select name="commission-model" defaultValue={rule?.model}>
+                    <SelectTrigger id="commission-model">
+                        <SelectValue placeholder="Select commission model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Percentage">Percentage (%)</SelectItem>
+                        <SelectItem value="Flat Fee">Flat Fee (R)</SelectItem>
+                        <SelectItem value="Hybrid">Hybrid (R + %)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="rate">Rate</Label>
+                <Input id="rate" placeholder="e.g. 15 or 10 + 5" defaultValue={rule?.value.replace('%','').replace('R','')} />
+            </div>
+            <DialogFooter>
+                <Button type="submit">{rule ? 'Save Changes' : 'Create Rule'}</Button>
+            </DialogFooter>
+        </form>
+    )
+}
+
+function OverrideRuleForm({ override }: { override?: typeof overrides[0] }) {
+     return (
+        <form className="space-y-4">
+            <div className="space-y-2">
+                <Label htmlFor="laundromat">Laundromat</Label>
+                <Select name="laundromat" defaultValue={override?.laundromatId}>
+                    <SelectTrigger id="laundromat">
+                        <SelectValue placeholder="Select a laundromat" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {laundromats.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="rule-to-override">Rule to Override</Label>
+                <Select name="rule-to-override" defaultValue={override?.overriddenRule}>
+                    <SelectTrigger id="rule-to-override">
+                        <SelectValue placeholder="Select a rule" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {defaultRules.map(r => <SelectItem key={r.id} value={r.name}>{r.name}</SelectItem>)}
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="override-commission-model">New Model</Label>
+                <Select name="override-commission-model" defaultValue={override?.type}>
+                    <SelectTrigger id="override-commission-model">
+                        <SelectValue placeholder="Select commission model" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Percentage">Percentage (%)</SelectItem>
+                        <SelectItem value="Flat Fee">Flat Fee (R)</SelectItem>
+                        <SelectItem value="Hybrid">Hybrid (R + %)</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="override-rate">New Rate</Label>
+                <Input id="override-rate" placeholder="e.g. 12 or 5 + 8" defaultValue={override?.value.replace('%','').replace('R','')} />
+            </div>
+            <DialogFooter>
+                <Button type="submit">{override ? 'Save Changes' : 'Create Override'}</Button>
+            </DialogFooter>
+        </form>
+    )
+}
+
+    
