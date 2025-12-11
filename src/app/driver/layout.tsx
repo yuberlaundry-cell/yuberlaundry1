@@ -1,10 +1,9 @@
 
-"use client";
+'use client';
 
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
@@ -29,14 +28,50 @@ import { UserNav } from '@/components/layout/user-nav';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
 import React from 'react';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
-const navItems = [
+const desktopNavItems = [
   { href: '/driver', label: 'Today', icon: Home, exact: true },
   { href: '/driver/jobs/available', label: 'Available Jobs', icon: ClipboardPlus },
   { href: '/driver/jobs', label: 'All Jobs', icon: ClipboardList },
   { href: '/driver/earnings', label: 'Earnings', icon: Wallet },
   { href: '/driver/profile', label: 'Profile', icon: CircleUserRound },
 ];
+
+const mobileNavItems = [
+  { href: '/driver', label: 'Today', icon: Home, exact: true },
+  { href: '/driver/jobs/available', label: 'Available', icon: ClipboardPlus },
+  { href: '/driver/earnings', label: 'Earnings', icon: Wallet },
+  { href: '/driver/profile', label: 'Profile', icon: CircleUserRound },
+];
+
+const BottomNavbar = () => {
+    const pathname = usePathname();
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
+            <div className="grid h-16 grid-cols-4 w-full">
+                {mobileNavItems.map((item) => {
+                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                "flex flex-col items-center justify-center gap-1 text-muted-foreground",
+                                isActive && "text-primary"
+                            )}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            <span className="text-xs">{item.label}</span>
+                        </Link>
+                    )
+                })}
+            </div>
+        </nav>
+    );
+};
+
 
 export default function DriverPortalLayout({
   children,
@@ -45,6 +80,32 @@ export default function DriverPortalLayout({
 }) {
   const pathname = usePathname();
   const { user } = useAuth();
+  const isMobile = useIsMobile();
+
+  if (isMobile) {
+       return (
+        <>
+            <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 justify-between">
+                <Link href="/" className="mr-auto">
+                    <WashingMachine className="h-7 w-7 text-primary" />
+                </Link>
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="availability-mobile" className="text-sm font-medium">
+                        Online
+                    </Label>
+                    <Switch id="availability-mobile" defaultChecked />
+                </div>
+                <UserNav />
+            </header>
+            <main className="flex-1 p-4 sm:p-6 lg:p-8 mb-16">
+                 <div className="mx-auto w-full max-w-6xl">
+                    {children}
+                 </div>
+            </main>
+            <BottomNavbar />
+        </>
+       )
+  }
 
   return (
     <SidebarProvider>
@@ -70,8 +131,8 @@ export default function DriverPortalLayout({
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
-            {navItems.map((item) => {
-              const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+            {desktopNavItems.map((item) => {
+              const isActive = (item.href === '/driver' && pathname === item.href) || (item.href !== '/driver' && pathname.startsWith(item.href));
               return (
               <SidebarMenuItem key={item.href}>
                 <SidebarMenuButton
@@ -88,28 +149,21 @@ export default function DriverPortalLayout({
             )})}
           </SidebarMenu>
         </SidebarContent>
-        <SidebarFooter>
-          <div className="flex items-center justify-between p-4 border-t">
-            <Label htmlFor="availability-desktop" className="font-medium group-data-[collapsible=icon]:hidden">
-              Online Status
-            </Label>
-            <Switch id="availability-desktop" defaultChecked/>
-          </div>
-        </SidebarFooter>
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
-          <div className="md:hidden">
+          <div className="hidden md:block">
             <SidebarTrigger />
           </div>
-          <div className="flex items-center gap-2 md:hidden">
-            <Label htmlFor="availability-mobile" className="font-medium">
-              Offline
-            </Label>
-            <Switch id="availability-mobile" />
+           <div className="ml-auto flex items-center gap-4">
+             <div className="flex items-center gap-2">
+                <Label htmlFor="availability-desktop" className="font-medium">
+                Online Status
+                </Label>
+                <Switch id="availability-desktop" defaultChecked/>
+            </div>
+            <UserNav />
           </div>
-          <div className="flex-1" />
-          <UserNav />
         </header>
         <main className="flex-1 p-4 sm:p-6 lg:p-8">
             <div className="mx-auto w-full max-w-6xl">
