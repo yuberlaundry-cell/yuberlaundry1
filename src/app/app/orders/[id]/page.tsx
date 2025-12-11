@@ -17,23 +17,20 @@ export default function OrderDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
     
-    // Find the original order from the mock data
     const originalOrder = mockOrders.find(o => o.id === orderId);
 
-    // Deep clone the order data into state to make it mutable
     const [order, setOrder] = React.useState(() => {
         if (!originalOrder) return null;
         return JSON.parse(JSON.stringify(originalOrder));
     });
 
-    // A dummy state to simulate progress
     const [progress, setProgress] = React.useState(25);
 
     const handleSimulate = () => {
         setOrder(prevOrder => {
             if (!prevOrder) return null;
 
-            // Create a new mutable copy for this update
+            // Create a fresh, deep copy for this update to avoid mutating read-only objects
             const newOrderState = JSON.parse(JSON.stringify(prevOrder));
             const newTimeline = newOrderState.timeline;
             
@@ -51,7 +48,6 @@ export default function OrderDetailsPage() {
                 }
             }
             
-            // Also update the overall progress bar
             setProgress(prev => Math.min(prev + 25, 100));
 
             return newOrderState;
