@@ -29,8 +29,9 @@ export default function LaundromatSettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-4">
+        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-5">
           <TabsTrigger value="profile">Profile</TabsTrigger>
+          <TabsTrigger value="pricing">Services & Pricing</TabsTrigger>
           <TabsTrigger value="operations">Operations</TabsTrigger>
           <TabsTrigger value="payouts">Payouts</TabsTrigger>
           <TabsTrigger value="notifications">Notifications</TabsTrigger>
@@ -62,6 +63,24 @@ export default function LaundromatSettingsPage() {
               </form>
             </CardContent>
           </Card>
+        </TabsContent>
+         <TabsContent value="pricing">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Services & Pricing</CardTitle>
+                    <CardDescription>
+                        Configure the services your facility offers. For detailed pricing, visit the full pricing manager.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="p-4 text-center border-2 border-dashed rounded-lg">
+                        <p className="text-muted-foreground mb-2">Detailed service and pricing management is available.</p>
+                        <Button asChild>
+                            <Link href="/laundromat/settings/pricing">Go to Pricing Manager</Link>
+                        </Button>
+                    </div>
+                </CardContent>
+            </Card>
         </TabsContent>
         <TabsContent value="operations">
           <div className="space-y-8">
