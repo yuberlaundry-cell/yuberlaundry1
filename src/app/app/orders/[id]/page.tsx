@@ -16,8 +16,49 @@ import { RateExperienceCard } from "@/components/orders/rate-experience-card";
 export default function OrderDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
-    const order = mockOrders.find(o => o.id === orderId);
+    const originalOrder = mockOrders.find(o => o.id === orderId);
 
+    // Create a deep copy of the order to make it mutable
+    const [order, setOrder] = React.useState(() => {
+        if (!originalOrder) return null;
+        return JSON.parse(JSON.stringify(originalOrder));
+    });
+
+    // A dummy state to simulate progress
+    const [progress, setProgress] = React.useState(25);
+
+    const handleSimulate = () => {
+        if (!order) return;
+
+        setProgress(prev => {
+            const next = prev + 25;
+            if (next > 100) return 100;
+            return next;
+        });
+
+        // Create a new order object with the updated timeline
+        setOrder(prevOrder => {
+            if (!prevOrder) return null;
+
+            const newTimeline = [...prevOrder.timeline];
+            const pendingStepIndex = newTimeline.findIndex(e => e.status === 'pending');
+
+            if (pendingStepIndex > -1) {
+                if (pendingStepIndex > 0) {
+                    newTimeline[pendingStepIndex-1].status = 'completed';
+                }
+                newTimeline[pendingStepIndex].status = 'in-progress';
+            } else {
+                const lastStepIndex = newTimeline.length - 1;
+                if (lastStepIndex >= 0 && newTimeline[lastStepIndex].status !== 'completed') {
+                    newTimeline[lastStepIndex].status = 'completed';
+                }
+            }
+
+            return { ...prevOrder, timeline: newTimeline };
+        });
+    }
+    
     if (!order) {
         return (
             <div className="flex items-center justify-center h-full">
@@ -26,27 +67,7 @@ export default function OrderDetailsPage() {
         );
     }
 
-    // A dummy state to simulate progress
-    const [progress, setProgress] = React.useState(25);
-
-    const handleSimulate = () => {
-      setProgress(prev => {
-        const next = prev + 25;
-        if (next > 100) return 100;
-        // Find the next pending step and update it
-        const pendingStepIndex = order.timeline.findIndex(e => e.status === 'pending');
-        if (pendingStepIndex > -1) {
-            order.timeline[pendingStepIndex-1].status = 'completed';
-            order.timeline[pendingStepIndex].status = 'in-progress';
-        } else {
-            // All steps are in progress or completed, mark the last one as completed
-            order.timeline[order.timeline.length - 1].status = 'completed';
-        }
-        return next;
-      });
-    }
-
-    const isDelivered = order.status === 'Delivered';
+    const isDelivered = order.timeline.every(e => e.status === 'completed');
 
 
     return (
