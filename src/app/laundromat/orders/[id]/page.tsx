@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -10,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning, DollarSign } from 'lucide-react';
+import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning, DollarSign, PlusCircle } from 'lucide-react';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -18,6 +19,10 @@ import { useParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
 
 const initialOrderData = {
     id: '#YL12345',
@@ -42,6 +47,7 @@ const initialOrderData = {
         { id: 'wf', name: 'Wash & Fold', model: 'per_kg', price: 1.99, value: 0 },
     ],
     isBilled: false,
+    issues: [] as { type: string, notes: string }[],
 }
 
 const qcChecklist = [
@@ -87,6 +93,22 @@ export default function OrderProcessingDetailsPage() {
             title: 'Order Updated',
             description: `Order ${order.id} has been moved to ${newStatus}.`
         });
+    }
+    
+    const handleLogIssue = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const issueType = formData.get('issue-type') as string;
+        const issueNotes = formData.get('issue-notes') as string;
+        
+        const newIssue = { type: issueType, notes: issueNotes };
+        setOrder(prev => ({...prev, issues: [...prev.issues, newIssue]}));
+
+        toast({
+            title: 'Issue Logged',
+            description: `A ${issueType} issue has been logged for order ${order.id}.`,
+        });
+        return true;
     }
 
     const subtotal = order.items.reduce((acc, item) => {
@@ -184,14 +206,31 @@ export default function OrderProcessingDetailsPage() {
               <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                       <CheckSquare className="h-5 w-5 text-primary" />
-                      Quality Control Checklist
+                      Quality & Issues
                   </CardTitle>
                   <CardDescription>
-                      Perform these checks before moving the order to the next stage.
+                      Perform quality checks and log any customer-reported issues.
                   </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
+                   {order.issues.length > 0 && (
+                        <div className="space-y-3">
+                             <h4 className="font-medium">Logged Issues</h4>
+                             {order.issues.map((issue, index) => (
+                                 <div key={index} className="p-3 border border-destructive/50 bg-destructive/5 rounded-lg">
+                                     <div className="flex justify-between items-center">
+                                         <Badge variant="destructive">{issue.type}</Badge>
+                                         <span className="text-xs text-muted-foreground">Logged Today</span>
+                                     </div>
+                                     <p className="text-sm text-destructive/90 mt-2">{issue.notes}</p>
+                                 </div>
+                             ))}
+                        </div>
+                   )}
+
+                  <Separator />
                   <div className="space-y-3">
+                     <h4 className="font-medium">Internal QC Checklist</h4>
                       {qcChecklist.map(item => (
                           <div key={item.id} className="flex items-center space-x-2">
                               <Checkbox id={item.id} />
@@ -207,10 +246,56 @@ export default function OrderProcessingDetailsPage() {
                           <ImageIcon className="mr-2 h-4 w-4" />
                           Upload QC Photo
                       </Button>
-                       <Button variant="destructive" className="w-full sm:w-auto">
-                          <MessageSquareWarning className="mr-2 h-4 w-4" />
-                          Log Issue / Defect
-                      </Button>
+                       <Dialog>
+                          <DialogTrigger asChild>
+                           <Button variant="destructive" className="w-full sm:w-auto">
+                              <MessageSquareWarning className="mr-2 h-4 w-4" />
+                              Log Customer Issue / Dispute
+                          </Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Log a New Issue or Dispute</DialogTitle>
+                                <DialogDescription>
+                                    Document a customer-reported problem for this order.
+                                </DialogDescription>
+                              </DialogHeader>
+                              <form className="space-y-4" onSubmit={(e) => {
+                                 const closeButton = e.currentTarget.querySelector<HTMLButtonElement>('[data-close-dialog]');
+                                 const success = handleLogIssue(e);
+                                 if (success && closeButton) {
+                                     closeButton.click();
+                                 }
+                              }}>
+                                  <div className="space-y-2">
+                                      <Label htmlFor="issue-type">Issue Type</Label>
+                                      <Select name="issue-type" required>
+                                          <SelectTrigger id="issue-type">
+                                              <SelectValue placeholder="Select an issue type" />
+                                          </SelectTrigger>
+                                          <SelectContent>
+                                              <SelectItem value="Missing Item">Missing Item</SelectItem>
+                                              <SelectItem value="Damaged Item">Damaged Item</SelectItem>
+                                              <SelectItem value="Poor Quality">Poor Quality (e.g., stains)</SelectItem>
+                                              <SelectItem value="Other">Other</SelectItem>
+                                          </SelectContent>
+                                      </Select>
+                                  </div>
+                                  <div className="space-y-2">
+                                      <Label htmlFor="issue-notes">Detailed Notes</Label>
+                                      <Textarea id="issue-notes" name="issue-notes" placeholder="Describe the issue in detail. e.g., 'Customer reports a blue sweater is missing from bag 2.'" required />
+                                  </div>
+                                  <div className="space-y-2">
+                                      <Label htmlFor="issue-photo">Upload Photo (optional)</Label>
+                                      <Input id="issue-photo" type="file" />
+                                  </div>
+                                  <DialogFooter>
+                                     <button type="button" data-close-dialog className="hidden"></button>
+                                      <Button type="submit">Log Issue</Button>
+                                  </DialogFooter>
+                              </form>
+                          </DialogContent>
+                       </Dialog>
                   </div>
               </CardContent>
             </Card>
