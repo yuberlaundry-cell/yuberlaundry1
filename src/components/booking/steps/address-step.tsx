@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { MapPin, Building, Home, Briefcase, Plus, Edit, Trash2 } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { AddressInput } from '@/components/ui/address-input';
 import { Separator } from '@/components/ui/separator';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -76,21 +76,6 @@ export default function AddressStep() {
                         </Label>
                     ))}
                 </RadioGroup>
-                
-                <Dialog open={isAddAddressOpen} onOpenChange={setIsAddAddressOpen}>
-                    <DialogTrigger asChild>
-                        <Button variant="outline" className="w-full">
-                            <Plus className="mr-2 h-4 w-4" /> Add New Address
-                        </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Add a New Address</DialogTitle>
-                            <DialogDescription>Enter the details for your new address.</DialogDescription>
-                        </DialogHeader>
-                        <AddressForm onSave={handleSaveAddress} />
-                    </DialogContent>
-                </Dialog>
             </div>
 
             <Separator />
@@ -138,20 +123,6 @@ export default function AddressStep() {
                                 </Label>
                             ))}
                         </RadioGroup>
-                        <Dialog>
-                            <DialogTrigger asChild>
-                                <Button variant="outline" className="w-full">
-                                    <Plus className="mr-2 h-4 w-4" /> Add New Delivery Address
-                                </Button>
-                            </DialogTrigger>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Add a New Delivery Address</DialogTitle>
-                                    <DialogDescription>Enter the details for your new address.</DialogDescription>
-                                </DialogHeader>
-                                <AddressForm onSave={handleSaveAddress} />
-                            </DialogContent>
-                        </Dialog>
                     </div>
                 )}
             </div>
@@ -159,7 +130,7 @@ export default function AddressStep() {
     )
 }
 
-function AddressForm({ defaultValues, onSave }: { defaultValues?: any, onSave: (e: React.FormEvent) => void }) {
+function AddressForm({ defaultValues, onSave }: { defaultValues?: any; onSave: (e: React.FormEvent) => void }) {
     const [selectedAddress, setSelectedAddress] = useState<string>(defaultValues?.street || '');
     
     return (
@@ -202,7 +173,9 @@ function AddressForm({ defaultValues, onSave }: { defaultValues?: any, onSave: (
                     </Label>
                 </RadioGroup>
             </div>
-            <Button type="submit" className="w-full">Save Address</Button>
+            <DialogClose asChild>
+                <Button type="submit" className="w-full">Save Address</Button>
+            </DialogClose>
         </form>
     );
 }
