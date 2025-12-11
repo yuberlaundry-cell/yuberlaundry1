@@ -1,0 +1,17 @@
+diff --git a/node_modules/@genkit-ai/next/package.json b/node_modules/@genkit-ai/next/package.json
+index 39a0669..3dece15 100644
+--- a/node_modules/@genkit-ai/next/package.json
++++ b/node_modules/@genkit-ai/next/package.json
+@@ -35,7 +35,7 @@
+   "dependencies": {
+     "tslib": "^2.6.0"
+   },
+   "peerDependencies": {
+-    "next": "^15.0.0"
++    "next": "^15.0.0 || ^16.0.0"
+   },
+   "publishConfig": {
+     "access": "public"
+-- 
+2.45.2
+
