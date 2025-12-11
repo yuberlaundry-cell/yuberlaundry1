@@ -16,8 +16,8 @@ export function OrderStatusTimeline({ timeline }: { timeline: TimelineEvent[] })
         <Card>
             <CardContent className="p-6">
                 <ol className="space-y-4">
-                    {timeline.slice(4).map((event, index) => { // Slicing to match the design
-                        const isLast = index === timeline.slice(4).length - 1;
+                    {timeline.map((event, index) => {
+                        const isLast = index === timeline.length - 1;
                         return (
                             <li key={event.title} className="flex items-start gap-4">
                                 <div className="flex flex-col items-center">
@@ -32,7 +32,7 @@ export function OrderStatusTimeline({ timeline }: { timeline: TimelineEvent[] })
                                         event.status === 'pending' && "text-muted-foreground"
                                     )}>{event.title}</p>
                                     <p className="text-sm text-muted-foreground">
-                                        {event.status === 'completed' ? 'Completed' : event.status === 'in-progress' ? 'In Progress' : 'Pending'}
+                                        {event.status === 'completed' ? `Completed at ${event.timestamp}` : event.status === 'in-progress' ? 'In Progress' : 'Pending'}
                                     </p>
                                 </div>
                             </li>
