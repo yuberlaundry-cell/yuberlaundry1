@@ -26,14 +26,7 @@ import {
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Calendar } from '@/components/ui/calendar';
 import { useRouter } from 'next/navigation';
-
-const mockOrders = [
-    {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold', pickup: 'Today, 10am', sla: 'Due in 3h'},
-    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning', pickup: 'Today, 9am', sla: 'Due in 1h'},
-    {id: '#YL12347', customer: 'Acme Corp', status: 'Ready', service: 'Wash & Fold', pickup: 'Yesterday', sla: 'Completed'},
-    {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing', pickup: 'Today, 11am', sla: 'Due in 5h'},
-    {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold', pickup: 'Today, 1pm', sla: 'Due in 24h'},
-];
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 
 const statusColors: { [key: string]: string } = {
   'Ready': 'bg-green-100 text-green-800',
@@ -41,10 +34,15 @@ const statusColors: { [key: string]: string } = {
   'Drying': 'bg-blue-100 text-blue-800',
   'Folding/QC': 'bg-purple-100 text-purple-800',
   'Intake': 'bg-gray-100 text-gray-800',
+  'Completed': 'bg-green-100 text-green-800',
+  'Cancelled': 'bg-red-100 text-red-800',
 };
 
-const OrderRow = ({ order }: { order: typeof mockOrders[0]}) => {
-    const router = useRouter();
+export default function LaundromatOrdersPage() {
+  const router = useRouter();
+  const { orders } = useLaundromatOrders();
+
+  const OrderRow = ({ order }: { order: typeof orders[0]}) => {
     return (
         <TableRow
             key={order.id}
@@ -65,10 +63,9 @@ const OrderRow = ({ order }: { order: typeof mockOrders[0]}) => {
             <TableCell>{order.sla}</TableCell>
         </TableRow>
     )
-}
+  }
 
-const OrderCard = ({ order }: { order: typeof mockOrders[0] }) => {
-    const router = useRouter();
+  const OrderCard = ({ order }: { order: typeof orders[0] }) => {
     return (
         <Card className="md:hidden" onClick={() => router.push(`/laundromat/orders/${order.id.replace("#","")}`)}>
              <CardHeader>
@@ -87,10 +84,8 @@ const OrderCard = ({ order }: { order: typeof mockOrders[0] }) => {
             </CardContent>
         </Card>
     )
-}
+  }
 
-
-export default function LaundromatOrdersPage() {
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -120,8 +115,7 @@ export default function LaundromatOrdersPage() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem>All</DropdownMenuItem>
-                  <DropdownMenuItem>Incoming</DropdownMenuItem>
-                  <DropdownMenuItem>In Intake</DropdownMenuItem>
+                  <DropdownMenuItem>Intake</DropdownMenuItem>
                   <DropdownMenuItem>Washing</DropdownMenuItem>
                   <DropdownMenuItem>Drying</DropdownMenuItem>
                   <DropdownMenuItem>Folding/QC</DropdownMenuItem>
@@ -155,14 +149,14 @@ export default function LaundromatOrdersPage() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {mockOrders.map((order) => (
+                    {orders.map((order) => (
                         <OrderRow key={order.id} order={order} />
                     ))}
                 </TableBody>
             </Table>
           </div>
           <div className="grid gap-4 md:hidden">
-              {mockOrders.map(order => <OrderCard key={order.id} order={order} />)}
+              {orders.map(order => <OrderCard key={order.id} order={order} />)}
           </div>
         </CardContent>
       </Card>
