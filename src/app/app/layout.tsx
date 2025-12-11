@@ -50,46 +50,40 @@ const BottomNavbar = () => {
                 <Link
                     href="/app"
                     className={cn(
-                        "flex flex-col items-center justify-center text-muted-foreground pt-1",
+                        "flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1",
                         pathname === "/app" && "text-primary"
                     )}
                 >
                     <LayoutDashboard className="h-5 w-5" />
                     <span className="text-xs">Dashboard</span>
                 </Link>
+
+                <Dialog>
+                    <DialogTrigger asChild>
+                        <div className={cn("flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1", pathname.startsWith("/app/book") && "text-primary")}>
+                            <PlusCircle className="h-5 w-5" />
+                            <span className="text-xs">New Order</span>
+                        </div>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-5xl h-screen flex flex-col p-0">
+                        <BookingFlow />
+                    </DialogContent>
+                </Dialog>
+
                 <Link
                     href="/app/wallet"
                     className={cn(
-                        "flex flex-col items-center justify-center text-muted-foreground pt-1",
+                        "flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1",
                         pathname.startsWith("/app/wallet") && "text-primary"
                     )}
                 >
                     <Wallet className="h-5 w-5" />
                     <span className="text-xs">Wallet</span>
                 </Link>
-                
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <div className="flex flex-col items-center justify-center text-primary pt-1">
-                             <PlusCircle className="h-6 w-6" />
-                             <span className="text-xs">New Order</span>
-                        </div>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
-                        <DialogHeader className="p-6 pb-0">
-                            <DialogTitle>Book your laundry</DialogTitle>
-                            <DialogDescription>
-                                Configure your laundry order and schedule a pickup.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="grid grid-cols-3 flex-1 overflow-hidden">
-                            <BookingFlow />
-                        </div>
-                    </DialogContent>
-                </Dialog>
+
                  <Sheet>
                     <SheetTrigger asChild>
-                         <div className="flex flex-col items-center justify-center text-muted-foreground pt-1">
+                         <div className="flex flex-col items-center justify-center text-muted-foreground pt-1 gap-1">
                             <MoreHorizontal className="h-5 w-5" />
                             <span className="text-xs">More</span>
                         </div>
@@ -179,12 +173,6 @@ export default function ConsumerPortalLayout({
                     <Button className="w-full justify-start">New Order</Button>
                   </DialogTrigger>
                   <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
-                    <DialogHeader className="p-6 pb-0 col-span-3">
-                        <DialogTitle>Book your laundry</DialogTitle>
-                        <DialogDescription>
-                            Configure your laundry order and schedule a pickup.
-                        </DialogDescription>
-                    </DialogHeader>
                       <BookingFlow />
                   </DialogContent>
                 </Dialog>

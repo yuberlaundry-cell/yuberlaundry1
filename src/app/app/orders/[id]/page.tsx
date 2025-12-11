@@ -45,14 +45,16 @@ export default function OrderDetailsPage() {
                     newTimeline[pendingStepIndex - 1].status = 'completed';
                 }
                 newTimeline[pendingStepIndex].status = 'in-progress';
+                 newOrderState.status = newTimeline[pendingStepIndex].title;
             } else {
                 const lastStepIndex = newTimeline.length - 1;
                 if (lastStepIndex >= 0 && newTimeline[lastStepIndex].status !== 'completed') {
                     newTimeline[lastStepIndex].status = 'completed';
+                     newOrderState.status = newTimeline[lastStepIndex].title;
                 }
             }
             
-            setProgress(prev => Math.min(prev + 25, 100));
+            setProgress(prev => Math.min(prev + 10, 100));
 
             return newOrderState;
         });
