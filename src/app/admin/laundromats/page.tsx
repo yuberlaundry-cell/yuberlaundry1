@@ -33,6 +33,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const laundromats = [
     { id: 'L-001', name: 'Speedy Suds', location: 'London, UK', status: 'Active', activeOrders: 25, issueRate: '1.2%', rating: 4.8 },
@@ -68,8 +69,10 @@ export default function LaundromatsPage() {
                 <p className="text-muted-foreground">Manage and monitor all partner facilities.</p>
             </div>
             <div className="flex gap-2">
-                <Button className="w-full sm:w-auto" onClick={() => handleGenericAction('Add Laundromat', '')}>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add Laundromat
+                <Button className="w-full sm:w-auto" asChild>
+                    <Link href="/admin/laundromats/new">
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add Laundromat
+                    </Link>
                 </Button>
             </div>
         </div>
