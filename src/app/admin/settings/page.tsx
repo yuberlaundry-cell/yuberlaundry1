@@ -10,6 +10,52 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
+const featureFlagCategories = {
+    "Core Order & Service Features": [
+        { id: "next_day_turnaround_enabled", label: "Next-day Turnaround", description: "SA consumers expect next-day or clear time slots.", defaultChecked: true },
+        { id: "same_day_turnaround_enabled", label: "Same-day Turnaround", description: "Operationally complex; enable only in dense metros (e.g., JHB North, CPT CBD).", defaultChecked: false },
+        { id: "wash_fold_enabled", label: "Wash & Fold Service", description: "Core service for any laundry platform.", defaultChecked: true },
+        { id: "dry_clean_enabled", label: "Dry Cleaning Service", description: "Dependent on partner capability in major cities.", defaultChecked: true },
+        { id: "ironing_only_enabled", label: "Ironing-Only Service", description: "High-demand service for professionals.", defaultChecked: true },
+        { id: "bedding_curtains_enabled", label: "Bedding & Curtains", description: "Fits local demand for households and guesthouses.", defaultChecked: true },
+        { id: "eco_wash_enabled", label: "Eco-Wash Options", description: "Good differentiator, but not essential for launch.", defaultChecked: false },
+        { id: "subscriptions_enabled", label: "Subscription Plans", description: "Best to enable after establishing a repeat user base.", defaultChecked: false },
+    ],
+    "Pickup & Delivery Experience": [
+        { id: "scheduled_pickup_delivery_enabled", label: "Scheduled Pickup & Delivery Slots", description: "SA users prefer knowing the delivery window.", defaultChecked: true },
+        { id: "asap_pickup_enabled", label: "ASAP Pickup Option", description: "Good differentiator in metros; can be off for smaller towns.", defaultChecked: true },
+        { id: "contactless_dropoff_enabled", label: "Contactless Drop-off/Pickup", description: "Common expectation, useful for estates/complexes.", defaultChecked: true },
+        { id: "multi_address_enabled", label: "Multiple Saved Addresses", description: "Users often switch between home and work.", defaultChecked: true },
+    ],
+    "Payments (South Africa)": [
+        { id: "card_payments_enabled", label: "Card Payments (Paystack)", description: "Primary non-cash method for the formal economy.", defaultChecked: true },
+        { id: "instant_eft_enabled", label: "Instant EFT (Paystack)", description: "Hugely popular for online payments in SA.", defaultChecked: true },
+        { id: "qr_payments_enabled", label: "QR Code Payments (SnapScan/Zapper)", description: "Widely used in cities, integrated via local gateways.", defaultChecked: true },
+        { id: "cash_on_collection_enabled", label: "Cash on Collection", description: "Important backup, but can be configured per city.", defaultChecked: true },
+        { id: "in_app_wallet_enabled", label: "In-App Wallet & Top-ups", description: "Adds complexity; best to enable after scaling.", defaultChecked: false },
+    ],
+    "Tracking & Communication": [
+        { id: "driver_live_tracking_enabled", label: "Driver Live Tracking", description: "Great UX, but can be optional if implementation is costly.", defaultChecked: true },
+        { id: "basic_status_tracking_enabled", label: "Basic Order Status Tracking", description: "Essential milestones: Picked up, At laundromat, etc.", defaultChecked: true },
+        { id: "in_app_chat_enabled", label: "In-App Chat with Driver/Support", description: "Reduces WhatsApp chaos and support load.", defaultChecked: true },
+        { id: "call_driver_enabled", label: "Call Driver Feature", description: "Very useful in gated estates and complexes.", defaultChecked: true },
+        { id: "sms_notifications_enabled", label: "SMS Notifications for Key Steps", description: "Crucial for users with limited data.", defaultChecked: true },
+        { id: "push_notifications_enabled", label: "Push Notifications", description: "For app users with reliable data/Wi-Fi.", defaultChecked: true },
+    ],
+    "Quality, Photos & Dispute Handling": [
+        { id: "pickup_photo_required", label: "Require Photo on Pickup", description: "Reduces 'you never collected' disputes.", defaultChecked: true },
+        { id: "dropoff_photo_required", label: "Require Photo on Contactless Drop-off", description: "Useful for 'leave at door' in secure estates.", defaultChecked: true },
+        { id: "item_level_entry_enabled", label: "Item-level Entry at Intake", description: "Start with bag-level; add for premium/B2B later.", defaultChecked: false },
+        { id: "rating_prompt_enabled", label: "Post-Order Rating Prompt", description: "Provides free, simple insight into partner/driver quality.", defaultChecked: true },
+    ],
+    "B2B & Commercial Add-ons": [
+        { id: "business_accounts_enabled", label: "Business Accounts", description: "Enable the B2B portal; pilot once B2C is stable.", defaultChecked: false },
+        { id: "invoice_billing_enabled", label: "Invoice Billing for B2B", description: "Tied to business accounts for corporate clients.", defaultChecked: false },
+        { id: "priority_sla_enabled", label: "Priority SLAs for B2B", description: "Only enable when operations can reliably prioritize B2B.", defaultChecked: false },
+    ]
+};
+
+
 export default function SettingsPage() {
     return (
         <div className="space-y-6">
@@ -195,36 +241,30 @@ export default function SettingsPage() {
                     </Card>
                 </TabsContent>
                 <TabsContent value="feature-flags">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Feature Flags</CardTitle>
-                            <CardDescription>Enable or disable features across the platform.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-4 max-w-lg">
-                             <div className="flex items-center justify-between rounded-lg border p-4">
-                                <div className="space-y-0.5">
-                                <Label htmlFor="ff-referrals" className="text-base">
-                                    Consumer Referral Program
-                                </Label>
-                                <p className="text-sm text-muted-foreground">
-                                    Enable the refer-a-friend program for consumers.
-                                </p>
-                                </div>
-                                <Switch id="ff-referrals" defaultChecked />
-                            </div>
-                             <div className="flex items-center justify-between rounded-lg border p-4">
-                                <div className="space-y-0.5">
-                                <Label htmlFor="ff-ai-chatbot" className="text-base">
-                                    AI Support Chatbot
-                                </Label>
-                                 <p className="text-sm text-muted-foreground">
-                                    Allow users to interact with the GenAI assistant.
-                                 </p>
-                                </div>
-                                <Switch id="ff-ai-chatbot" defaultChecked />
-                            </div>
-                        </CardContent>
-                    </Card>
+                    <div className="space-y-6">
+                        {Object.entries(featureFlagCategories).map(([category, flags]) => (
+                            <Card key={category}>
+                                <CardHeader>
+                                    <CardTitle>{category}</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-6">
+                                    {flags.map(flag => (
+                                        <div key={flag.id} className="flex items-start justify-between rounded-lg border p-4">
+                                            <div className="space-y-0.5">
+                                                <Label htmlFor={flag.id} className="text-base">
+                                                    {flag.label}
+                                                </Label>
+                                                <p className="text-sm text-muted-foreground">
+                                                    {flag.description}
+                                                </p>
+                                            </div>
+                                            <Switch id={flag.id} defaultChecked={flag.defaultChecked} />
+                                        </div>
+                                    ))}
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
                 </TabsContent>
                 <TabsContent value="advanced">
                     <Card className="border-destructive">
