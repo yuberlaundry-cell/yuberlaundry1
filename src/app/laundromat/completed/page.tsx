@@ -53,15 +53,17 @@ export default function CompletedOrdersPage() {
   const totalCompleted = completedOrders.length;
   const averageRating = useMemo(() => {
     if (completedOrders.length === 0) return 0;
-    const totalRating = completedOrders.reduce((acc, order) => acc + (order.rating || 0), 0);
-    const ratedOrders = completedOrders.filter(o => o.rating).length;
-    return ratedOrders > 0 ? totalRating / ratedOrders : 0;
+    const ratedOrders = completedOrders.filter(o => o.rating);
+    if (ratedOrders.length === 0) return 0;
+    const totalRating = ratedOrders.reduce((acc, order) => acc + (order.rating || 0), 0);
+    return totalRating / ratedOrders.length;
   }, [completedOrders]);
   const positiveFeedback = useMemo(() => {
     if (completedOrders.length === 0) return 0;
-    const positiveReviews = completedOrders.filter(o => o.rating && o.rating >= 4).length;
-    const ratedOrders = completedOrders.filter(o => o.rating).length;
-    return ratedOrders > 0 ? (positiveReviews / ratedOrders) * 100 : 0;
+    const ratedOrders = completedOrders.filter(o => o.rating);
+    if (ratedOrders.length === 0) return 0;
+    const positiveReviews = ratedOrders.filter(o => o.rating && o.rating >= 4).length;
+    return (positiveReviews / ratedOrders.length) * 100;
   }, [completedOrders]);
 
   return (
@@ -127,8 +129,8 @@ export default function CompletedOrdersPage() {
                 <TableHead>Order ID</TableHead>
                 <TableHead>Customer</TableHead>
                 <TableHead>Service</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Rating</TableHead>
+                <TableHead>Date Completed</TableHead>
+                <TableHead>Review</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -139,7 +141,12 @@ export default function CompletedOrdersPage() {
                   <TableCell>{order.service}</TableCell>
                   <TableCell>{order.readyTime || new Date().toLocaleDateString()}</TableCell>
                   <TableCell>
-                    {order.rating ? <RatingStars rating={order.rating} /> : <span className="text-muted-foreground">N/A</span>}
+                    {order.rating ? (
+                        <div>
+                            <RatingStars rating={order.rating} />
+                            {order.reviewDate && <p className="text-xs text-muted-foreground">Rated on {order.reviewDate}</p>}
+                        </div>
+                    ) : <span className="text-muted-foreground">N/A</span>}
                   </TableCell>
                 </TableRow>
               ))}
