@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { CreditCard, Gift, PlusCircle, ShieldQuestion, Loader2 } from 'lucide-react';
+import { CreditCard, Gift, PlusCircle, ShieldQuestion, Loader2, Star, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -33,18 +33,22 @@ import {
 import PaystackPop from '@paystack/inline-js';
 import { useAuth } from '@/hooks/use-auth';
 import { useState } from 'react';
-
-const kpiCards = [
-    { title: "Available Balance", value: "R150.50" },
-    { title: "Referral Credits", value: "R500.00" },
-    { title: "Loyalty Points", value: "1,245", description: "Equal to R124.50" },
-];
+import { Progress } from '@/components/ui/progress';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 
 const transactions = [
-    { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-R255.50'},
-    { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+R500.00'},
-    { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+R100.00'},
+    { date: 'May 12, 2024', description: 'Order #YL12344', amount: '-R255.50', points: '+2550 pts'},
+    { date: 'May 10, 2024', description: 'Redeemed: R50 Voucher', amount: '', points: '-1000 pts'},
+    { date: 'May 10, 2024', description: 'Funds added via Paystack', amount: '+R500.00', points: ''},
+    { date: 'May 8, 2024', description: 'Referral bonus from J. Smith', amount: '+R100.00', points: '+1000 pts'},
 ];
+
+const rewards = [
+    { name: 'R50 Off Your Next Order', cost: 5000 },
+    { name: 'Free Delivery', cost: 2500 },
+    { name: 'Free Ironing (5 items)', cost: 7500 },
+    { name: 'Plant a Tree', cost: 1000 },
+]
 
 export default function WalletPage() {
   const { toast } = useToast();
@@ -55,6 +59,8 @@ export default function WalletPage() {
   const [isProcessingTopUp, setIsProcessingTopUp] = useState(false);
   const [isProcessingGift, setIsProcessingGift] = useState(false);
   const [giftAmount, setGiftAmount] = useState('');
+  const [points, setPoints] = useState(1245);
+  const nextRewardTier = 5000;
 
   const handleAddFunds = () => {
     const amountInKobo = (customAmount ? parseFloat(customAmount) : topUpAmount) * 100;
@@ -107,6 +113,16 @@ export default function WalletPage() {
       });
   }
 
+  const handleRedeem = (cost: number, rewardName: string) => {
+      if (points >= cost) {
+          setPoints(currentPoints => currentPoints - cost);
+          toast({
+              title: "Reward Redeemed!",
+              description: `You've successfully redeemed "${rewardName}".`,
+          });
+      }
+  }
+
 
   return (
     <div className="space-y-8 pb-8">
@@ -116,84 +132,86 @@ export default function WalletPage() {
           Manage your balance, credits, and transaction history.
         </p>
       </div>
+      
+       <div className="grid lg:grid-cols-3 gap-8">
+            <Card className="lg:col-span-2">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Star className="h-5 w-5 text-yellow-500 fill-yellow-500"/> Loyalty Points</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid sm:grid-cols-2 gap-6 items-center">
+                        <div className="p-4 rounded-lg bg-muted/50 text-center">
+                            <p className="text-sm text-muted-foreground">Your Points Balance</p>
+                            <p className="text-4xl font-bold">{points.toLocaleString()}</p>
+                        </div>
+                        <div>
+                             <div className="mb-1 flex justify-between items-baseline">
+                                <p className="text-sm font-medium">Next Reward</p>
+                                <p className="text-sm font-bold text-muted-foreground">
+                                    {(nextRewardTier - points).toLocaleString()} pts to go
+                                </p>
+                            </div>
+                            <Progress value={(points / nextRewardTier) * 100} />
+                            <p className="text-xs text-muted-foreground mt-1">You're on your way to a R50 voucher!</p>
+                        </div>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                     <Dialog>
+                        <DialogTrigger asChild>
+                            <Button className="w-full">Redeem Points</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Redeem Your Points</DialogTitle>
+                                <DialogDescription>You have {points.toLocaleString()} points. Choose a reward to claim.</DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-3 py-4">
+                                {rewards.map(reward => (
+                                    <Card key={reward.name} className="p-4">
+                                        <div className="flex justify-between items-center">
+                                            <div>
+                                                <p className="font-semibold">{reward.name}</p>
+                                                <p className="text-sm text-muted-foreground">{reward.cost.toLocaleString()} points</p>
+                                            </div>
+                                            <Button 
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => handleRedeem(reward.cost, reward.name)}
+                                                disabled={points < reward.cost}
+                                            >
+                                                Redeem
+                                            </Button>
+                                        </div>
+                                    </Card>
+                                ))}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                </CardFooter>
+            </Card>
 
-       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {kpiCards.map((card) => (
-                <Card key={card.title}>
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                        <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
+            <div className="space-y-8">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Cash Balance</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="text-2xl font-bold">{card.value}</div>
-                        {card.description && <p className="text-xs text-muted-foreground">{card.description}</p>}
+                         <div className="space-y-1 text-center border p-4 rounded-lg bg-muted/50">
+                            <p className="text-sm text-muted-foreground">Available Balance</p>
+                            <p className="text-2xl font-bold">R150.50</p>
+                        </div>
+                         <div className="space-y-1 text-center border p-4 rounded-lg bg-muted/50 mt-4">
+                            <p className="text-sm text-muted-foreground">Referral Credits</p>
+                            <p className="text-2xl font-bold">R500.00</p>
+                        </div>
                     </CardContent>
                 </Card>
-            ))}
+            </div>
         </div>
 
       <div className="grid lg:grid-cols-3 gap-8 items-start">
         <div className="lg:col-span-2 space-y-8">
-          <Card>
-            <CardHeader>
-              <CardTitle>Add Funds</CardTitle>
-               <CardDescription>Select an amount and payment method. Payments are processed securely by Paystack.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-                <div className="space-y-2">
-                    <Label>Amount</Label>
-                    <div className="flex flex-col sm:flex-row gap-2">
-                        {[250, 500, 1000].map(amount => (
-                            <Button 
-                                key={amount}
-                                variant={topUpAmount === amount && !customAmount ? 'default' : 'outline'}
-                                className="flex-1 text-lg"
-                                onClick={() => { setTopUpAmount(amount); setCustomAmount(''); }}
-                            >
-                                R{amount}
-                            </Button>
-                        ))}
-                        <Input 
-                            id="custom-amount" 
-                            placeholder="Custom Amount" 
-                            className="flex-1 h-12 text-lg" 
-                            value={customAmount}
-                            onChange={(e) => { setCustomAmount(e.target.value); setTopUpAmount(0); }}
-                        />
-                    </div>
-                </div>
-                 <div className="space-y-2">
-                    <Label htmlFor="payment-method">Payment Method</Label>
-                    <Select defaultValue="visa-4242">
-                        <SelectTrigger id="payment-method">
-                            <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem value="visa-4242">
-                                <div className="flex items-center gap-2">
-                                    <CreditCard className="h-4 w-4" /> Visa ending in 4242
-                                </div>
-                            </SelectItem>
-                             <SelectItem value="mastercard-5555">
-                                <div className="flex items-center gap-2">
-                                    <CreditCard className="h-4 w-4" /> Mastercard ending in 5555
-                                </div>
-                            </SelectItem>
-                             <SelectItem value="new-card">
-                                 <div className="flex items-center gap-2">
-                                    <PlusCircle className="h-4 w-4" /> Add a new card
-                                </div>
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                </div>
-            </CardContent>
-            <CardFooter>
-                 <Button className="w-full" onClick={handleAddFunds} disabled={isProcessingTopUp}>
-                    {isProcessingTopUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldQuestion className="mr-2 h-4 w-4" />}
-                    {isProcessingTopUp ? 'Processing...' : 'Add Funds with Paystack'}
-                </Button>
-            </CardFooter>
-          </Card>
            <Card>
             <CardHeader>
             <CardTitle>Transaction History</CardTitle>
@@ -205,6 +223,7 @@ export default function WalletPage() {
                     <TableHead>Date</TableHead>
                     <TableHead>Description</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
+                    <TableHead className="text-right">Points</TableHead>
                 </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -213,10 +232,11 @@ export default function WalletPage() {
                             <TableCell>{t.date}</TableCell>
                             <TableCell>{t.description}</TableCell>
                             <TableCell className={`text-right font-medium ${t.amount.startsWith('+') ? 'text-green-600' : ''}`}>{t.amount}</TableCell>
+                            <TableCell className={`text-right font-medium ${t.points.startsWith('+') ? 'text-green-600' : 'text-destructive'}`}>{t.points}</TableCell>
                         </TableRow>
                     )) : (
                         <TableRow>
-                            <TableCell colSpan={3} className="text-center text-muted-foreground h-24">
+                            <TableCell colSpan={4} className="text-center text-muted-foreground h-24">
                                 No transactions yet.
                             </TableCell>
                         </TableRow>
@@ -226,50 +246,40 @@ export default function WalletPage() {
             </CardContent>
         </Card>
         </div>
-        <div className="space-y-8">
-          <Card>
-            <CardHeader>
-                <CardTitle>Loyalty Points</CardTitle>
-            </CardHeader>
-            <CardContent>
-                <p className="text-sm text-muted-foreground">You have <span className="font-bold text-foreground">1,245 points</span> available. Conversion rate is 10 points = R1.00.</p>
-                <Button className="w-full mt-4">Redeem Points</Button>
-            </CardContent>
-          </Card>
-           <Card>
-            <form onSubmit={handleSendGift}>
+        <div className="space-y-8 lg:sticky top-24">
+            <Card>
                 <CardHeader>
-                    <CardTitle>Send a Gift Card</CardTitle>
+                <CardTitle>Add Funds</CardTitle>
+                <CardDescription>Top up your wallet via Paystack.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                     <div className="space-y-2">
-                        <Label htmlFor="gift-amount">Amount</Label>
-                        <Input id="gift-amount" type="number" placeholder="R500.00" value={giftAmount} onChange={(e) => setGiftAmount(e.target.value)} required />
+                    <div className="flex gap-2">
+                        {[100, 250, 500].map(amount => (
+                            <Button 
+                                key={amount}
+                                variant={topUpAmount === amount && !customAmount ? 'default' : 'outline'}
+                                className="flex-1"
+                                onClick={() => { setTopUpAmount(amount); setCustomAmount(''); }}
+                            >
+                                R{amount}
+                            </Button>
+                        ))}
                     </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="recipient-email">Recipient's email or phone</Label>
-                        <Input id="recipient-email" placeholder="email@example.com" required/>
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="gift-message">Optional message</Label>
-                        <Textarea id="gift-message" placeholder="Enjoy some clean clothes!" />
-                    </div>
-                    <Button type="submit" className="w-full" disabled={isProcessingGift}>
-                        {isProcessingGift ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Gift className="mr-2 h-4 w-4" />}
-                        {isProcessingGift ? 'Sending...' : 'Send Gift'}
-                    </Button>
+                    <Input 
+                        id="custom-amount" 
+                        placeholder="Or enter custom amount" 
+                        className="flex-1" 
+                        value={customAmount}
+                        onChange={(e) => { setCustomAmount(e.target.value); setTopUpAmount(0); }}
+                    />
                 </CardContent>
-            </form>
-          </Card>
-          <Card>
-             <CardHeader>
-                <CardTitle>Enable Auto Top-up</CardTitle>
-                <CardDescription>Never run out of balance. Automatically add funds when your balance is low.</CardDescription>
-            </CardHeader>
-             <CardContent>
-                <Button variant="outline" className="w-full">Set Up Auto Top-up</Button>
-             </CardContent>
-          </Card>
+                <CardFooter>
+                    <Button className="w-full" onClick={handleAddFunds} disabled={isProcessingTopUp}>
+                        {isProcessingTopUp ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldQuestion className="mr-2 h-4 w-4" />}
+                        {isProcessingTopUp ? 'Processing...' : 'Add Funds'}
+                    </Button>
+                </CardFooter>
+            </Card>
         </div>
       </div>
     </div>

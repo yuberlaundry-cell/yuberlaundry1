@@ -35,6 +35,7 @@ import {
   FileText,
   UserCog,
   Briefcase,
+  Star,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -77,6 +78,12 @@ const navigationConfig = [
       { href: '/admin/revenue/subscriptions', label: 'Subscription Plans', icon: Crown },
       { href: '/admin/billing', label: 'B2B Billing', icon: CreditCard },
     ],
+  },
+  {
+    title: 'Marketing',
+    links: [
+        { href: '/admin/loyalty', label: 'Loyalty Program', icon: Star },
+    ]
   },
   {
     title: 'Quality & Risk',
