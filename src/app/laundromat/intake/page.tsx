@@ -18,6 +18,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { useState, useRef, useEffect } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { CreateWalkinFlow } from '@/components/laundromat/create-walkin-flow';
 
 
 const orderToCome = {
@@ -103,24 +104,8 @@ export default function IntakePage() {
                     <UserPlus className="mr-2" /> Create Walk-in Order
                   </Button>
                 </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Create Walk-in Order</DialogTitle>
-                    <DialogDescription>
-                      Enter customer and order details for an in-store drop-off.
-                    </DialogDescription>
-                  </DialogHeader>
-                  <form className="space-y-4">
-                    <div className="space-y-2">
-                        <Label htmlFor="customer-name">Customer Name</Label>
-                        <Input id="customer-name" placeholder="John Doe" />
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="customer-phone">Phone Number</Label>
-                        <Input id="customer-phone" type="tel" placeholder="+44 7123 456789" />
-                    </div>
-                    <Button className="w-full" type="submit">Create Order & Print Tag</Button>
-                  </form>
+                <DialogContent className="max-w-2xl min-h-[70vh]">
+                  <CreateWalkinFlow />
                 </DialogContent>
               </Dialog>
             </CardContent>
