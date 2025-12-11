@@ -11,6 +11,7 @@ import { CleaningFacilityCard } from "@/components/orders/cleaning-facility-card
 import { DeliveryScheduledCard } from "@/components/orders/delivery-scheduled-card";
 import { WaterSavedCard } from "@/components/orders/water-saved-card";
 import { InvoiceCard } from "@/components/orders/invoice-card";
+import { RateExperienceCard } from "@/components/orders/rate-experience-card";
 
 export default function OrderDetailsPage() {
     const params = useParams();
@@ -54,11 +55,7 @@ export default function OrderDetailsPage() {
              <div className="grid lg:grid-cols-3 gap-8 items-start">
                 <div className="lg:col-span-2 space-y-8">
                      {isDelivered && (
-                        <div className="flex justify-center">
-                            <Button variant="outline" asChild>
-                                <a href="#">Reorder</a>
-                            </Button>
-                        </div>
+                        <RateExperienceCard />
                     )}
                 </div>
                 <div className="space-y-6">
