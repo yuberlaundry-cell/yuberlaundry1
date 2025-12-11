@@ -23,6 +23,8 @@ import {
   Download,
   MoreHorizontal,
   TrendingUp,
+  Search,
+  ChevronDown,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -30,6 +32,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Input } from '@/components/ui/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
+import { useRouter } from 'next/navigation';
 
 const kpiCards = [
   {
@@ -48,7 +56,7 @@ const kpiCards = [
     title: 'YTD Earnings',
     value: '$25,830.00',
     icon: DollarSign,
-    description: 'Platform fees paid',
+    description: 'After platform fees',
   },
 ];
 
@@ -83,7 +91,24 @@ const statusColors: { [key: string]: string } = {
   Failed: 'bg-red-100 text-red-800',
 };
 
+const chartData = [
+    { month: "Jan", earnings: 4000 },
+    { month: "Feb", earnings: 3000 },
+    { month: "Mar", earnings: 5000 },
+    { month: "Apr", earnings: 4500 },
+    { month: "May", earnings: 6000 },
+];
+const chartConfig = {
+    earnings: {
+        label: "Earnings",
+        color: "hsl(var(--primary))",
+    },
+};
+
+
 export default function FinancialsPage() {
+    const router = useRouter();
+
   return (
     <div className="space-y-8 pb-8">
       <div className="flex items-center justify-between">
@@ -113,13 +138,94 @@ export default function FinancialsPage() {
           </Card>
         ))}
       </div>
+      
+      <div className="grid lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-3 xl:col-span-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle>Earnings Over Time</CardTitle>
+                    <CardDescription>Monthly earnings after platform fees.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ChartContainer config={chartConfig} className="min-h-[250px] w-full">
+                        <BarChart accessibilityLayer data={chartData}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="month"
+                                tickLine={false}
+                                tickMargin={10}
+                                axisLine={false}
+                            />
+                             <YAxis
+                                tickLine={false}
+                                axisLine={false}
+                                tickFormatter={(value) => `$${Number(value) / 1000}k`}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Bar dataKey="earnings" fill="var(--color-earnings)" radius={4} />
+                        </BarChart>
+                    </ChartContainer>
+                </CardContent>
+            </Card>
+        </div>
+        <div className="lg:col-span-3 xl:col-span-1">
+             <Card>
+                <CardHeader>
+                    <CardTitle>Bank Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                     <div className="flex items-center gap-4 p-4 border rounded-lg bg-muted/50">
+                        <DollarSign className="h-6 w-6 text-muted-foreground"/>
+                        <div>
+                            <p className="font-medium">Main Street Bank</p>
+                            <p className="text-sm text-muted-foreground">Account ending in **** 5678</p>
+                        </div>
+                    </div>
+                    <Button variant="outline" className="w-full">Manage Payout Method</Button>
+                </CardContent>
+            </Card>
+        </div>
+      </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Payout History</CardTitle>
-          <CardDescription>
-            A record of all payouts from Yuber Laundry.
-          </CardDescription>
+            <div className="flex flex-col md:flex-row gap-4 justify-between">
+                 <div>
+                    <CardTitle>Payout History</CardTitle>
+                    <CardDescription>
+                        A record of all payouts from Yuber Laundry.
+                    </CardDescription>
+                </div>
+                 <div className="flex items-center gap-2 flex-wrap">
+                    <Popover>
+                        <PopoverTrigger asChild>
+                        <Button variant="outline" className="w-full sm:w-auto">
+                            Date: All time <ChevronDown className="ml-2 h-4 w-4" />
+                        </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar mode="range" />
+                        </PopoverContent>
+                    </Popover>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="outline" className="w-full sm:w-auto">
+                            Status: All <ChevronDown className="ml-2 h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem>All</DropdownMenuItem>
+                            <DropdownMenuItem>Completed</DropdownMenuItem>
+                            <DropdownMenuItem>Processing</DropdownMenuItem>
+                            <DropdownMenuItem>Failed</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                    <Button variant="outline"><Download className="mr-2 h-4 w-4" /> Export</Button>
+                 </div>
+            </div>
         </CardHeader>
         <CardContent>
           <Table>
@@ -137,7 +243,7 @@ export default function FinancialsPage() {
             </TableHeader>
             <TableBody>
               {payoutHistory.map((payout) => (
-                <TableRow key={payout.id}>
+                <TableRow key={payout.id} className="cursor-pointer" onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
                   <TableCell className="font-medium font-mono text-xs">
                     {payout.id}
                   </TableCell>
@@ -155,12 +261,14 @@ export default function FinancialsPage() {
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
+                        <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
                           <MoreHorizontal className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Breakdown</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
+                            View Breakdown
+                        </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Download className="mr-2 h-4 w-4" />
                           Download Statement
