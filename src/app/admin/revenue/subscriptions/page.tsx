@@ -84,22 +84,22 @@ export default function SubscriptionsPage() {
                 <DialogHeader>
                     <DialogTitle>Create a New Subscription Plan</DialogTitle>
                     <DialogDescription>
-                        Define a new membership tier for customers. This should correspond to a plan in Paystack.
+                        Define a new membership tier for customers. This must correspond to an existing plan in Paystack.
                     </DialogDescription>
                 </DialogHeader>
                 <form className="space-y-4">
                     <div className="space-y-2">
                         <Label htmlFor="plan-name">Plan Name</Label>
-                        <Input id="plan-name" placeholder="e.g., Yuber Premium" />
+                        <Input id="plan-name" placeholder="e.g., Yuber Premium" required/>
                     </div>
                      <div className="grid grid-cols-2 gap-4">
                         <div className="space-y-2">
                             <Label htmlFor="plan-price">Price ($)</Label>
-                            <Input id="plan-price" type="number" placeholder="e.g., 99" />
+                            <Input id="plan-price" type="number" placeholder="e.g., 99" required/>
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="plan-cycle">Billing Cycle</Label>
-                             <Select name="billing-cycle">
+                             <Select name="billing-cycle" required>
                                 <SelectTrigger id="plan-cycle">
                                     <SelectValue placeholder="Select interval" />
                                 </SelectTrigger>
@@ -114,11 +114,11 @@ export default function SubscriptionsPage() {
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="plan-features">Features (comma-separated)</Label>
-                        <Input id="plan-features" placeholder="Feature 1, Feature 2, ..." />
+                        <Input id="plan-features" placeholder="Feature 1, Feature 2, ..." required/>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="paystack-plan-code">Paystack Plan Code</Label>
-                        <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" />
+                        <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" required/>
                     </div>
                     <Button type="submit" className="w-full">Create Plan</Button>
                 </form>
