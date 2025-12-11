@@ -152,7 +152,7 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
                 <Camera className="h-4 w-4" />
                 <AlertTitle>Camera Access Required</AlertTitle>
                 <AlertDescription>
-                    Please allow camera access in your browser settings. You can enter the Order ID manually below if needed.
+                    Please allow camera access in your browser settings. You can enter the Order ID manually below.
                 </AlertDescription>
                 </Alert>
             </div>
@@ -167,10 +167,10 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
         <Separator />
 
         <div>
-            <p className="text-sm text-muted-foreground text-center mb-2">Can't scan or no camera?</p>
+            <p className="text-sm text-muted-foreground text-center mb-2">Or enter the ID manually</p>
              <form className="flex gap-2" onSubmit={handleManualFind}>
                 <Input
-                    placeholder="Enter Order ID manually"
+                    placeholder="Enter Order ID"
                     value={manualOrderId}
                     onChange={(e) => setManualOrderId(e.target.value)}
                 />
