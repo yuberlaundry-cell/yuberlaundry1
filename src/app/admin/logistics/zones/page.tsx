@@ -24,7 +24,9 @@ import {
   Truck,
   MoreHorizontal,
   Map,
-  Trash2
+  Trash2,
+  FilePen,
+  Eye,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -32,6 +34,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 
 const zones = [
     { id: 'ZONE-LON-N', name: 'North London', facilities: 3, drivers: 15 },
@@ -49,9 +54,33 @@ export default function ZonesPage() {
             Define and manage geographic service areas and their assigned resources.
           </p>
         </div>
-        <Button className="w-full sm:w-auto">
-          <PlusCircle className="mr-2 h-4 w-4" /> Create New Zone
-        </Button>
+        <Dialog>
+            <DialogTrigger asChild>
+                <Button className="w-full sm:w-auto">
+                    <PlusCircle className="mr-2 h-4 w-4" /> Create New Zone
+                </Button>
+            </DialogTrigger>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>Create New Service Zone</DialogTitle>
+                    <DialogDescription>Define a new geographic area. You can draw the zone on the map later.</DialogDescription>
+                </DialogHeader>
+                 <form className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="zone-name">Zone Name</Label>
+                        <Input id="zone-name" placeholder="e.g., Central London" />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="zone-city">City</Label>
+                        <Input id="zone-city" placeholder="e.g., London" />
+                    </div>
+                     <DialogFooter>
+                        <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                        <Button type="submit">Create Zone</Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -92,8 +121,8 @@ export default function ZonesPage() {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
-                        <DropdownMenuItem>Edit Zone on Map</DropdownMenuItem>
-                        <DropdownMenuItem>Manage Assigned Facilities</DropdownMenuItem>
+                        <DropdownMenuItem><FilePen className="mr-2 h-4 w-4" /> Edit Zone on Map</DropdownMenuItem>
+                        <DropdownMenuItem><Eye className="mr-2 h-4 w-4" /> Manage Assigned Facilities</DropdownMenuItem>
                         <DropdownMenuItem className="text-destructive">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete Zone
                         </DropdownMenuItem>
