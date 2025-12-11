@@ -136,7 +136,7 @@ export default function SettingsPage() {
                         <CardContent className="space-y-6 max-w-lg">
                              <div className="space-y-2">
                                 <Label htmlFor="paystack-public">Paystack Public Key</Label>
-                                <Input id="paystack-public" type="text" defaultValue="pk_test_xxxxxxxxxxxxxxxx" />
+                                <Input id="paystack-public" type="text" placeholder="pk_test_xxxxxxxxxxxxxxxx" />
                                 <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
                             </div>
                             <div className="space-y-2">
@@ -144,10 +144,27 @@ export default function SettingsPage() {
                                 <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
                                 <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
                             </div>
+                            <Separator />
                             <div className="space-y-2">
                                 <Label htmlFor="google-maps-key">Google Maps API Key</Label>
                                 <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
-                                <p className="text-xs text-muted-foreground">Used for address autocomplete and navigation.</p>
+                                <p className="text-xs text-muted-foreground">Used for address autocomplete, maps, and navigation.</p>
+                            </div>
+                            <Separator />
+                            <div className="space-y-2">
+                                <Label htmlFor="twilio-sid">Twilio Account SID</Label>
+                                <Input id="twilio-sid" type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" />
+                                <p className="text-xs text-muted-foreground">Used for sending SMS notifications.</p>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="twilio-token">Twilio Auth Token</Label>
+                                <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
+                            </div>
+                            <Separator />
+                             <div className="space-y-2">
+                                <Label htmlFor="sendgrid-key">SendGrid API Key</Label>
+                                <Input id="sendgrid-key" type="password" defaultValue="SG.xxxxxxxxxxxxxxxx" />
+                                <p className="text-xs text-muted-foreground">Used for sending transactional emails.</p>
                             </div>
                             <Button>Save Integration Keys</Button>
                         </CardContent>
