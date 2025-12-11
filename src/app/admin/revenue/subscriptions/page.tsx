@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const plans = [
     {
@@ -98,7 +99,17 @@ export default function SubscriptionsPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="plan-cycle">Billing Cycle</Label>
-                             <Input id="plan-cycle" placeholder="e.g., monthly" />
+                             <Select name="billing-cycle">
+                                <SelectTrigger id="plan-cycle">
+                                    <SelectValue placeholder="Select interval" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="monthly">Monthly</SelectItem>
+                                    <SelectItem value="quarterly">Quarterly</SelectItem>
+                                    <SelectItem value="biannually">Biannually</SelectItem>
+                                    <SelectItem value="annually">Annually</SelectItem>
+                                </SelectContent>
+                             </Select>
                         </div>
                     </div>
                      <div className="space-y-2">
@@ -107,7 +118,7 @@ export default function SubscriptionsPage() {
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="paystack-plan-code">Paystack Plan Code</Label>
-                        <Input id="paystack-plan-code" placeholder="e.g., PLN_xxxxxxxxxxxxxxx" />
+                        <Input id="paystack-plan-code" placeholder="PLN_xxxxxxxxxxxxxxx" />
                     </div>
                     <Button type="submit" className="w-full">Create Plan</Button>
                 </form>
