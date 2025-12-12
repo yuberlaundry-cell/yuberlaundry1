@@ -12,6 +12,7 @@ import Image from 'next/image';
 import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
 const services = [
     {
@@ -62,12 +63,20 @@ export default function HowItWorksPage() {
             <PublicHeader />
             <main className="flex-grow">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="border-b">
-                        <div className="container mx-auto px-6 sm:px-8">
-                             <TabsList className="grid w-full grid-cols-3 h-auto -mb-px bg-transparent p-0">
+                    <div className="bg-card border-b">
+                        <div className="container mx-auto px-6 sm:px-8 py-4 flex justify-center">
+                            <TabsList className="bg-transparent p-0 h-auto gap-2">
                                 {services.map(service => (
-                                    <TabsTrigger key={service.id} value={service.id} className="text-muted-foreground data-[state=active]:text-primary data-[state=active]:shadow-none data-[state=active]:border-b-2 data-[state=active]:border-primary rounded-none h-14 data-[state=active]:bg-yellow-100/50">
-                                        <service.icon className="mr-2" />
+                                    <TabsTrigger 
+                                        key={service.id} 
+                                        value={service.id} 
+                                        className={cn(
+                                            "rounded-full px-6 py-2 text-sm font-semibold transition-colors",
+                                            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
+                                            "data-[state=active]:bg-yellow-400 data-[state=active]:text-black data-[state=active]:shadow-md"
+                                        )}
+                                    >
+                                        <service.icon className="mr-2 h-4 w-4" />
                                         {service.name}
                                     </TabsTrigger>
                                 ))}
