@@ -31,12 +31,12 @@ const personalMegaMenuItems = {
     { icon: Wind, title: "Ironing", href: "/how-it-works#ironing" },
   ],
   "Plans & Features": [
-    { icon: Sparkles, title: "Yuber Plus", href: "/features#yuber-plus", popular: true },
+    { icon: Sparkles, title: "Yuber Plus", href: "/features#yuber-plus" },
     { icon: Gift, title: "Gift Cards", href: "/features#gift-cards" },
     { icon: Users, title: "Referral Program", href: "/features#referrals" },
   ],
   "Support": [
-    { icon: CircleHelp, title: "Help Centre", href: "/faq" },
+    { icon: CircleHelp, title: "Help Centre", href: "/support" },
     { icon: Mail, title: "Contact Us", href: "/contact" },
     { icon: MessageSquare, title: "FAQs", href: "/faq" },
     { icon: Star, title: "Reviews", href: "#" },
@@ -326,3 +326,5 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
+
+    

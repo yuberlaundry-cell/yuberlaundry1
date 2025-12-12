@@ -18,7 +18,7 @@ const footerLinks = {
   ],
   Resources: [
     { name: "FAQ", href: "/faq" },
-    { name: "Help Center", href: "/faq" },
+    { name: "Help Center", href: "/support" },
     { name: "Contact Us", href: "/contact" },
     { name: "Partnerships", href: "/partnerships" },
   ],
@@ -86,3 +86,5 @@ export function PublicFooter() {
     </footer>
   );
 }
+
+    
