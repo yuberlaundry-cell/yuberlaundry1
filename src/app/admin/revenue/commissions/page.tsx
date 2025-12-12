@@ -325,5 +325,3 @@ function OverrideRuleForm({ override }: { override?: typeof overrides[0] }) {
         </form>
     )
 }
-
-    
