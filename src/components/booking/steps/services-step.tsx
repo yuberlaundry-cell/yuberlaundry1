@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Info, Box, Sparkles, Truck, Shirt, Waves } from "lucide-react";
+import { Info, Box, Sparkles, Truck, Shirt, Waves, Droplets, Wind, BedDouble } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -12,35 +12,49 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 
-const services = [
+const servicesConfig = [
     {
-        id: 'wash',
-        name: 'Wash',
-        icon: Waves,
-        description: 'From R3.49 / per item',
+        id: 'wash-fold',
+        name: 'Wash & Fold',
+        icon: Droplets,
         details: 'For everyday laundry, bedsheets and towels.',
+        description: 'From R40.00 / per kg',
         preferences: {
-            title: 'Please select your preference for Wash',
+            title: 'Please select your preference for Wash & Fold',
             options: [
-                { id: 'mixed', name: 'Mixed Wash', price: 'R39.75 / 15lbs' },
-                { id: 'separate', name: 'Separate Wash', price: 'R79.50 / 30lbs' },
+                { id: 'mixed', name: 'Mixed Wash', price: 'R40.00 / kg' },
+                { id: 'separate', name: 'Separate Wash', price: 'R80.00 / kg' },
             ],
-            description: "We'll separate the lights; you mix wash as light, or the dark loads. You can request 110°F+ washes. Each additional is charged at R2.65 per lb."
+            description: "We'll separate the lights and darks for you."
         },
         addOns: [
-            { id: 'high-temp', name: 'High temperature', description: "Items upgrade to wash at a higher temperature. Check labels before selecting this option." }
+            { id: 'high-temp', name: 'High temperature wash', description: "Items will be washed at a higher temperature. Please check labels before selecting." }
         ]
     },
     {
         id: 'dry-cleaning',
         name: 'Dry Cleaning',
         icon: Shirt,
-        description: 'From R5.49 / per item',
-        details: 'For everyday laundry that requires pressing.',
+        details: 'For delicate items that require special care.',
+        description: 'From R80.00 / per item',
     },
+    {
+        id: 'ironing',
+        name: 'Ironing',
+        icon: Wind,
+        details: 'Get your clothes professionally pressed.',
+        description: 'From R25.00 / per item',
+    },
+     {
+        id: 'duvets-bulky',
+        name: 'Duvets & Bulky Items',
+        icon: BedDouble,
+        details: 'For large items like duvets and comforters.',
+        description: 'From R150.00 / per item',
+    }
 ];
 
-type Service = typeof services[0];
+type Service = typeof servicesConfig[0];
 type ServicePreferences = {
     [key: string]: {
         washType?: string;
@@ -72,11 +86,11 @@ export default function ServicesStep() {
     };
 
     const toggleService = (serviceId: string) => {
-        const service = services.find(s => s.id === serviceId);
+        const service = servicesConfig.find(s => s.id === serviceId);
         if (!service) return;
 
         // If the service has preferences, always open the dialog
-        if (service.preferences) {
+        if (service.preferences || service.addOns) {
             openServiceDialog(service);
         } else {
             // For services without preferences, just toggle them in the list
@@ -117,7 +131,7 @@ export default function ServicesStep() {
             </div>
             <div className="space-y-4">
                 <div className="rounded-lg border">
-                    {services.map((service, index) => (
+                    {servicesConfig.map((service, index) => (
                         <div key={service.id}>
                             <div className="p-4 flex items-start gap-4">
                                 <div className="p-3 bg-muted rounded-full">
@@ -136,7 +150,7 @@ export default function ServicesStep() {
                                     {selectedServices.includes(service.id) ? 'Edit' : 'Add'}
                                 </Button>
                             </div>
-                            {index < services.length - 1 && <Separator />}
+                            {index < servicesConfig.length - 1 && <Separator />}
                         </div>
                     ))}
                 </div>
