@@ -35,7 +35,7 @@ const roles = [
         description: "Partner with us to grow your business.",
         icon: WashingMachine,
         role: "laundromat",
-        href: "/admin/laundromats/new"
+        href: "/laundromat/onboarding"
     }
 ]
 
