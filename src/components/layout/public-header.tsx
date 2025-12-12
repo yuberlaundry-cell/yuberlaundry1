@@ -214,28 +214,6 @@ export function PublicHeader() {
                         </ul>
                         </AccordionContent>
                     </AccordionItem>
-                    <AccordionItem value="how-it-works">
-                        <AccordionTrigger className="font-semibold">How It Works</AccordionTrigger>
-                        <AccordionContent>
-                        <ul className="space-y-4 pt-2">
-                            {Object.entries(howItWorksMenuItems).map(([title, items]) => (
-                            <div key={title}>
-                                <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
-                                <ul className="space-y-3">
-                                {items.map(item => (
-                                    <li key={item.title}>
-                                    <Link href={item.href} className="flex flex-col gap-1 text-sm font-medium hover:text-primary transition-colors">
-                                        <span className="font-semibold">{item.title}</span>
-                                        <span className="text-xs text-muted-foreground">{item.description}</span>
-                                    </Link>
-                                    </li>
-                                ))}
-                                </ul>
-                            </div>
-                            ))}
-                        </ul>
-                        </AccordionContent>
-                    </AccordionItem>
                     </Accordion>
                 </div>
                  {!loading && !user && (
@@ -306,5 +284,3 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
-
-    
