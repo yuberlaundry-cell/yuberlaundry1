@@ -10,10 +10,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { mockBusinessEmployees } from "@/lib/mock-data";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { useToast } from "@/hooks/use-toast";
 
 export default function EditEmployeePage() {
     const params = useParams();
+    const router = useRouter();
+    const { toast } = useToast();
     const employeeId = params.id as string;
     const employee = mockBusinessEmployees.find(e => e.id === employeeId);
     
@@ -27,6 +30,15 @@ export default function EditEmployeePage() {
     }
 
     const [firstName, lastName] = employee.name.split(' ');
+
+    const handleSaveChanges = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Employee Updated",
+            description: `The details for ${employee.name} have been saved.`,
+        });
+        router.push(`/business/employees/${employee.id}`);
+    }
 
     return (
         <div className="space-y-8 pb-8">
@@ -47,7 +59,7 @@ export default function EditEmployeePage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleSaveChanges}>
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="first-name">First Name</Label>

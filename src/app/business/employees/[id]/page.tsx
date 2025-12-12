@@ -11,7 +11,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { mockBusinessEmployees } from "@/lib/mock-data";
 import { ArrowLeft, BarChart2, DollarSign, Edit, ShieldOff, ShoppingCart, Trash2, User } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const statusStyles: { [key: string]: string } = {
     Active: 'bg-green-100 text-green-800',
@@ -26,6 +26,7 @@ const orderStatusColors: { [key: string]: string } = {
 
 export default function EmployeeDetailsPage() {
     const params = useParams();
+    const router = useRouter();
     const employeeId = params.id as string;
     const employee = mockBusinessEmployees.find(e => e.id === employeeId);
 
@@ -111,7 +112,7 @@ export default function EmployeeDetailsPage() {
                                 <p className="font-medium">Per-Order Limit</p>
                                 <p className="font-bold">R{employee.allowance.perOrder.toFixed(2)}</p>
                             </div>
-                            <Button variant="outline" className="w-full">Edit Allowance</Button>
+                            <Button variant="outline" className="w-full" onClick={() => router.push(`/business/employees/${employee.id}/edit`)}>Edit Allowance</Button>
                         </CardContent>
                     </Card>
                 </div>

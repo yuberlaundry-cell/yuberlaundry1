@@ -9,8 +9,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useToast } from "@/hooks/use-toast";
+import { useRouter } from "next/navigation";
 
 export default function NewEmployeePage() {
+    const { toast } = useToast();
+    const router = useRouter();
+
+    const handleAddEmployee = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Employee Invited!",
+            description: "An invitation has been sent to the employee to join the company account.",
+        });
+        router.push('/business/employees');
+    }
 
     return (
         <div className="space-y-8 pb-8">
@@ -31,27 +44,27 @@ export default function NewEmployeePage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-6">
+                    <form className="space-y-6" onSubmit={handleAddEmployee}>
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="first-name">First Name</Label>
-                                <Input id="first-name" placeholder="John" />
+                                <Input id="first-name" placeholder="John" required />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="last-name">Last Name</Label>
-                                <Input id="last-name" placeholder="Doe" />
+                                <Input id="last-name" placeholder="Doe" required />
                             </div>
                         </div>
 
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="john.doe@company.com" />
+                            <Input id="email" type="email" placeholder="john.doe@company.com" required/>
                         </div>
                         
                         <div className="grid sm:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="role">Role</Label>
-                                <Select>
+                                <Select required>
                                     <SelectTrigger id="role">
                                         <SelectValue placeholder="Select a role" />
                                     </SelectTrigger>
@@ -71,7 +84,7 @@ export default function NewEmployeePage() {
                         <div className="grid sm:grid-cols-2 gap-4">
                              <div className="space-y-2">
                                 <Label htmlFor="monthly-allowance">Monthly Allowance (R)</Label>
-                                <Input id="monthly-allowance" type="number" placeholder="e.g., 2000" />
+                                <Input id="monthly-allowance" type="number" placeholder="e.g., 2000" required/>
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="per-order-limit">Per-Order Limit (R) (optional)</Label>
@@ -85,7 +98,7 @@ export default function NewEmployeePage() {
 
                         <div className="flex justify-end gap-2 pt-4">
                             <Button variant="outline" asChild><Link href="/business/employees">Cancel</Link></Button>
-                            <Button type="submit">Add Employee</Button>
+                            <Button type="submit">Send Invite & Add Employee</Button>
                         </div>
                     </form>
                 </CardContent>

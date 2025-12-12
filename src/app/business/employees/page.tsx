@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Search, PlusCircle, MoreHorizontal, ChevronDown, Upload, Download } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 const statusStyles: { [key: string]: string } = {
     Active: 'bg-green-100 text-green-800',
@@ -24,6 +25,7 @@ const roleStyles: { [key: string]: string } = {
 }
 
 export default function EmployeesPage() {
+    const router = useRouter();
     return (
         <div className="space-y-8 pb-8">
             <div>
@@ -112,14 +114,14 @@ export default function EmployeesPage() {
                         </TableHeader>
                         <TableBody>
                             {mockBusinessEmployees.map((employee) => (
-                                <TableRow key={employee.id}>
+                                <TableRow key={employee.id} className="cursor-pointer" onClick={() => router.push(`/business/employees/${employee.id}`)}>
                                     <TableCell>
                                         <div className="flex items-center gap-3">
                                             <Avatar>
                                                 <AvatarFallback>{employee.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                                             </Avatar>
                                             <div>
-                                                <Link href={`/business/employees/${employee.id}`} className="font-medium hover:underline">{employee.name}</Link>
+                                                <span className="font-medium">{employee.name}</span>
                                                 <div className="text-sm text-muted-foreground">{employee.email}</div>
                                             </div>
                                         </div>
@@ -138,14 +140,14 @@ export default function EmployeesPage() {
                                     <TableCell>
                                         <DropdownMenu>
                                             <DropdownMenuTrigger asChild>
-                                                <Button aria-haspopup="true" size="icon" variant="ghost">
+                                                <Button aria-haspopup="true" size="icon" variant="ghost" onClick={(e) => e.stopPropagation()}>
                                                     <MoreHorizontal className="h-4 w-4" />
                                                     <span className="sr-only">Toggle menu</span>
                                                 </Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent align="end">
-                                                <DropdownMenuItem asChild><Link href={`/business/employees/${employee.id}`}>View Details</Link></DropdownMenuItem>
-                                                <DropdownMenuItem asChild><Link href={`/business/employees/${employee.id}/edit`}>Edit</Link></DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => router.push(`/business/employees/${employee.id}`)}>View Details</DropdownMenuItem>
+                                                <DropdownMenuItem onSelect={() => router.push(`/business/employees/${employee.id}/edit`)}>Edit</DropdownMenuItem>
                                                 <DropdownMenuItem className="text-destructive">Deactivate</DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
