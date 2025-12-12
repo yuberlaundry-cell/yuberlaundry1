@@ -8,8 +8,24 @@ import { Label } from '@/components/ui/label';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 import { Briefcase } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
 
 export default function RegisterBusinessPage() {
+  const { login } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
+
+  const handleCreateBusinessAccount = (e: React.FormEvent) => {
+    e.preventDefault();
+    login('business_admin');
+    toast({
+      title: 'Business Account Created!',
+      description: "Welcome to Yuber for Business. Your dashboard is ready.",
+    });
+    router.push('/business');
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
@@ -24,7 +40,7 @@ export default function RegisterBusinessPage() {
           <CardDescription>Offer a modern laundry benefit to your employees.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleCreateBusinessAccount}>
             <div className="space-y-2">
                 <Label htmlFor="company-name">Company Name</Label>
                 <Input id="company-name" placeholder="Acme Corporation" required />

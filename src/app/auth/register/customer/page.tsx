@@ -7,21 +7,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 import { useToast } from '@/hooks/use-toast';
-import { User, WashingMachine } from 'lucide-react';
+import { User } from 'lucide-react';
 import Link from 'next/link';
+import { useAuth } from '@/hooks/use-auth';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterCustomerPage() {
   const { toast } = useToast();
+  const { login } = useAuth();
+  const router = useRouter();
 
   const handleCreateAccount = (e: React.FormEvent) => {
     e.preventDefault();
+    login('consumer');
     toast({
       title: 'Account Created!',
       description: "Welcome to Yuber Laundry. You're now logged in.",
     });
-    // In a real app, you would handle the actual registration logic
-    // and then redirect the user.
-    // router.push('/app');
+    router.push('/app');
   };
 
   return (

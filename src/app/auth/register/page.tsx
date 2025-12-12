@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Briefcase, HardHat, User, WashingMachine } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { platformName } from '@/lib/branding';
 
 const roles = [
     {
@@ -17,7 +18,7 @@ const roles = [
     },
     {
         name: "I have a business",
-        description: "Provide laundry as a benefit for your team.",
+        description: "On-demand laundry for linens, towels, uniforms, and more—built for your industry.",
         icon: Briefcase,
         role: "business",
         href: "/auth/register/business"
@@ -45,7 +46,7 @@ export default function RegisterPage() {
     <div className="flex flex-col items-center justify-center min-h-screen bg-background p-4">
        <div className="w-full max-w-md">
            <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold font-headline">Join Yuber Laundry</h1>
+              <h1 className="text-3xl font-bold font-headline">Join {platformName}</h1>
               <p className="text-muted-foreground">How would you like to use our service?</p>
             </div>
             <div className="space-y-4">
