@@ -7,6 +7,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter
 } from '@/components/ui/card';
 import {
   Table,
@@ -18,7 +19,7 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Star, Filter } from 'lucide-react';
+import { Star, Filter, MoreHorizontal } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -29,6 +30,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 import { useMemo } from 'react';
+import { useRouter } from 'next/navigation';
 
 const RatingStars = ({ rating }: { rating: number }) => {
   return (
@@ -47,6 +49,7 @@ const RatingStars = ({ rating }: { rating: number }) => {
 
 export default function CompletedOrdersPage() {
   const { orders } = useLaundromatOrders();
+  const router = useRouter();
   
   const completedOrders = useMemo(() => orders.filter(o => o.status === 'Completed'), [orders]);
 
@@ -79,24 +82,29 @@ export default function CompletedOrdersPage() {
 
       <div className="grid md:grid-cols-3 gap-6">
         <Card>
-          <CardHeader>
-            <CardTitle>Total Completed</CardTitle>
-            <CardDescription>{totalCompleted}</CardDescription>
+          <CardHeader className="flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Completed</CardTitle>
           </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{totalCompleted}</div>
+          </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle>Average Rating</CardTitle>
-            <CardDescription className="flex items-center gap-1">
-              {averageRating.toFixed(1)} <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
-            </CardDescription>
+          <CardHeader className="flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Average Rating</CardTitle>
+            <Star className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
+          <CardContent>
+             <div className="text-2xl font-bold">{averageRating.toFixed(1)}</div>
+          </CardContent>
         </Card>
         <Card>
-          <CardHeader>
-            <CardTitle>Positive Feedback</CardTitle>
-            <CardDescription>{positiveFeedback.toFixed(1)}%</CardDescription>
+          <CardHeader className="flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Positive Feedback</CardTitle>
           </CardHeader>
+           <CardContent>
+             <div className="text-2xl font-bold">{positiveFeedback.toFixed(1)}%</div>
+          </CardContent>
         </Card>
       </div>
 
@@ -123,35 +131,54 @@ export default function CompletedOrdersPage() {
           </DropdownMenu>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Order ID</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Service</TableHead>
-                <TableHead>Date Completed</TableHead>
-                <TableHead>Review</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {completedOrders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.service}</TableCell>
-                  <TableCell>{order.readyTime || new Date().toLocaleDateString()}</TableCell>
-                  <TableCell>
-                    {order.rating ? (
-                        <div>
-                            <RatingStars rating={order.rating} />
-                            {order.reviewDate && <p className="text-xs text-muted-foreground">Rated on {order.reviewDate}</p>}
-                        </div>
-                    ) : <span className="text-muted-foreground">N/A</span>}
-                  </TableCell>
+          <div className="hidden md:block">
+            <Table>
+                <TableHeader>
+                <TableRow>
+                    <TableHead>Order ID</TableHead>
+                    <TableHead>Customer</TableHead>
+                    <TableHead>Service</TableHead>
+                    <TableHead>Date Completed</TableHead>
+                    <TableHead>Review</TableHead>
                 </TableRow>
+                </TableHeader>
+                <TableBody>
+                {completedOrders.map((order) => (
+                    <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/laundromat/orders/${order.id.replace('#','')}`)}>
+                    <TableCell className="font-medium">{order.id}</TableCell>
+                    <TableCell>{order.customer}</TableCell>
+                    <TableCell>{order.service}</TableCell>
+                    <TableCell>{order.readyTime || new Date().toLocaleDateString()}</TableCell>
+                    <TableCell>
+                        {order.rating ? (
+                            <div>
+                                <RatingStars rating={order.rating} />
+                                {order.reviewDate && <p className="text-xs text-muted-foreground">Rated on {order.reviewDate}</p>}
+                            </div>
+                        ) : <span className="text-muted-foreground">N/A</span>}
+                    </TableCell>
+                    </TableRow>
+                ))}
+                </TableBody>
+            </Table>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4 md:hidden">
+              {completedOrders.map(order => (
+                  <Card key={order.id} onClick={() => router.push(`/laundromat/orders/${order.id.replace('#','')}`)}>
+                      <CardHeader>
+                          <div className="flex justify-between">
+                            <CardTitle className="text-base">{order.id}</CardTitle>
+                            {order.rating ? <RatingStars rating={order.rating} /> : <span className="text-xs text-muted-foreground">No rating</span>}
+                          </div>
+                          <CardDescription>{order.customer}</CardDescription>
+                      </CardHeader>
+                      <CardContent className="text-sm">
+                          <p><span className="font-medium">Service:</span> {order.service}</p>
+                          <p><span className="font-medium">Completed:</span> {order.readyTime}</p>
+                      </CardContent>
+                  </Card>
               ))}
-            </TableBody>
-          </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
