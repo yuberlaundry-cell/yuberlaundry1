@@ -20,9 +20,11 @@ import { Button } from '@/components/ui/button';
 import {
   MoreHorizontal,
   PlusCircle,
-  Clock,
   Trash2,
-  FilePen
+  FilePen,
+  Clock,
+  Wrench,
+  Sparkles,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -44,7 +46,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Separator } from '@/components/ui/separator';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -73,12 +75,25 @@ export default function SlotTemplatesPage() {
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Time Slot Templates</h1>
           <p className="text-muted-foreground">
-            Manage reusable templates for pickup and delivery time slots.
+            Manage reusable templates for pickup and delivery time slots, including turnaround rules.
           </p>
         </div>
-        <Button className="w-full sm:w-auto" onClick={() => handleOpenDialog(null)}>
-            <PlusCircle className="mr-2 h-4 w-4" /> Add Template
-        </Button>
+        <Dialog open={isEditing !== null} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+          <DialogTrigger asChild>
+            <Button className="w-full sm:w-auto" onClick={() => handleOpenDialog(null)}>
+                <PlusCircle className="mr-2 h-4 w-4" /> Add Template
+            </Button>
+          </DialogTrigger>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>{isEditing ? 'Edit Time Slot Template' : 'Create Time Slot Template'}</DialogTitle>
+              <DialogDescription>
+                {isEditing ? 'Update the details for this template.' : 'Define a new reusable set of time slots and rules for a city.'}
+              </DialogDescription>
+            </DialogHeader>
+            <SlotTemplateForm template={isEditing} onClose={handleCloseDialog} />
+          </DialogContent>
+        </Dialog>
       </div>
 
       <Card>
@@ -130,23 +145,11 @@ export default function SlotTemplatesPage() {
           </Table>
         </CardContent>
       </Card>
-      
-       <Dialog open={isEditing !== null} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>{isEditing ? 'Edit Time Slot Template' : 'Create Time Slot Template'}</DialogTitle>
-              <DialogDescription>
-                {isEditing ? 'Update the details for this template.' : 'Define a new reusable set of time slots for a city.'}
-              </DialogDescription>
-            </DialogHeader>
-            <SlotTemplateForm template={isEditing} onClose={handleCloseDialog} />
-          </DialogContent>
-        </Dialog>
     </div>
   );
 }
 
-function SlotTemplateForm({template, onClose}: {template: typeof initialTemplates[0] | null, onClose: () => void}) {
+function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplates)[0] | null, onClose: () => void}) {
     const { toast } = useToast();
     
     const handleSubmit = (e: React.FormEvent) => {
@@ -159,48 +162,85 @@ function SlotTemplateForm({template, onClose}: {template: typeof initialTemplate
     }
 
     return (
-        <form className="space-y-4" onSubmit={handleSubmit}>
-          <div className="space-y-2">
-            <Label htmlFor="template-name">Template Name</Label>
-            <Input id="template-name" defaultValue={template?.name} placeholder="e.g., London - Weekend Express" required />
+        <form className="space-y-6 max-h-[70vh] overflow-y-auto pr-6" onSubmit={handleSubmit}>
+           <div className="space-y-4 p-4 border rounded-lg">
+             <h4 className="font-semibold text-base flex items-center gap-2"><Clock/> General Settings</h4>
+              <div className="space-y-2">
+                <Label htmlFor="template-name">Template Name</Label>
+                <Input id="template-name" defaultValue={template?.name} placeholder="e.g., London - Weekend Express" required />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="city">City</Label>
+                <Select name="city" defaultValue={template?.city.toLowerCase()} required>
+                  <SelectTrigger id="city">
+                    <SelectValue placeholder="Select a city" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="london">London</SelectItem>
+                    <SelectItem value="manchester">Manchester</SelectItem>
+                    <SelectItem value="birmingham">Birmingham</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="start-time">Start Time</Label>
+                  <Input id="start-time" type="time" defaultValue={template?.time.split(' - ')[0]} required />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="end-time">End Time</Label>
+                  <Input id="end-time" type="time" defaultValue={template?.time.split(' - ')[1]} required />
+                </div>
+              </div>
+               <div className="space-y-2">
+                <Label htmlFor="slot-length">Slot Length (minutes)</Label>
+                <Input id="slot-length" type="number" defaultValue={template?.slotLength} placeholder="e.g., 120" required />
+              </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="city">City</Label>
-            <Select name="city" defaultValue={template?.city.toLowerCase()} required>
-              <SelectTrigger id="city">
-                <SelectValue placeholder="Select a city" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="london">London</SelectItem>
-                <SelectItem value="manchester">Manchester</SelectItem>
-                <SelectItem value="birmingham">Birmingham</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
+
+          <div className="space-y-4 p-4 border rounded-lg">
+            <h4 className="font-semibold text-base flex items-center gap-2"><Sparkles/> Service Level</h4>
             <div className="space-y-2">
-              <Label htmlFor="start-time">Start Time</Label>
-              <Input id="start-time" type="time" defaultValue={template?.time.split(' - ')[0]} required />
+                <Label htmlFor="template-type">Template Type</Label>
+                <Select name="template-type" defaultValue={template?.type}>
+                    <SelectTrigger id="template-type">
+                        <SelectValue placeholder="Select service type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Standard">Standard (e.g., Next-day)</SelectItem>
+                        <SelectItem value="Premium">Premium (e.g., Same-day Express)</SelectItem>
+                    </SelectContent>
+                </Select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="end-time">End Time</Label>
-              <Input id="end-time" type="time" defaultValue={template?.time.split(' - ')[1]} required />
+             <div className="space-y-2">
+                <Label htmlFor="cutoff-time">Order Cut-off Time</Label>
+                <Input id="cutoff-time" type="time" defaultValue="14:00" />
+                <p className="text-xs text-muted-foreground">Orders placed after this time will be scheduled for the next operational day.</p>
             </div>
           </div>
-          <div className="space-y-2">
-            <Label htmlFor="slot-length">Slot Length (minutes)</Label>
-            <Input id="slot-length" type="number" defaultValue={template?.slotLength} placeholder="e.g., 120" required />
+          
+           <div className="space-y-4 p-4 border rounded-lg">
+             <h4 className="font-semibold text-base flex items-center gap-2"><Wrench/> Turnaround Rules</h4>
+             <div className="space-y-2">
+                <Label htmlFor="default-turnaround">Default Turnaround (hours)</Label>
+                <Input id="default-turnaround" type="number" defaultValue={48} />
+                <p className="text-xs text-muted-foreground">The standard time from collection to delivery if no specific rules apply.</p>
+            </div>
+            <Separator />
+            <p className="text-sm font-medium">Service-Specific Overrides</p>
+            <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                    <Label htmlFor="wash-turnaround">Wash & Fold (hours)</Label>
+                    <Input id="wash-turnaround" type="number" defaultValue={24} />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="dry-clean-turnaround">Dry Cleaning (hours)</Label>
+                    <Input id="dry-clean-turnaround" type="number" defaultValue={48} />
+                </div>
+            </div>
           </div>
-          <div className="flex items-center space-x-2">
-            <Checkbox id="same-day" defaultChecked={template?.type === 'Premium'} />
-            <label
-              htmlFor="same-day"
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-            >
-              This is a premium template (e.g., for same-day service)
-            </label>
-          </div>
-          <DialogFooter>
+
+          <DialogFooter className="sticky bottom-0 bg-background pt-4 pb-0 -mb-6 -mx-6 px-6">
             <Button variant="ghost" type="button" onClick={onClose}>Cancel</Button>
             <Button type="submit">{template ? 'Save Changes' : 'Create Template'}</Button>
           </DialogFooter>
