@@ -36,8 +36,8 @@ const personalMegaMenuItems = {
     { icon: Users, title: "Referral Program", href: "/features#referrals" },
   ],
   "Support": [
-    { icon: CircleHelp, title: "Help Centre", href: "/app/support" },
-    { icon: Mail, title: "Contact Us", href: "/faq" },
+    { icon: CircleHelp, title: "Help Centre", href: "/faq" },
+    { icon: Mail, title: "Contact Us", href: "/contact" },
     { icon: MessageSquare, title: "FAQs", href: "/faq" },
     { icon: Star, title: "Reviews", href: "#" },
   ]
