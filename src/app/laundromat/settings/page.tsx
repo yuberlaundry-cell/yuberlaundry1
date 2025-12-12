@@ -20,9 +20,83 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
+import { CheckCircle, PlusCircle, Trash2 } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+
+const YocoDeviceManager = () => {
+    const [devices, setDevices] = useState([{id: 'dev_1', name: 'Front Counter'}]);
+    const [newDeviceName, setNewDeviceName] = useState('');
+
+    const handleAddDevice = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (newDeviceName) {
+            setDevices([...devices, {id: `dev_${Date.now()}`, name: newDeviceName}]);
+            setNewDeviceName('');
+        }
+    }
+
+    return (
+        <div className="space-y-4">
+            <div>
+                <h4 className="font-semibold">Web POS Devices</h4>
+                <p className="text-sm text-muted-foreground">Manage the devices (stations) you use to accept payments.</p>
+            </div>
+            <div className="space-y-2">
+                {devices.map(device => (
+                    <div key={device.id} className="flex items-center justify-between p-3 border rounded-lg bg-background">
+                        <p className="font-medium">{device.name}</p>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"><Trash2 className="h-4 w-4"/></Button>
+                    </div>
+                ))}
+            </div>
+             <Dialog>
+                <DialogTrigger asChild>
+                    <Button variant="outline" className="w-full">
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add New Device
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Add Yoco Web POS Device</DialogTitle>
+                        <DialogDescription>
+                            Give this payment station a friendly name (e.g., "Front Counter PC", "Office Tablet").
+                        </DialogDescription>
+                    </DialogHeader>
+                     <form onSubmit={handleAddDevice}>
+                        <div className="py-4">
+                            <Label htmlFor="device-name">Device Name</Label>
+                            <Input 
+                                id="device-name" 
+                                value={newDeviceName}
+                                onChange={(e) => setNewDeviceName(e.target.value)}
+                                placeholder="e.g., Front Counter"
+                            />
+                        </div>
+                        <DialogFooter>
+                            <Button type="submit">Add Device</Button>
+                        </DialogFooter>
+                     </form>
+                </DialogContent>
+            </Dialog>
+        </div>
+    );
+};
+
 
 export default function LaundromatSettingsPage() {
   const [address, setAddress] = useState("100 Laundry Lane, London, UK");
+  const [isYocoConnected, setIsYocoConnected] = useState(false);
+  const { toast } = useToast();
+
+  const handleYocoConnect = () => {
+      toast({ title: "Redirecting to Yoco..."});
+      setTimeout(() => {
+          setIsYocoConnected(true);
+          toast({ title: "Yoco Connected Successfully!" });
+      }, 1500);
+  }
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -39,6 +113,7 @@ export default function LaundromatSettingsPage() {
                 <TabsTrigger value="pricing">Services & Pricing</TabsTrigger>
                 <TabsTrigger value="operations">Operations</TabsTrigger>
                 <TabsTrigger value="payouts">Payouts</TabsTrigger>
+                <TabsTrigger value="integrations">Integrations</TabsTrigger>
                 <TabsTrigger value="notifications">Notifications</TabsTrigger>
             </TabsList>
             <ScrollBar orientation="horizontal" />
@@ -195,6 +270,42 @@ export default function LaundromatSettingsPage() {
               </form>
             </CardContent>
           </Card>
+        </TabsContent>
+         <TabsContent value="integrations" className="mt-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle>POS & Payment Integrations</CardTitle>
+                    <CardDescription>
+                        Connect your POS system to accept in-person payments for walk-in orders.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="max-w-lg">
+                    {isYocoConnected ? (
+                        <div className="p-4 border rounded-lg bg-muted/50 space-y-6">
+                             <div className="flex items-start justify-between">
+                                <div>
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="font-semibold text-lg">Yoco</h3>
+                                        <Badge className="bg-green-100 text-green-800">Connected</Badge>
+                                    </div>
+                                    <p className="text-sm text-muted-foreground">Business ID: BIZ-xxxxxxxx</p>
+                                </div>
+                                <Button variant="destructive" size="sm" onClick={() => setIsYocoConnected(false)}>Disconnect</Button>
+                             </div>
+                             <Separator />
+                             <YocoDeviceManager />
+                        </div>
+                    ) : (
+                        <div className="p-4 border rounded-lg flex items-center justify-between">
+                             <div>
+                                <h3 className="font-semibold">Yoco</h3>
+                                <p className="text-sm text-muted-foreground">Accept card payments in-person.</p>
+                             </div>
+                             <Button onClick={handleYocoConnect}>Connect to Yoco</Button>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
         </TabsContent>
         <TabsContent value="notifications" className="mt-4">
            <Card>

@@ -8,7 +8,7 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
-import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote } from 'lucide-react';
+import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
@@ -29,6 +29,8 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const [customer, setCustomer] = useState({ name: '', phone: '' });
   const [orderItems, setOrderItems] = useState<{ id: string; name: string; model: string; price: number; value: number }[]>([]);
   const [newOrderId, setNewOrderId] = useState('');
+  const [paymentMethod, setPaymentMethod] = useState('cash');
+  const [isProcessingYoco, setIsProcessingYoco] = useState(false);
   const { toast } = useToast();
   const { addOrder } = useLaundromatOrders();
 
@@ -36,6 +38,28 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const handleBack = () => setStep((s) => s - 1);
   
   const handleCreateOrder = () => {
+    if (paymentMethod === 'yoco') {
+        setIsProcessingYoco(true);
+        // Simulate API call to Yoco
+        setTimeout(() => {
+            // This is where you would get the redirect_url from your backend
+            // and open it in an iframe or new tab.
+            // For now, we'll just show a "waiting" state.
+             toast({
+                title: "Waiting for Yoco Payment",
+                description: "Complete the payment on the Yoco terminal.",
+            });
+            // To simulate completion, we add another button
+        }, 1000);
+        return;
+    }
+    
+    // For non-Yoco payments
+    finalizeOrder();
+  }
+
+  const finalizeOrder = () => {
+    setIsProcessingYoco(false);
     const generatedId = `#W-${Math.floor(10000 + Math.random() * 90000)}`;
     setNewOrderId(generatedId);
     
@@ -49,15 +73,15 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
         pickup: new Date().toLocaleDateString(),
         sla: 'Due in 24h',
         bags: orderItems.length,
-        items: orderItems, // Make sure to pass the items with their values
-        isBilled: true, // Walk-in orders are billed on the spot
+        items: orderItems,
+        isBilled: true,
     });
 
     toast({
         title: `Order ${generatedId} Created`,
         description: 'The order for ' + customer.name + ' is now in the system.',
     });
-    handleNext();
+    setStep(4); // Move to confirmation step
   }
 
   const handlePrint = (type: 'Receipt' | 'Bag Tags') => {
@@ -188,37 +212,48 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
               <DialogDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</DialogDescription>
             </DialogHeader>
              <div className="space-y-4 py-4">
-                <RadioGroup defaultValue="cash" className="space-y-3">
-                    <Label htmlFor="pay-cash" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                        <RadioGroupItem value="cash" id="pay-cash" />
-                        <Banknote className="h-6 w-6 text-green-600" />
-                        <div>
-                            <p className="font-semibold">Pay with Cash</p>
-                            <p className="text-sm text-muted-foreground">Customer pays with physical cash.</p>
+                {isProcessingYoco ? (
+                     <div className="p-8 text-center space-y-4">
+                        <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary" />
+                        <h3 className="font-semibold text-lg">Waiting for Yoco...</h3>
+                        <p className="text-muted-foreground">Complete the payment on the Yoco card machine.</p>
+                        <div className="flex gap-2 justify-center">
+                            <Button variant="destructive" size="sm" onClick={() => setIsProcessingYoco(false)}>Cancel</Button>
+                            <Button variant="secondary" size="sm" onClick={finalizeOrder}>Simulate Success</Button>
                         </div>
-                    </Label>
-                     <Label htmlFor="pay-pos" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                        <RadioGroupItem value="pos" id="pay-pos" />
-                        <CreditCard className="h-6 w-6 text-blue-600" />
-                        <div>
-                            <p className="font-semibold">Pay with Card / POS</p>
-                            <p className="text-sm text-muted-foreground">Use your existing POS terminal.</p>
-                        </div>
-                    </Label>
-                    <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                        <RadioGroupItem value="later" id="pay-later" />
-                        <Clock className="h-6 w-6 text-amber-600" />
-                        <div>
-                            <p className="font-semibold">Pay Later</p>
-                            <p className="text-sm text-muted-foreground">Bill the customer's account, pay at pickup.</p>
-                        </div>
-                    </Label>
-                </RadioGroup>
+                    </div>
+                ) : (
+                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                        <Label htmlFor="pay-cash" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <RadioGroupItem value="cash" id="pay-cash" />
+                            <Banknote className="h-6 w-6 text-green-600" />
+                            <div>
+                                <p className="font-semibold">Pay with Cash</p>
+                            </div>
+                        </Label>
+                        <Label htmlFor="pay-yoco" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <RadioGroupItem value="yoco" id="pay-yoco" />
+                            <CreditCard className="h-6 w-6 text-blue-600" />
+                            <div>
+                                <p className="font-semibold">Pay with Yoco</p>
+                            </div>
+                        </Label>
+                        <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <RadioGroupItem value="later" id="pay-later" />
+                            <Clock className="h-6 w-6 text-amber-600" />
+                            <div>
+                                <p className="font-semibold">Pay on Collection</p>
+                            </div>
+                        </Label>
+                    </RadioGroup>
+                )}
             </div>
-            <DialogFooter>
-              <Button variant="ghost" onClick={handleBack}>Back</Button>
-              <Button onClick={handleCreateOrder}>Confirm & Create Order</Button>
-            </DialogFooter>
+            {!isProcessingYoco && (
+                <DialogFooter>
+                <Button variant="ghost" onClick={handleBack}>Back</Button>
+                <Button onClick={handleCreateOrder}>Confirm & Create Order</Button>
+                </DialogFooter>
+            )}
           </>
         );
       case 4: // Confirmation
