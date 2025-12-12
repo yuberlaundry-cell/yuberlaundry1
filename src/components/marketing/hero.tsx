@@ -12,7 +12,8 @@ import { AddressInput } from "../ui/address-input";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "../ui/badge";
 
-const serviceableCities = ['london', 'manchester', 'birmingham'];
+// This now reflects the cities managed in the Superadmin's "Service Zones" section.
+const serviceableCities = ['london', 'manchester', 'birmingham', 'johannesburg'];
 
 export default function Hero() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function Hero() {
   const handleAddressSelect = (address: { description: string }) => {
     const addressLower = address.description.toLowerCase();
     setSelectedAddress(address.description);
+    // This check simulates looking up the address against the zones defined by the superadmin.
     const isSupported = serviceableCities.some(city => addressLower.includes(city));
     setIsServiceable(isSupported);
   };
