@@ -38,6 +38,7 @@ import {
   Star,
   Palette,
   Sparkles,
+  Package,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -63,6 +64,7 @@ const navigationConfig = [
       { href: '/admin/b2b', label: 'B2B Accounts', icon: Briefcase },
       { href: '/admin/laundromats', label: 'Laundromats', icon: Building },
       { href: '/admin/drivers', label: 'Driver Fleet', icon: Truck },
+      { href: '/admin/services', label: 'Service Management', icon: Package },
     ],
   },
    {
