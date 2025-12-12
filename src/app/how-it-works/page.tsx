@@ -13,7 +13,7 @@ import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const services = [
     {
@@ -101,24 +101,27 @@ export default function HowItWorksPage() {
             <main>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="bg-card border-b sticky top-16 z-30">
-                        <div className="container mx-auto px-4 sm:px-8 py-4 flex flex-wrap justify-center">
-                            <TabsList className="bg-transparent p-0 h-auto gap-2">
-                                {services.map(service => (
-                                    <TabsTrigger
-                                        key={service.id}
-                                        value={service.id}
-                                        className={cn(
-                                            "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
-                                            activeTab === service.id
-                                                ? "bg-primary text-primary-foreground shadow-md"
-                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-                                        )}
-                                    >
-                                        <service.icon className="mr-2 h-4 w-4" />
-                                        {service.name}
-                                    </TabsTrigger>
-                                ))}
-                            </TabsList>
+                        <div className="container mx-auto px-4 sm:px-8 py-4">
+                            <ScrollArea className="w-full whitespace-nowrap rounded-md">
+                                <TabsList className="bg-transparent p-0 h-auto gap-2">
+                                    {services.map(service => (
+                                        <TabsTrigger
+                                            key={service.id}
+                                            value={service.id}
+                                            className={cn(
+                                                "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
+                                                activeTab === service.id
+                                                    ? "bg-primary text-primary-foreground shadow-md"
+                                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                            )}
+                                        >
+                                            <service.icon className="mr-2 h-4 w-4" />
+                                            {service.name}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                <ScrollBar orientation="horizontal" className="invisible" />
+                            </ScrollArea>
                         </div>
                     </div>
 
@@ -318,3 +321,5 @@ export default function HowItWorksPage() {
         </div>
     );
 }
+
+    

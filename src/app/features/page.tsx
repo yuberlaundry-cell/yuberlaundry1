@@ -7,6 +7,7 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
 import { Sparkles, Gift, Users, Star } from 'lucide-react';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const featureTabs = [
     {
@@ -47,23 +48,26 @@ export default function FeaturesPage() {
             <main>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="bg-card border-b sticky top-16 z-30">
-                        <div className="container mx-auto px-6 sm:px-8 py-4 flex justify-center">
-                            <TabsList className="bg-transparent p-0 h-auto gap-2">
-                                {featureTabs.map(tab => (
-                                    <TabsTrigger
-                                        key={tab.id}
-                                        value={tab.id}
-                                        className={cn(
-                                            "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
-                                            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
-                                            "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
-                                        )}
-                                    >
-                                        <tab.icon className="mr-2 h-4 w-4" />
-                                        {tab.name}
-                                    </TabsTrigger>
-                                ))}
-                            </TabsList>
+                        <div className="container mx-auto px-4 sm:px-8 py-4">
+                            <ScrollArea className="w-full whitespace-nowrap rounded-md">
+                                <TabsList className="bg-transparent p-0 h-auto gap-2">
+                                    {featureTabs.map(tab => (
+                                        <TabsTrigger
+                                            key={tab.id}
+                                            value={tab.id}
+                                            className={cn(
+                                                "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
+                                                "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
+                                                "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                                            )}
+                                        >
+                                            <tab.icon className="mr-2 h-4 w-4" />
+                                            {tab.name}
+                                        </TabsTrigger>
+                                    ))}
+                                </TabsList>
+                                <ScrollBar orientation="horizontal" className="invisible" />
+                            </ScrollArea>
                         </div>
                     </div>
                     <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24 text-center">
@@ -92,3 +96,5 @@ export default function FeaturesPage() {
         </div>
     );
 }
+
+    
