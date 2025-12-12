@@ -43,7 +43,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 
 const desktopNavConfig = [
@@ -120,28 +120,32 @@ const BottomNavbar = () => {
                             <span>More</span>
                         </div>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="rounded-t-2xl">
+                    <SheetContent side="bottom" className="rounded-t-2xl h-[90%] flex flex-col">
                         <SheetHeader>
                             <SheetTitle className="sr-only">More Options</SheetTitle>
                             <SheetDescription className="sr-only">
                                 Access additional menu items like financials, settings, and more.
                             </SheetDescription>
                         </SheetHeader>
-                        <div className="space-y-2 py-4">
+                        <div className="space-y-2 py-4 flex-grow overflow-y-auto">
                             {moreMenuItems.map((item) => (
-                                <Button key={item.href} variant="ghost" className="w-full justify-start text-base py-6" asChild>
-                                    <Link href={item.href}>
-                                        <item.icon className="mr-3 h-5 w-5 text-muted-foreground" />
-                                        {item.label}
-                                    </Link>
-                                </Button>
+                                <SheetClose asChild key={item.href}>
+                                    <Button variant="ghost" className="w-full justify-start text-base py-6" asChild>
+                                        <Link href={item.href}>
+                                            <item.icon className="mr-3 h-5 w-5 text-muted-foreground" />
+                                            {item.label}
+                                        </Link>
+                                    </Button>
+                                </SheetClose>
                             ))}
-                            <Separator className="my-2"/>
-                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" >
-                                <LogOut className="mr-3 h-5 w-5" />
-                                Log Out
-                            </Button>
                         </div>
+                        <Separator className="my-2"/>
+                        <SheetClose asChild>
+                         <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" >
+                            <LogOut className="mr-3 h-5 w-5" />
+                            Log Out
+                        </Button>
+                        </SheetClose>
                     </SheetContent>
                 </Sheet>
             </div>
@@ -214,7 +218,7 @@ export default function LaundromatPortalLayout({
                 </DropdownMenu>
                 <UserNav />
             </header>
-            <main className="flex-1 p-4 pb-24 sm:p-6 lg:p-8">
+            <main className="flex-1 p-4 pb-24 sm:p-6">
                  <div className="mx-auto w-full max-w-6xl">
                     {children}
                  </div>
