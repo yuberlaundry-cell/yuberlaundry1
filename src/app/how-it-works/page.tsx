@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -127,9 +128,11 @@ export default function HowItWorksPage() {
 
                     <TabsContent value="wash-fold">
                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
-                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                             <div className="text-center max-w-3xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Wash & Fold</h2>
+                             </div>
+                            <div className="grid md:grid-cols-2 gap-12 items-center mt-8">
                                 <div className="prose lg:prose-lg max-w-none">
-                                    <h2>Wash & Fold</h2>
                                     <p>Wash & Fold is built for people who don’t waste time on chores that don’t move them forward.</p>
                                     <p>We pick up your laundry, clean it with care using a dedicated machine, and return everything neatly folded – right down to pairing your socks.</p>
                                     <p>Clothes are washed to your preferences and delivered on your schedule, so you can focus on what matters most.</p>
@@ -260,9 +263,11 @@ export default function HowItWorksPage() {
 
                     <TabsContent value="dry-cleaning">
                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
-                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                            <div className="text-center max-w-3xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Dry Cleaning</h2>
+                            </div>
+                            <div className="grid md:grid-cols-2 gap-12 items-center mt-8">
                                 <div className="prose lg:prose-lg max-w-none">
-                                    <h2>Dry Cleaning</h2>
                                     <p>This is the perfect service for items you want professionally cleaned and returned pressed and on a hanger (this service includes both Dry Cleaning and Launder & Press).</p>
                                     <p>Enjoy premium cleaning from the comfort of your home and never go to the dry cleaners again.</p>
                                 </div>
@@ -321,5 +326,3 @@ export default function HowItWorksPage() {
         </div>
     );
 }
-
-    
