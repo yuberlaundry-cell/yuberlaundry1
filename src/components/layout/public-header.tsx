@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell, BarChart, Users } from 'lucide-react';
+import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell, BarChart, Users, Wind, Droplets } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -25,11 +25,10 @@ import { getRedirectPathForRole } from '@/lib/auth';
 
 const personalMegaMenuItems = {
   "How it works": [
-    { icon: Rocket, title: "Schedule Pickup", href: "/#features" },
-    { icon: Shirt, title: "We Clean", href: "/#features" },
-    { icon: Bike, title: "Fast Delivery", href: "/#features" },
-    { icon: Shirt, title: "Pricing", href: "/pricing" },
-    { icon: Smartphone, title: "Download App", href: "#footer" },
+    { icon: Droplets, title: "Wash & Fold", href: "/how-it-works" },
+    { icon: Shirt, title: "Dry Cleaning", href: "/how-it-works" },
+    { icon: Wind, title: "Hang Dry", href: "/how-it-works" },
+    { icon: Shirt, title: "Ironing", href: "/how-it-works" },
   ],
   "Plans & Features": [
     { icon: Sparkles, title: "Yuber Plus", href: "/app/promotions", popular: true },
@@ -72,8 +71,8 @@ const howItWorksMenuItems = {
       { icon: Bike, title: "Contactless Delivery", description: "Get fresh, folded laundry delivered to your door.", href: "/#features" },
     ],
     "Our Services": [
-      { icon: Shirt, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/pricing" },
-      { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/pricing" },
+      { icon: Droplets, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/how-it-works" },
+      { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/how-it-works" },
       { icon: Sparkles, title: "Yuber Plus", description: "Subscription for savings and convenience.", href: "/pricing", popular: true },
     ]
 };
@@ -328,5 +327,7 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
+
+    
 
     
