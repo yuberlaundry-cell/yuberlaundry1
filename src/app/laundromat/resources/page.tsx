@@ -26,7 +26,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
-import QRCode from 'qrcode.react';
+import { QRCode } from 'qrcode.react';
 
 const initialStaff = [
   { id: 'st-1', name: 'Maria Garcia', role: 'Operator', email: 'maria.g@mainstreetlaundry.com', phone: '+44 20 7946 0958' },
