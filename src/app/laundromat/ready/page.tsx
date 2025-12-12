@@ -30,8 +30,8 @@ export default function ReadyForHandoffPage() {
         }
     }
 
-    const readyForDriverOrders = useMemo(() => orders.filter(o => o.status === 'Ready'), [orders]);
-    const readyForPickupOrders = useMemo(() => orders.filter(o => o.status === 'Ready'), [orders]); // In a real app this might be different
+    const readyForDriverOrders = useMemo(() => orders.filter(o => o.status === 'Ready' && !o.id.startsWith('#W-')), [orders]);
+    const readyForPickupOrders = useMemo(() => orders.filter(o => o.status === 'Ready' && o.id.startsWith('#W-')), [orders]);
 
     const filteredDriverOrders = useMemo(() => readyForDriverOrders.filter(
         (order) =>
@@ -108,7 +108,7 @@ export default function ReadyForHandoffPage() {
                 ))}
                  {filteredDriverOrders.length === 0 && (
                     <Card className="sm:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
-                        <p>No orders awaiting driver handoff.</p>
+                        <p>No delivery orders are awaiting handoff.</p>
                     </Card>
                 )}
             </div>
@@ -137,7 +137,7 @@ export default function ReadyForHandoffPage() {
                 ))}
                  {filteredPickupOrders.length === 0 && (
                     <Card className="sm:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
-                        <p>No orders awaiting customer pickup.</p>
+                        <p>No walk-in orders are awaiting customer pickup.</p>
                     </Card>
                 )}
             </div>
@@ -146,3 +146,5 @@ export default function ReadyForHandoffPage() {
     </div>
   );
 }
+
+    

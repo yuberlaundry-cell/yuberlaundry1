@@ -17,17 +17,20 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { MoreHorizontal, PlusCircle, Trash2 } from 'lucide-react';
+import { MoreHorizontal, PlusCircle, Trash2, Edit, Printer } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter, DialogClose } from '@/components/ui/dialog';
 import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
+import { useToast } from '@/hooks/use-toast';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
+import QRCode from 'qrcode.react';
 
 const initialStaff = [
-  { id: 'st-1', name: 'Maria Garcia', role: 'Operator' },
-  { id: 'st-2', name: 'Tom Jones', role: 'Supervisor' },
+  { id: 'st-1', name: 'Maria Garcia', role: 'Operator', email: 'maria.g@mainstreetlaundry.com', phone: '+44 20 7946 0958' },
+  { id: 'st-2', name: 'Tom Jones', role: 'Supervisor', email: 'tom.j@mainstreetlaundry.com', phone: '+44 20 7946 0959' },
 ];
 
 const initialMachines = [
@@ -88,29 +91,7 @@ export default function ResourcesPage() {
                   <DialogHeader>
                     <DialogTitle>Add New Staff Member</DialogTitle>
                   </DialogHeader>
-                  <form className="space-y-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="staff-name">Name</Label>
-                      <Input id="staff-name" placeholder="e.g. John Doe" />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="staff-role">Role</Label>
-                      <Select>
-                        <SelectTrigger id="staff-role">
-                          <SelectValue placeholder="Select a role" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="operator">Operator</SelectItem>
-                          <SelectItem value="supervisor">Supervisor</SelectItem>
-                          <SelectItem value="cleaner">Cleaner</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <DialogFooter>
-                      <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
-                      <Button type="submit">Add Staff Member</Button>
-                    </DialogFooter>
-                  </form>
+                  <StaffForm />
                 </DialogContent>
               </Dialog>
             </CardHeader>
@@ -129,13 +110,23 @@ export default function ResourcesPage() {
                       <TableCell className="font-medium">{s.name}</TableCell>
                       <TableCell>{s.role}</TableCell>
                       <TableCell className="text-right">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Dialog>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DialogTrigger asChild>
+                                        <DropdownMenuItem><Edit className="mr-2 h-4 w-4"/>Edit</DropdownMenuItem>
+                                    </DialogTrigger>
+                                    <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>Edit Staff Member</DialogTitle>
+                                </DialogHeader>
+                                <StaffForm staff={s} />
+                            </DialogContent>
+                        </Dialog>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -212,13 +203,28 @@ export default function ResourcesPage() {
                         </DropdownMenu>
                       </TableCell>
                        <TableCell className="text-right">
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem>Edit</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <Dialog>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DialogTrigger asChild><DropdownMenuItem><Printer className="mr-2 h-4 w-4"/>Print QR Code</DropdownMenuItem></DialogTrigger>
+                                    <DropdownMenuItem><Edit className="mr-2 h-4 w-4"/>Edit</DropdownMenuItem>
+                                    <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                             <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>QR Code for {m.id}</DialogTitle>
+                                </DialogHeader>
+                                <div className="flex flex-col items-center justify-center p-8 space-y-4">
+                                    <div className="p-4 bg-white rounded-lg">
+                                        <QRCode value={m.id} size={256} />
+                                    </div>
+                                    <p className="font-mono text-xl">{m.id}</p>
+                                    <Button onClick={() => window.print()}><Printer className="mr-2"/> Print</Button>
+                                </div>
+                            </DialogContent>
+                        </Dialog>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -314,3 +320,56 @@ export default function ResourcesPage() {
     </div>
   );
 }
+
+function StaffForm({ staff }: { staff?: typeof initialStaff[0] }) {
+    const { toast } = useToast();
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        toast({
+            title: staff ? 'Staff Updated' : 'Staff Added',
+            description: `The details for ${staff?.name || 'the new staff member'} have been saved.`,
+        });
+    };
+
+    return (
+        <form className="space-y-4" onSubmit={handleSubmit}>
+            <div className="space-y-2">
+                <Label htmlFor="staff-name">Name</Label>
+                <Input id="staff-name" placeholder="e.g. John Doe" defaultValue={staff?.name} required />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="staff-email">Email</Label>
+                <Input id="staff-email" type="email" placeholder="e.g. john@example.com" defaultValue={staff?.email} required />
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="staff-phone">Phone Number</Label>
+                <PhoneNumberInput />
+            </div>
+            <div className="space-y-2">
+                <Label htmlFor="staff-role">Role</Label>
+                <Select defaultValue={staff?.role}>
+                    <SelectTrigger id="staff-role">
+                        <SelectValue placeholder="Select a role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="Operator">Operator</SelectItem>
+                        <SelectItem value="Supervisor">Supervisor</SelectItem>
+                        <SelectItem value="Cleaner">Cleaner</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="staff-password">Password</Label>
+                <Input id="staff-password" type="password" placeholder={staff ? 'Enter new password to reset' : 'Set initial password'} required={!staff} />
+            </div>
+            <DialogFooter>
+                <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                <Button type="submit">Save Changes</Button>
+            </DialogFooter>
+        </form>
+    );
+}
+
+
+    

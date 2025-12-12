@@ -21,9 +21,10 @@ import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, PlusCircle, Trash2, Settings, AlertTriangle } from 'lucide-react';
+import { CheckCircle, PlusCircle, Trash2, Settings, AlertTriangle, Mail, Phone } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Alert, AlertTitle } from '@/components/ui/alert';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 
 
 export default function LaundromatSettingsPage() {
@@ -74,7 +75,7 @@ export default function LaundromatSettingsPage() {
             <CardHeader>
               <CardTitle>Facility Details</CardTitle>
               <CardDescription>
-                Update your facility's name and address.
+                Update your facility's name, address and contact information.
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -82,6 +83,16 @@ export default function LaundromatSettingsPage() {
                 <div className="space-y-2">
                   <Label htmlFor="facility-name">Facility Name</Label>
                   <Input id="facility-name" defaultValue="Main St. Laundry" />
+                </div>
+                 <div className="grid sm:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="facility-email">Facility Email</Label>
+                      <Input id="facility-email" type="email" placeholder="contact@mainlaundry.com" />
+                    </div>
+                     <div className="space-y-2">
+                      <Label htmlFor="facility-phone">Facility Phone</Label>
+                      <PhoneNumberInput />
+                    </div>
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="address">Address</Label>
@@ -340,3 +351,5 @@ export default function LaundromatSettingsPage() {
     </div>
   );
 }
+
+    
