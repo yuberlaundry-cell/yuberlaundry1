@@ -40,8 +40,11 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/component
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
 import { platformName } from '@/lib/branding';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 
-const navigationConfig = [
+const desktopNavConfig = [
   { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },
   {
     title: 'Core Operations',
@@ -64,11 +67,47 @@ const navigationConfig = [
   }
 ];
 
+const mobileNavItems = [
+    { href: '/laundromat', label: 'Dashboard', icon: Home, exact: true },
+    { href: '/laundromat/intake', label: 'Intake', icon: ScanLine },
+    { href: '/laundromat/processing', label: 'Processing', icon: LayoutGrid },
+    { href: '/laundromat/ready', label: 'Handoff', icon: Truck },
+];
+
+
 const notifications = [
     { title: 'New order #YL12350 arrived', description: 'Driver David L. just dropped off 3 bags.'},
     { title: 'Machine W-02 cycle finished', description: 'Washer is ready for the next load.'},
     { title: 'Low Supply: Standard Detergent', description: 'Stock is below 20%. Consider reordering.'},
 ];
+
+
+const BottomNavbar = () => {
+    const pathname = usePathname();
+    return (
+        <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
+            <div className="grid h-16 grid-cols-4 w-full text-xs">
+                {mobileNavItems.map((item) => {
+                    const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
+                    return (
+                        <Link
+                            key={item.href}
+                            href={item.href}
+                            className={cn(
+                                "flex flex-col items-center justify-center pt-1 gap-1",
+                                isActive ? "text-primary" : "text-muted-foreground"
+                            )}
+                        >
+                            <item.icon className="h-5 w-5" />
+                            <span>{item.label}</span>
+                        </Link>
+                    )
+                })}
+            </div>
+        </nav>
+    );
+};
+
 
 export default function LaundromatPortalLayout({
   children,
@@ -77,7 +116,8 @@ export default function LaundromatPortalLayout({
 }) {
   const pathname = usePathname();
   const { user, loading } = useAuth();
-   const router = useRouter();
+  const router = useRouter();
+  const isMobile = useIsMobile();
 
   React.useEffect(() => {
     if (!loading && !user) {
@@ -95,6 +135,52 @@ export default function LaundromatPortalLayout({
             <p className="mt-4 text-muted-foreground">Loading your portal...</p>
         </div>
     );
+  }
+
+  if (isMobile) {
+      return (
+        <LaundromatOrdersProvider>
+            <header className="sticky top-0 z-40 flex h-14 items-center gap-4 border-b bg-background px-4 sm:px-6 justify-between">
+                <Link href="/" className="mr-auto">
+                    <WashingMachine className="h-7 w-7 text-primary" />
+                </Link>
+                <div className="flex items-center gap-2">
+                    <Label htmlFor="availability-mobile" className="text-sm font-medium">
+                        Open
+                    </Label>
+                    <Switch id="availability-mobile" defaultChecked />
+                </div>
+                 <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon" className="relative">
+                          <Bell />
+                          <span className="absolute top-1 right-1 flex h-2 w-2">
+                              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                          </span>
+                      </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-80">
+                      <div className="p-2 font-semibold">Notifications</div>
+                      <DropdownMenuSeparator />
+                      {notifications.map((n, i) => (
+                          <DropdownMenuItem key={i} className="flex flex-col items-start gap-1 whitespace-normal">
+                            <div className="font-medium">{n.title}</div>
+                            <div className="text-xs text-muted-foreground">{n.description}</div>
+                          </DropdownMenuItem>
+                      ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+                <UserNav />
+            </header>
+            <main className="flex-1 p-4 pb-24 sm:p-6 lg:p-8">
+                 <div className="mx-auto w-full max-w-6xl">
+                    {children}
+                 </div>
+            </main>
+            <BottomNavbar />
+        </LaundromatOrdersProvider>
+      )
   }
 
   return (
@@ -123,7 +209,7 @@ export default function LaundromatPortalLayout({
           </SidebarHeader>
           <SidebarContent>
             <SidebarMenu>
-              {navigationConfig.map((section) => {
+              {desktopNavConfig.map((section) => {
                 if (section.isStandalone) {
                   return (
                     <SidebarMenuItem key={section.href}>
@@ -184,7 +270,7 @@ export default function LaundromatPortalLayout({
               <DropdownMenuTrigger asChild>
                   <Button variant="ghost" size="icon" className="relative">
                       <Bell />
-                      <span className="absolute top-0 right-0 flex h-2 w-2">
+                      <span className="absolute top-1 right-1 flex h-2 w-2">
                           <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
                           <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
                       </span>
