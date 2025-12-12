@@ -31,7 +31,7 @@ export default function BrandingSettingsPage() {
             <Card>
                 <CardHeader>
                     <CardTitle>Platform Name</CardTitle>
-                    <CardDescription>This name will be displayed throughout the application.</CardDescription>
+                    <CardDescription>This name will be displayed throughout the application, including the copyright notice in the footer.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 max-w-lg">
                     <div className="space-y-2">
@@ -66,6 +66,23 @@ export default function BrandingSettingsPage() {
                             <Input id="favicon-upload" type="file" className="max-w-xs" />
                         </div>
                         <p className="text-xs text-muted-foreground">Recommended: ICO or PNG file, 32x32px or 64x64px.</p>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>App Store Links</CardTitle>
+                    <CardDescription>Enter the URLs for your mobile apps in the Apple App Store and Google Play Store.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6 max-w-lg">
+                    <div className="space-y-2">
+                        <Label htmlFor="app-store-url">Apple App Store URL</Label>
+                        <Input id="app-store-url" placeholder="https://apps.apple.com/..." />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="play-store-url">Google Play Store URL</Label>
+                        <Input id="play-store-url" placeholder="https://play.google.com/store/apps/..." />
                     </div>
                 </CardContent>
             </Card>
