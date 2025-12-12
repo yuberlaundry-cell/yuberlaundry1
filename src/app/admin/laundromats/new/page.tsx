@@ -15,6 +15,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 
 const steps = [
   { id: 1, name: 'Facility Details', icon: Building },
@@ -137,7 +138,7 @@ export default function NewLaundromatPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="contact-phone">Contact Phone</Label>
-                                    <Input id="contact-phone" type="tel" placeholder="+27 82 123 4567" required />
+                                    <PhoneNumberInput />
                                 </div>
                             </div>
                         </div>

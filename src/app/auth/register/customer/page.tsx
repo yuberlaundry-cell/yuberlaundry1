@@ -6,10 +6,23 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
+import { useToast } from '@/hooks/use-toast';
 import { User, WashingMachine } from 'lucide-react';
 import Link from 'next/link';
 
 export default function RegisterCustomerPage() {
+  const { toast } = useToast();
+
+  const handleCreateAccount = (e: React.FormEvent) => {
+    e.preventDefault();
+    toast({
+      title: 'Account Created!',
+      description: "Welcome to Yuber Laundry. You're now logged in.",
+    });
+    // In a real app, you would handle the actual registration logic
+    // and then redirect the user.
+    // router.push('/app');
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-background p-4">
@@ -24,7 +37,7 @@ export default function RegisterCustomerPage() {
           <CardDescription>Get started with Yuber Laundry today.</CardDescription>
         </CardHeader>
         <CardContent>
-          <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleCreateAccount}>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                     <Label htmlFor="first-name">First Name</Label>
