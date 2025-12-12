@@ -8,24 +8,40 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useAuth } from "@/hooks/use-auth";
-import { CreditCard, Edit, MoreVertical, PlusCircle, Trash2, User } from "lucide-react";
+import { CreditCard, Edit, MoreVertical, PlusCircle, Trash2, User, Home, Briefcase } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from "@/components/ui/dialog";
 import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-
+import React, { useState } from "react";
+import { AddressInput } from "@/components/ui/address-input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Switch } from "@/components/ui/switch";
 
 const paymentMethods = [
     { id: 'pm_1', brand: 'Visa', last4: '4242', expiry: '12/26', isPrimary: true },
     { id: 'pm_2', brand: 'Mastercard', last4: '5555', expiry: '08/25', isPrimary: false },
-]
+];
+
+const initialAddresses = [
+    { id: 'home', type: 'Home', address: '123 Main St, London, SW1A 0AA', isPrimary: true },
+    { id: 'work', type: 'Work', address: '456 Business Rd, London, EC1A 1BB', isPrimary: false },
+];
+
+const notificationSettings = [
+    { id: 'email-status', label: 'Order Status Updates', description: 'Receive email updates when your order progresses.', defaultValue: true },
+    { id: 'email-promo', label: 'Promotions & Offers', description: 'Get notified about special deals and new services.', defaultValue: true },
+    { id: 'sms-delivery', label: 'Delivery Alerts', description: 'Get an SMS when your driver is on the way.', defaultValue: true },
+    { id: 'push-general', label: 'General App Notifications', description: 'Receive general updates through the mobile app.', defaultValue: true },
+];
 
 export default function AccountPage() {
     const { user } = useAuth();
     const { toast } = useToast();
     const initials = `${user?.firstName?.[0] ?? ''}${user?.lastName?.[0] ?? ''}`;
+    const [addresses, setAddresses] = useState(initialAddresses);
 
     const handleSaveProfile = (e: React.FormEvent) => {
         e.preventDefault();
@@ -34,6 +50,22 @@ export default function AccountPage() {
             description: "Your information has been updated successfully.",
         });
     }
+
+    const handleSavePassword = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Password Updated",
+            description: "Your password has been changed successfully.",
+        });
+    }
+    
+    const handleSaveAddress = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Address Saved",
+            description: "Your address has been saved.",
+        });
+    };
 
     return (
         <div className="space-y-8 pb-8">
@@ -93,12 +125,55 @@ export default function AccountPage() {
                 </TabsContent>
                  <TabsContent value="addresses" className="mt-4">
                     <Card>
-                         <CardHeader>
-                            <CardTitle>Addresses</CardTitle>
-                            <CardDescription>Manage your saved pickup and delivery addresses.</CardDescription>
+                         <CardHeader className="flex-row items-center justify-between">
+                            <div>
+                                <CardTitle>Addresses</CardTitle>
+                                <CardDescription>Manage your saved pickup and delivery addresses.</CardDescription>
+                            </div>
+                             <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button><PlusCircle className="mr-2 h-4 w-4" /> Add New Address</Button>
+                                </DialogTrigger>
+                                <DialogContent>
+                                    <DialogHeader>
+                                        <DialogTitle>Add New Address</DialogTitle>
+                                    </DialogHeader>
+                                    <AddressForm onSave={handleSaveAddress} />
+                                </DialogContent>
+                            </Dialog>
                         </CardHeader>
-                        <CardContent>
-                            <p>Addresses management coming soon.</p>
+                        <CardContent className="space-y-4">
+                           {addresses.map(addr => (
+                                <div key={addr.id} className="flex items-center justify-between p-4 border rounded-lg">
+                                    <div className="flex items-center gap-4">
+                                        {addr.type === 'Home' ? <Home className="h-6 w-6 text-muted-foreground" /> : <Briefcase className="h-6 w-6 text-muted-foreground" />}
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <p className="font-semibold">{addr.type}</p>
+                                                {addr.isPrimary && <Badge>Primary</Badge>}
+                                            </div>
+                                            <p className="text-sm text-muted-foreground">{addr.address}</p>
+                                        </div>
+                                    </div>
+                                     <DropdownMenu>
+                                        <DropdownMenuTrigger asChild>
+                                            <Button variant="ghost" size="icon">
+                                                <MoreVertical className="h-4 w-4" />
+                                                <span className="sr-only">Actions</span>
+                                            </Button>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end">
+                                            {!addr.isPrimary && <DropdownMenuItem>Set as Primary</DropdownMenuItem>}
+                                            <DropdownMenuItem>
+                                                <Edit className="mr-2 h-4 w-4" /> Edit
+                                            </DropdownMenuItem>
+                                            <DropdownMenuItem className="text-destructive">
+                                                <Trash2 className="mr-2 h-4 w-4" /> Delete
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
+                                    </DropdownMenu>
+                                </div>
+                           ))}
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -123,13 +198,6 @@ export default function AccountPage() {
                                             Your card details are securely stored and processed by Paystack.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    {/* 
-                                      In a real application, this form would be replaced by the Paystack Inline SDK.
-                                      You would use the NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY from environment variables
-                                      to initialize Paystack and show the payment popup.
-                                      e.g., using a library like 'react-paystack':
-                                      <PaystackButton publicKey={process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY} ... />
-                                    */}
                                     <form className="space-y-4">
                                         <div className="space-y-2">
                                             <Label htmlFor="email">Email Address</Label>
@@ -200,7 +268,23 @@ export default function AccountPage() {
                             <CardDescription>Manage your password and account security.</CardDescription>
                         </CardHeader>
                         <CardContent>
-                           <p>Security settings coming soon.</p>
+                            <form className="space-y-6 max-w-lg" onSubmit={handleSavePassword}>
+                                <div className="space-y-2">
+                                    <Label htmlFor="current-password">Current Password</Label>
+                                    <Input id="current-password" type="password" required />
+                                </div>
+                                <div className="grid sm:grid-cols-2 gap-4">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="new-password">New Password</Label>
+                                        <Input id="new-password" type="password" required />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="confirm-password">Confirm New Password</Label>
+                                        <Input id="confirm-password" type="password" required />
+                                    </div>
+                                </div>
+                                <Button type="submit">Update Password</Button>
+                            </form>
                         </CardContent>
                     </Card>
                 </TabsContent>
@@ -210,12 +294,75 @@ export default function AccountPage() {
                             <CardTitle>Notifications</CardTitle>
                             <CardDescription>Manage your notification preferences.</CardDescription>
                         </CardHeader>
-                        <CardContent>
-                           <p>Notifications settings coming soon.</p>
+                        <CardContent className="space-y-6 max-w-2xl">
+                           {notificationSettings.map(setting => (
+                               <div key={setting.id} className="flex items-start justify-between rounded-lg border p-4">
+                                    <div className="space-y-0.5">
+                                        <Label htmlFor={setting.id} className="text-base font-medium">{setting.label}</Label>
+                                        <p className="text-sm text-muted-foreground">{setting.description}</p>
+                                    </div>
+                                    <Switch id={setting.id} defaultChecked={setting.defaultValue} />
+                               </div>
+                           ))}
+                            <div className="pt-2">
+                                <Button>Save Notification Settings</Button>
+                            </div>
                         </CardContent>
                     </Card>
                 </TabsContent>
             </Tabs>
         </div>
+    );
+}
+
+function AddressForm({ defaultValues, onSave }: { defaultValues?: any; onSave: (e: React.FormEvent) => void }) {
+    const [selectedAddress, setSelectedAddress] = useState<string>(defaultValues?.street || '');
+    
+    return (
+        <form className="space-y-4" onSubmit={onSave}>
+            <div className="space-y-2">
+                <Label htmlFor="street">Street Address</Label>
+                <AddressInput
+                    id="street"
+                    placeholder="Start typing your address..."
+                    value={selectedAddress}
+                    onChange={(e) => setSelectedAddress(e.target.value)}
+                    onAddressSelect={(address) => {
+                        setSelectedAddress(address.description);
+                        console.log('Selected address coordinates:', address.coordinates);
+                    }}
+                />
+            </div>
+             <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Input id="city" placeholder="London" />
+                </div>
+                 <div className="space-y-2">
+                    <Label htmlFor="postcode">Postcode</Label>
+                    <Input id="postcode" placeholder="SW1A 0AA" />
+                </div>
+            </div>
+             <div className="space-y-2">
+                <Label htmlFor="notes">Delivery Notes (optional)</Label>
+                <Input id="notes" placeholder="e.g., Leave with concierge." />
+            </div>
+             <div className="space-y-2">
+                <Label>Address Type</Label>
+                <RadioGroup defaultValue={defaultValues?.type || 'home'} className="flex gap-4">
+                     <Label htmlFor="home" className="flex items-center gap-2 cursor-pointer">
+                        <RadioGroupItem value="home" id="home"/> Home
+                    </Label>
+                     <Label htmlFor="work" className="flex items-center gap-2 cursor-pointer">
+                        <RadioGroupItem value="work" id="work"/> Work
+                    </Label>
+                </RadioGroup>
+            </div>
+            <DialogFooter>
+                <DialogClose asChild>
+                    <Button type="submit" className="w-full">Save Address</Button>
+                </DialogClose>
+            </DialogFooter>
+        </form>
     );
 }
