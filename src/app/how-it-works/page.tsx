@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Droplets, Shirt, Wind, ArrowRight, Search as InspectIcon, Waves, Box, Star, Info, Check, Eye, Package, ShieldCheck } from "lucide-react";
 import Image from 'next/image';
@@ -292,4 +292,5 @@ export default function HowItWorksPage() {
             </main>
             <PublicFooter />
         </div>
-     
+    );
+}
