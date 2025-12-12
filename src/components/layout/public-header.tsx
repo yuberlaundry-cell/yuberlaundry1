@@ -22,6 +22,7 @@ import React from 'react';
 import { Badge } from '../ui/badge';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../ui/accordion';
 import { getRedirectPathForRole } from '@/lib/auth';
+import { platformName } from '@/lib/branding';
 
 const personalMegaMenuItems = {
   "How it works": [
@@ -86,7 +87,7 @@ export function PublicHeader() {
       <div className="container flex h-16 items-center">
         <div className="mr-auto flex items-center">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold sm:inline-block font-headline text-lg">Yuber Laundry</span>
+            <span className="font-bold sm:inline-block font-headline text-lg">{platformName}</span>
           </Link>
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
@@ -167,7 +168,7 @@ export function PublicHeader() {
                 </SheetHeader>
                 <div className="flex-grow overflow-y-auto">
                     <Link href="/" className="flex items-center space-x-2 mb-6">
-                        <span className="font-bold font-headline text-lg">Yuber Laundry</span>
+                        <span className="font-bold font-headline text-lg">{platformName}</span>
                     </Link>
                     <Accordion type="multiple" className="w-full">
                     <AccordionItem value="personal">

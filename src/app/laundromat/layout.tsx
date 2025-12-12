@@ -39,6 +39,7 @@ import React from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
+import { platformName } from '@/lib/branding';
 
 const navigationConfig = [
   { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },

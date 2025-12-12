@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { Upload } from 'lucide-react';
+import { platformName, appStoreLinks } from '@/lib/branding';
 
 export default function BrandingSettingsPage() {
     const { toast } = useToast();
@@ -36,7 +37,7 @@ export default function BrandingSettingsPage() {
                 <CardContent className="space-y-6 max-w-lg">
                     <div className="space-y-2">
                         <Label htmlFor="platform-name">Platform Name</Label>
-                        <Input id="platform-name" defaultValue="Yuber Laundry" />
+                        <Input id="platform-name" defaultValue={platformName} />
                     </div>
                 </CardContent>
             </Card>
@@ -78,11 +79,11 @@ export default function BrandingSettingsPage() {
                 <CardContent className="space-y-6 max-w-lg">
                     <div className="space-y-2">
                         <Label htmlFor="app-store-url">Apple App Store URL</Label>
-                        <Input id="app-store-url" placeholder="https://apps.apple.com/..." />
+                        <Input id="app-store-url" placeholder="https://apps.apple.com/..." defaultValue={appStoreLinks.apple} />
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="play-store-url">Google Play Store URL</Label>
-                        <Input id="play-store-url" placeholder="https://play.google.com/store/apps/..." />
+                        <Input id="play-store-url" placeholder="https://play.google.com/store/apps/..." defaultValue={appStoreLinks.google}/>
                     </div>
                 </CardContent>
             </Card>
