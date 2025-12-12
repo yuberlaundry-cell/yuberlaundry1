@@ -19,6 +19,7 @@ import Link from 'next/link';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 export default function LaundromatSettingsPage() {
   const [address, setAddress] = useState("100 Laundry Lane, London, UK");
@@ -32,14 +33,17 @@ export default function LaundromatSettingsPage() {
       </div>
 
       <Tabs defaultValue="profile" className="w-full">
-        <TabsList className="grid w-full grid-cols-1 sm:grid-cols-5">
-          <TabsTrigger value="profile">Profile</TabsTrigger>
-          <TabsTrigger value="pricing">Services & Pricing</TabsTrigger>
-          <TabsTrigger value="operations">Operations</TabsTrigger>
-          <TabsTrigger value="payouts">Payouts</TabsTrigger>
-          <TabsTrigger value="notifications">Notifications</TabsTrigger>
-        </TabsList>
-        <TabsContent value="profile">
+        <ScrollArea className="w-full whitespace-nowrap">
+            <TabsList>
+                <TabsTrigger value="profile">Profile</TabsTrigger>
+                <TabsTrigger value="pricing">Services & Pricing</TabsTrigger>
+                <TabsTrigger value="operations">Operations</TabsTrigger>
+                <TabsTrigger value="payouts">Payouts</TabsTrigger>
+                <TabsTrigger value="notifications">Notifications</TabsTrigger>
+            </TabsList>
+            <ScrollBar orientation="horizontal" />
+        </ScrollArea>
+        <TabsContent value="profile" className="mt-4">
           <Card>
             <CardHeader>
               <CardTitle>Facility Details</CardTitle>
@@ -72,7 +76,7 @@ export default function LaundromatSettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
-         <TabsContent value="pricing">
+         <TabsContent value="pricing" className="mt-4">
             <Card>
                 <CardHeader>
                     <CardTitle>Services & Pricing</CardTitle>
@@ -90,7 +94,7 @@ export default function LaundromatSettingsPage() {
                 </CardContent>
             </Card>
         </TabsContent>
-        <TabsContent value="operations">
+        <TabsContent value="operations" className="mt-4">
           <div className="space-y-8">
             <Card>
               <CardHeader>
@@ -137,7 +141,7 @@ export default function LaundromatSettingsPage() {
             </Card>
           </div>
         </TabsContent>
-         <TabsContent value="payouts">
+         <TabsContent value="payouts" className="mt-4">
           <Card>
             <CardHeader>
               <CardTitle>Payout Information</CardTitle>
@@ -192,7 +196,7 @@ export default function LaundromatSettingsPage() {
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="notifications">
+        <TabsContent value="notifications" className="mt-4">
            <Card>
               <CardHeader>
                 <CardTitle>Notification Settings</CardTitle>

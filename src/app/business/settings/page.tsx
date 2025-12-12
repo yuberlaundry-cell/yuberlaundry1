@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 function AdminSettings() {
     const { user } = useAuth();
@@ -28,11 +29,14 @@ function AdminSettings() {
             </CardHeader>
             <CardContent>
                 <Tabs defaultValue="profile">
-                    <TabsList className="grid w-full grid-cols-3">
-                        <TabsTrigger value="profile">Company Profile</TabsTrigger>
-                        <TabsTrigger value="preferences">Laundry Preferences</TabsTrigger>
-                        <TabsTrigger value="notifications">Notifications</TabsTrigger>
-                    </TabsList>
+                    <ScrollArea className="w-full whitespace-nowrap">
+                        <TabsList>
+                            <TabsTrigger value="profile">Company Profile</TabsTrigger>
+                            <TabsTrigger value="preferences">Laundry Preferences</TabsTrigger>
+                            <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                        </TabsList>
+                        <ScrollBar orientation="horizontal" />
+                    </ScrollArea>
                     <TabsContent value="profile" className="pt-6">
                         <form className="space-y-6 max-w-lg">
                             <div className="space-y-2">
@@ -166,13 +170,16 @@ function EmployeeSettings() {
 
     return (
         <Tabs defaultValue="profile">
-            <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="profile">Your Profile</TabsTrigger>
-                <TabsTrigger value="security">Security</TabsTrigger>
-                <TabsTrigger value="notifications">Notifications</TabsTrigger>
-            </TabsList>
-            <TabsContent value="profile">
-                <Card className="mt-6">
+            <ScrollArea className="w-full whitespace-nowrap">
+                <TabsList>
+                    <TabsTrigger value="profile">Your Profile</TabsTrigger>
+                    <TabsTrigger value="security">Security</TabsTrigger>
+                    <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                </TabsList>
+                <ScrollBar orientation="horizontal" />
+            </ScrollArea>
+            <TabsContent value="profile" className="mt-6">
+                <Card>
                     <CardHeader>
                         <CardTitle>Your Profile</CardTitle>
                         <CardDescription>This is your personal information for your business account.</CardDescription>
@@ -204,8 +211,8 @@ function EmployeeSettings() {
                     </CardContent>
                 </Card>
             </TabsContent>
-            <TabsContent value="security">
-                <Card className="mt-6">
+            <TabsContent value="security" className="mt-6">
+                <Card>
                     <CardHeader>
                         <CardTitle>Change Password</CardTitle>
                         <CardDescription>Update your password here. It's recommended to use a strong, unique password.</CardDescription>
@@ -231,8 +238,8 @@ function EmployeeSettings() {
                     </CardContent>
                 </Card>
             </TabsContent>
-            <TabsContent value="notifications">
-                <Card className="mt-6">
+            <TabsContent value="notifications" className="mt-6">
+                <Card>
                     <CardHeader>
                         <CardTitle>Notification Settings</CardTitle>
                         <CardDescription>How you receive updates about your orders.</CardDescription>

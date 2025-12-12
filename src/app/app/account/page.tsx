@@ -14,6 +14,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { PhoneNumberInput } from "@/components/ui/phone-number-input";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 
 const paymentMethods = [
@@ -42,14 +43,17 @@ export default function AccountPage() {
             </div>
 
             <Tabs defaultValue="profile">
-                <TabsList>
-                    <TabsTrigger value="profile">Profile</TabsTrigger>
-                    <TabsTrigger value="addresses">Addresses</TabsTrigger>
-                    <TabsTrigger value="payment">Payment</TabsTrigger>
-                    <TabsTrigger value="security">Security</TabsTrigger>
-                    <TabsTrigger value="notifications">Notifications</TabsTrigger>
-                </TabsList>
-                <TabsContent value="profile">
+                <ScrollArea className="w-full whitespace-nowrap">
+                    <TabsList>
+                        <TabsTrigger value="profile">Profile</TabsTrigger>
+                        <TabsTrigger value="addresses">Addresses</TabsTrigger>
+                        <TabsTrigger value="payment">Payment</TabsTrigger>
+                        <TabsTrigger value="security">Security</TabsTrigger>
+                        <TabsTrigger value="notifications">Notifications</TabsTrigger>
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+                <TabsContent value="profile" className="mt-4">
                     <Card>
                         <CardHeader>
                             <CardTitle>Profile</CardTitle>
@@ -87,7 +91,7 @@ export default function AccountPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                 <TabsContent value="addresses">
+                 <TabsContent value="addresses" className="mt-4">
                     <Card>
                          <CardHeader>
                             <CardTitle>Addresses</CardTitle>
@@ -98,7 +102,7 @@ export default function AccountPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                <TabsContent value="payment">
+                <TabsContent value="payment" className="mt-4">
                      <Card>
                          <CardHeader className="flex-row items-center justify-between">
                             <div>
@@ -189,7 +193,7 @@ export default function AccountPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                <TabsContent value="security">
+                <TabsContent value="security" className="mt-4">
                      <Card>
                          <CardHeader>
                             <CardTitle>Security</CardTitle>
@@ -200,7 +204,7 @@ export default function AccountPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                 <TabsContent value="notifications">
+                 <TabsContent value="notifications" className="mt-4">
                      <Card>
                          <CardHeader>
                             <CardTitle>Notifications</CardTitle>

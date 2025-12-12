@@ -9,6 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const featureFlagCategories = {
     "Core Order & Service Features": [
@@ -67,13 +68,16 @@ export default function SettingsPage() {
             </div>
 
             <Tabs defaultValue="general" className="w-full">
-                <TabsList className="grid w-full grid-cols-1 sm:grid-cols-4">
-                    <TabsTrigger value="general">General</TabsTrigger>
-                    <TabsTrigger value="integrations">Integrations</TabsTrigger>
-                    <TabsTrigger value="feature-flags">Feature Flags</TabsTrigger>
-                    <TabsTrigger value="advanced">Advanced</TabsTrigger>
-                </TabsList>
-                <TabsContent value="general">
+                <ScrollArea className="w-full whitespace-nowrap">
+                    <TabsList>
+                        <TabsTrigger value="general">General</TabsTrigger>
+                        <TabsTrigger value="integrations">Integrations</TabsTrigger>
+                        <TabsTrigger value="feature-flags">Feature Flags</TabsTrigger>
+                        <TabsTrigger value="advanced">Advanced</TabsTrigger>
+                    </TabsList>
+                    <ScrollBar orientation="horizontal" />
+                </ScrollArea>
+                <TabsContent value="general" className="mt-4">
                     <div className="space-y-6">
                         <Card>
                             <CardHeader>
@@ -186,7 +190,7 @@ export default function SettingsPage() {
                         </Card>
                     </div>
                 </TabsContent>
-                 <TabsContent value="integrations">
+                 <TabsContent value="integrations" className="mt-4">
                     <Card>
                         <CardHeader>
                             <CardTitle>API Integrations</CardTitle>
@@ -253,7 +257,7 @@ export default function SettingsPage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-                <TabsContent value="feature-flags">
+                <TabsContent value="feature-flags" className="mt-4">
                     <div className="space-y-6">
                         {Object.entries(featureFlagCategories).map(([category, flags]) => (
                             <Card key={category}>
@@ -279,7 +283,7 @@ export default function SettingsPage() {
                         ))}
                     </div>
                 </TabsContent>
-                <TabsContent value="advanced">
+                <TabsContent value="advanced" className="mt-4">
                     <Card className="border-destructive">
                         <CardHeader>
                             <CardTitle className="text-destructive">Advanced / Danger Zone</CardTitle>
