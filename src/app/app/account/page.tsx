@@ -19,6 +19,7 @@ import React, { useState } from "react";
 import { AddressInput } from "@/components/ui/address-input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Switch } from "@/components/ui/switch";
+import { usePaystackPayment } from 'react-paystack';
 
 const paymentMethods = [
     { id: 'pm_1', brand: 'Visa', last4: '4242', expiry: '12/26', isPrimary: true },
@@ -36,6 +37,48 @@ const notificationSettings = [
     { id: 'sms-delivery', label: 'Delivery Alerts', description: 'Get an SMS when your driver is on the way.', defaultValue: true },
     { id: 'push-general', label: 'General App Notifications', description: 'Receive general updates through the mobile app.', defaultValue: true },
 ];
+
+
+function AddCardForm() {
+    const { user } = useAuth();
+    const { toast } = useToast();
+
+    const config = {
+        reference: (new Date()).getTime().toString(),
+        email: user?.email || '',
+        amount: 0, // Amount is 0 for card authorization
+        publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+    };
+
+    const initializePayment = usePaystackPayment(config);
+
+    const onSuccess = (reference: any) => {
+        // In a real app, you'd send this reference to your backend to verify
+        // and save the card authorization details with the user's profile.
+        console.log('Paystack Authorization Success:', reference);
+        toast({
+            title: "Card Added Successfully",
+            description: "Your new payment method has been saved.",
+        });
+    };
+
+    const onClose = () => {
+        console.log('Paystack modal closed.');
+    };
+    
+    return (
+        <Button 
+            onClick={() => {
+                initializePayment({onSuccess, onClose});
+            }}
+            className="w-full"
+        >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add New Card Securely
+        </Button>
+    )
+}
+
 
 export default function AccountPage() {
     const { user } = useAuth();
@@ -184,7 +227,7 @@ export default function AccountPage() {
                                 <CardTitle>Payment Methods</CardTitle>
                                 <CardDescription>Manage your saved payment methods via Paystack.</CardDescription>
                             </div>
-                             <Dialog>
+                            <Dialog>
                                 <DialogTrigger asChild>
                                     <Button>
                                         <PlusCircle className="mr-2 h-4 w-4" />
@@ -195,34 +238,12 @@ export default function AccountPage() {
                                     <DialogHeader>
                                         <DialogTitle>Add a New Payment Method</DialogTitle>
                                         <DialogDescription>
-                                            Your card details are securely stored and processed by Paystack.
+                                            Your card details are securely stored with Paystack.
                                         </DialogDescription>
                                     </DialogHeader>
-                                    <form className="space-y-4">
-                                        <div className="space-y-2">
-                                            <Label htmlFor="email">Email Address</Label>
-                                            <Input id="email" type="email" placeholder="you@company.com" required />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <Label htmlFor="card-number">Card Number</Label>
-                                            <Input id="card-number" placeholder="•••• •••• •••• ••••" required />
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-4">
-                                            <div className="space-y-2">
-                                                <Label htmlFor="expiry-month">Expiry Month</Label>
-                                                <Input id="expiry-month" placeholder="MM" required />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="expiry-year">Expiry Year</Label>
-                                                <Input id="expiry-year" placeholder="YY" required />
-                                            </div>
-                                            <div className="space-y-2">
-                                                <Label htmlFor="cvc">CVC</Label>
-                                                <Input id="cvc" placeholder="•••" required />
-                                            </div>
-                                        </div>
-                                        <Button type="submit" className="w-full">Save Card</Button>
-                                    </form>
+                                    <div className="pt-4">
+                                       <AddCardForm />
+                                    </div>
                                 </DialogContent>
                             </Dialog>
                         </CardHeader>

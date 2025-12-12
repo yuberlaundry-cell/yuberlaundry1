@@ -6,14 +6,53 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { CreditCard, MoreVertical, PlusCircle, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { usePaystackPayment } from 'react-paystack';
+import { useAuth } from "@/hooks/use-auth";
+import { useToast } from "@/hooks/use-toast";
 
 const paymentMethods = [
     { id: 'pm_1', brand: 'Visa', last4: '4242', expiry: '12/26', isPrimary: true },
     { id: 'pm_2', brand: 'Mastercard', last4: '5555', expiry: '08/25', isPrimary: false },
 ]
+
+function AddCardForm() {
+    const { user } = useAuth();
+    const { toast } = useToast();
+
+    const config = {
+        reference: (new Date()).getTime().toString(),
+        email: user?.email || '',
+        amount: 0, // Amount is 0 for card authorization
+        publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+    };
+
+    const initializePayment = usePaystackPayment(config);
+
+    const onSuccess = (reference: any) => {
+        console.log('Paystack Authorization Success:', reference);
+        toast({
+            title: "Card Added Successfully",
+            description: "The new payment method has been saved for your company.",
+        });
+    };
+
+    const onClose = () => {
+        console.log('Paystack modal closed.');
+    };
+    
+    return (
+        <Button 
+            onClick={() => {
+                initializePayment({onSuccess, onClose});
+            }}
+            className="w-full"
+        >
+            <PlusCircle className="mr-2 h-4 w-4" />
+            Add New Card Securely
+        </Button>
+    )
+}
 
 export default function PaymentMethodsPage() {
     return (
@@ -34,41 +73,12 @@ export default function PaymentMethodsPage() {
                         <DialogHeader>
                             <DialogTitle>Add a New Payment Method</DialogTitle>
                             <DialogDescription>
-                                Your card details are securely stored and processed by Paystack.
+                                This card will be used for monthly invoices. Your details are securely stored with Paystack.
                             </DialogDescription>
                         </DialogHeader>
-                        {/* 
-                            In a real application, this form would be replaced by the Paystack Inline SDK.
-                            You would use the NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY from environment variables
-                            to initialize Paystack and show the payment popup.
-                            e.g., using a library like 'react-paystack':
-                            <PaystackButton publicKey={process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY} ... />
-                        */}
-                        <form className="space-y-4">
-                             <div className="space-y-2">
-                                <Label htmlFor="email">Email Address</Label>
-                                <Input id="email" type="email" placeholder="you@company.com" required />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="card-number">Card Number</Label>
-                                <Input id="card-number" placeholder="•••• •••• •••• ••••" required />
-                            </div>
-                            <div className="grid grid-cols-3 gap-4">
-                                <div className="space-y-2">
-                                    <Label htmlFor="expiry-month">Expiry Month</Label>
-                                    <Input id="expiry-month" placeholder="MM" required />
-                                </div>
-                                 <div className="space-y-2">
-                                    <Label htmlFor="expiry-year">Expiry Year</Label>
-                                    <Input id="expiry-year" placeholder="YY" required />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="cvc">CVC</Label>
-                                    <Input id="cvc" placeholder="•••" required />
-                                </div>
-                            </div>
-                            <Button type="submit" className="w-full">Save Card</Button>
-                        </form>
+                        <div className="pt-4">
+                           <AddCardForm />
+                        </div>
                     </DialogContent>
                 </Dialog>
             </div>
