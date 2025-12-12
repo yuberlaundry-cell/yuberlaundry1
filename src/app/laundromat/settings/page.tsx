@@ -21,80 +21,31 @@ import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, PlusCircle, Trash2 } from 'lucide-react';
+import { CheckCircle, PlusCircle, Trash2, Settings, AlertTriangle } from 'lucide-react';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-
-const YocoDeviceManager = () => {
-    const [devices, setDevices] = useState([{id: 'dev_1', name: 'Front Counter'}]);
-    const [newDeviceName, setNewDeviceName] = useState('');
-
-    const handleAddDevice = (e: React.FormEvent) => {
-        e.preventDefault();
-        if (newDeviceName) {
-            setDevices([...devices, {id: `dev_${Date.now()}`, name: newDeviceName}]);
-            setNewDeviceName('');
-        }
-    }
-
-    return (
-        <div className="space-y-4">
-            <div>
-                <h4 className="font-semibold">Web POS Devices</h4>
-                <p className="text-sm text-muted-foreground">Manage the devices (stations) you use to accept payments.</p>
-            </div>
-            <div className="space-y-2">
-                {devices.map(device => (
-                    <div key={device.id} className="flex items-center justify-between p-3 border rounded-lg bg-background">
-                        <p className="font-medium">{device.name}</p>
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive"><Trash2 className="h-4 w-4"/></Button>
-                    </div>
-                ))}
-            </div>
-             <Dialog>
-                <DialogTrigger asChild>
-                    <Button variant="outline" className="w-full">
-                        <PlusCircle className="mr-2 h-4 w-4" /> Add New Device
-                    </Button>
-                </DialogTrigger>
-                <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Add Yoco Web POS Device</DialogTitle>
-                        <DialogDescription>
-                            Give this payment station a friendly name (e.g., "Front Counter PC", "Office Tablet").
-                        </DialogDescription>
-                    </DialogHeader>
-                     <form onSubmit={handleAddDevice}>
-                        <div className="py-4">
-                            <Label htmlFor="device-name">Device Name</Label>
-                            <Input 
-                                id="device-name" 
-                                value={newDeviceName}
-                                onChange={(e) => setNewDeviceName(e.target.value)}
-                                placeholder="e.g., Front Counter"
-                            />
-                        </div>
-                        <DialogFooter>
-                            <Button type="submit">Add Device</Button>
-                        </DialogFooter>
-                     </form>
-                </DialogContent>
-            </Dialog>
-        </div>
-    );
-};
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
 
 export default function LaundromatSettingsPage() {
   const [address, setAddress] = useState("100 Laundry Lane, London, UK");
   const [isYocoConnected, setIsYocoConnected] = useState(false);
+  const [yocoEnv, setYocoEnv] = useState('sandbox');
+  const [yocoPubKey, setYocoPubKey] = useState('');
+  const [yocoSecKey, setYocoSecKey] = useState('');
+
   const { toast } = useToast();
 
-  const handleYocoConnect = () => {
-      toast({ title: "Redirecting to Yoco..."});
+  const handleYocoConnect = (e: React.FormEvent) => {
+      e.preventDefault();
+      toast({ title: "Connecting to Yoco..."});
       setTimeout(() => {
-          setIsYocoConnected(true);
-          toast({ title: "Yoco Connected Successfully!" });
-      }, 1500);
+          if (yocoPubKey && yocoSecKey) {
+            setIsYocoConnected(true);
+            toast({ title: "Yoco Connected Successfully!" });
+          } else {
+            toast({ title: "Connection Failed", description: "Please provide both public and secret keys.", variant: "destructive"});
+          }
+      }, 1000);
   }
 
   return (
@@ -281,28 +232,63 @@ export default function LaundromatSettingsPage() {
                 </CardHeader>
                 <CardContent className="max-w-lg">
                     {isYocoConnected ? (
-                        <div className="p-4 border rounded-lg bg-muted/50 space-y-6">
-                             <div className="flex items-start justify-between">
-                                <div>
-                                    <div className="flex items-center gap-2">
-                                        <h3 className="font-semibold text-lg">Yoco</h3>
-                                        <Badge className="bg-green-100 text-green-800">Connected</Badge>
-                                    </div>
-                                    <p className="text-sm text-muted-foreground">Business ID: BIZ-xxxxxxxx</p>
-                                </div>
-                                <Button variant="destructive" size="sm" onClick={() => setIsYocoConnected(false)}>Disconnect</Button>
-                             </div>
-                             <Separator />
-                             <YocoDeviceManager />
+                        <div className="space-y-4">
+                            <Alert variant="default" className="border-green-300 bg-green-50">
+                                <CheckCircle className="h-4 w-4 text-green-600" />
+                                <AlertTitle className="text-green-800">Yoco is Connected</AlertTitle>
+                                <AlertDescription className="text-green-700">
+                                    You are operating in <span className="font-semibold">{yocoEnv}</span> mode.
+                                </AlertDescription>
+                            </Alert>
+                            <div className="flex gap-2">
+                                <Button variant="outline" onClick={() => setIsYocoConnected(false)}>Edit Settings</Button>
+                                <Button variant="destructive" onClick={() => setIsYocoConnected(false)}>Disconnect</Button>
+                            </div>
                         </div>
+
                     ) : (
-                        <div className="p-4 border rounded-lg flex items-center justify-between">
-                             <div>
-                                <h3 className="font-semibold">Yoco</h3>
-                                <p className="text-sm text-muted-foreground">Accept card payments in-person.</p>
-                             </div>
-                             <Button onClick={handleYocoConnect}>Connect to Yoco</Button>
-                        </div>
+                        <form className="space-y-6" onSubmit={handleYocoConnect}>
+                            <div className="p-4 border rounded-lg flex items-center justify-between">
+                                <div>
+                                    <h3 className="font-semibold">Yoco</h3>
+                                    <p className="text-sm text-muted-foreground">Accept card payments in-person.</p>
+                                </div>
+                                <img src="https://www.yoco.com/za/assets/images/logo/logo-blue.svg" alt="Yoco logo" className="h-6" />
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="yoco-env">Environment</Label>
+                                <Select value={yocoEnv} onValueChange={setYocoEnv}>
+                                    <SelectTrigger id="yoco-env">
+                                        <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="sandbox">Sandbox (Test)</SelectItem>
+                                        <SelectItem value="live">Live (Production)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="yoco-pub-key">Public Key</Label>
+                                <Input 
+                                    id="yoco-pub-key" 
+                                    placeholder="pub_test_..."
+                                    value={yocoPubKey}
+                                    onChange={(e) => setYocoPubKey(e.target.value)} 
+                                />
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="yoco-sec-key">Secret Key</Label>
+                                <Input 
+                                    id="yoco-sec-key" 
+                                    type="password"
+                                    placeholder="sk_test_..."
+                                    value={yocoSecKey}
+                                    onChange={(e) => setYocoSecKey(e.target.value)}
+                                />
+                            </div>
+                            <Button type="submit" className="w-full">Save & Connect</Button>
+                        </form>
                     )}
                 </CardContent>
             </Card>
