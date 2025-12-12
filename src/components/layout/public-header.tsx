@@ -2,7 +2,7 @@
 "use client";
 
 import Link from 'next/link';
-import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell, BarChart, Users, Wind, Droplets } from 'lucide-react';
+import { Menu, ChevronDown, Rocket, Bike, Shirt, Gift, Sparkles, CircleHelp, Mail, MessageSquare, Star, Smartphone, Store, Building, Briefcase, FileText, Bot, ChevronRight, Utensils, Dumbbell, BarChart, Users, Wind, Droplets, BedDouble } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
 import { UserNav } from './user-nav';
@@ -27,7 +27,7 @@ const personalMegaMenuItems = {
   "How it works": [
     { icon: Droplets, title: "Wash & Fold", href: "/how-it-works" },
     { icon: Shirt, title: "Dry Cleaning", href: "/how-it-works" },
-    { icon: Wind, title: "Hang Dry", href: "/how-it-works" },
+    { icon: BedDouble, title: "Duvets & Bulky Items", href: "/how-it-works" },
     { icon: Shirt, title: "Ironing", href: "/how-it-works" },
   ],
   "Plans & Features": [
@@ -327,7 +327,3 @@ const ListItem = React.forwardRef<
   )
 })
 ListItem.displayName = "ListItem"
-
-    
-
-    

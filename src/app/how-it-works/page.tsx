@@ -7,7 +7,7 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Droplets, Shirt, Wind, ArrowRight, Search as InspectIcon, Waves, Box, Star, Info, Check, Eye, Package, ShieldCheck } from "lucide-react";
+import { Droplets, Shirt, Wind, ArrowRight, Search as InspectIcon, Waves, Box, Star, Info, Check, Eye, Package, ShieldCheck, BedDouble } from "lucide-react";
 import Image from 'next/image';
 import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
@@ -26,9 +26,9 @@ const services = [
         icon: Shirt,
     },
     {
-        id: 'hang-dry',
-        name: 'Hang Dry',
-        icon: Wind,
+        id: 'duvets-bulky',
+        name: 'Duvets & Bulky Items',
+        icon: BedDouble,
     },
 ];
 
@@ -84,7 +84,7 @@ export default function HowItWorksPage() {
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
-            <main className="flex-grow">
+            <main>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="bg-card border-b sticky top-16 z-30">
                         <div className="container mx-auto px-6 sm:px-8 py-4 flex justify-center">
@@ -280,11 +280,11 @@ export default function HowItWorksPage() {
                         </section>
                     </TabsContent>
 
-                    <TabsContent value="hang-dry">
+                    <TabsContent value="duvets-bulky">
                          <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24 text-center">
                             <div className="max-w-3xl mx-auto">
-                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Hang Dry</h2>
-                                <p className="text-muted-foreground text-lg">Details for our Hang Dry service are coming soon.</p>
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Duvets & Bulky Items</h2>
+                                <p className="text-muted-foreground text-lg">Details for our Duvets & Bulky Items service are coming soon.</p>
                              </div>
                         </div>
                     </TabsContent>
