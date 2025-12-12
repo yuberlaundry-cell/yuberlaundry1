@@ -33,6 +33,21 @@ export default function IntakePage() {
     });
   }
 
+  const getOrderWeight = (order: typeof orders[0]) => {
+      if (!order.items) return 'N/A';
+      const weight = order.items.reduce((acc, item) => {
+          if (item.model === 'per_kg') {
+              return acc + item.value;
+          }
+          return acc;
+      }, 0);
+      return weight > 0 ? `${weight.toFixed(2)} kg` : 'N/A';
+  }
+
+  const getOrderSource = (order: typeof orders[0]) => {
+      return order.id.startsWith('#W-') ? 'Walk-in' : 'Driver';
+  }
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -83,7 +98,8 @@ export default function IntakePage() {
                                   <TableHead>Order ID</TableHead>
                                   <TableHead>Customer</TableHead>
                                   <TableHead>Service</TableHead>
-                                  <TableHead>Bags</TableHead>
+                                  <TableHead>Weight (kg)</TableHead>
+                                  <TableHead>Source</TableHead>
                                   <TableHead><span className="sr-only">Actions</span></TableHead>
                               </TableRow>
                           </TableHeader>
@@ -93,7 +109,12 @@ export default function IntakePage() {
                                       <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => router.push(`/laundromat/orders/${order.id.replace('#', '')}`)}>{order.id}</TableCell>
                                       <TableCell>{order.customer}</TableCell>
                                       <TableCell>{order.service}</TableCell>
-                                      <TableCell>{order.bags || 1}</TableCell>
+                                      <TableCell>{getOrderWeight(order)}</TableCell>
+                                      <TableCell>
+                                        <Badge variant={getOrderSource(order) === 'Driver' ? 'default' : 'secondary'}>
+                                          {getOrderSource(order)}
+                                        </Badge>
+                                      </TableCell>
                                       <TableCell className="text-right">
                                           <Button size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
                                       </TableCell>
@@ -112,7 +133,12 @@ export default function IntakePage() {
                         </CardHeader>
                         <CardContent className="text-sm space-y-2">
                            <p><span className="font-medium">Service:</span> {order.service}</p>
-                           <p><span className="font-medium">Bags:</span> {order.bags || 1}</p>
+                           <p><span className="font-medium">Weight:</span> {getOrderWeight(order)}</p>
+                           <p><span className="font-medium">Source:</span>
+                              <Badge variant={getOrderSource(order) === 'Driver' ? 'default' : 'secondary'} className="ml-2">
+                                {getOrderSource(order)}
+                              </Badge>
+                           </p>
                            <Button className="w-full mt-2" size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
                         </CardContent>
                       </Card>
