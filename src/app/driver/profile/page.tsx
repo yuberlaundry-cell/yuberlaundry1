@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label";
 import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
-import { Building, Car, HelpCircle, LogOut, Mail, Newspaper, Bell } from "lucide-react";
+import { Building, Car, HelpCircle, LogOut, Mail, Newspaper, Bell, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -32,6 +32,14 @@ export default function ProfilePage() {
         });
     }
 
+     const handlePasswordChange = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Password Updated",
+            description: "Your password has been changed successfully.",
+        });
+    }
+
     return (
         <div className="space-y-8">
             <div>
@@ -39,8 +47,8 @@ export default function ProfilePage() {
                 <p className="text-muted-foreground">Manage your personal information and settings.</p>
             </div>
 
-            <form onSubmit={handleSaveChanges}>
-                <div className="grid gap-8">
+            <div className="grid gap-8">
+                <form onSubmit={handleSaveChanges}>
                     <Card>
                         <CardHeader>
                             <CardTitle>Personal Information</CardTitle>
@@ -73,14 +81,19 @@ export default function ProfilePage() {
                                     <PhoneNumberInput />
                                 </div>
                             </div>
+                             <div className="flex justify-end">
+                                 <Button type="submit">Save Personal Info</Button>
+                            </div>
                         </CardContent>
                     </Card>
+                </form>
 
-                     <Card>
-                        <CardHeader>
-                            <CardTitle>Vehicle Information</CardTitle>
-                        </CardHeader>
-                        <CardContent className="space-y-6">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Vehicle Information</CardTitle>
+                    </CardHeader>
+                    <CardContent className="space-y-6">
+                        <form onSubmit={handleSaveChanges} className="space-y-6">
                             <div className="grid sm:grid-cols-2 gap-4">
                                 <div className="space-y-2">
                                     <Label htmlFor="vehicle-model">Vehicle Model & Color</Label>
@@ -91,16 +104,39 @@ export default function ProfilePage() {
                                     <Input id="license-plate" defaultValue="LAUNDRY1" />
                                 </div>
                             </div>
-                        </CardContent>
-                    </Card>
+                             <div className="flex justify-end">
+                                 <Button type="submit">Save Vehicle Info</Button>
+                            </div>
+                        </form>
+                    </CardContent>
+                </Card>
 
-                    <div className="flex justify-end">
-                         <Button type="submit" className="w-full sm:w-auto">Save All Changes</Button>
-                    </div>
-                </div>
-            </form>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Security</CardTitle>
+                        <CardDescription>Update your password.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <form className="space-y-6 max-w-lg" onSubmit={handlePasswordChange}>
+                            <div className="space-y-2">
+                                <Label htmlFor="current-password">Current Password</Label>
+                                <Input id="current-password" type="password" required />
+                            </div>
+                            <div className="grid sm:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="new-password">New Password</Label>
+                                    <Input id="new-password" type="password" required />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="confirm-password">Confirm New Password</Label>
+                                    <Input id="confirm-password" type="password" required />
+                                </div>
+                            </div>
+                            <Button type="submit">Update Password</Button>
+                        </form>
+                    </CardContent>
+                </Card>
 
-            <div className="grid gap-8 md:grid-cols-2">
                  <Card>
                     <CardHeader>
                         <CardTitle>Payout Information</CardTitle>
