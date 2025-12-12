@@ -40,11 +40,8 @@ export default function DriverOnboardingPage() {
     };
     
     const handleFinish = () => {
-        toast({
-            title: "Application Submitted!",
-            description: "We're reviewing your application and will notify you once you're approved.",
-        });
-        router.push('/driver');
+        // Don't log in. Redirect to a success/pending page.
+        router.push('/driver/onboarding/submitted');
     }
 
     const progress = ((currentStep - 1) / (steps.length - 1)) * 100;
