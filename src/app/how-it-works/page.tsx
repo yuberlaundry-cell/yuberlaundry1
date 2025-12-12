@@ -7,7 +7,7 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Droplets, Shirt, Wind, ArrowRight, Search as InspectIcon, Waves, Box, Star, Info, Check } from "lucide-react";
+import { Droplets, Shirt, Wind, ArrowRight, Search as InspectIcon, Waves, Box, Star, Info, Check, Eye, Package, ShieldCheck } from "lucide-react";
 import Image from 'next/image';
 import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +32,7 @@ const services = [
     },
 ];
 
-const howItWorksSteps = [
+const washAndFoldSteps = [
     {
         icon: InspectIcon,
         title: "We inspect your clothes and check your pockets.",
@@ -55,6 +55,29 @@ const howItWorksSteps = [
     }
 ];
 
+const dryCleaningSteps = [
+    {
+        icon: Eye,
+        title: "We keep track so that you don’t have to.",
+        description: "We email you a photo and itemized inventory of what we pick up, so you remember what’s being cleaned and in what condition."
+    },
+    {
+        icon: InspectIcon,
+        title: "We carefully inspect for spots and stains.",
+        description: "Our “spotters” have decades of experience in identifying and treating stains in the best way possible so your garments are returned pristine."
+    },
+    {
+        icon: ShieldCheck,
+        title: "We clean your clothing with expert care.",
+        description: "We follow the care label (and know what all the symbols mean!) so your clothes receive the optimal cleaning treatment and last for years to come."
+    },
+    {
+        icon: Package,
+        title: "We press and hang each of your items.",
+        description: "Your clothes are crisply pressed, put on hangers, and placed in your protective garment bag, ready to wear when we deliver your dry cleaning to your door!"
+    }
+]
+
 export default function HowItWorksPage() {
     const [activeTab, setActiveTab] = useState(services[0].id);
 
@@ -73,7 +96,7 @@ export default function HowItWorksPage() {
                                         className={cn(
                                             "rounded-full px-6 py-2 text-sm font-semibold transition-colors",
                                             "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
-                                            "data-[state=active]:bg-yellow-400 data-[state=active]:text-black data-[state=active]:shadow-md"
+                                            "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                                         )}
                                     >
                                         <service.icon className="mr-2 h-4 w-4" />
@@ -137,7 +160,7 @@ export default function HowItWorksPage() {
                                     <p className="mt-4 text-lg text-muted-foreground">Rinse will pick up your laundry, clean it according to best practices and your preferences, and deliver it back neatly folded—right to your door.</p>
                                 </div>
                                 <div className="mt-12 grid md:grid-cols-4 gap-8 text-center">
-                                    {howItWorksSteps.map((step, index) => (
+                                    {washAndFoldSteps.map((step, index) => (
                                          <div key={index} className="flex flex-col items-center">
                                             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
                                                 <step.icon className="h-8 w-8" />
@@ -220,13 +243,49 @@ export default function HowItWorksPage() {
                     </TabsContent>
 
                     <TabsContent value="dry-cleaning">
-                        <div className="container mx-auto px-6 sm:px-8 py-12 text-center">
-                            <p className="text-muted-foreground">Dry Cleaning details coming soon.</p>
+                        <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
+                            <div className="grid md:grid-cols-2 gap-12 items-center">
+                                <div className="prose lg:prose-lg max-w-none">
+                                    <h2>Dry Cleaning</h2>
+                                    <p>This is the perfect service for items you want professionally cleaned and returned pressed and on a hanger (this service includes both Dry Cleaning and Launder & Press).</p>
+                                    <p>Enjoy premium cleaning from the comfort of your home and never go to the dry cleaners again.</p>
+                                </div>
+                                <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
+                                    <Image
+                                        src="https://picsum.photos/seed/dry-cleaning-rack/800/600"
+                                        alt="A rack of dry-cleaned clothes"
+                                        data-ai-hint="dry cleaning clothes"
+                                        fill
+                                        className="object-cover"
+                                    />
+                                </div>
+                            </div>
                         </div>
+
+                         <section className="py-16 md:py-24 bg-card">
+                            <div className="container mx-auto px-6 sm:px-8">
+                                <div className="text-center max-w-3xl mx-auto">
+                                    <h2 className="text-3xl md:text-4xl font-bold font-headline">How it works</h2>
+                                </div>
+                                <div className="mt-12 grid md:grid-cols-4 gap-8 text-center">
+                                    {dryCleaningSteps.map((step, index) => (
+                                         <div key={index} className="flex flex-col items-center">
+                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
+                                                <step.icon className="h-8 w-8" />
+                                            </div>
+                                            <h3 className="text-xl font-semibold">{step.title}</h3>
+                                            <p className="mt-2 text-muted-foreground text-sm">{step.description}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </section>
                     </TabsContent>
+                    
                     <TabsContent value="hang-dry">
                          <div className="container mx-auto px-6 sm:px-8 py-12 text-center">
-                            <p className="text-muted-foreground">Hang Dry details coming soon.</p>
+                            <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Hang Dry</h2>
+                            <p className="text-muted-foreground text-lg">Details for our Hang Dry service are coming soon.</p>
                         </div>
                     </TabsContent>
                 </Tabs>
