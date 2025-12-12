@@ -63,6 +63,7 @@ const deliverySteps = [
     { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: Signature },
     { id: 'complete', label: 'Job Complete', actionLabel: '' },
     { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat' },
+    { id: 'confirm_return_handoff', label: 'Confirm Laundromat Return', actionLabel: 'Confirm Handoff' },
 ];
 
 
@@ -109,17 +110,23 @@ export default function JobDetailsPage() {
     const handleNextStep = () => {
         const nextStepIndex = currentStep + 1;
         
-        // Skip the return step if delivery was successful
-        if (job.type === 'Delivery' && !deliveryFailed && workflowSteps[nextStepIndex]?.id === 'return_to_laundromat') {
-            setCurrentStep(workflowSteps.findIndex(s => s.id === 'complete'));
-            return;
+        // Logic for Delivery workflow
+        if (job.type === 'Delivery') {
+            const currentStepId = workflowSteps[currentStep].id;
+
+            if (deliveryFailed) {
+                if (currentStepId === 'confirm_or_fail') {
+                    setCurrentStep(workflowSteps.findIndex(s => s.id === 'return_to_laundromat'));
+                    return;
+                }
+            } else {
+                 if (currentStepId === 'confirm_or_fail') {
+                    setCurrentStep(workflowSteps.findIndex(s => s.id === 'complete'));
+                    return;
+                }
+            }
         }
 
-        // Skip the completion step if delivery failed
-        if (job.type === 'Delivery' && deliveryFailed && workflowSteps[nextStepIndex]?.id === 'complete') {
-             setCurrentStep(workflowSteps.findIndex(s => s.id === 'return_to_laundromat'));
-            return;
-        }
 
         if (currentStep < workflowSteps.length -1) {
             setCurrentStep(nextStepIndex);
@@ -263,8 +270,20 @@ export default function JobDetailsPage() {
         }
     };
 
-    const isJobComplete = currentStep === workflowSteps.length || workflowSteps[currentStep].id === 'complete' || workflowSteps[currentStep].id === 'return_to_laundromat';
-    const finalStep = workflowSteps[currentStep];
+    const isJobComplete = currentStep === workflowSteps.length;
+    let finalStatus = null;
+    if (isJobComplete) {
+        finalStatus = deliveryFailed ? 'returned' : 'completed';
+    }
+
+    const visibleSteps = workflowSteps.filter(step => {
+        if (job.type !== 'Delivery') return true;
+        if (deliveryFailed) {
+            return step.id !== 'complete';
+        }
+        return step.id !== 'return_to_laundromat' && step.id !== 'confirm_return_handoff';
+    });
+
 
     return (
         <div className="space-y-6 pb-16">
@@ -316,12 +335,12 @@ export default function JobDetailsPage() {
                             </Button>
                         </CardContent>
                     </Card>
-                    {(job.type === 'Pickup' && currentStep >= 4 || finalStep?.id === 'return_to_laundromat') && (
+                    {(job.type === 'Pickup' && currentStep >= 4 || (deliveryFailed && currentStep >= workflowSteps.findIndex(s => s.id === 'return_to_laundromat'))) && (
                          <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
                                     <Building />
-                                    Laundromat Drop-off
+                                    Laundromat Location
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -341,14 +360,10 @@ export default function JobDetailsPage() {
                     </CardHeader>
                     <CardContent>
                          <ol className="space-y-4">
-                            {workflowSteps.filter(s => s.id !== 'complete' && s.id !== 'return_to_laundromat' || s.id === finalStep?.id ).map((step, index) => {
+                            {visibleSteps.map((step, index) => {
                                 const stepIndex = workflowSteps.findIndex(s => s.id === step.id);
                                 const isCurrent = stepIndex === currentStep;
-                                const isCompleted = stepIndex < currentStep || (isJobComplete && finalStep?.id !== step.id);
-
-                                if (job.type === 'Delivery' && ((deliveryFailed && step.id === 'complete') || (!deliveryFailed && step.id === 'return_to_laundromat'))) {
-                                    return null;
-                                }
+                                const isCompleted = stepIndex < currentStep;
 
                                 return (
                                 <li key={step.id} className="flex items-start gap-4">
@@ -356,7 +371,7 @@ export default function JobDetailsPage() {
                                         <div className={`flex h-8 w-8 items-center justify-center rounded-full ${isCompleted ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
                                             {isCompleted ? <Check /> : (step.icon ? <step.icon className="h-4 w-4" /> : index + 1)}
                                         </div>
-                                        {index < workflowSteps.length -1 && step.id !== 'confirm_or_fail' && <div className={`w-px flex-1 my-1 ${isCompleted ? 'bg-primary' : 'bg-border'}`} />}
+                                        {index < visibleSteps.length -1 && <div className={`w-px flex-1 my-1 ${isCompleted ? 'bg-primary' : 'bg-border'}`} />}
                                     </div>
                                     <div className="flex-1 pt-1.5">
                                         <p className={`font-medium ${!isCompleted && !isCurrent ? 'text-muted-foreground' : 'text-foreground'}`}>{step.label}</p>
@@ -367,12 +382,12 @@ export default function JobDetailsPage() {
                                 </li>
                             )})}
                         </ol>
-                        {isJobComplete && finalStep && (
-                             <div className={`mt-6 flex items-center gap-3 rounded-lg border p-4 ${finalStep.id === 'return_to_laundromat' ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-green-500 bg-green-50 text-green-800'}`}>
-                                {finalStep.id === 'return_to_laundromat' ? <Ban className="h-6 w-6"/> : <Check className="h-6 w-6" />}
+                        {isJobComplete && (
+                             <div className={`mt-6 flex items-center gap-3 rounded-lg border p-4 ${finalStatus === 'returned' ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-green-500 bg-green-50 text-green-800'}`}>
+                                {finalStatus === 'returned' ? <Ban className="h-6 w-6"/> : <Check className="h-6 w-6" />}
                                 <div>
-                                    <h4 className="font-semibold">{finalStep.id === 'return_to_laundromat' ? 'Delivery Failed' : `${job.type} Job Complete!`}</h4>
-                                    <p className="text-sm">{finalStep.id === 'return_to_laundromat' ? 'Please return items to the laundromat.' : 'This job has been marked as completed.'}</p>
+                                    <h4 className="font-semibold">{finalStatus === 'returned' ? 'Delivery Failed' : `${job.type} Job Complete!`}</h4>
+                                    <p className="text-sm">{finalStatus === 'returned' ? 'Items returned to laundromat.' : 'This job has been marked as completed.'}</p>
                                 </div>
                             </div>
                         )}
@@ -387,3 +402,5 @@ export default function JobDetailsPage() {
         </div>
     )
 }
+
+    
