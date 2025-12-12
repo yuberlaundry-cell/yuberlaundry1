@@ -26,7 +26,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
-import { QRCode } from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 
 const initialStaff = [
   { id: 'st-1', name: 'Maria Garcia', role: 'Operator', email: 'maria.g@mainstreetlaundry.com', phone: '+44 20 7946 0958' },
@@ -218,7 +218,7 @@ export default function ResourcesPage() {
                                 </DialogHeader>
                                 <div className="flex flex-col items-center justify-center p-8 space-y-4">
                                     <div className="p-4 bg-white rounded-lg">
-                                        <QRCode value={m.id} size={256} />
+                                        <QRCodeSVG value={m.id} size={256} />
                                     </div>
                                     <p className="font-mono text-xl">{m.id}</p>
                                     <Button onClick={() => window.print()}><Printer className="mr-2"/> Print</Button>
