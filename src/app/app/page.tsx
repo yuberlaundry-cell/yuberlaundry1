@@ -9,27 +9,33 @@ import { useRouter } from "next/navigation";
 import { mockOrders } from "@/lib/mock-data";
 import { OrderCard } from "@/components/orders/order-card";
 import { LoyaltyCard } from "@/components/app/loyalty-card";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { BookingFlow } from "@/components/booking/booking-flow";
 
 const actionCards = [
     {
+        id: "book-new",
         title: "Book New Order",
         description: "Place a one-time order",
         icon: ShoppingCart,
-        href: "/app/book/address"
+        href: "/app/wallet" // Placeholder, logic is handled differently
     },
     {
+        id: "reorder",
         title: "Reorder Last",
         description: "Repeat your last order",
         icon: RefreshCw,
         href: "#"
     },
     {
+        id: "schedule",
         title: "Schedule Recurring",
         description: "Set up a regular pickup",
         icon: CalendarClock,
         href: "#"
     },
     {
+        id: "add-funds",
         title: "Add Funds",
         description: "Top up your wallet",
         icon: Wallet,
@@ -41,6 +47,19 @@ export default function ConsumerDashboard() {
   const router = useRouter();
   const recentOrders = mockOrders.slice(0, 2);
 
+  const renderActionCardContent = (card: typeof actionCards[0]) => (
+    <CardContent className="p-4 flex flex-col h-full">
+        <div className="flex flex-row items-center gap-3 space-y-0">
+            <div className="bg-primary/10 p-2 rounded-lg text-primary">
+                <card.icon className="h-5 w-5" />
+            </div>
+            <div>
+                <CardTitle className="text-base">{card.title}</CardTitle>
+            </div>
+        </div>
+    </CardContent>
+  );
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -51,20 +70,42 @@ export default function ConsumerDashboard() {
       <LoyaltyCard />
       
       <div className="grid gap-4 sm:grid-cols-2">
-        {actionCards.map(card => (
-            <Card key={card.title} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
-                <Link href={card.href} className="flex flex-col h-full">
-                    <CardHeader className="flex flex-row items-center gap-3 space-y-0 p-4">
-                        <div className="bg-primary/10 p-2 rounded-lg text-primary">
-                            <card.icon className="h-5 w-5" />
-                        </div>
-                        <div>
-                            <CardTitle className="text-base">{card.title}</CardTitle>
-                        </div>
-                    </CardHeader>
-                </Link>
-            </Card>
-        ))}
+        {actionCards.map(card => {
+            if (card.id === 'book-new') {
+                return (
+                    <Dialog key={card.id}>
+                        <DialogTrigger asChild>
+                            <Card className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                                {renderActionCardContent(card)}
+                            </Card>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                             <DialogHeader className="p-6 pb-0 sr-only">
+                                <DialogTitle>Book your laundry</DialogTitle>
+                                <DialogDescription>
+                                    Configure your laundry order and schedule a pickup.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <BookingFlow />
+                        </DialogContent>
+                    </Dialog>
+                )
+            }
+             if (card.id === 'add-funds') {
+                return (
+                    <Card key={card.id} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                        <Link href={card.href} className="flex flex-col h-full">
+                            {renderActionCardContent(card)}
+                        </Link>
+                    </Card>
+                )
+            }
+            return (
+                 <Card key={card.id} className="opacity-50 cursor-not-allowed">
+                     {renderActionCardContent(card)}
+                </Card>
+            )
+        })}
       </div>
       
       <Card>
