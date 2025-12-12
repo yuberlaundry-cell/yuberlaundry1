@@ -40,7 +40,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetHeader, SheetTi
 import { Separator } from '@/components/ui/separator';
 
 const navConfig = [
-    { href: '/driver', label: 'Today', icon: Home, isStandalone: true },
+    { href: '/driver', label: 'Today', icon: Home, isStandalone: true, exact: true },
     {
         title: 'Jobs',
         links: [
@@ -77,6 +77,7 @@ const notifications = [
 
 const BottomNavbar = () => {
     const pathname = usePathname();
+    const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
             <div className="grid h-16 grid-cols-5 w-full text-xs">
@@ -121,7 +122,7 @@ const BottomNavbar = () => {
                          </div>
                         <Separator className="my-2"/>
                          <SheetClose asChild>
-                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" >
+                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" onClick={logout}>
                                 <LogOut className="mr-3 h-5 w-5" /> Log Out
                             </Button>
                         </SheetClose>
@@ -139,7 +140,7 @@ export default function DriverPortalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { user, loading } = useAuth();
+  const { user, loading, logout } = useAuth();
   const router = useRouter();
   const isMobile = useIsMobile();
 
@@ -225,9 +226,10 @@ export default function DriverPortalLayout({
           <SidebarMenu>
             {navConfig.map((section) => {
                if (section.isStandalone) {
+                const isActive = section.exact ? pathname === section.href : pathname.startsWith(section.href);
                 return (
                    <SidebarMenuItem key={section.href}>
-                    <SidebarMenuButton asChild tooltip={section.label} isActive={pathname === section.href}>
+                    <SidebarMenuButton asChild tooltip={section.label} isActive={isActive}>
                       <Link href={section.href}>
                         <section.icon />
                         <span>{section.label}</span>
