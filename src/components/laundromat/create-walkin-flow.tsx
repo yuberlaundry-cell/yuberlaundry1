@@ -34,39 +34,57 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const { toast } = useToast();
   const { addOrder } = useLaundromatOrders();
 
+  const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.value), 0);
+  const tax = subtotal * 0; // Assuming 0 tax for simplicity
+  const total = subtotal + tax;
+
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => setStep((s) => s - 1);
   
   const handleCreateOrder = () => {
+    // Generate the unique order ID right away. This will be our client_reference.
+    const orderId = `#W-${Math.floor(10000 + Math.random() * 90000)}`;
+    setNewOrderId(orderId);
+
     if (paymentMethod === 'yoco') {
         setIsProcessingYoco(true);
-        // Simulate API call to Yoco
+
+        // --- HERE IS WHERE THE PAYLOAD IS CONSTRUCTED ---
+        const yocoPayload = {
+            amount: {
+                amount: Math.round(total * 100), // Convert to cents
+                currency: "ZAR"
+            },
+            client_reference: orderId, // Our internal order ID
+            metadata: {
+                laundromatId: "laundromat-123", // Example ID
+                customerName: customer.name,
+            }
+        };
+
+        console.log("Simulating API call to Yoco with payload:", yocoPayload);
+        
+        // Simulate API call to Yoco backend
         setTimeout(() => {
-            // This is where you would get the redirect_url from your backend
-            // and open it in an iframe or new tab.
-            // For now, we'll just show a "waiting" state.
-             toast({
+            toast({
                 title: "Waiting for Yoco Payment",
-                description: "Complete the payment on the Yoco terminal.",
+                description: `Complete the R${total.toFixed(2)} payment on the Yoco terminal.`,
             });
-            // To simulate completion, we add another button
         }, 1000);
         return;
     }
     
-    // For non-Yoco payments
-    finalizeOrder();
+    // For non-Yoco payments (cash, pay later)
+    finalizeOrder(orderId);
   }
 
-  const finalizeOrder = () => {
+  const finalizeOrder = (orderId: string) => {
     setIsProcessingYoco(false);
-    const generatedId = `#W-${Math.floor(10000 + Math.random() * 90000)}`;
-    setNewOrderId(generatedId);
     
     const serviceSummary = orderItems.map(item => item.name).join(', ');
 
     addOrder({
-        id: generatedId,
+        id: orderId,
         customer: customer.name,
         service: serviceSummary,
         status: 'Intake',
@@ -78,7 +96,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
     });
 
     toast({
-        title: `Order ${generatedId} Created`,
+        title: `Order ${orderId} Created`,
         description: 'The order for ' + customer.name + ' is now in the system.',
     });
     setStep(4); // Move to confirmation step
@@ -105,10 +123,6 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
         setOrderItems([...orderItems, { ...service, value: 0 }]);
     }
   };
-  
-  const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.value), 0);
-  const tax = subtotal * 0; // Assuming 0 tax for simplicity
-  const total = subtotal + tax;
 
 
   const renderStep = () => {
@@ -219,7 +233,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                         <p className="text-muted-foreground">Complete the payment on the Yoco card machine.</p>
                         <div className="flex gap-2 justify-center">
                             <Button variant="destructive" size="sm" onClick={() => setIsProcessingYoco(false)}>Cancel</Button>
-                            <Button variant="secondary" size="sm" onClick={finalizeOrder}>Simulate Success</Button>
+                            <Button variant="secondary" size="sm" onClick={() => finalizeOrder(newOrderId)}>Simulate Success</Button>
                         </div>
                     </div>
                 ) : (
