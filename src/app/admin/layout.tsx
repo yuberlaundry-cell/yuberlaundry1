@@ -39,6 +39,7 @@ import {
   Palette,
   Sparkles,
   Package,
+  Tag,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -86,6 +87,7 @@ const navigationConfig = [
   {
     title: 'Marketing',
     links: [
+        { href: '/admin/promotions', label: 'Promotions', icon: Tag },
         { href: '/admin/loyalty', label: 'Loyalty Program', icon: Star },
     ]
   },
