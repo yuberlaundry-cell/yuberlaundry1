@@ -80,9 +80,9 @@ export default function LaundromatOrdersPage() {
                 <CardDescription>{order.customer}</CardDescription>
             </CardHeader>
             <CardContent className="text-sm space-y-1">
-                <p><span className="font-medium">Service:</span> {order.service}</p>
-                <p><span className="font-medium">Pickup:</span> {order.pickup}</p>
-                <p><span className="font-medium">SLA:</span> <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'} className="ml-1">{order.sla}</Badge></p>
+               <p><span className="font-medium">Service:</span> {order.service}</p>
+               <p><span className="font-medium">Pickup:</span> {order.pickup}</p>
+               <div className="flex items-center gap-1.5"><span className="font-medium">SLA:</span> <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'}>{order.sla}</Badge></div>
             </CardContent>
         </Card>
     )
