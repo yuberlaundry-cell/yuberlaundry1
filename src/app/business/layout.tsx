@@ -156,7 +156,7 @@ export default function BusinessPortalLayout({
             <div className="flex-1" />
             <UserNav />
         </header>
-        <main className="flex-1 p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 p-4 pb-24 sm:pb-6 lg:p-8">
           <div className="mx-auto w-full max-w-6xl">
             {children}
           </div>
