@@ -6,7 +6,7 @@ import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
-import { Sparkles, Gift, Users, Star } from 'lucide-react';
+import { Sparkles, Gift, Users } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 
 const featureTabs = [
@@ -14,11 +14,6 @@ const featureTabs = [
         id: 'yuber-plus',
         name: 'Yuber Plus',
         icon: Sparkles,
-    },
-    {
-        id: 'sustainability',
-        name: 'Sustainability',
-        icon: Star,
     },
     {
         id: 'gift-cards',
@@ -76,10 +71,6 @@ export default function FeaturesPage() {
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Yuber Plus</h2>
                                 <p className="text-muted-foreground text-lg">Information about the Yuber Plus subscription program.</p>
                             </TabsContent>
-                             <TabsContent value="sustainability">
-                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Sustainability</h2>
-                                <p className="text-muted-foreground text-lg">Details about our commitment to eco-friendly practices.</p>
-                            </TabsContent>
                              <TabsContent value="gift-cards">
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Gift Cards</h2>
                                 <p className="text-muted-foreground text-lg">Purchase and redeem gift cards for Yuber Laundry.</p>
@@ -96,5 +87,3 @@ export default function FeaturesPage() {
         </div>
     );
 }
-
-    

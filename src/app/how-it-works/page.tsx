@@ -111,9 +111,8 @@ export default function HowItWorksPage() {
                                             value={service.id}
                                             className={cn(
                                                 "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
-                                                activeTab === service.id
-                                                    ? "bg-primary text-primary-foreground shadow-md"
-                                                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                                "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
+                                                "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                                             )}
                                         >
                                             <service.icon className="mr-2 h-4 w-4" />
@@ -129,7 +128,7 @@ export default function HowItWorksPage() {
                     <TabsContent value="wash-fold">
                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
                              <div className="text-center max-w-3xl mx-auto">
-                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Wash & Fold</h2>
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Wash &amp; Fold</h2>
                              </div>
                             <div className="grid md:grid-cols-2 gap-12 items-center mt-8">
                                 <div className="prose lg:prose-lg max-w-none">

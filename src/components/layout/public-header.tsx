@@ -28,11 +28,10 @@ const personalMegaMenuItems = {
     { icon: Droplets, title: "Wash & Fold", href: "/how-it-works#wash-fold" },
     { icon: Shirt, title: "Dry Cleaning", href: "/how-it-works#dry-cleaning" },
     { icon: BedDouble, title: "Duvets & Bulky Items", href: "/how-it-works#duvets-bulky" },
-    { icon: Shirt, title: "Ironing", href: "/how-it-works#ironing" },
+    { icon: Wind, title: "Ironing", href: "/how-it-works#ironing" },
   ],
   "Plans & Features": [
     { icon: Sparkles, title: "Yuber Plus", href: "/features#yuber-plus", popular: true },
-    { icon: Sparkles, title: "Sustainability", href: "/features#sustainability" },
     { icon: Gift, title: "Gift Cards", href: "/features#gift-cards" },
     { icon: Users, title: "Referral Program", href: "/features#referrals" },
   ],
