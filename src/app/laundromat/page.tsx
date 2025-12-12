@@ -58,7 +58,7 @@ export default function LaundromatDashboard() {
         </p>
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {kpiCards.map((card) => (
           <Card key={card.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
