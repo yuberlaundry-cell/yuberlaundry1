@@ -10,12 +10,16 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
 import { getRedirectPathForRole } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { HardHat, User, Briefcase } from "lucide-react";
+
 
 export function UserNav() {
   const { user, logout } = useAuth();
@@ -69,6 +73,20 @@ export function UserNav() {
              </DropdownMenuItem>
            }
         </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+         <DropdownMenuSub>
+            <DropdownMenuSubTrigger>Switch Role</DropdownMenuSubTrigger>
+            <DropdownMenuSubContent>
+                 <DropdownMenuItem>
+                    <User className="mr-2"/>
+                    <span>Customer</span>
+                </DropdownMenuItem>
+                 <DropdownMenuItem>
+                    <HardHat className="mr-2"/>
+                    <span>Driver</span>
+                </DropdownMenuItem>
+            </DropdownMenuSubContent>
+        </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           Log out
