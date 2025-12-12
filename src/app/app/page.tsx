@@ -69,44 +69,37 @@ export default function ConsumerDashboard() {
 
       <LoyaltyCard />
       
-      <div className="grid gap-4 sm:grid-cols-2">
-        {actionCards.map(card => {
-            if (card.id === 'book-new') {
-                return (
-                    <Dialog key={card.id}>
-                        <DialogTrigger asChild>
-                            <Card className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
-                                {renderActionCardContent(card)}
-                            </Card>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
-                             <DialogHeader className="p-6 pb-0 sr-only">
-                                <DialogTitle>Book your laundry</DialogTitle>
-                                <DialogDescription>
-                                    Configure your laundry order and schedule a pickup.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <BookingFlow />
-                        </DialogContent>
-                    </Dialog>
-                )
-            }
-             if (card.id === 'add-funds') {
-                return (
-                    <Card key={card.id} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
-                        <Link href={card.href} className="flex flex-col h-full">
-                            {renderActionCardContent(card)}
-                        </Link>
-                    </Card>
-                )
-            }
-            return (
-                 <Card key={card.id} className="opacity-50 cursor-not-allowed">
-                     {renderActionCardContent(card)}
-                </Card>
-            )
-        })}
-      </div>
+      <Dialog>
+        <div className="grid gap-4 sm:grid-cols-2">
+          {actionCards.map(card => {
+              if (card.id === 'add-funds') {
+                  return (
+                      <Card key={card.id} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                          <Link href={card.href} className="flex flex-col h-full">
+                              {renderActionCardContent(card)}
+                          </Link>
+                      </Card>
+                  )
+              }
+              return (
+                  <DialogTrigger asChild key={card.id}>
+                      <Card className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                          {renderActionCardContent(card)}
+                      </Card>
+                  </DialogTrigger>
+              )
+          })}
+        </div>
+        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+              <DialogHeader className="p-6 pb-0 sr-only">
+                <DialogTitle>Book your laundry</DialogTitle>
+                <DialogDescription>
+                    Configure your laundry order and schedule a pickup.
+                </DialogDescription>
+              </DialogHeader>
+              <BookingFlow />
+        </DialogContent>
+      </Dialog>
       
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
