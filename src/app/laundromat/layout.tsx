@@ -28,6 +28,8 @@ import {
   Bell,
   Tag,
   Star,
+  MoreHorizontal,
+  LogOut,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -39,10 +41,10 @@ import React from 'react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
-import { platformName } from '@/lib/branding';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Separator } from '@/components/ui/separator';
 
 const desktopNavConfig = [
   { href: '/laundromat', label: 'Dashboard', icon: Home, isStandalone: true },
@@ -74,6 +76,14 @@ const mobileNavItems = [
     { href: '/laundromat/ready', label: 'Handoff', icon: Truck },
 ];
 
+const moreMenuItems = [
+    { href: '/laundromat/orders', label: 'All Orders', icon: Package },
+    { href: '/laundromat/completed', label: 'Completed & Reviews', icon: Star },
+    { href: '/laundromat/financials', label: 'Financials', icon: CreditCard },
+    { href: '/laundromat/subscription', label: 'Subscription', icon: Tag },
+    { href: '/laundromat/resources', label: 'Resources', icon: Book },
+    { href: '/laundromat/settings', label: 'Settings', icon: Settings },
+];
 
 const notifications = [
     { title: 'New order #YL12350 arrived', description: 'Driver David L. just dropped off 3 bags.'},
@@ -86,7 +96,7 @@ const BottomNavbar = () => {
     const pathname = usePathname();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
-            <div className="grid h-16 grid-cols-4 w-full text-xs">
+            <div className="grid h-16 grid-cols-5 w-full text-xs">
                 {mobileNavItems.map((item) => {
                     const isActive = item.exact ? pathname === item.href : pathname.startsWith(item.href);
                     return (
@@ -103,6 +113,31 @@ const BottomNavbar = () => {
                         </Link>
                     )
                 })}
+                 <Sheet>
+                    <SheetTrigger asChild>
+                         <div className="flex flex-col items-center justify-center pt-1 gap-1 text-muted-foreground">
+                            <MoreHorizontal className="h-5 w-5" />
+                            <span>More</span>
+                        </div>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="rounded-t-2xl">
+                        <div className="space-y-2 py-4">
+                            {moreMenuItems.map((item) => (
+                                <Button key={item.href} variant="ghost" className="w-full justify-start text-base py-6" asChild>
+                                    <Link href={item.href}>
+                                        <item.icon className="mr-3 h-5 w-5 text-muted-foreground" />
+                                        {item.label}
+                                    </Link>
+                                </Button>
+                            ))}
+                            <Separator className="my-2"/>
+                             <Button variant="ghost" className="w-full justify-start text-base py-6 text-destructive hover:text-destructive" >
+                                <LogOut className="mr-3 h-5 w-5" />
+                                Log Out
+                            </Button>
+                        </div>
+                    </SheetContent>
+                </Sheet>
             </div>
         </nav>
     );
