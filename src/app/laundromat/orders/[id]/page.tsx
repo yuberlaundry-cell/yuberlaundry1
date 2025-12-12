@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning, DollarSign, PlusCircle } from 'lucide-react';
+import { ArrowLeft, Package, User, CheckSquare, Image as ImageIcon, MessageSquareWarning, DollarSign, PlusCircle, Printer } from 'lucide-react';
 import Link from 'next/link';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
@@ -24,6 +24,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { useLaundromatOrders, type LaundromatOrder, type LaundromatOrderItem } from '@/hooks/use-laundromat-orders';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 
 const qcChecklist = [
@@ -104,6 +105,13 @@ export default function OrderProcessingDetailsPage() {
         return true;
     }
 
+    const handlePrint = (type: 'Receipt' | 'Bag Tags') => {
+      toast({
+          title: `Printing ${type}...`,
+          description: `Your ${type.toLowerCase()} have been sent to the printer.`,
+      });
+    }
+
     if (!order) {
         return <div className="text-center py-16">Loading order details...</div>;
     }
@@ -147,8 +155,17 @@ export default function OrderProcessingDetailsPage() {
           </h1>
           <p className="text-muted-foreground mt-1">Status: {order.status}</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 items-center">
             {renderActionButtons()}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline"><Printer className="mr-2 h-4 w-4" /> Print</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => handlePrint('Receipt')}>Print Receipt</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => handlePrint('Bag Tags')}>Print Bag Tags</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </div>
       </div>
       

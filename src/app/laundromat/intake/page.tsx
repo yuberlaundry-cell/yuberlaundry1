@@ -10,18 +10,29 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ScanLine, UserPlus, CheckCircle } from 'lucide-react';
+import { ScanLine, UserPlus, CheckCircle, Package } from 'lucide-react';
 import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { IntakeFlow } from '@/components/laundromat/intake-flow';
-
-const orderToCome = {
-  id: '#YL12345',
-  customer: 'Jane Doe',
-  service: 'Wash & Fold',
-  bags: 2,
-};
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { useToast } from '@/hooks/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function IntakePage() {
+  const { orders, updateOrderStatus } = useLaundromatOrders();
+  const { toast } = useToast();
+  const router = useRouter();
+  const awaitingOrders = orders.filter(o => o.status === 'Intake');
+
+  const handleStartProcessing = (orderId: string) => {
+    updateOrderStatus(orderId, 'Washing');
+    toast({
+      title: 'Order Sent to Processing',
+      description: `${orderId} is now in the 'Washing' queue.`,
+    });
+  }
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -51,6 +62,77 @@ export default function IntakePage() {
           </Dialog>
         </CardContent>
       </Card>
+      
+      <Separator />
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Awaiting Processing ({awaitingOrders.length})</CardTitle>
+          <CardDescription>
+            These orders have been checked in and are ready to be moved to the washing stage.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+            {awaitingOrders.length > 0 ? (
+                <div className="space-y-4">
+                  {/* Desktop Table */}
+                  <div className="hidden md:block">
+                      <Table>
+                          <TableHeader>
+                              <TableRow>
+                                  <TableHead>Order ID</TableHead>
+                                  <TableHead>Customer</TableHead>
+                                  <TableHead>Service</TableHead>
+                                  <TableHead>Bags</TableHead>
+                                  <TableHead><span className="sr-only">Actions</span></TableHead>
+                              </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                              {awaitingOrders.map(order => (
+                                  <TableRow key={order.id}>
+                                      <TableCell className="font-medium cursor-pointer hover:underline" onClick={() => router.push(`/laundromat/orders/${order.id.replace('#', '')}`)}>{order.id}</TableCell>
+                                      <TableCell>{order.customer}</TableCell>
+                                      <TableCell>{order.service}</TableCell>
+                                      <TableCell>{order.bags || 1}</TableCell>
+                                      <TableCell className="text-right">
+                                          <Button size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
+                                      </TableCell>
+                                  </TableRow>
+                              ))}
+                          </TableBody>
+                      </Table>
+                  </div>
+                  {/* Mobile Cards */}
+                  <div className="space-y-4 md:hidden">
+                    {awaitingOrders.map(order => (
+                      <Card key={order.id}>
+                        <CardHeader>
+                          <CardTitle className="text-base cursor-pointer hover:underline" onClick={() => router.push(`/laundromat/orders/${order.id.replace('#', '')}`)}>{order.id}</CardTitle>
+                          <CardDescription>{order.customer}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="text-sm space-y-2">
+                           <p><span className="font-medium">Service:</span> {order.service}</p>
+                           <p><span className="font-medium">Bags:</span> {order.bags || 1}</p>
+                           <Button className="w-full mt-2" size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+            ) : (
+                <div className="text-center py-12 border-2 border-dashed rounded-lg">
+                    <div className="flex justify-center mb-4">
+                        <div className="bg-secondary rounded-full p-4">
+                            <Package className="h-8 w-8 text-muted-foreground" />
+                        </div>
+                    </div>
+                    <h3 className="text-xl font-semibold">No orders are awaiting processing.</h3>
+                    <p className="text-muted-foreground">Complete an intake to see orders appear here.</p>
+                </div>
+            )}
+        </CardContent>
+      </Card>
+
     </div>
   );
 }
