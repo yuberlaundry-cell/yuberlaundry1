@@ -31,7 +31,7 @@ const steps = [
 
 const servicesConfig = [
     {
-        id: 'wash',
+        id: 'wash-fold',
         name: 'Wash & Fold',
         icon: Waves,
         description: 'For everyday laundry, bedsheets and towels.',
@@ -307,7 +307,7 @@ export default function NewBusinessOrderPage() {
                         <Separator />
                         <div className="space-y-1">
                             <h4 className="font-semibold">Services</h4>
-                            <p className="text-muted-foreground">Wash & Fold, Dry Cleaning</p>
+                            <p className="text-muted-foreground">{selectedServices.map(s => servicesConfig.find(sc => sc.id === s)?.name).join(', ')}</p>
                         </div>
                         <Separator/>
                         <div className="space-y-1">
