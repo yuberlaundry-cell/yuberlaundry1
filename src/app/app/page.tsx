@@ -18,21 +18,21 @@ const actionCards = [
         title: "Book New Order",
         description: "Place a one-time order",
         icon: ShoppingCart,
-        href: "/app/wallet" // Placeholder, logic is handled differently
+        isBooking: true
     },
     {
         id: "reorder",
         title: "Reorder Last",
         description: "Repeat your last order",
         icon: RefreshCw,
-        href: "#"
+        isBooking: true
     },
     {
         id: "schedule",
         title: "Schedule Recurring",
         description: "Set up a regular pickup",
         icon: CalendarClock,
-        href: "#"
+        isBooking: true
     },
     {
         id: "add-funds",
@@ -72,25 +72,25 @@ export default function ConsumerDashboard() {
       <Dialog>
         <div className="grid gap-4 sm:grid-cols-2">
           {actionCards.map(card => {
-              if (card.id === 'add-funds') {
-                  return (
-                      <Card key={card.id} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
-                          <Link href={card.href} className="flex flex-col h-full">
+              if (card.isBooking) {
+                   return (
+                      <DialogTrigger asChild key={card.id}>
+                          <Card className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
                               {renderActionCardContent(card)}
-                          </Link>
-                      </Card>
+                          </Card>
+                      </DialogTrigger>
                   )
               }
               return (
-                  <DialogTrigger asChild key={card.id}>
-                      <Card className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                  <Card key={card.id} className="hover:border-primary/80 hover:shadow-lg transition-all cursor-pointer">
+                      <Link href={card.href || '#'} className="flex flex-col h-full">
                           {renderActionCardContent(card)}
-                      </Card>
-                  </DialogTrigger>
+                      </Link>
+                  </Card>
               )
           })}
         </div>
-        <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+        <DialogContent className="max-w-5xl flex flex-col p-0 h-full sm:h-[90vh]">
               <DialogHeader className="p-6 pb-0 sr-only">
                 <DialogTitle>Book your laundry</DialogTitle>
                 <DialogDescription>

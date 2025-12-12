@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import React, { useState } from 'react';
@@ -185,7 +186,7 @@ export default function NewBusinessOrderPage() {
                        Step {currentStep}: {steps[currentStep-1]?.name}
                     </CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="overflow-y-auto">
                     {renderStepContent()}
                      <div className="flex justify-between mt-8 pt-6 border-t">
                         {currentStep > 1 ? (

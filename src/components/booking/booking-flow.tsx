@@ -1,5 +1,6 @@
 
 
+
 'use client';
 
 import { useState } from "react";
@@ -95,13 +96,13 @@ export function BookingFlow() {
 
     return (
         <>
-            <div className="col-span-3 md:col-span-2 p-4 md:p-8 overflow-y-auto">
+            <div className="md:col-span-2 p-4 md:p-8 flex-1 overflow-y-auto">
                 <div className="max-w-xl mx-auto">
                    {renderStepContent()}
                 </div>
             </div>
-            <div className="hidden md:block md:col-span-1 bg-muted/50 p-8 overflow-y-auto border-l flex flex-col">
-                <div className="flex-grow">
+            <div className="hidden md:flex md:col-span-1 bg-muted/50 p-8 border-l flex-col">
+                <div className="flex-grow overflow-y-auto">
                     <div className="space-y-2 mb-8">
                         <p className="text-sm font-medium">Step {currentStep} of {steps.length}</p>
                         <Progress value={progress} />

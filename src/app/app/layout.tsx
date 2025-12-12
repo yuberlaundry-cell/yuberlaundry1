@@ -76,16 +76,14 @@ const BottomNavbar = () => {
                             <span className="mt-0.5">New Order</span>
                         </div>
                     </DialogTrigger>
-                    <DialogContent className="max-w-5xl h-[90vh] flex flex-col p-0">
+                    <DialogContent className="max-w-5xl flex flex-col p-0 h-full sm:h-[90vh]">
                          <DialogHeader className="p-6 pb-0">
                             <DialogTitle>Book your laundry</DialogTitle>
                             <DialogDescription>
                                 Configure your laundry order and schedule a pickup.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="grid grid-cols-3 flex-1 overflow-hidden">
-                            <BookingFlow />
-                        </div>
+                        <BookingFlow />
                     </DialogContent>
                 </Dialog>
                 
@@ -212,7 +210,7 @@ export default function ConsumerPortalLayout({
                   <DialogTrigger asChild>
                     <Button className="w-full justify-start">New Order</Button>
                   </DialogTrigger>
-                  <DialogContent className="max-w-5xl min-h-[90vh] grid-cols-3 p-0">
+                  <DialogContent className="max-w-5xl flex flex-col p-0 h-full sm:h-[90vh]">
                       <DialogHeader className="p-6 pb-0 sr-only">
                         <DialogTitle>Book your laundry</DialogTitle>
                         <DialogDescription>
