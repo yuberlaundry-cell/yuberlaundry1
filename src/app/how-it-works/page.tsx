@@ -101,7 +101,7 @@ export default function HowItWorksPage() {
             <main>
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
                     <div className="bg-card border-b sticky top-16 z-30">
-                        <div className="container mx-auto px-6 sm:px-8 py-4 flex justify-center">
+                        <div className="container mx-auto px-4 sm:px-8 py-4 flex flex-wrap justify-center">
                             <TabsList className="bg-transparent p-0 h-auto gap-2">
                                 {services.map(service => (
                                     <TabsTrigger
@@ -109,8 +109,9 @@ export default function HowItWorksPage() {
                                         value={service.id}
                                         className={cn(
                                             "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
-                                            "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
-                                            "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
+                                            activeTab === service.id
+                                                ? "bg-primary text-primary-foreground shadow-md"
+                                                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
                                         )}
                                     >
                                         <service.icon className="mr-2 h-4 w-4" />
@@ -316,4 +317,5 @@ export default function HowItWorksPage() {
             <PublicFooter />
         </div>
     );
-}
+
+    
