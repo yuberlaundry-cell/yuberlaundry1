@@ -86,15 +86,15 @@ export default function HowItWorksPage() {
             <PublicHeader />
             <main className="flex-grow">
                 <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-                    <div className="bg-card border-b">
+                    <div className="bg-card border-b sticky top-16 z-30">
                         <div className="container mx-auto px-6 sm:px-8 py-4 flex justify-center">
                             <TabsList className="bg-transparent p-0 h-auto gap-2">
                                 {services.map(service => (
-                                    <TabsTrigger 
-                                        key={service.id} 
-                                        value={service.id} 
+                                    <TabsTrigger
+                                        key={service.id}
+                                        value={service.id}
                                         className={cn(
-                                            "rounded-full px-6 py-2 text-sm font-semibold transition-colors",
+                                            "rounded-full px-4 sm:px-6 py-2 text-sm font-semibold transition-colors",
                                             "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
                                             "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                                         )}
@@ -106,7 +106,7 @@ export default function HowItWorksPage() {
                             </TabsList>
                         </div>
                     </div>
-                    
+
                     <TabsContent value="wash-fold">
                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
                             <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -116,25 +116,25 @@ export default function HowItWorksPage() {
                                     <p>We pick up your laundry, clean it with care using a dedicated machine, and return everything neatly folded – right down to pairing your socks.</p>
                                     <p>Clothes are washed to your preferences and delivered on your schedule, so you can focus on what matters most.</p>
                                     <p>Let us take laundry off your to-do list – permanently.</p>
-                                    <Card className="mt-8">
-                                        <CardContent className="p-4">
-                                            <div className="flex flex-col sm:flex-row gap-4">
-                                                 <div className="flex-grow">
-                                                    <Label htmlFor="address-input">Where</Label>
-                                                    <AddressInput id="address-input" placeholder="Add address" onAddressSelect={() => {}} />
-                                                </div>
-                                                <div className="sm:w-auto">
-                                                    <Label>Pickup</Label>
-                                                    <Button variant="outline" className="w-full">Tonight</Button>
-                                                </div>
-                                                <div className="flex items-end">
-                                                    <Button size="icon" className="w-full sm:w-10 bg-blue-500 hover:bg-blue-600">
-                                                        <ArrowRight />
-                                                        <span className="sr-only">Schedule</span>
-                                                    </Button>
-                                                </div>
+                                    <Card className="mt-8 bg-transparent shadow-none border-none p-0">
+                                        <CardContent className="p-0">
+                                            <div className="flex flex-col sm:flex-row gap-4 p-2 border rounded-full">
+                                                 <div className="flex-grow grid grid-cols-2">
+                                                     <div className="p-2">
+                                                        <Label htmlFor="pickup-when">Pickup</Label>
+                                                        <p className="font-semibold">Tonight</p>
+                                                    </div>
+                                                    <div className="p-2 border-l">
+                                                        <Label htmlFor="address-input">Where</Label>
+                                                        <AddressInput id="address-input" placeholder="Add address" onAddressSelect={() => {}} className="border-none p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0" />
+                                                    </div>
+                                                 </div>
+                                                <Button size="icon" className="w-full sm:w-12 h-12 rounded-full bg-orange-500 hover:bg-orange-600 shrink-0">
+                                                    <ArrowRight />
+                                                    <span className="sr-only">Schedule</span>
+                                                </Button>
                                             </div>
-                                            <Badge variant="secondary" className="mt-4 bg-green-100 text-green-800">
+                                            <Badge variant="secondary" className="mt-4 bg-green-100 text-green-800 border-green-200">
                                                 Your R50 off in credits will be automatically applied
                                             </Badge>
                                         </CardContent>
@@ -152,7 +152,6 @@ export default function HowItWorksPage() {
                             </div>
                         </div>
 
-                         {/* How it works Section */}
                         <section className="py-16 md:py-24 bg-card">
                             <div className="container mx-auto px-6 sm:px-8">
                                 <div className="text-center max-w-3xl mx-auto">
@@ -173,7 +172,6 @@ export default function HowItWorksPage() {
                             </div>
                         </section>
 
-                         {/* Pricing Section */}
                         <section className="py-16 md:py-24">
                             <div className="container mx-auto px-6 sm:px-8">
                                 <div className="text-center max-w-3xl mx-auto">
@@ -281,16 +279,17 @@ export default function HowItWorksPage() {
                             </div>
                         </section>
                     </TabsContent>
-                    
+
                     <TabsContent value="hang-dry">
-                         <div className="container mx-auto px-6 sm:px-8 py-12 text-center">
-                            <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Hang Dry</h2>
-                            <p className="text-muted-foreground text-lg">Details for our Hang Dry service are coming soon.</p>
+                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24 text-center">
+                            <div className="max-w-3xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Hang Dry</h2>
+                                <p className="text-muted-foreground text-lg">Details for our Hang Dry service are coming soon.</p>
+                             </div>
                         </div>
                     </TabsContent>
                 </Tabs>
             </main>
             <PublicFooter />
         </div>
-    );
-}
+     
