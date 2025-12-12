@@ -113,7 +113,7 @@ const OrderCard = ({ order }: { order: (typeof columns)[0]['orders'][0] }) => {
           <div className="flex justify-between items-center text-sm">
             <p className="font-medium">{order.service}</p>
             <Badge
-              variant={order.sla === 'Completed' ? 'default' : 'destructive'}
+              variant={order.sla.includes('Due') ? 'destructive' : 'outline'}
             >
               {order.sla}
             </Badge>

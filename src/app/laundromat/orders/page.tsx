@@ -60,7 +60,9 @@ export default function LaundromatOrdersPage() {
             </Badge>
             </TableCell>
             <TableCell>{order.pickup}</TableCell>
-            <TableCell>{order.sla}</TableCell>
+            <TableCell>
+                <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'}>{order.sla}</Badge>
+            </TableCell>
         </TableRow>
     )
   }
@@ -80,7 +82,7 @@ export default function LaundromatOrdersPage() {
             <CardContent className="text-sm space-y-1">
                 <p><span className="font-medium">Service:</span> {order.service}</p>
                 <p><span className="font-medium">Pickup:</span> {order.pickup}</p>
-                <p><span className="font-medium">SLA:</span> {order.sla}</p>
+                <p><span className="font-medium">SLA:</span> <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'} className="ml-1">{order.sla}</Badge></p>
             </CardContent>
         </Card>
     )
