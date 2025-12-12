@@ -186,7 +186,7 @@ export default function NewBusinessOrderPage() {
                        Step {currentStep}: {steps[currentStep-1]?.name}
                     </CardTitle>
                 </CardHeader>
-                <CardContent className="overflow-y-auto">
+                <CardContent className="overflow-y-auto pb-24 md:pb-6">
                     {renderStepContent()}
                      <div className="flex justify-between mt-8 pt-6 border-t">
                         {currentStep > 1 ? (

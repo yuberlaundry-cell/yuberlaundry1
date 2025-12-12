@@ -1,6 +1,5 @@
 
 
-
 'use client';
 
 import { useState } from "react";
@@ -96,8 +95,8 @@ export function BookingFlow() {
 
     return (
         <>
-            <div className="md:col-span-2 p-4 md:p-8 flex-1 overflow-y-auto pb-24 md:pb-8">
-                <div className="max-w-xl mx-auto">
+            <div className="md:col-span-2 p-4 md:p-8 flex-1 overflow-y-auto">
+                <div className="max-w-xl mx-auto pb-24 md:pb-0">
                    {renderStepContent()}
                 </div>
             </div>
