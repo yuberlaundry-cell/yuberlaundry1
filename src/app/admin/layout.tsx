@@ -37,6 +37,7 @@ import {
   Briefcase,
   Star,
   Palette,
+  Sparkles,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -113,6 +114,8 @@ const navigationConfig = [
     links: [
         { href: '/admin/content/homepage', label: 'Homepage', icon: FileText },
         { href: '/admin/content/for-business', label: 'For Business', icon: FileText },
+        { href: '/admin/content/how-it-works', label: 'How It Works', icon: FileText },
+        { href: '/admin/content/features', label: 'Features', icon: Sparkles },
         { href: '/admin/content/pages', label: 'Site Pages', icon: FileText },
     ]
   },
@@ -248,5 +251,3 @@ export default function AdminPortalLayout({
     </SidebarProvider>
   );
 }
-
-    
