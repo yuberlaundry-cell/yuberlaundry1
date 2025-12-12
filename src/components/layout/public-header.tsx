@@ -25,16 +25,16 @@ import { getRedirectPathForRole } from '@/lib/auth';
 
 const personalMegaMenuItems = {
   "How it works": [
-    { icon: Droplets, title: "Wash & Fold", href: "/how-it-works" },
-    { icon: Shirt, title: "Dry Cleaning", href: "/how-it-works" },
-    { icon: BedDouble, title: "Duvets & Bulky Items", href: "/how-it-works" },
-    { icon: Shirt, title: "Ironing", href: "/how-it-works" },
+    { icon: Droplets, title: "Wash & Fold", href: "/how-it-works#wash-fold" },
+    { icon: Shirt, title: "Dry Cleaning", href: "/how-it-works#dry-cleaning" },
+    { icon: BedDouble, title: "Duvets & Bulky Items", href: "/how-it-works#duvets-bulky" },
+    { icon: Shirt, title: "Ironing", href: "/how-it-works#ironing" },
   ],
   "Plans & Features": [
-    { icon: Sparkles, title: "Yuber Plus", href: "/app/promotions", popular: true },
-    { icon: Sparkles, title: "Sustainability", href: "/about" },
-    { icon: Gift, title: "Gift Cards", href: "/app/wallet" },
-    { icon: Users, title: "Referral Program", href: "/app/referrals" },
+    { icon: Sparkles, title: "Yuber Plus", href: "/features#yuber-plus", popular: true },
+    { icon: Sparkles, title: "Sustainability", href: "/features#sustainability" },
+    { icon: Gift, title: "Gift Cards", href: "/features#gift-cards" },
+    { icon: Users, title: "Referral Program", href: "/features#referrals" },
   ],
   "Support": [
     { icon: CircleHelp, title: "Help Centre", href: "/app/support" },
@@ -71,9 +71,9 @@ const howItWorksMenuItems = {
       { icon: Bike, title: "Contactless Delivery", description: "Get fresh, folded laundry delivered to your door.", href: "/#features" },
     ],
     "Our Services": [
-      { icon: Droplets, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/how-it-works" },
-      { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/how-it-works" },
-      { icon: Sparkles, title: "Yuber Plus", description: "Subscription for savings and convenience.", href: "/pricing", popular: true },
+      { icon: Droplets, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/how-it-works#wash-fold" },
+      { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/how-it-works#dry-cleaning" },
+      { icon: Sparkles, title: "Yuber Plus", description: "Subscription for savings and convenience.", href: "/features#yuber-plus", popular: true },
     ]
 };
 

@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
 
 const services = [
     {
@@ -30,6 +31,11 @@ const services = [
         name: 'Duvets & Bulky Items',
         icon: BedDouble,
     },
+    {
+        id: 'ironing',
+        name: 'Ironing',
+        icon: Wind,
+    }
 ];
 
 const washAndFoldSteps = [
@@ -80,6 +86,14 @@ const dryCleaningSteps = [
 
 export default function HowItWorksPage() {
     const [activeTab, setActiveTab] = useState(services[0].id);
+
+    useEffect(() => {
+        const hash = window.location.hash.replace('#', '');
+        if (hash && services.some(s => s.id === hash)) {
+            setActiveTab(hash);
+        }
+    }, []);
+
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -285,6 +299,15 @@ export default function HowItWorksPage() {
                             <div className="max-w-3xl mx-auto">
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Duvets & Bulky Items</h2>
                                 <p className="text-muted-foreground text-lg">Details for our Duvets & Bulky Items service are coming soon.</p>
+                             </div>
+                        </div>
+                    </TabsContent>
+
+                    <TabsContent value="ironing">
+                         <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24 text-center">
+                            <div className="max-w-3xl mx-auto">
+                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Ironing</h2>
+                                <p className="text-muted-foreground text-lg">Details for our Ironing service are coming soon.</p>
                              </div>
                         </div>
                     </TabsContent>
