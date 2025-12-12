@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
@@ -56,9 +57,15 @@ export default function NewEmployeePage() {
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <Label htmlFor="email">Email</Label>
-                            <Input id="email" type="email" placeholder="john.doe@company.com" required/>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="email">Email</Label>
+                                <Input id="email" type="email" placeholder="john.doe@company.com" required/>
+                            </div>
+                             <div className="space-y-2">
+                                <Label htmlFor="phone">Phone Number</Label>
+                                <PhoneNumberInput />
+                            </div>
                         </div>
                         
                         <div className="grid sm:grid-cols-2 gap-4">

@@ -13,6 +13,7 @@ import { useToast } from "@/hooks/use-toast";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 
 
 const paymentMethods = [
@@ -79,7 +80,7 @@ export default function AccountPage() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="phone">Phone Number</Label>
-                                    <Input id="phone" type="tel" />
+                                    <PhoneNumberInput />
                                 </div>
                                 <Button type="submit">Save Changes</Button>
                             </form>

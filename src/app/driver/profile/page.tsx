@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PhoneNumberInput } from "@/components/ui/phone-number-input";
 import { Separator } from "@/components/ui/separator";
 import { useAuth } from "@/hooks/use-auth";
 import { Building, Car, HelpCircle, LogOut, Mail, Newspaper, Bell } from "lucide-react";
@@ -51,6 +52,10 @@ export default function ProfilePage() {
                          <div className="space-y-2">
                             <Label>Email</Label>
                             <Input type="email" defaultValue={user?.email} />
+                        </div>
+                        <div className="space-y-2">
+                            <Label>Phone Number</Label>
+                            <PhoneNumberInput />
                         </div>
                     </div>
                     <Separator/>

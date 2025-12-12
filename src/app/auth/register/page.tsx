@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 import { WashingMachine } from 'lucide-react';
 import Link from 'next/link';
 
@@ -40,7 +41,7 @@ export default function RegisterPage() {
             </div>
              <div className="space-y-2">
               <Label htmlFor="phone">Phone Number</Label>
-              <Input id="phone" type="tel" placeholder="+1 (555) 123-4567" required />
+              <PhoneNumberInput />
             </div>
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>

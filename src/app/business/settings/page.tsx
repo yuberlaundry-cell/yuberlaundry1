@@ -14,6 +14,7 @@ import { AddressInput } from "@/components/ui/address-input";
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 
 function AdminSettings() {
     const { user } = useAuth();
@@ -45,7 +46,7 @@ function AdminSettings() {
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="company-phone">Company Phone</Label>
-                                    <Input id="company-phone" type="tel" placeholder="+44 20 7123 4567" />
+                                    <PhoneNumberInput />
                                 </div>
                             </div>
                             <div className="space-y-2">

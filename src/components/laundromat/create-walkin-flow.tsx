@@ -12,6 +12,7 @@ import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
+import { PhoneNumberInput } from '../ui/phone-number-input';
 
 const servicesConfig = [
   { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 40.00 },
@@ -107,18 +108,12 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
               </div>
               <div className="space-y-2">
                 <Label htmlFor="customer-phone">Phone Number</Label>
-                <Input
-                  id="customer-phone"
-                  type="tel"
-                  placeholder="+27 71 123 4567"
-                  value={customer.phone}
-                  onChange={(e) => setCustomer({ ...customer, phone: e.target.value })}
-                />
+                <PhoneNumberInput />
               </div>
             </div>
             <DialogFooter>
               <Button variant="ghost" onClick={onBack}>Back to Intake Type</Button>
-              <Button onClick={handleNext} disabled={!customer.name || !customer.phone}>Continue</Button>
+              <Button onClick={handleNext} disabled={!customer.name}>Continue</Button>
             </DialogFooter>
           </>
         );

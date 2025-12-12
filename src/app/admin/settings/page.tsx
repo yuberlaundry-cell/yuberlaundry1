@@ -141,6 +141,19 @@ export default function SettingsPage() {
                                         </SelectContent>
                                     </Select>
                                 </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="phone-country">Default Country for Phone</Label>
+                                    <Select defaultValue="ZA">
+                                        <SelectTrigger id="phone-country">
+                                            <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="ZA">South Africa (+27)</SelectItem>
+                                            <SelectItem value="GB">United Kingdom (+44)</SelectItem>
+                                            <SelectItem value="US">United States (+1)</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                                 <Separator/>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                      <div className="space-y-2">
