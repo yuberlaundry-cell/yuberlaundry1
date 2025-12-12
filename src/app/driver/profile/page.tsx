@@ -49,13 +49,15 @@ export default function ProfilePage() {
                             <Label>Name</Label>
                             <Input defaultValue={`${user?.firstName} ${user?.lastName}`} />
                         </div>
-                         <div className="space-y-2">
-                            <Label>Email</Label>
-                            <Input type="email" defaultValue={user?.email} />
-                        </div>
-                        <div className="space-y-2">
-                            <Label>Phone Number</Label>
-                            <PhoneNumberInput />
+                         <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label>Email</Label>
+                                <Input type="email" defaultValue={user?.email} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label>Phone Number</Label>
+                                <PhoneNumberInput />
+                            </div>
                         </div>
                     </div>
                     <Separator/>
