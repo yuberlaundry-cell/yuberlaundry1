@@ -111,34 +111,27 @@ export default function DriverPortalLayout({
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="p-4">
-          <div className="flex items-center gap-2">
-            <Button
-              variant="ghost"
-              size="icon"
-              asChild
-              className="group-data-[collapsible=icon]:hidden"
-            >
-              <Link href="/" className="mr-auto">
+          <div className="flex items-center gap-2 group-data-[collapsible=icon]:justify-center">
+             <Link href="/" className="flex items-center gap-2 group-data-[collapsible=icon]:mr-0">
                 <WashingMachine className="h-7 w-7 text-primary" />
-              </Link>
-            </Button>
-            <div className="flex flex-col group-data-[collapsible=icon]:hidden">
-              <h1 className="font-headline text-lg font-semibold -mb-1">
-                Driver Portal
-              </h1>
-            </div>
+                 <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                    <h1 className="font-headline text-lg font-semibold -mb-1">Driver Portal</h1>
+                </div>
+             </Link>
           </div>
         </SidebarHeader>
         <SidebarContent>
           <SidebarMenu>
             {desktopNavItems.map((item) => {
-              const isActive = (item.href === '/driver' && pathname === item.href) || (item.href !== '/driver' && pathname.startsWith(item.href));
+              const isActive = (item.exact && pathname === item.href) || (!item.exact && pathname.startsWith(item.href));
               return (
-              <SidebarMenuItem key={item.href}>
+              <SidebarMenuItem key={item.href} className="px-2">
                 <SidebarMenuButton
                   asChild
                   tooltip={item.label}
                   isActive={isActive}
+                  variant="ghost"
+                  className="justify-start"
                 >
                   <Link href={item.href}>
                     <item.icon />

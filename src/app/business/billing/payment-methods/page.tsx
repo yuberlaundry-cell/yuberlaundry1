@@ -7,7 +7,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { CreditCard, MoreVertical, PlusCircle, Trash2, Edit } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
-import { usePaystackPayment } from 'react-paystack';
+import PaystackPop from '@paystack/inline-js';
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 
@@ -20,32 +20,29 @@ function AddCardForm() {
     const { user } = useAuth();
     const { toast } = useToast();
 
-    const config = {
-        reference: (new Date()).getTime().toString(),
-        email: user?.email || '',
-        amount: 0, // Amount is 0 for card authorization
-        publicKey: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
-    };
-
-    const initializePayment = usePaystackPayment(config);
-
-    const onSuccess = (reference: any) => {
-        console.log('Paystack Authorization Success:', reference);
-        toast({
-            title: "Card Added Successfully",
-            description: "The new payment method has been saved for your company.",
+    const handleAddCard = () => {
+        const paystack = new PaystackPop();
+        paystack.newTransaction({
+            key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
+            email: user?.email || '',
+            amount: 0, // Amount is 0 for card authorization
+            reference: `yuber_auth_${Date.now()}`,
+            onSuccess: (reference: any) => {
+                console.log('Paystack Authorization Success:', reference);
+                toast({
+                    title: "Card Added Successfully",
+                    description: "The new payment method has been saved for your company.",
+                });
+            },
+            onClose: () => {
+                console.log('Paystack modal closed.');
+            },
         });
-    };
-
-    const onClose = () => {
-        console.log('Paystack modal closed.');
     };
     
     return (
         <Button 
-            onClick={() => {
-                initializePayment({onSuccess, onClose});
-            }}
+            onClick={handleAddCard}
             className="w-full"
         >
             <PlusCircle className="mr-2 h-4 w-4" />
