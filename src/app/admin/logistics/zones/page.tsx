@@ -45,17 +45,21 @@ import { Input } from '@/components/ui/input';
 import { X } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
+import { AddressInput } from '@/components/ui/address-input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const zones = [
-    { id: 'ZONE-LON-N', name: 'North London', facilities: 3, drivers: 15, template: 'London - Standard Weekday', definition: 'Defined by map boundary' },
-    { id: 'ZONE-LON-S', name: 'South London', facilities: 4, drivers: 18, template: 'London - Standard Weekday', definition: 'Defined by 5 postal codes' },
-    { id: 'ZONE-MAN-C', name: 'Manchester Central', facilities: 2, drivers: 10, template: 'Manchester - All Day', definition: 'Defined by map boundary' },
+    { id: 'ZONE-LON-N', name: 'North London', country: 'United Kingdom', city: 'London', facilities: 3, drivers: 15, template: 'London - Standard Weekday', definition: 'Defined by map boundary' },
+    { id: 'ZONE-LON-S', name: 'South London', country: 'United Kingdom', city: 'London', facilities: 4, drivers: 18, template: 'London - Standard Weekday', definition: 'Defined by 5 postal codes' },
+    { id: 'ZONE-MAN-C', name: 'Manchester Central', country: 'United Kingdom', city: 'Manchester', facilities: 2, drivers: 10, template: 'Manchester - All Day', definition: 'Defined by map boundary' },
+    { id: 'ZONE-JHB-N', name: 'Joburg North', country: 'South Africa', city: 'Johannesburg', facilities: 5, drivers: 25, template: '', definition: 'Not defined' },
 ];
 
 const slotTemplates = [
-  { id: 'T-LON-01', name: 'London - Standard Weekday'},
-  { id: 'T-LON-02', name: 'London - Express'},
-  { id: 'T-MAN-01', name: 'Manchester - All Day'},
+  { id: 'T-LON-01', name: 'London - Standard Weekday', city: 'London' },
+  { id: 'T-LON-02', name: 'London - Express', city: 'London' },
+  { id: 'T-MAN-01', name: 'Manchester - All Day', city: 'Manchester' },
+  { id: 'T-JHB-01', name: 'Joburg - Weekday', city: 'Johannesburg' },
 ];
 
 
@@ -82,7 +86,7 @@ export default function ZonesPage() {
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Service Zones</h1>
           <p className="text-muted-foreground">
-            Define and manage geographic service areas and their assigned resources.
+            Define and manage geographic service areas across different cities and countries.
           </p>
         </div>
         <Dialog>
@@ -97,13 +101,40 @@ export default function ZonesPage() {
                     <DialogDescription>Define a new geographic area using the map or by listing concrete areas like postal codes.</DialogDescription>
                 </DialogHeader>
                  <form className="space-y-4 py-4">
-                    <div className="space-y-2">
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <div className="space-y-2">
+                        <Label htmlFor="zone-country">Country</Label>
+                        <Select name="zone-country">
+                          <SelectTrigger id="zone-country">
+                            <SelectValue placeholder="Select a country" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="uk">United Kingdom</SelectItem>
+                            <SelectItem value="za">South Africa</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                       <div className="space-y-2">
+                        <Label htmlFor="zone-city">City</Label>
+                        <Select name="zone-city">
+                          <SelectTrigger id="zone-city">
+                            <SelectValue placeholder="Select a city" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="london">London</SelectItem>
+                            <SelectItem value="manchester">Manchester</SelectItem>
+                            <SelectItem value="johannesburg">Johannesburg</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                     <div className="space-y-2">
                         <Label htmlFor="zone-name">Zone Name</Label>
-                        <Input id="zone-name" placeholder="e.g., Central London" />
+                        <Input id="zone-name" placeholder="e.g., Central London or Sandton" />
                     </div>
                     
                     <div className="space-y-2">
-                        <Label>Draw Zone</Label>
+                        <Label>Draw Zone on Map</Label>
                         <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border">
                             <div className="text-center text-muted-foreground">
                                 <Map className="h-12 w-12 mx-auto mb-2" />
@@ -152,7 +183,8 @@ export default function ZonesPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Zone Name</TableHead>
-                <TableHead>Definition</TableHead>
+                <TableHead>City</TableHead>
+                <TableHead>Country</TableHead>
                 <TableHead>Time Slot Template</TableHead>
                 <TableHead><span className="sr-only">Actions</span></TableHead>
               </TableRow>
@@ -164,18 +196,22 @@ export default function ZonesPage() {
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     {zone.name}
                   </TableCell>
-                   <TableCell className="text-sm text-muted-foreground">{zone.definition}</TableCell>
+                  <TableCell>{zone.city}</TableCell>
+                  <TableCell>{zone.country}</TableCell>
                   <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button variant="ghost" className="text-muted-foreground -ml-4">
-                                {zone.template} <ChevronDown className="ml-2 h-4 w-4"/>
+                                {zone.template || 'Not Set'} <ChevronDown className="ml-2 h-4 w-4"/>
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
-                            {slotTemplates.map(t => (
+                            {slotTemplates.filter(t => t.city === zone.city).map(t => (
                                 <DropdownMenuItem key={t.id}>{t.name}</DropdownMenuItem>
                             ))}
+                             {slotTemplates.filter(t => t.city === zone.city).length === 0 && (
+                                <DropdownMenuItem disabled>No templates for {zone.city}</DropdownMenuItem>
+                             )}
                         </DropdownMenuContent>
                       </DropdownMenu>
                   </TableCell>
@@ -212,3 +248,4 @@ export default function ZonesPage() {
     </div>
   );
 }
+
