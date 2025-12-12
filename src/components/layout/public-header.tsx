@@ -146,26 +146,6 @@ export function PublicHeader() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
 
-              <NavigationMenuItem>
-                <NavigationMenuTrigger>How It Works</NavigationMenuTrigger>
-                <NavigationMenuContent>
-                  <div className="grid w-[400px] lg:w-[500px] grid-cols-2 gap-6 p-6">
-                     {Object.entries(howItWorksMenuItems).map(([title, items]) => (
-                       <div key={title}>
-                          <h3 className="font-semibold text-sm text-muted-foreground mb-3">{title}</h3>
-                          <ul className="space-y-1">
-                            {items.map(item => (
-                              <ListItem key={item.title} title={item.title} href={item.href}>
-                                  {item.description}
-                                </ListItem>
-                            ))}
-                          </ul>
-                       </div>
-                    ))}
-                  </div>
-                </NavigationMenuContent>
-              </NavigationMenuItem>
-
             </NavigationMenuList>
           </NavigationMenu>
         </div>
