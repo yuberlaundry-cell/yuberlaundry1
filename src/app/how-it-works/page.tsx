@@ -317,5 +317,4 @@ export default function HowItWorksPage() {
             <PublicFooter />
         </div>
     );
-
-    
+}
