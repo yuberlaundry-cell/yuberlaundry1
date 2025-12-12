@@ -9,17 +9,11 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Button } from '../ui/button';
 import Link from 'next/link';
-
-const mockOrders = [
-    {id: '#YL12345', customer: 'Jane Doe', status: 'Washing', service: 'Wash & Fold'},
-    {id: '#YL12346', customer: 'John Smith', status: 'Folding/QC', service: 'Dry Cleaning'},
-    {id: '#YL12347', customer: 'Acme Corp', status: 'Ready', service: 'Wash & Fold'},
-    {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing'},
-    {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold'},
-];
+import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
+import { useRouter } from 'next/navigation';
 
 const statusColors: { [key: string]: string } = {
   'Ready': 'bg-green-100 text-green-800',
@@ -31,6 +25,10 @@ const statusColors: { [key: string]: string } = {
 
 
 export function RecentActivity() {
+  const { orders } = useLaundromatOrders();
+  const router = useRouter();
+  const currentOrders = orders.filter(o => o.status !== 'Completed' && o.status !== 'Cancelled').slice(0, 5);
+
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -40,34 +38,57 @@ export function RecentActivity() {
         </Button>
       </CardHeader>
       <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Service</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {mockOrders.map((order) => (
-              <TableRow key={order.id}>
-                <TableCell className="font-medium">
-                  <Link href={`/laundromat/orders/${order.id.replace('#', '')}`} className="hover:underline">
-                    {order.id}
-                  </Link>
-                </TableCell>
-                <TableCell>{order.customer}</TableCell>
-                <TableCell>{order.service}</TableCell>
-                <TableCell>
-                  <Badge variant="secondary" className={statusColors[order.status] || ''}>
-                    {order.status}
-                  </Badge>
-                </TableCell>
-              </TableRow>
+        {/* Desktop Table */}
+        <div className="hidden md:block">
+            <Table>
+            <TableHeader>
+                <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Service</TableHead>
+                <TableHead>Status</TableHead>
+                </TableRow>
+            </TableHeader>
+            <TableBody>
+                {currentOrders.map((order) => (
+                <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/laundromat/orders/${order.id.replace('#', '')}`)}>
+                    <TableCell className="font-medium">
+                        {order.id}
+                    </TableCell>
+                    <TableCell>{order.customer}</TableCell>
+                    <TableCell>{order.service}</TableCell>
+                    <TableCell>
+                    <Badge variant="secondary" className={statusColors[order.status] || ''}>
+                        {order.status}
+                    </Badge>
+                    </TableCell>
+                </TableRow>
+                ))}
+            </TableBody>
+            </Table>
+        </div>
+
+        {/* Mobile Card List */}
+        <div className="space-y-4 md:hidden">
+            {currentOrders.map((order) => (
+                <Card key={order.id} onClick={() => router.push(`/laundromat/orders/${order.id.replace('#', '')}`)}>
+                     <CardHeader>
+                        <div className="flex justify-between items-start">
+                            <div>
+                                <CardTitle className="text-base">{order.id}</CardTitle>
+                                <CardDescription>{order.customer}</CardDescription>
+                            </div>
+                             <Badge variant="secondary" className={statusColors[order.status] || ''}>
+                                {order.status}
+                            </Badge>
+                        </div>
+                    </CardHeader>
+                    <CardContent className="text-sm">
+                        <p>{order.service}</p>
+                    </CardContent>
+                </Card>
             ))}
-          </TableBody>
-        </Table>
+        </div>
       </CardContent>
     </Card>
   );
