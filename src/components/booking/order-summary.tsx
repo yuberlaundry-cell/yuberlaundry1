@@ -18,7 +18,7 @@ export function OrderSummary() {
                     </div>
                     <div>
                         <p className="font-semibold">Address</p>
-                        <p className="text-sm text-muted-foreground">12345</p>
+                        <p className="text-sm text-muted-foreground">Selected Address</p>
                     </div>
                 </li>
                  <li className="flex gap-4">
@@ -30,7 +30,7 @@ export function OrderSummary() {
                     </div>
                     <div>
                         <p className="font-semibold">Collection time</p>
-                        <p className="text-sm text-muted-foreground">day-after, 16:00 - 17:00</p>
+                        <p className="text-sm text-muted-foreground">Selected Time Slot</p>
                          <p className="text-sm text-muted-foreground">Collect from me in person</p>
                     </div>
                 </li>
@@ -42,7 +42,7 @@ export function OrderSummary() {
                     </div>
                     <div>
                         <p className="font-semibold text-primary">Delivery time</p>
-                        <p className="text-sm text-muted-foreground">tomorrow, 15:00 - 16:00</p>
+                        <p className="text-sm text-muted-foreground">Selected Time Slot</p>
                         <p className="text-sm text-muted-foreground">Deliver to me in person</p>
                     </div>
                 </li>
