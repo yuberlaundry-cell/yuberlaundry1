@@ -78,7 +78,7 @@ export default function ReadyForHandoffPage() {
             </TabsTrigger>
         </TabsList>
         <TabsContent value="driver">
-             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                 {filteredDriverOrders.map((order) => (
                     <Card key={order.id}>
                         <CardHeader>
@@ -107,14 +107,14 @@ export default function ReadyForHandoffPage() {
                     </Card>
                 ))}
                  {filteredDriverOrders.length === 0 && (
-                    <Card className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
+                    <Card className="sm:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
                         <p>No orders awaiting driver handoff.</p>
                     </Card>
                 )}
             </div>
         </TabsContent>
          <TabsContent value="customer">
-             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
+             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-4">
                 {filteredPickupOrders.map((order) => (
                     <Card key={order.id}>
                         <CardHeader>
@@ -136,7 +136,7 @@ export default function ReadyForHandoffPage() {
                     </Card>
                 ))}
                  {filteredPickupOrders.length === 0 && (
-                    <Card className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
+                    <Card className="sm:col-span-2 lg:col-span-3 text-center text-muted-foreground py-12 border-dashed">
                         <p>No orders awaiting customer pickup.</p>
                     </Card>
                 )}
