@@ -43,7 +43,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { LaundromatOrdersProvider } from '@/hooks/use-laundromat-orders';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Separator } from '@/components/ui/separator';
 
 const desktopNavConfig = [
@@ -121,6 +121,12 @@ const BottomNavbar = () => {
                         </div>
                     </SheetTrigger>
                     <SheetContent side="bottom" className="rounded-t-2xl">
+                        <SheetHeader>
+                            <SheetTitle className="sr-only">More Options</SheetTitle>
+                            <SheetDescription className="sr-only">
+                                Access additional menu items like financials, settings, and more.
+                            </SheetDescription>
+                        </SheetHeader>
                         <div className="space-y-2 py-4">
                             {moreMenuItems.map((item) => (
                                 <Button key={item.href} variant="ghost" className="w-full justify-start text-base py-6" asChild>
