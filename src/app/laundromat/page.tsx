@@ -39,10 +39,11 @@ const kpiCards = [
     description: 'Awaiting driver pickup',
   },
   {
-    title: 'Completed Today',
-    value: '56',
-    icon: CheckCheck,
-    description: 'Past 24 hours',
+    title: 'Delayed Orders',
+    value: '2',
+    icon: AlertCircle,
+    description: 'Past SLA',
+    color: 'text-destructive',
   },
 ];
 
@@ -58,7 +59,7 @@ export default function LaundromatDashboard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {kpiCards.map((card) => (
           <Card key={card.title}>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -66,7 +67,7 @@ export default function LaundromatDashboard() {
               <card.icon className="h-4 w-4 text-muted-foreground" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
+              <div className={`text-2xl font-bold ${card.color || ''}`}>{card.value}</div>
               <p className="text-xs text-muted-foreground">{card.description}</p>
             </CardContent>
           </Card>

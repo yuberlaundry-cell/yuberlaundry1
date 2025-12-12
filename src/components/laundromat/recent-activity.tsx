@@ -47,6 +47,7 @@ export function RecentActivity() {
                 <TableHead>Customer</TableHead>
                 <TableHead>Service</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>SLA</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -61,6 +62,9 @@ export function RecentActivity() {
                     <Badge variant="secondary" className={statusColors[order.status] || ''}>
                         {order.status}
                     </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'}>{order.sla}</Badge>
                     </TableCell>
                 </TableRow>
                 ))}
@@ -83,8 +87,9 @@ export function RecentActivity() {
                             </Badge>
                         </div>
                     </CardHeader>
-                    <CardContent className="text-sm">
+                    <CardContent className="text-sm flex justify-between items-center">
                         <p>{order.service}</p>
+                        <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'}>{order.sla}</Badge>
                     </CardContent>
                 </Card>
             ))}

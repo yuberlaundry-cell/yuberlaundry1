@@ -100,6 +100,7 @@ export default function IntakePage() {
                                   <TableHead>Service</TableHead>
                                   <TableHead>Weight (kg)</TableHead>
                                   <TableHead>Source</TableHead>
+                                  <TableHead>SLA</TableHead>
                                   <TableHead><span className="sr-only">Actions</span></TableHead>
                               </TableRow>
                           </TableHeader>
@@ -114,6 +115,9 @@ export default function IntakePage() {
                                         <Badge variant={getOrderSource(order) === 'Driver' ? 'default' : 'secondary'}>
                                           {getOrderSource(order)}
                                         </Badge>
+                                      </TableCell>
+                                      <TableCell>
+                                        <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'}>{order.sla}</Badge>
                                       </TableCell>
                                       <TableCell className="text-right">
                                           <Button size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
@@ -138,6 +142,9 @@ export default function IntakePage() {
                               <Badge variant={getOrderSource(order) === 'Driver' ? 'default' : 'secondary'} className="ml-2">
                                 {getOrderSource(order)}
                               </Badge>
+                           </p>
+                           <p><span className="font-medium">SLA:</span>
+                                <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'} className="ml-2">{order.sla}</Badge>
                            </p>
                            <Button className="w-full mt-2" size="sm" onClick={() => handleStartProcessing(order.id)}>Start Processing</Button>
                         </CardContent>
