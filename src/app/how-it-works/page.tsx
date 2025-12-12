@@ -11,6 +11,7 @@ import { Droplets, Shirt, Wind } from "lucide-react";
 import Image from 'next/image';
 import { AddressInput } from '@/components/ui/address-input';
 import { Badge } from '@/components/ui/badge';
+import { Label } from '@/components/ui/label';
 
 const services = [
     {
@@ -117,5 +118,3 @@ export default function HowItWorksPage() {
         </div>
     );
 }
-
-    
