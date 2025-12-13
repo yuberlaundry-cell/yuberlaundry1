@@ -246,7 +246,27 @@ const driverNotifications = {
 const laundromatNotifications = {
     "Order Flow": [
         { 
-            id: 'laundromat_new_order', 
+            id: 'laundromat_new_order_assigned', 
+            title: 'New Order Allocated', 
+            channels: {
+                email: { enabled: true, subject: 'New Order {{order.id}} Allocated to Your Facility', body: 'A new order has been allocated to you. Please confirm in your portal.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'New order {{order.id}} has been allocated to your facility.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'laundromat_driver_enroute_dropoff', 
+            title: 'Driver En-route for Drop-off', 
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Driver {{driver.name}} is on the way to drop off new orders (ETA: {{driver.eta}}).' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'laundromat_order_arrived', 
             title: 'New Order Arrived', 
             channels: {
                 email: { enabled: true, subject: 'New Order {{order.id}} at your facility', body: 'A new order has arrived.' },
@@ -493,3 +513,6 @@ export default function NotificationTemplatesPage() {
     
 
 
+
+
+    
