@@ -85,6 +85,7 @@ const allDrivers = [
 export default function ZonesPage() {
   const [postalCodes, setPostalCodes] = useState<string[]>(['SW1A', 'SW1E', 'SW1P', 'SW1V', 'SW1Y']);
   const [inputValue, setInputValue] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && inputValue.trim() !== '') {
@@ -140,7 +141,7 @@ export default function ZonesPage() {
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="zone-city">City</Label>
-                                <Select name="zone-city">
+                                <Select name="zone-city" onValueChange={setSelectedCity}>
                                 <SelectTrigger id="zone-city">
                                     <SelectValue placeholder="Select a city" />
                                 </SelectTrigger>
@@ -152,6 +153,21 @@ export default function ZonesPage() {
                                 </Select>
                             </div>
                         </div>
+
+                        <div className="space-y-2">
+                            <Label htmlFor="zone-template">Time Slot Template</Label>
+                            <Select name="zone-template" disabled={!selectedCity}>
+                                <SelectTrigger id="zone-template">
+                                    <SelectValue placeholder={selectedCity ? "Select a template" : "Select a city first"} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {slotTemplates.filter(t => t.city === selectedCity).map(t => (
+                                        <SelectItem key={t.id} value={t.id}>{t.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+
 
                          <div className="space-y-4 rounded-lg border p-4">
                             <Label className="font-semibold text-base">Logistics Model</Label>
