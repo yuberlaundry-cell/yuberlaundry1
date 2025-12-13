@@ -68,6 +68,16 @@ export default function WalletPage() {
     });
   };
 
+  const handleRedeemGiftCard = (e: React.FormEvent) => {
+    e.preventDefault();
+    const formData = new FormData(e.target as HTMLFormElement);
+    const code = formData.get('gift-card-code') as string;
+    toast({
+        title: "Gift Card Redeemed!",
+        description: `R100.00 has been added to your wallet from gift card ${code}.`,
+    });
+  }
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -170,6 +180,17 @@ export default function WalletPage() {
                         {isProcessingTopUp ? 'Processing...' : 'Add Funds'}
                     </Button>
                 </CardFooter>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Gift className="h-5 w-5 text-primary"/>Redeem a Gift Card</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <form className="flex gap-2" onSubmit={handleRedeemGiftCard}>
+                        <Input id="gift-card-code" name="gift-card-code" placeholder="Enter gift card code" />
+                        <Button type="submit">Redeem</Button>
+                    </form>
+                </CardContent>
             </Card>
         </div>
       </div>

@@ -48,7 +48,8 @@ function AddCardForm() {
         paystack.newTransaction({
             key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
             email: user?.email || '',
-            amount: 0, // Amount is 0 for card authorization
+            amount: 5000, // Authorize for R50, which will be reversed.
+            currency: 'ZAR',
             reference: `yuber_auth_${Date.now()}`,
             onSuccess: (reference: any) => {
                 // In a real app, you'd send this reference to your backend to verify
@@ -235,7 +236,7 @@ export default function AccountPage() {
                                     <DialogHeader>
                                         <DialogTitle>Add a New Payment Method</DialogTitle>
                                         <DialogDescription>
-                                            Your card details are securely stored with Paystack.
+                                            Your card details are securely handled by Paystack. We perform a temporary R50 authorization to validate your card, which is immediately reversed.
                                         </DialogDescription>
                                     </DialogHeader>
                                     <div className="pt-4">
@@ -266,9 +267,6 @@ export default function AccountPage() {
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
                                             {!method.isPrimary && <DropdownMenuItem>Set as Primary</DropdownMenuItem>}
-                                            <DropdownMenuItem>
-                                                <Edit className="mr-2 h-4 w-4" /> Edit
-                                            </DropdownMenuItem>
                                             <DropdownMenuItem className="text-destructive">
                                                 <Trash2 className="mr-2 h-4 w-4" /> Delete
                                             </DropdownMenuItem>
