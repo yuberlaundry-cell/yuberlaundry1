@@ -45,8 +45,9 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
 
-const companies = [
+const initialCompanies = [
     { id: 'acme-corp', name: 'Acme Corp', industry: 'Technology', admin: 'John Smith', plan: 'Business Pro', status: 'Active' },
     { id: 'stark-industries', name: 'Stark Industries', industry: 'Defense', admin: 'Tony Stark', plan: 'Enterprise', status: 'Active' },
     { id: 'wayne-enterprises', name: 'Wayne Enterprises', industry: 'Conglomerate', admin: 'Bruce Wayne', plan: 'Business Pro', status: 'Active' },
@@ -63,13 +64,26 @@ const statusColors: { [key: string]: string } = {
 export default function B2BAccountsPage() {
     const { toast } = useToast();
     const router = useRouter();
+    const [companies, setCompanies] = useState(initialCompanies);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
     
-    const handleAddCompany = (e: React.FormEvent) => {
+    const handleAddCompany = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const newCompany = {
+            id: (formData.get('company-name') as string).toLowerCase().replace(/\s+/g, '-'),
+            name: formData.get('company-name') as string,
+            industry: 'New',
+            admin: formData.get('admin-name') as string,
+            plan: formData.get('company-plan') === 'pro' ? 'Business Pro' : 'Enterprise',
+            status: 'Pending',
+        };
+        setCompanies(prev => [newCompany, ...prev]);
         toast({
             title: "Company Onboarded!",
             description: "The new corporate account has been created and an invite has been sent to the admin.",
         });
+        setIsDialogOpen(false);
     }
 
   return (
@@ -79,7 +93,7 @@ export default function B2BAccountsPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">B2B Accounts</h1>
                 <p className="text-muted-foreground">Onboard and manage corporate client accounts.</p>
             </div>
-            <Dialog>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                     <Button className="w-full sm:w-auto">
                         <PlusCircle className="mr-2 h-4 w-4" /> Add Company
@@ -95,16 +109,16 @@ export default function B2BAccountsPage() {
                     <form className="space-y-4" onSubmit={handleAddCompany}>
                         <div className="space-y-2">
                             <Label htmlFor="company-name">Company Name</Label>
-                            <Input id="company-name" placeholder="e.g., Acme Corporation" required />
+                            <Input id="company-name" name="company-name" placeholder="e.g., Acme Corporation" required />
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="admin-name">Admin Full Name</Label>
-                                <Input id="admin-name" placeholder="John Smith" required />
+                                <Input id="admin-name" name="admin-name" placeholder="John Smith" required />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="admin-email">Admin Email</Label>
-                                <Input id="admin-email" type="email" placeholder="john@acme.com" required />
+                                <Input id="admin-email" name="admin-email" type="email" placeholder="john@acme.com" required />
                             </div>
                         </div>
                         <div className="space-y-2">
