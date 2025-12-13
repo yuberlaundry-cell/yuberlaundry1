@@ -87,7 +87,7 @@ export default function ZonesPage() {
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Service Zones</h1>
           <p className="text-muted-foreground">
-            Define and manage geographic service areas across different cities and countries.
+            Define and manage geographic service areas and their assigned time slot templates.
           </p>
         </div>
         <Dialog>
@@ -209,6 +209,7 @@ export default function ZonesPage() {
                             </Button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent>
+                            <DropdownMenuItem onSelect={() => {}}>Not Set</DropdownMenuItem>
                             {slotTemplates.filter(t => t.city === zone.city).map(t => (
                                 <DropdownMenuItem key={t.id}>{t.name}</DropdownMenuItem>
                             ))}
@@ -234,6 +235,13 @@ export default function ZonesPage() {
                                <DropdownMenuItem><Building className="mr-2 h-4 w-4"/> Assign Facilities</DropdownMenuItem>
                                <DropdownMenuItem><Truck className="mr-2 h-4 w-4"/> Assign Drivers</DropdownMenuItem>
                           </DropdownMenuSubContent>
+                        </DropdownMenuSub>
+                         <DropdownMenuSub>
+                            <DropdownMenuSubTrigger><Clock className="mr-2 h-4 w-4" /> Manage Templates</DropdownMenuSubTrigger>
+                            <DropdownMenuSubContent>
+                                <DropdownMenuItem asChild><Link href="/admin/logistics/slots">View All Templates</Link></DropdownMenuItem>
+                                <DropdownMenuItem asChild><Link href="/admin/logistics/slots">Create New Template</Link></DropdownMenuItem>
+                            </DropdownMenuSubContent>
                         </DropdownMenuSub>
                         <DropdownMenuItem className="text-destructive">
                           <Trash2 className="mr-2 h-4 w-4" /> Delete Zone

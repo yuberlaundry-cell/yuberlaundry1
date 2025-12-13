@@ -72,7 +72,6 @@ const navigationConfig = [
    {
     title: 'Logistics & Routing',
     links: [
-      { href: '/admin/logistics/slots', label: 'Time Slots', icon: Clock },
       { href: '/admin/logistics/zones', label: 'Service Zones', icon: Map },
       { href: '/admin/logistics/routing', label: 'Routing Rules', icon: Waypoints },
     ],
