@@ -351,7 +351,7 @@ export default function OrderProcessingDetailsPage() {
                      <div>
                         <h4 className="font-semibold mb-1">Schedule</h4>
                         <p className="text-muted-foreground">Pickup: {order.pickup}</p>
-                        <p className="text-muted-foreground">SLA: <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'} className="ml-1">{order.sla}</Badge></p>
+                        <div className="text-muted-foreground flex items-center">SLA: <Badge variant={order.sla.includes('Due') ? 'destructive' : 'outline'} className="ml-1">{order.sla}</Badge></div>
                     </div>
                     
                 </CardContent>
