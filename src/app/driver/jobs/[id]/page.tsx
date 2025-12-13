@@ -3,13 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building, Ban, UserX } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building, Ban, UserX, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useParams, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import SignatureCanvas from 'react-signature-canvas';
 
 
 const jobData = {
@@ -78,6 +79,7 @@ export default function JobDetailsPage() {
 
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+    const sigCanvas = useRef<SignatureCanvas | null>(null);
     const { toast } = useToast();
     
     const [isModalOpen, setModalOpen] = useState(false);
@@ -191,6 +193,10 @@ export default function JobDetailsPage() {
 
         return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
     }
+    
+    const clearSignature = () => {
+        sigCanvas.current?.clear();
+    };
 
     const renderModalContent = () => {
         switch (modalContent) {
@@ -259,10 +265,23 @@ export default function JobDetailsPage() {
                                 Ask the customer to sign on the screen to confirm delivery.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="w-full aspect-video bg-muted rounded-lg flex items-center justify-center">
-                            <p className="text-muted-foreground italic">Signature pad placeholder</p>
+                        <div className="w-full aspect-video bg-muted rounded-lg border">
+                           <SignatureCanvas
+                                ref={sigCanvas}
+                                penColor='black'
+                                canvasProps={{ className: 'w-full h-full' }}
+                            />
                         </div>
-                        <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Confirm Signature</Button>
+                         <div className="grid grid-cols-2 gap-2">
+                            <Button variant="outline" onClick={clearSignature}>
+                                <Trash2 className="mr-2" />
+                                Clear
+                            </Button>
+                            <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>
+                                <Check className="mr-2" />
+                                Confirm Signature
+                            </Button>
+                        </div>
                     </>
                 );
             default:
@@ -402,5 +421,3 @@ export default function JobDetailsPage() {
         </div>
     )
 }
-
-    
