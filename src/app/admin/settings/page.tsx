@@ -10,6 +10,7 @@ import { Separator } from '@/components/ui/separator';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 const featureFlagCategories = {
     "Core Order & Service Features": [
@@ -58,6 +59,15 @@ const featureFlagCategories = {
 
 
 export default function SettingsPage() {
+     const { toast } = useToast();
+
+    const handleSave = (section: string) => {
+        toast({
+            title: `${section} Settings Saved`,
+            description: "Your changes have been successfully saved.",
+        });
+    }
+
     return (
         <div className="space-y-6">
             <div>
@@ -80,208 +90,219 @@ export default function SettingsPage() {
                 <TabsContent value="general" className="mt-4">
                     <div className="space-y-6">
                         <Card>
-                            <CardHeader>
-                                <CardTitle>General Settings</CardTitle>
-                            </CardHeader>
-                            <CardContent className="space-y-6 max-w-lg">
-                                <div className="space-y-2">
-                                    <Label htmlFor="platform-name">Platform Name</Label>
-                                    <Input id="platform-name" defaultValue="Yuber Laundry" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="support-email">Support Email</Label>
-                                    <Input id="support-email" type="email" defaultValue="support@yuberlaundry.com" />
-                                </div>
-                                <Button>Save General Settings</Button>
-                            </CardContent>
+                             <form onSubmit={(e) => {e.preventDefault(); handleSave('General')}}>
+                                <CardHeader>
+                                    <CardTitle>General Settings</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-6 max-w-lg">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="platform-name">Platform Name</Label>
+                                        <Input id="platform-name" defaultValue="Yuber Laundry" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="support-email">Support Email</Label>
+                                        <Input id="support-email" type="email" defaultValue="support@yuberlaundry.com" />
+                                    </div>
+                                    <Button type="submit">Save General Settings</Button>
+                                </CardContent>
+                            </form>
                         </Card>
                          <Card>
-                            <CardHeader>
-                                <CardTitle>Localization & Units</CardTitle>
-                                <CardDescription>Set the default country, currency, and units for the platform.</CardDescription>
-                            </CardHeader>
-                            <CardContent className="space-y-6 max-w-lg">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                             <form onSubmit={(e) => {e.preventDefault(); handleSave('Localization')}}>
+                                <CardHeader>
+                                    <CardTitle>Localization & Units</CardTitle>
+                                    <CardDescription>Set the default country, currency, and units for the platform.</CardDescription>
+                                </CardHeader>
+                                <CardContent className="space-y-6 max-w-lg">
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="country">Default Country</Label>
+                                            <Select defaultValue="ZA">
+                                                <SelectTrigger id="country">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="ZA">South Africa</SelectItem>
+                                                    <SelectItem value="GB">United Kingdom</SelectItem>
+                                                    <SelectItem value="US">United States</SelectItem>
+                                                    <SelectItem value="CA">Canada</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="currency">Default Currency</Label>
+                                            <Select defaultValue="ZAR">
+                                                <SelectTrigger id="currency">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="ZAR">ZAR (R)</SelectItem>
+                                                    <SelectItem value="GBP">GBP (£)</SelectItem>
+                                                    <SelectItem value="USD">USD ($)</SelectItem>
+                                                    <SelectItem value="CAD">CAD ($)</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                    </div>
                                     <div className="space-y-2">
-                                        <Label htmlFor="country">Default Country</Label>
+                                        <Label htmlFor="locale">Locale</Label>
+                                        <Select defaultValue="en-ZA">
+                                            <SelectTrigger id="locale">
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="en-ZA">English (South Africa)</SelectItem>
+                                                <SelectItem value="en-GB">English (United Kingdom)</SelectItem>
+                                                <SelectItem value="en-US">English (United States)</SelectItem>
+                                                <SelectItem value="fr-CA">French (Canada)</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="phone-country">Default Country for Phone</Label>
                                         <Select defaultValue="ZA">
-                                            <SelectTrigger id="country">
+                                            <SelectTrigger id="phone-country">
                                                 <SelectValue />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="ZA">South Africa</SelectItem>
-                                                <SelectItem value="GB">United Kingdom</SelectItem>
-                                                <SelectItem value="US">United States</SelectItem>
-                                                <SelectItem value="CA">Canada</SelectItem>
+                                                <SelectItem value="ZA">South Africa (+27)</SelectItem>
+                                                <SelectItem value="GB">United Kingdom (+44)</SelectItem>
+                                                <SelectItem value="US">United States (+1)</SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
-                                    <div className="space-y-2">
-                                        <Label htmlFor="currency">Default Currency</Label>
-                                        <Select defaultValue="ZAR">
-                                            <SelectTrigger id="currency">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="ZAR">ZAR (R)</SelectItem>
-                                                <SelectItem value="GBP">GBP (£)</SelectItem>
-                                                <SelectItem value="USD">USD ($)</SelectItem>
-                                                <SelectItem value="CAD">CAD ($)</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                    <Separator/>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                         <div className="space-y-2">
+                                            <Label htmlFor="weight-unit">Weight Unit</Label>
+                                            <Select defaultValue="kg">
+                                                <SelectTrigger id="weight-unit">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="kg">Kilograms (kg)</SelectItem>
+                                                    <SelectItem value="lbs">Pounds (lbs)</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
+                                         <div className="space-y-2">
+                                            <Label htmlFor="distance-unit">Distance Unit</Label>
+                                            <Select defaultValue="km">
+                                                <SelectTrigger id="distance-unit">
+                                                    <SelectValue />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="km">Kilometers (km)</SelectItem>
+                                                    <SelectItem value="miles">Miles (mi)</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="locale">Locale</Label>
-                                    <Select defaultValue="en-ZA">
-                                        <SelectTrigger id="locale">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="en-ZA">English (South Africa)</SelectItem>
-                                            <SelectItem value="en-GB">English (United Kingdom)</SelectItem>
-                                            <SelectItem value="en-US">English (United States)</SelectItem>
-                                            <SelectItem value="fr-CA">French (Canada)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="phone-country">Default Country for Phone</Label>
-                                    <Select defaultValue="ZA">
-                                        <SelectTrigger id="phone-country">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="ZA">South Africa (+27)</SelectItem>
-                                            <SelectItem value="GB">United Kingdom (+44)</SelectItem>
-                                            <SelectItem value="US">United States (+1)</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-                                </div>
-                                <Separator/>
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                     <div className="space-y-2">
-                                        <Label htmlFor="weight-unit">Weight Unit</Label>
-                                        <Select defaultValue="kg">
-                                            <SelectTrigger id="weight-unit">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="kg">Kilograms (kg)</SelectItem>
-                                                <SelectItem value="lbs">Pounds (lbs)</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                     <div className="space-y-2">
-                                        <Label htmlFor="distance-unit">Distance Unit</Label>
-                                        <Select defaultValue="km">
-                                            <SelectTrigger id="distance-unit">
-                                                <SelectValue />
-                                            </SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="km">Kilometers (km)</SelectItem>
-                                                <SelectItem value="miles">Miles (mi)</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </div>
-                                </div>
-                                <Button>Save Localization Settings</Button>
-                            </CardContent>
+                                    <Button type="submit">Save Localization Settings</Button>
+                                </CardContent>
+                            </form>
                         </Card>
                     </div>
                 </TabsContent>
                  <TabsContent value="integrations" className="mt-4">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>API Integrations</CardTitle>
-                             <CardDescription>Manage keys and status for third-party services.</CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-6 max-w-lg">
-                            <div className="space-y-4 rounded-lg border p-4">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="paystack-toggle" className="text-base font-semibold">Paystack</Label>
-                                    <Switch id="paystack-toggle" defaultChecked />
+                     <form onSubmit={(e) => {e.preventDefault(); handleSave('Integrations')}}>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>API Integrations</CardTitle>
+                                 <CardDescription>Manage keys and status for third-party services.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6 max-w-lg">
+                                <div className="space-y-4 rounded-lg border p-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="paystack-toggle" className="text-base font-semibold">Paystack</Label>
+                                        <Switch id="paystack-toggle" defaultChecked />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="paystack-public">Public Key</Label>
+                                        <Input id="paystack-public" type="text" placeholder="pk_test_xxxxxxxxxxxxxxxx" />
+                                        <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="paystack-secret">Secret Key</Label>
+                                        <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
+                                        <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="paystack-public">Public Key</Label>
-                                    <Input id="paystack-public" type="text" placeholder="pk_test_xxxxxxxxxxxxxxxx" />
-                                    <p className="text-xs text-muted-foreground">Used on the frontend to initiate transactions.</p>
+                                
+                                <div className="space-y-4 rounded-lg border p-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="google-maps-toggle" className="text-base font-semibold">Google Maps</Label>
+                                        <Switch id="google-maps-toggle" defaultChecked />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="google-maps-key">API Key</Label>
+                                        <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
+                                        <p className="text-xs text-muted-foreground">Used for address autocomplete, maps, and navigation.</p>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="paystack-secret">Secret Key</Label>
-                                    <Input id="paystack-secret" type="password" defaultValue="sk_test_xxxxxxxxxxxxxxxx" />
-                                    <p className="text-xs text-muted-foreground">Used on the backend for API requests and webhook verification.</p>
-                                </div>
-                            </div>
-                            
-                            <div className="space-y-4 rounded-lg border p-4">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="google-maps-toggle" className="text-base font-semibold">Google Maps</Label>
-                                    <Switch id="google-maps-toggle" defaultChecked />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="google-maps-key">API Key</Label>
-                                    <Input id="google-maps-key" type="password" defaultValue="AIzaSyxxxxxxxxxxxxxxxx" />
-                                    <p className="text-xs text-muted-foreground">Used for address autocomplete, maps, and navigation.</p>
-                                </div>
-                            </div>
 
-                             <div className="space-y-4 rounded-lg border p-4">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="twilio-toggle" className="text-base font-semibold">Twilio</Label>
-                                    <Switch id="twilio-toggle" defaultChecked />
+                                 <div className="space-y-4 rounded-lg border p-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="twilio-toggle" className="text-base font-semibold">Twilio</Label>
+                                        <Switch id="twilio-toggle" defaultChecked />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="twilio-sid">Account SID</Label>
+                                        <Input id="twilio-sid" type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="twilio-token">Auth Token</Label>
+                                        <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="twilio-sid">Account SID</Label>
-                                    <Input id="twilio-sid" type="text" placeholder="ACxxxxxxxxxxxxxxxxxxxxxxxx" />
-                                </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="twilio-token">Auth Token</Label>
-                                    <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
-                                </div>
-                            </div>
 
-                            <div className="space-y-4 rounded-lg border p-4">
-                                <div className="flex items-center justify-between">
-                                    <Label htmlFor="sendgrid-toggle" className="text-base font-semibold">SendGrid</Label>
-                                    <Switch id="sendgrid-toggle" />
+                                <div className="space-y-4 rounded-lg border p-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="sendgrid-toggle" className="text-base font-semibold">SendGrid</Label>
+                                        <Switch id="sendgrid-toggle" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="sendgrid-key">API Key</Label>
+                                        <Input id="sendgrid-key" type="password" defaultValue="SG.xxxxxxxxxxxxxxxx" />
+                                        <p className="text-xs text-muted-foreground">Used for sending transactional emails.</p>
+                                    </div>
                                 </div>
-                                <div className="space-y-2">
-                                    <Label htmlFor="sendgrid-key">API Key</Label>
-                                    <Input id="sendgrid-key" type="password" defaultValue="SG.xxxxxxxxxxxxxxxx" />
-                                    <p className="text-xs text-muted-foreground">Used for sending transactional emails.</p>
-                                </div>
-                            </div>
-                            
-                            <Button>Save Integration Settings</Button>
-                        </CardContent>
-                    </Card>
+                                
+                                <Button type="submit">Save Integration Settings</Button>
+                            </CardContent>
+                        </Card>
+                     </form>
                 </TabsContent>
                 <TabsContent value="feature-flags" className="mt-4">
-                    <div className="space-y-6">
-                        {Object.entries(featureFlagCategories).map(([category, flags]) => (
-                            <Card key={category}>
-                                <CardHeader>
-                                    <CardTitle>{category}</CardTitle>
-                                </CardHeader>
-                                <CardContent className="space-y-6">
-                                    {flags.map(flag => (
-                                        <div key={flag.id} className="flex items-start justify-between rounded-lg border p-4">
-                                            <div className="space-y-0.5">
-                                                <Label htmlFor={flag.id} className="text-base">
-                                                    {flag.label}
-                                                </Label>
-                                                <p className="text-sm text-muted-foreground">
-                                                    {flag.description}
-                                                </p>
+                     <form onSubmit={(e) => {e.preventDefault(); handleSave('Feature Flag')}}>
+                        <div className="space-y-6">
+                            {Object.entries(featureFlagCategories).map(([category, flags]) => (
+                                <Card key={category}>
+                                    <CardHeader>
+                                        <CardTitle>{category}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="space-y-6">
+                                        {flags.map(flag => (
+                                            <div key={flag.id} className="flex items-start justify-between rounded-lg border p-4">
+                                                <div className="space-y-0.5">
+                                                    <Label htmlFor={flag.id} className="text-base">
+                                                        {flag.label}
+                                                    </Label>
+                                                    <p className="text-sm text-muted-foreground">
+                                                        {flag.description}
+                                                    </p>
+                                                </div>
+                                                <Switch id={flag.id} defaultChecked={flag.defaultChecked} />
                                             </div>
-                                            <Switch id={flag.id} defaultChecked={flag.defaultChecked} />
-                                        </div>
-                                    ))}
-                                </CardContent>
-                            </Card>
-                        ))}
-                    </div>
+                                        ))}
+                                    </CardContent>
+                                </Card>
+                            ))}
+                             <div className="flex justify-end">
+                                <Button type="submit">Save All Feature Flags</Button>
+                            </div>
+                        </div>
+                     </form>
                 </TabsContent>
                 <TabsContent value="advanced" className="mt-4">
                     <Card className="border-destructive">
