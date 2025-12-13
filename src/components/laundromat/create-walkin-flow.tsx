@@ -7,18 +7,22 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
-import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote, Loader2 } from 'lucide-react';
+import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote, Loader2, User, Truck, Calendar as CalendarIcon, MapPin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 import { PhoneNumberInput } from '../ui/phone-number-input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { ArrowLeft } from 'lucide-react';
+import { AddressInput } from '../ui/address-input';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
 
 const servicesConfig = [
   { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 40.00 },
   { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, model: 'per_item', price: 80.00 },
 ];
+
+const deliveryFee = 25.00;
 
 interface CreateWalkinFlowProps {
     onComplete: () => void;
@@ -27,17 +31,22 @@ interface CreateWalkinFlowProps {
 
 export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) {
   const [step, setStep] = useState(1);
-  const [customer, setCustomer] = useState({ name: '', phone: '' });
+  const [customer, setCustomer] = useState({ name: '', phone: '', email: '' });
   const [orderItems, setOrderItems] = useState<{ id: string; name: string; model: string; price: number; value: number }[]>([]);
   const [newOrderId, setNewOrderId] = useState('');
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [isProcessingYoco, setIsProcessingYoco] = useState(false);
+  const [deliveryOption, setDeliveryOption] = useState('pickup');
+  const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [deliverySlot, setDeliverySlot] = useState('');
+
   const { toast } = useToast();
   const { addOrder } = useLaundromatOrders();
 
   const subtotal = orderItems.reduce((acc, item) => acc + (item.price * item.value), 0);
   const tax = subtotal * 0; // Assuming 0 tax for simplicity
-  const total = subtotal + tax;
+  const finalDeliveryFee = deliveryOption === 'deliver' ? deliveryFee : 0;
+  const total = subtotal + tax + finalDeliveryFee;
 
   const handleNext = () => setStep((s) => s + 1);
   const handleBack = () => step === 1 ? onBack() : setStep((s) => s - 1);
@@ -75,7 +84,7 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
         items: orderItems, isBilled: true,
     });
     toast({ title: `Order ${orderId} Created`, description: `The order for ${customer.name} is now in the system.` });
-    setStep(4);
+    setStep(5); // Move to the final confirmation step
   }
 
   const handlePrint = (type: 'Receipt' | 'Bag Tags') => {
@@ -103,8 +112,9 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                 <CardDescription>Step 1: Enter customer details.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2"><Label htmlFor="customer-name">Customer Name</Label><Input id="customer-name" placeholder="John Doe" value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })}/></div>
+              <div className="space-y-2"><Label htmlFor="customer-name">Customer Name</Label><Input id="customer-name" placeholder="John Doe" value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })} required /></div>
               <div className="space-y-2"><Label htmlFor="customer-phone">Phone Number</Label><PhoneNumberInput /></div>
+              <div className="space-y-2"><Label htmlFor="customer-email">Email Address</Label><Input id="customer-email" type="email" placeholder="john.doe@example.com" value={customer.email} onChange={(e) => setCustomer({ ...customer, email: e.target.value })} /></div>
             </CardContent>
           </Card>
         );
@@ -134,12 +144,47 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
             </CardContent>
           </Card>
         );
-      case 3:
+      case 3: // Delivery Options
+        return (
+            <Card>
+                <CardHeader>
+                    <CardTitle>Pickup or Delivery?</CardTitle>
+                    <CardDescription>Step 3: Will the customer pick up the order, or should it be delivered?</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                    <RadioGroup value={deliveryOption} onValueChange={setDeliveryOption} className="space-y-3">
+                        <Label htmlFor="delivery-pickup" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="pickup" id="delivery-pickup" /><User className="h-6 w-6 text-gray-600" /><div><p className="font-semibold">Customer will pick up from store</p></div></Label>
+                        <Label htmlFor="delivery-deliver" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="deliver" id="delivery-deliver" /><Truck className="h-6 w-6 text-primary" /><div><p className="font-semibold">Deliver to customer's address</p><p className="text-sm text-muted-foreground">A delivery fee of R{deliveryFee.toFixed(2)} will be added.</p></div></Label>
+                    </RadioGroup>
+                    {deliveryOption === 'deliver' && (
+                        <div className="pt-4 space-y-4">
+                            <Separator />
+                            <div className="space-y-2">
+                                <Label htmlFor="delivery-address">Delivery Address</Label>
+                                <AddressInput id="delivery-address" value={deliveryAddress} onChange={(e) => setDeliveryAddress(e.target.value)} onAddressSelect={(addr) => setDeliveryAddress(addr.description)} required={deliveryOption === 'deliver'} />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="delivery-slot">Delivery Time Slot</Label>
+                                <Select onValueChange={setDeliverySlot} required={deliveryOption === 'deliver'}>
+                                    <SelectTrigger><SelectValue placeholder="Select a delivery slot..." /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="tomorrow-am">Tomorrow Morning (9am-12pm)</SelectItem>
+                                        <SelectItem value="tomorrow-pm">Tomorrow Afternoon (1pm-5pm)</SelectItem>
+                                        <SelectItem value="day-after-am">Day After Tomorrow (9am-12pm)</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                    )}
+                </CardContent>
+            </Card>
+        );
+      case 4: // Payment
         return (
           <Card>
             <CardHeader>
               <CardTitle>Payment</CardTitle>
-              <CardDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</CardDescription>
+              <CardDescription>Step 4: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</CardDescription>
             </CardHeader>
              <CardContent className="space-y-4">
                 {isProcessingYoco ? (
@@ -153,13 +198,13 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                     <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
                         <Label htmlFor="pay-cash" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="cash" id="pay-cash" /><Banknote className="h-6 w-6 text-green-600" /><div><p className="font-semibold">Pay with Cash</p></div></Label>
                         <Label htmlFor="pay-yoco" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="yoco" id="pay-yoco" /><CreditCard className="h-6 w-6 text-blue-600" /><div><p className="font-semibold">Pay with Yoco</p></div></Label>
-                        <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="later" id="pay-later" /><Clock className="h-6 w-6 text-amber-600" /><div><p className="font-semibold">Pay on Collection</p></div></Label>
+                        {deliveryOption === 'pickup' && <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="later" id="pay-later" /><Clock className="h-6 w-6 text-amber-600" /><div><p className="font-semibold">Pay on Collection</p></div></Label>}
                     </RadioGroup>
                 )}
             </CardContent>
           </Card>
         );
-      case 4:
+      case 5: // Confirmation
          return (
              <Card className="text-center">
                 <CardHeader className="items-center">
@@ -180,17 +225,17 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   return (
       <div className="max-w-md mx-auto space-y-6">
         {renderStep()}
-        {step < 4 && !isProcessingYoco && (
+        {step < 5 && !isProcessingYoco && (
             <div className="flex justify-between">
                 <Button variant="ghost" onClick={handleBack}><ArrowLeft className="mr-2" />Back</Button>
-                {step < 3 ? (
-                     <Button onClick={handleNext} disabled={step === 1 ? !customer.name : total <= 0}>Continue</Button>
+                {step < 4 ? (
+                     <Button onClick={handleNext} disabled={(step === 1 && !customer.name) || (step === 2 && total <= 0) || (step === 3 && deliveryOption === 'deliver' && (!deliveryAddress || !deliverySlot))}>Continue</Button>
                 ) : (
                     <Button onClick={handleCreateOrder}>Confirm & Create Order</Button>
                 )}
             </div>
         )}
-        {step === 4 && (
+        {step === 5 && (
             <Button onClick={onComplete} className="w-full">Finish Intake & Start New</Button>
         )}
       </div>
