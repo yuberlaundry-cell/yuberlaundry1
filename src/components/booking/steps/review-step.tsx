@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle2, Info, Loader2, HandCoins, HardHat, Wallet, CreditCard, Banknote, PlusCircle, Payment, FileCreditCard } from "lucide-react";
+import { CheckCircle2, Info, Loader2, HandCoins, HardHat, Wallet, CreditCard, Banknote, PlusCircle } from "lucide-react";
 import { useState } from "react";
 
 
@@ -30,7 +30,7 @@ export default function ReviewStep({ isProcessing, paymentMethod, setPaymentMeth
         <div className="space-y-8">
             <div>
                 <h2 className="text-2xl font-bold font-headline flex items-center gap-2">
-                    <FileCreditCard className="h-6 w-6 text-muted-foreground" />
+                    <CreditCard className="h-6 w-6 text-muted-foreground" />
                     Review & Pay
                 </h2>
                 <p className="text-muted-foreground mt-1">Finalize your details before confirming your order.</p>
