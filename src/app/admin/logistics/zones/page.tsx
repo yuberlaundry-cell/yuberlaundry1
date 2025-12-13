@@ -47,6 +47,7 @@ import { Badge } from '@/components/ui/badge';
 import { useState } from 'react';
 import { AddressInput } from '@/components/ui/address-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const zones = [
     { id: 'ZONE-LON-N', name: 'North London', country: 'United Kingdom', city: 'London', facilities: 3, drivers: 15, template: 'London - Standard Weekday', definition: 'Defined by map boundary' },
@@ -95,77 +96,79 @@ export default function ZonesPage() {
                     <PlusCircle className="mr-2 h-4 w-4" /> Create New Zone
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-2xl">
+            <DialogContent className="max-w-md">
                 <DialogHeader>
                     <DialogTitle>Create New Service Zone</DialogTitle>
                     <DialogDescription>Define a new geographic area using the map or by listing concrete areas like postal codes.</DialogDescription>
                 </DialogHeader>
-                 <form className="space-y-4 py-4">
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <div className="space-y-2">
-                        <Label htmlFor="zone-country">Country</Label>
-                        <Select name="zone-country">
-                          <SelectTrigger id="zone-country">
-                            <SelectValue placeholder="Select a country" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                            <SelectItem value="South Africa">South Africa</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                       <div className="space-y-2">
-                        <Label htmlFor="zone-city">City</Label>
-                        <Select name="zone-city">
-                          <SelectTrigger id="zone-city">
-                            <SelectValue placeholder="Select a city" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="London">London</SelectItem>
-                            <SelectItem value="Manchester">Manchester</SelectItem>
-                            <SelectItem value="Johannesburg">Johannesburg</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="zone-name">Zone Name</Label>
-                        <Input id="zone-name" placeholder="e.g., Central London or Sandton" />
-                    </div>
-                    
-                    <div className="space-y-2">
-                        <Label>Draw Zone on Map</Label>
-                        <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border">
-                            <div className="text-center text-muted-foreground">
-                                <Map className="h-12 w-12 mx-auto mb-2" />
-                                <p>Interactive map for drawing zones would be here.</p>
+                 <ScrollArea className="max-h-[70vh]">
+                    <form className="space-y-4 py-4 pr-6">
+                        <div className="grid sm:grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="zone-country">Country</Label>
+                            <Select name="zone-country">
+                            <SelectTrigger id="zone-country">
+                                <SelectValue placeholder="Select a country" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                                <SelectItem value="South Africa">South Africa</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="zone-city">City</Label>
+                            <Select name="zone-city">
+                            <SelectTrigger id="zone-city">
+                                <SelectValue placeholder="Select a city" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="London">London</SelectItem>
+                                <SelectItem value="Manchester">Manchester</SelectItem>
+                                <SelectItem value="Johannesburg">Johannesburg</SelectItem>
+                            </SelectContent>
+                            </Select>
+                        </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="zone-name">Zone Name</Label>
+                            <Input id="zone-name" placeholder="e.g., Central London or Sandton" />
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <Label>Draw Zone on Map</Label>
+                            <div className="aspect-video bg-muted rounded-lg flex items-center justify-center border">
+                                <div className="text-center text-muted-foreground">
+                                    <Map className="h-12 w-12 mx-auto mb-2" />
+                                    <p>Interactive map for drawing zones would be here.</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div className="space-y-2">
-                        <Label htmlFor="postal-codes">Refine by Area/Postcode</Label>
-                        <p className="text-xs text-muted-foreground">Draw a zone on the map to get started, or add postcodes/areas manually below.</p>
-                        <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-24">
-                            {postalCodes.map((code) => (
-                                <Badge key={code} variant="secondary" className="flex items-center gap-1 text-base">
-                                {code}
-                                <button onClick={() => removePostalCode(code)} className="rounded-full hover:bg-background/50">
-                                    <X className="h-3 w-3" />
-                                </button>
-                                </Badge>
-                            ))}
-                            <Input
-                                id="postal-codes"
-                                value={inputValue}
-                                onChange={(e) => setInputValue(e.target.value)}
-                                onKeyDown={handleKeyDown}
-                                placeholder="Add a code and press Enter..."
-                                className="flex-1 border-none focus-visible:ring-0 shadow-none min-w-[150px]"
-                            />
+                        <div className="space-y-2">
+                            <Label htmlFor="postal-codes">Refine by Area/Postcode</Label>
+                            <p className="text-xs text-muted-foreground">Draw a zone on the map to get started, or add postcodes/areas manually below.</p>
+                            <div className="flex flex-wrap gap-2 p-2 border rounded-md min-h-24">
+                                {postalCodes.map((code) => (
+                                    <Badge key={code} variant="secondary" className="flex items-center gap-1 text-base">
+                                    {code}
+                                    <button onClick={() => removePostalCode(code)} className="rounded-full hover:bg-background/50">
+                                        <X className="h-3 w-3" />
+                                    </button>
+                                    </Badge>
+                                ))}
+                                <Input
+                                    id="postal-codes"
+                                    value={inputValue}
+                                    onChange={(e) => setInputValue(e.target.value)}
+                                    onKeyDown={handleKeyDown}
+                                    placeholder="Add a code and press Enter..."
+                                    className="flex-1 border-none focus-visible:ring-0 shadow-none min-w-[150px]"
+                                />
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </ScrollArea>
                 <DialogFooter>
                     <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
                     <Button type="submit">Create Zone</Button>
