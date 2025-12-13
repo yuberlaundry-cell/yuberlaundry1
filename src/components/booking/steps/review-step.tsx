@@ -6,7 +6,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle2, Info, Loader2, HandCoins, HardHat } from "lucide-react";
+import { CheckCircle2, Info, Loader2, HandCoins, HardHat, Wallet, CreditCard } from "lucide-react";
 import { useState } from "react";
 
 
@@ -14,6 +14,7 @@ export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) 
     const [driverTip, setDriverTip] = useState('15%');
     const [laundromatTip, setLaundromatTip] = useState('0%');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('wallet');
 
     return (
         <div className="space-y-8">
@@ -23,7 +24,32 @@ export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) 
             </div>
            
             <div className="space-y-6">
-                <h3 className="font-semibold text-lg">Payment with Paystack</h3>
+                <div className="space-y-4">
+                    <Label className="font-semibold text-lg">Payment Method</Label>
+                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                        <Label htmlFor="pay-wallet" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <div className="flex items-center gap-3">
+                                <RadioGroupItem value="wallet" id="pay-wallet"/>
+                                <Wallet className="h-5 w-5 text-primary"/>
+                                <div>
+                                    <p className="font-medium">Use Yuber Wallet</p>
+                                    <p className="text-sm text-muted-foreground">R150.50 available</p>
+                                </div>
+                            </div>
+                        </Label>
+                         <Label htmlFor="pay-card" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                            <div className="flex items-center gap-3">
+                                <RadioGroupItem value="card" id="pay-card"/>
+                                <CreditCard className="h-5 w-5 text-muted-foreground"/>
+                                <div>
+                                    <p className="font-medium">Pay with Card</p>
+                                    <p className="text-sm text-muted-foreground">Visa ending in 4242</p>
+                                </div>
+                            </div>
+                             <Button variant="link" size="sm" className="p-0 h-auto">Change</Button>
+                        </Label>
+                    </RadioGroup>
+                </div>
                 
                 <div className="p-4 border rounded-lg bg-muted/50 space-y-4">
                     <h4 className="font-medium">How payment works</h4>
@@ -38,7 +64,7 @@ export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) 
                         </div>
                         <div className="flex items-start gap-3">
                             <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
-                            <p>Your card will be charged via Paystack's secure gateway only after the service is complete.</p>
+                            <p>Your selected payment method will be charged only after the service is complete.</p>
                         </div>
                     </div>
                 </div>
