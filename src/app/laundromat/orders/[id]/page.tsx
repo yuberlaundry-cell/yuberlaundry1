@@ -46,7 +46,7 @@ const allTimelineSteps: { status: LaundromatOrderStatus, title: string }[] = [
 export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
-    const { toast } } from useToast();
+    const { toast } = useToast();
     const { getOrderById, updateOrder } = useLaundromatOrders();
 
     const order = getOrderById(orderId);
