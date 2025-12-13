@@ -100,7 +100,7 @@ export default function CompanyProfilePage() {
                 </div>
                 <div className="flex items-center gap-2">
                     <Button variant="outline"><FileText className="mr-2"/> View Contract</Button>
-                    <Button variant="outline"><Edit className="mr-2"/> Edit Company</Button>
+                    <Button asChild variant="outline"><Link href={`/admin/b2b/${companyId}/edit`}><Edit className="mr-2"/> Edit Company</Link></Button>
                     <Button variant="destructive"><ShieldOff className="mr-2"/> Suspend</Button>
                 </div>
             </div>
