@@ -41,6 +41,54 @@
       "description": "A modern office environment with employees working.",
       "imageUrl": "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MjgxNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "modern office"
+    },
+    {
+      "id": "team-jane-doe",
+      "description": "CEO and Founder of the company",
+      "imageUrl": "https://images.unsplash.com/photo-1551893107-2e66c459330c?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw5fHx3b21hbiUyMGNlb3xlbnwwfHx8fDE3NjU1NTI1MTV8MA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman ceo"
+    },
+    {
+      "id": "team-john-smith",
+      "description": "CTO of the company",
+      "imageUrl": "https://images.unsplash.com/photo-1603575448360-153f093fd0b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw4fHxtYW4lMjBkZXZlbG9wZXJ8ZW58MHx8fHwxNzY1NjMzMjAyfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man developer"
+    },
+    {
+      "id": "team-alex-ray",
+      "description": "Head of Operations",
+      "imageUrl": "https://images.unsplash.com/photo-1557130943-d7e31cb517b2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw2fHxtYW4lMjBvcGVyYXRpb25zfGVufDB8fHx8MTc2NTYzMzIwMnww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "man operations"
+    },
+    {
+      "id": "team-maria-garcia",
+      "description": "Partner Success Lead",
+      "imageUrl": "https://images.unsplash.com/photo-1573496004954-c40e67747967?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHx3b21hbiUyMHN1Y2Nlc3N8ZW58MHx8fHwxNzY1NjMzMjAzfDA&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "woman success"
+    },
+    {
+      "id": "modern-laundromat",
+      "description": "A modern and clean laundromat facility.",
+      "imageUrl": "https://images.unsplash.com/photo-1545172288-1f48b9193557?w=800&h=800&fit=crop",
+      "imageHint": "modern laundromat"
+    },
+    {
+      "id": "feature-schedule",
+      "description": "Man with luggage scheduling a pickup",
+      "imageUrl": "https://images.unsplash.com/photo-1593121184920-951e4445a435?w=800&q=80",
+      "imageHint": "man with luggage"
+    },
+    {
+      "id": "feature-professional",
+      "description": "Folded towels in a laundromat",
+      "imageUrl": "https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=800&q=80",
+      "imageHint": "folded towels"
+    },
+    {
+      "id": "feature-delivery",
+      "description": "Delivery package at a door",
+      "imageUrl": "https://images.unsplash.com/photo-1586528116311-069242114950?w=800&q=80",
+      "imageHint": "delivery at door"
     }
   ]
 }

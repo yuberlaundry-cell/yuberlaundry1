@@ -6,12 +6,13 @@ import { PublicFooter } from "@/components/layout/public-footer";
 import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 const teamMembers = [
-    { name: 'Jane Doe', role: 'CEO & Founder', avatar: 'https://picsum.photos/seed/team1/100/100', aiHint: 'woman ceo' },
-    { name: 'John Smith', role: 'CTO', avatar: 'https://picsum.photos/seed/team2/100/100', aiHint: 'man developer' },
-    { name: 'Alex Ray', role: 'Head of Operations', avatar: 'https://picsum.photos/seed/team3/100/100', aiHint: 'man operations' },
-    { name: 'Maria Garcia', role: 'Partner Success Lead', avatar: 'https://picsum.photos/seed/team4/100/100', aiHint: 'woman success' },
+    { name: 'Jane Doe', role: 'CEO & Founder', avatarId: 'team-jane-doe' },
+    { name: 'John Smith', role: 'CTO', avatarId: 'team-john-smith' },
+    { name: 'Alex Ray', role: 'Head of Operations', avatarId: 'team-alex-ray' },
+    { name: 'Maria Garcia', role: 'Partner Success Lead', avatarId: 'team-maria-garcia' },
 ];
 
 const values = [
@@ -21,6 +22,8 @@ const values = [
 ];
 
 export default function AboutPage() {
+    const modernLaundromatImage = PlaceHolderImages.find(p => p.id === 'modern-laundromat');
+    
     return (
         <div className="flex flex-col min-h-screen">
             <PublicHeader />
@@ -38,13 +41,15 @@ export default function AboutPage() {
                     <div className="container mx-auto px-6 sm:px-8">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <div className="relative aspect-square">
-                                <Image
-                                    src="https://images.unsplash.com/photo-1545172288-1f48b9193557?w=800&h=800&fit=crop"
-                                    alt="A modern laundromat facility"
-                                    data-ai-hint="modern laundromat"
-                                    fill
-                                    className="object-cover rounded-2xl"
-                                />
+                                {modernLaundromatImage && (
+                                    <Image
+                                        src={modernLaundromatImage.imageUrl}
+                                        alt={modernLaundromatImage.description}
+                                        data-ai-hint={modernLaundromatImage.imageHint}
+                                        fill
+                                        className="object-cover rounded-2xl"
+                                    />
+                                )}
                             </div>
                             <div>
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Story</h2>
@@ -83,16 +88,21 @@ export default function AboutPage() {
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">Meet the Team</h2>
                         </div>
                         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                            {teamMembers.map(member => (
-                                <div key={member.name} className="text-center">
-                                    <Avatar className="h-24 w-24 mx-auto">
-                                        <AvatarImage src={member.avatar} alt={member.name} data-ai-hint={member.aiHint} />
-                                        <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                                    </Avatar>
-                                    <h3 className="text-lg font-semibold mt-4">{member.name}</h3>
-                                    <p className="text-muted-foreground">{member.role}</p>
-                                </div>
-                            ))}
+                            {teamMembers.map(member => {
+                                const memberImage = PlaceHolderImages.find(p => p.id === member.avatarId);
+                                return (
+                                    <div key={member.name} className="text-center">
+                                        <Avatar className="h-24 w-24 mx-auto">
+                                            {memberImage && (
+                                                <AvatarImage src={memberImage.imageUrl} alt={member.name} data-ai-hint={memberImage.imageHint} />
+                                            )}
+                                            <AvatarFallback>{member.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                                        </Avatar>
+                                        <h3 className="text-lg font-semibold mt-4">{member.name}</h3>
+                                        <p className="text-muted-foreground">{member.role}</p>
+                                    </div>
+                                );
+                            })}
                         </div>
                     </div>
                 </section>
@@ -101,5 +111,3 @@ export default function AboutPage() {
         </div>
     );
 }
-
-    
