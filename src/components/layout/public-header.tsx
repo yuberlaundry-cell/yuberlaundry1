@@ -92,12 +92,12 @@ export function PublicHeader() {
           <NavigationMenu className="hidden md:flex">
             <NavigationMenuList>
               <NavigationMenuItem>
-                 <NavigationMenuTrigger>
-                    <Link href="/how-it-works">
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                            Personal
-                        </NavigationMenuLink>
-                    </Link>
+                <NavigationMenuTrigger>
+                  <Link href="/how-it-works" legacyBehavior passHref>
+                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+                      Personal
+                    </NavigationMenuLink>
+                  </Link>
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid w-[600px] lg:w-[700px] grid-cols-3 gap-6 p-6">
@@ -127,8 +127,8 @@ export function PublicHeader() {
               </NavigationMenuItem>
 
                <NavigationMenuItem>
-                 <NavigationMenuTrigger>
-                    <Link href="/for-business">
+                <NavigationMenuTrigger>
+                    <Link href="/for-business" legacyBehavior passHref>
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                            For Business
                         </NavigationMenuLink>
