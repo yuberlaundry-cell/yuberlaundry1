@@ -34,6 +34,9 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useState } from 'react';
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { NewLaundromatForm } from '@/components/admin/laundromats/new-laundromat-form';
 
 const laundromats = [
     { id: 'L-001', name: 'Speedy Suds', location: 'London, UK', status: 'Active', activeOrders: 25, issueRate: '1.2%', rating: 4.8 },
@@ -68,13 +71,22 @@ export default function LaundromatsPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Laundromats</h1>
                 <p className="text-muted-foreground">Manage and monitor all partner facilities.</p>
             </div>
-            <div className="flex gap-2">
-                <Button className="w-full sm:w-auto" asChild>
-                    <Link href="/admin/laundromats/new">
+             <Dialog>
+                <DialogTrigger asChild>
+                     <Button className="w-full sm:w-auto">
                         <PlusCircle className="mr-2 h-4 w-4" /> Add Laundromat
-                    </Link>
-                </Button>
-            </div>
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl">
+                     <DialogHeader>
+                        <DialogTitle>Onboard New Laundromat</DialogTitle>
+                         <DialogDescription>
+                            Follow these steps to add a new partner facility to the platform.
+                        </DialogDescription>
+                     </DialogHeader>
+                    <NewLaundromatForm />
+                </DialogContent>
+            </Dialog>
         </div>
 
       <Card>

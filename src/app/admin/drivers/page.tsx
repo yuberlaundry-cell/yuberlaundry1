@@ -35,6 +35,11 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { PhoneNumberInput } from '@/components/ui/phone-number-input';
 
 const drivers = [
     { id: 'D-001', name: 'Alex Ray', location: 'London, UK', status: 'Online', activeJobs: 1, acceptanceRate: '98%', rating: 4.9, avatar: 'https://picsum.photos/seed/driver1/40/40' },
@@ -62,6 +67,15 @@ export default function DriversPage() {
         description: `The action '${action}' for driver ${driverName} has been triggered.`,
     });
   };
+  
+  const handleAddDriver = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: "Driver Added!",
+            description: "The new driver has been created and can now log in.",
+        });
+        // In a real app, you would close the dialog here.
+    }
 
   return (
     <div className="space-y-6">
@@ -70,13 +84,97 @@ export default function DriversPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Driver Fleet</h1>
                 <p className="text-muted-foreground">Manage and monitor all drivers on the platform.</p>
             </div>
-            <div className="flex gap-2">
-                <Button className="w-full sm:w-auto" asChild>
-                    <Link href="/admin/drivers/new">
+             <Dialog>
+                <DialogTrigger asChild>
+                    <Button className="w-full sm:w-auto">
                         <PlusCircle className="mr-2 h-4 w-4" /> Add Driver
-                    </Link>
-                </Button>
-            </div>
+                    </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-2xl">
+                     <DialogHeader>
+                        <DialogTitle>Add New Driver</DialogTitle>
+                     </DialogHeader>
+                      <form onSubmit={handleAddDriver}>
+                        <div className="grid lg:grid-cols-2 gap-6 py-4">
+                            <Card className="border-0 shadow-none">
+                                <CardHeader className="p-0 pb-4">
+                                    <CardTitle>Personal Details</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 p-0">
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="first-name">First Name</Label>
+                                            <Input id="first-name" placeholder="John" required />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="last-name">Last Name</Label>
+                                            <Input id="last-name" placeholder="Doe" required/>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="email">Email Address</Label>
+                                        <Input id="email" type="email" placeholder="john.doe@example.com" required/>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="phone">Phone Number</Label>
+                                        <PhoneNumberInput />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="password">Set Initial Password</Label>
+                                        <Input id="password" type="password" required />
+                                    </div>
+                                </CardContent>
+                            </Card>
+
+                            <Card className="border-0 shadow-none">
+                                <CardHeader className="p-0 pb-4">
+                                    <CardTitle>Vehicle & Status</CardTitle>
+                                </CardHeader>
+                                <CardContent className="space-y-4 p-0">
+                                    <div className="space-y-2">
+                                        <Label htmlFor="vehicle-type">Vehicle Type</Label>
+                                        <Select required>
+                                            <SelectTrigger><SelectValue placeholder="Select vehicle type" /></SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="scooter">Scooter</SelectItem>
+                                                <SelectItem value="car">Car</SelectItem>
+                                                <SelectItem value="van">Van</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div className="space-y-2">
+                                            <Label htmlFor="vehicle-model">Vehicle Model</Label>
+                                            <Input id="vehicle-model" placeholder="e.g. Toyota Vitz" required/>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor="license-plate">License Plate</Label>
+                                            <Input id="license-plate" placeholder="AB12CD GP" required/>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="status">Initial Status</Label>
+                                        <Select defaultValue="New" required>
+                                            <SelectTrigger>
+                                                <SelectValue />
+                                            </SelectTrigger>
+                                            <SelectContent>
+                                                <SelectItem value="New">New (Pending Docs)</SelectItem>
+                                                <SelectItem value="Active">Active</SelectItem>
+                                                <SelectItem value="Offline">Offline</SelectItem>
+                                                <SelectItem value="Suspended">Suspended</SelectItem>
+                                            </SelectContent>
+                                        </Select>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        </div>
+                        <DialogFooter>
+                            <Button type="submit">Add Driver</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
 
       <Card>
