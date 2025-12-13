@@ -23,6 +23,7 @@ import {
   Search,
   ChevronDown,
   Download,
+  AlertTriangle,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -42,11 +43,23 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 
+// Add a new order that needs attention
+const attentionOrder = {
+    ...mockOrders[0],
+    id: '#YL12300',
+    status: 'Needs Attention',
+    statusCategory: 'in-progress' as 'in-progress',
+};
+
+const ordersWithAttention = [attentionOrder, ...mockOrders];
+
+
 const statusColors: { [key: string]: string } = {
   'upcoming': 'bg-blue-100 text-blue-800',
   'in-progress': 'bg-amber-100 text-amber-800',
   'completed': 'bg-green-100 text-green-800',
   'cancelled': 'bg-gray-100 text-gray-800',
+  'Needs Attention': 'bg-red-100 text-red-800',
 };
 
 export default function AdminOrdersPage() {
@@ -112,6 +125,7 @@ export default function AdminOrdersPage() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>All</DropdownMenuItem>
+                        <DropdownMenuItem>Needs Attention</DropdownMenuItem>
                         <DropdownMenuItem>Upcoming</DropdownMenuItem>
                         <DropdownMenuItem>In Progress</DropdownMenuItem>
                         <DropdownMenuItem>Completed</DropdownMenuItem>
@@ -133,13 +147,16 @@ export default function AdminOrdersPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {mockOrders.map((order) => (
+              {ordersWithAttention.map((order) => (
                 <TableRow key={order.id} className="cursor-pointer" onClick={() => router.push(`/admin/orders/${order.id.replace('#','')}`)}>
-                  <TableCell className="font-medium">{order.id}</TableCell>
+                  <TableCell className="font-medium flex items-center gap-2">
+                    {order.status === 'Needs Attention' && <AlertTriangle className="h-4 w-4 text-destructive" />}
+                    {order.id}
+                  </TableCell>
                   <TableCell>{order.driver?.name || 'Jane Doe'}</TableCell>
                   <TableCell>{order.pickupTime.split(',')[0]}</TableCell>
                   <TableCell>
-                    <Badge variant="secondary" className={statusColors[order.statusCategory]}>{order.status}</Badge>
+                    <Badge variant="secondary" className={statusColors[order.status as keyof typeof statusColors]}>{order.status}</Badge>
                    </TableCell>
                    <TableCell className="text-right">{order.price}</TableCell>
                    <TableCell>
@@ -153,8 +170,11 @@ export default function AdminOrdersPage() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     <DropdownMenuItem onSelect={() => router.push(`/admin/orders/${order.id.replace('#','')}`)}>View Order Details</DropdownMenuItem>
+                                     {order.status === 'Needs Attention' && (
+                                        <DropdownMenuItem onSelect={(e) => e.stopPropagation()}>Re-assign Order</DropdownMenuItem>
+                                     )}
                                      <DialogTrigger asChild>
-                                        <DropdownMenuItem disabled={order.statusCategory === 'cancelled' || order.statusCategory === 'upcoming'} onSelect={(e) => e.preventDefault()}>
+                                        <DropdownMenuItem disabled={order.statusCategory === 'cancelled' || order.statusCategory === 'upcoming'} onSelect={(e) => { e.preventDefault(); e.stopPropagation(); }}>
                                             Refund Order
                                         </DropdownMenuItem>
                                     </DialogTrigger>
@@ -170,7 +190,6 @@ export default function AdminOrdersPage() {
                                 </DialogHeader>
                                 <form className="space-y-4" onSubmit={(e) => {
                                     handleRefund(e, order.id);
-                                    // This is a trick to close the dialog from within the form
                                     const closeButton = (e.target as HTMLElement).closest('[role="dialog"]')?.querySelector('[aria-label="Close"]');
                                     if (closeButton) (closeButton as HTMLButtonElement).click();
                                 }}>
