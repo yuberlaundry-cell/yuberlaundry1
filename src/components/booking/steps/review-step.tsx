@@ -6,12 +6,13 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle2, Info, Loader2 } from "lucide-react";
+import { CheckCircle2, Info, Loader2, HandCoins, HardHat } from "lucide-react";
 import { useState } from "react";
 
 
 export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) {
-    const [tip, setTip] = useState('15%');
+    const [driverTip, setDriverTip] = useState('15%');
+    const [laundromatTip, setLaundromatTip] = useState('0%');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
 
     return (
@@ -50,14 +51,14 @@ export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) 
                     </div>
                 </div>
 
-                <div className="space-y-3">
-                    <Label>Add a tip for your driver?</Label>
+                <div className="space-y-4">
+                    <Label className="font-semibold flex items-center gap-2"><HardHat /> Add a tip for your driver?</Label>
                      <div className="flex gap-2">
                         {['10%', '15%', '20%', '25%', 'Custom'].map(val => (
                             <Button 
                                 key={val}
-                                variant={tip === val ? 'default' : 'outline'}
-                                onClick={() => setTip(val)}
+                                variant={driverTip === val ? 'default' : 'outline'}
+                                onClick={() => setDriverTip(val)}
                                 className="flex-1"
                                 disabled={isProcessing}
                             >
@@ -66,6 +67,24 @@ export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) 
                         ))}
                     </div>
                      <p className="text-xs text-muted-foreground">The selected tip will be added to your order total. 100% goes directly to your driver.</p>
+                </div>
+                
+                 <div className="space-y-4">
+                    <Label className="font-semibold flex items-center gap-2"><HandCoins /> Add a tip for the laundromat staff?</Label>
+                     <div className="flex gap-2">
+                        {['0%', '5%', '10%', '15%', 'Custom'].map(val => (
+                            <Button 
+                                key={val}
+                                variant={laundromatTip === val ? 'default' : 'outline'}
+                                onClick={() => setLaundromatTip(val)}
+                                className="flex-1"
+                                disabled={isProcessing}
+                            >
+                                {val}
+                            </Button>
+                        ))}
+                    </div>
+                     <p className="text-xs text-muted-foreground">Show your appreciation for the team that cleans your clothes.</p>
                 </div>
 
                  <div className="flex items-center space-x-2 pt-4">

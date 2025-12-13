@@ -7,7 +7,7 @@ import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
 import { Checkbox } from '../ui/checkbox';
-import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote, Loader2, User, Truck, Calendar as CalendarIcon, MapPin } from 'lucide-react';
+import { CheckCircle, Printer, ShoppingBag, VenetianMask, DollarSign, CreditCard, Clock, Banknote, Loader2, User, Truck, Calendar as CalendarIcon, MapPin, Smartphone, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
@@ -16,6 +16,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui
 import { ArrowLeft } from 'lucide-react';
 import { AddressInput } from '../ui/address-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import QRCode from "react-qr-code";
 
 const servicesConfig = [
   { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 40.00 },
@@ -91,6 +92,10 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
     toast({ title: `Printing ${type}...`, description: `Your ${type.toLowerCase()} have been sent to the printer.` });
   }
 
+   const handleSendAppLink = () => {
+    toast({ title: "App Link Sent!", description: `An SMS with a link to download the app has been sent to ${customer.name}.` });
+  }
+
   const handleItemValueChange = (id: string, value: number) => {
     setOrderItems(orderItems.map(item => item.id === id ? { ...item, value } : item));
   };
@@ -140,7 +145,6 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                         )}
                     </div>
                 ))}
-                <Separator /><div className="space-y-1 text-sm"><div className="flex justify-between"><p className="text-muted-foreground">Subtotal</p><p className="font-medium">R{subtotal.toFixed(2)}</p></div><div className="flex justify-between"><p className="text-muted-foreground">Tax</p><p className="font-medium">R{tax.toFixed(2)}</p></div><div className="flex justify-between font-bold text-base"><p>Total</p><p>R{total.toFixed(2)}</p></div></div>
             </CardContent>
           </Card>
         );
@@ -213,8 +217,21 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
                     <CardDescription>The order for {customer.name} has been successfully created and is marked as paid.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                    <p className="text-muted-foreground">Attach the printed tags to the customer's bags. You can now find this order in the main queue.</p>
-                    <div className="grid grid-cols-2 gap-2"><Button className="w-full" variant="outline" onClick={() => handlePrint('Receipt')}><Printer className="mr-2" /> Print Receipt</Button><Button className="w-full" onClick={() => handlePrint('Bag Tags')}><Printer className="mr-2" /> Print Bag Tags</Button></div>
+                    {deliveryOption === 'deliver' && (
+                        <Card className="bg-blue-50 border-blue-200">
+                            <CardHeader>
+                                <CardTitle className="flex items-center gap-2 text-base text-blue-800"><Smartphone />Customer Next Steps</CardTitle>
+                                <CardDescription className="text-blue-700">Encourage the customer to download the app to track their delivery.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="flex flex-col items-center gap-4">
+                                <div className="bg-white p-2 rounded-lg border">
+                                    <QRCode value={`https://yuber.app/order/${newOrderId}`} size={128} />
+                                </div>
+                                <Button onClick={handleSendAppLink} className="w-full">Send App Link via SMS</Button>
+                            </CardContent>
+                        </Card>
+                    )}
+                    <div className="grid grid-cols-2 gap-2 pt-4"><Button className="w-full" variant="outline" onClick={() => handlePrint('Receipt')}><Printer className="mr-2" /> Print Receipt</Button><Button className="w-full" onClick={() => handlePrint('Bag Tags')}><Printer className="mr-2" /> Print Bag Tags</Button></div>
                 </CardContent>
              </Card>
          )
