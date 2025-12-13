@@ -14,6 +14,8 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
+import { type Plan, initialPlans } from '@/app/admin/revenue/subscriptions/page';
+
 
 const featureTabs = [
     {
@@ -33,33 +35,6 @@ const featureTabs = [
     }
 ];
 
-const repeatPlans = [
-    {
-        icon: ShoppingBag,
-        bags: 1,
-        title: '1 Bag / month',
-        description: 'Ideal for one person\'s needs',
-        pricePerBag: 800,
-        popular: false,
-    },
-    {
-        icon: Users,
-        bags: 2,
-        title: '2 Bags / month',
-        description: 'Perfect for couples',
-        pricePerBag: 750,
-        popular: true,
-    },
-    {
-        icon: Users,
-        bags: 4,
-        title: '4 Bags / month',
-        description: 'Great for families',
-        pricePerBag: 700,
-        popular: false,
-    }
-];
-
 const repeatFeatures = [
     { icon: Truck, text: 'Free Pickup & Delivery' },
     { icon: Zap, text: 'Free Next-Day Rush Service' },
@@ -72,12 +47,21 @@ export default function FeaturesPage() {
     const [activeTab, setActiveTab] = useState(featureTabs[0].id);
     const [isAnnual, setIsAnnual] = useState(false);
 
+    // Filter for consumer plans that are part of Yuber Repeat
+    const repeatPlans = initialPlans.filter(p => p.type === 'Consumer' && p.name.includes('Yuber Repeat'));
+
     useEffect(() => {
         const hash = window.location.hash.replace('#', '');
         if (hash && featureTabs.some(s => s.id === hash)) {
             setActiveTab(hash);
         }
     }, []);
+
+    const getBagIcon = (bags: number = 1) => {
+        if (bags >= 4) return Users;
+        if (bags > 1) return Users;
+        return ShoppingBag;
+    }
 
     return (
         <div className="flex flex-col min-h-screen">
@@ -137,23 +121,26 @@ export default function FeaturesPage() {
                                     </div>
                                     <div className="space-y-4">
                                         {repeatPlans.map(plan => {
-                                            const finalPrice = isAnnual ? plan.pricePerBag * 0.85 : plan.pricePerBag;
+                                            const finalPrice = isAnnual ? parseFloat(plan.price) * 12 * 0.85 / 12 : parseFloat(plan.price);
+                                            const pricePerBag = finalPrice / (plan.limits.bagsIncluded || 1);
+                                            const BagIcon = getBagIcon(plan.limits.bagsIncluded);
+
                                             return (
-                                                <Card key={plan.bags} className={cn("transition-all", plan.popular ? "border-2 border-primary shadow-lg" : "")}>
+                                                <Card key={plan.name} className={cn("transition-all", plan.popular ? "border-2 border-primary shadow-lg" : "")}>
                                                     {plan.popular && <Badge className="absolute -top-3 right-4">Most Popular</Badge>}
                                                     <CardContent className="p-4 grid grid-cols-3 items-center">
                                                         <div className="flex items-center gap-3 col-span-2">
                                                             <div className={cn("p-2 rounded-lg", plan.popular ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
-                                                                <plan.icon className="h-6 w-6"/>
+                                                                <BagIcon className="h-6 w-6"/>
                                                             </div>
                                                             <div>
-                                                                <p className="font-semibold">{plan.title}</p>
-                                                                <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                                                <p className="font-semibold">{plan.name.replace('Yuber Repeat ', '')}</p>
+                                                                <p className="text-sm text-muted-foreground">{plan.features.join(', ')}</p>
                                                             </div>
                                                         </div>
                                                         <div className="text-right">
-                                                            <p className="font-bold text-xl md:text-2xl">R{finalPrice.toFixed(2)}<span className="text-sm font-normal text-muted-foreground">/bag</span></p>
-                                                            <p className="text-xs text-muted-foreground">R{(finalPrice * plan.bags).toFixed(2)}/month</p>
+                                                            <p className="font-bold text-xl md:text-2xl">R{pricePerBag.toFixed(2)}<span className="text-sm font-normal text-muted-foreground">/bag</span></p>
+                                                            <p className="text-xs text-muted-foreground">R{finalPrice.toFixed(2)}/month</p>
                                                         </div>
                                                          <div className="col-span-3 mt-2">
                                                             <Button className="w-full" variant={plan.popular ? "default" : "outline"}>Choose this plan</Button>

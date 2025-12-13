@@ -23,6 +23,7 @@ import {
   Trash2,
   Edit,
   Building,
+  ShoppingBag,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
@@ -55,8 +56,9 @@ import { useToast } from '@/hooks/use-toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Separator } from '@/components/ui/separator';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
+import { cn } from '@/lib/utils';
 
-interface Plan {
+export interface Plan {
     name: string;
     price: string;
     billingCycle: string;
@@ -64,6 +66,7 @@ interface Plan {
     active: boolean;
     type: 'Consumer' | 'Business' | 'Laundromat';
     paystackPlanCode: string;
+    popular?: boolean;
     limits: {
         // Consumer
         kgIncluded?: number;
@@ -86,23 +89,46 @@ interface Plan {
 }
 
 const initialPlans: Plan[] = [
-    {
-        name: "Yuber Repeat",
+     {
+        name: "Yuber Repeat (1 Bag)",
         price: "800",
         billingCycle: "monthly",
-        features: [
-            "If it fits in the bag, we'll clean it"
-        ],
+        features: [ "Ideal for one person's needs" ],
         active: true,
         type: 'Consumer',
-        paystackPlanCode: 'PLN_repeat800',
+        paystackPlanCode: 'PLN_repeat_1bag',
+        popular: false,
+        limits: {
+            bagsIncluded: 1,
+            deliveryFeeWaiver: true, platformFeeWaiver: true, nextDayRushWaiver: true, otherServicesCredit: 120, rollover: true
+        }
+    },
+    {
+        name: "Yuber Repeat (2 Bags)",
+        price: "1500",
+        billingCycle: "monthly",
+        features: [ "Perfect for couples" ],
+        active: true,
+        type: 'Consumer',
+        paystackPlanCode: 'PLN_repeat_2bags',
+        popular: true,
         limits: {
             bagsIncluded: 2,
-            deliveryFeeWaiver: true,
-            platformFeeWaiver: true,
-            nextDayRushWaiver: true,
-            otherServicesCredit: 10,
-            rollover: true,
+            deliveryFeeWaiver: true, platformFeeWaiver: true, nextDayRushWaiver: true, otherServicesCredit: 120, rollover: true
+        }
+    },
+     {
+        name: "Yuber Repeat (4 Bags)",
+        price: "2800",
+        billingCycle: "monthly",
+        features: [ "Great for families" ],
+        active: true,
+        type: 'Consumer',
+        paystackPlanCode: 'PLN_repeat_4bags',
+        popular: false,
+        limits: {
+            bagsIncluded: 4,
+            deliveryFeeWaiver: true, platformFeeWaiver: true, nextDayRushWaiver: true, otherServicesCredit: 120, rollover: true
         }
     },
     {
@@ -202,9 +228,10 @@ export default function SubscriptionsPage() {
       
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
         {plans.map((plan) => {
-            const PlanIcon = planTypeIcons[plan.type];
+            const PlanIcon = plan.limits.bagsIncluded ? ShoppingBag : planTypeIcons[plan.type];
             return (
-            <Card key={plan.name} className={`flex flex-col h-full ${!plan.active ? 'bg-muted/50' : ''}`}>
+            <Card key={plan.name} className={cn("flex flex-col h-full", !plan.active && 'bg-muted/50')}>
+                {plan.popular && <Badge className="absolute -top-3 right-4">Most Popular</Badge>}
                 <CardHeader>
                     <div className="flex justify-between items-start">
                         <div>
@@ -279,7 +306,7 @@ export default function SubscriptionsPage() {
                                 <span className="text-muted-foreground"><span className="font-semibold text-foreground">{plan.limits.discountPercentage}% discount</span> on all orders</span>
                             </li>
                         )}
-                        {plan.limits.rollover !== undefined && (
+                         {plan.limits.rollover !== undefined && (
                              <li className="flex items-center gap-3 text-sm">
                                 {plan.limits.rollover ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
                                 <span className="text-muted-foreground">Rollover of bags/kgs</span>
@@ -491,4 +518,3 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
         </form>
     );
 }
-
