@@ -1,3 +1,4 @@
+
 // This is a placeholder for your Paystack webhook handler.
 // In a real application, you would verify the webhook signature
 // and handle various events (charge.success, subscription.create, etc.)
@@ -50,7 +51,18 @@ export async function POST(req: Request) {
     
     case 'subscription.create':
       console.log(`Subscription created for ${data.plan.name} at ${data.amount} ${data.plan.currency}.`);
-      // Example: Activate subscription features for the user based on the plan code and currency.
+      // Example: Create a new subscription record in your DB for the customer (data.customer.email) and plan (data.plan.plan_code).
+      // Set status to 'active'.
+      break;
+
+    case 'subscription.disable':
+      console.log(`Subscription disabled for customer: ${data.customer.email}`);
+      // Example: Update the subscription record in your DB to 'cancelled' or 'paused'.
+      break;
+
+    case 'subscription.enable':
+      console.log(`Subscription re-enabled for customer: ${data.customer.email}`);
+      // Example: Update the subscription record in your DB to 'active'.
       break;
 
     case 'refund.processed':

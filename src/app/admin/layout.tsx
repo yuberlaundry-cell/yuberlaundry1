@@ -81,6 +81,7 @@ const navigationConfig = [
     links: [
       { href: '/admin/revenue/commissions', label: 'Commission Rules', icon: Percent },
       { href: '/admin/revenue/subscriptions', label: 'Subscription Plans', icon: Crown },
+      { href: '/admin/revenue/subscribers', label: 'Subscribers', icon: Users },
       { href: '/admin/billing', label: 'B2B Billing', icon: CreditCard },
     ],
   },
