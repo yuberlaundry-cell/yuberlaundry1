@@ -49,6 +49,8 @@ import { AddressInput } from '@/components/ui/address-input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const zones = [
     { id: 'ZONE-LON-N', name: 'North London', country: 'United Kingdom', city: 'London', facilities: 3, drivers: 15, template: 'London - Standard Weekday', definition: 'Defined by map boundary' },
@@ -63,6 +65,18 @@ const slotTemplates = [
   { id: 'T-MAN-01', name: 'Manchester - All Day', city: 'Manchester' },
   { id: 'T-JHB-01', name: 'Joburg - Weekday', city: 'Johannesburg' },
 ];
+
+const allLaundromats = [
+    { id: 'L-001', name: 'Speedy Suds', city: 'London', assigned: true },
+    { id: 'L-003', name: 'Fresh Folds', city: 'London', assigned: true },
+    { id: 'L-007', name: 'London Laundry Co', city: 'London', assigned: false },
+]
+
+const allDrivers = [
+    { id: 'D-001', name: 'Alex Ray', city: 'London', assigned: true },
+    { id: 'D-002', name: 'Sarah Johnson', city: 'Manchester', assigned: false },
+    { id: 'D-003', name: 'David Lee', city: 'London', assigned: true },
+]
 
 
 export default function ZonesPage() {
@@ -221,34 +235,90 @@ export default function ZonesPage() {
                       </DropdownMenu>
                   </TableCell>
                   <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button aria-haspopup="true" size="icon" variant="ghost">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem><FilePen className="mr-2 h-4 w-4" /> Edit Zone Definition</DropdownMenuItem>
-                        <DropdownMenuSub>
-                          <DropdownMenuSubTrigger><Eye className="mr-2 h-4 w-4" /> Manage Resources</DropdownMenuSubTrigger>
-                          <DropdownMenuSubContent>
-                               <DropdownMenuItem><Building className="mr-2 h-4 w-4"/> Assign Facilities</DropdownMenuItem>
-                               <DropdownMenuItem><Truck className="mr-2 h-4 w-4"/> Assign Drivers</DropdownMenuItem>
-                          </DropdownMenuSubContent>
-                        </DropdownMenuSub>
-                         <DropdownMenuSub>
-                            <DropdownMenuSubTrigger><Clock className="mr-2 h-4 w-4" /> Manage Templates</DropdownMenuSubTrigger>
-                            <DropdownMenuSubContent>
-                                <DropdownMenuItem asChild><Link href="/admin/logistics/slots">View All Templates</Link></DropdownMenuItem>
-                                <DropdownMenuItem asChild><Link href="/admin/logistics/slots">Create New Template</Link></DropdownMenuItem>
-                            </DropdownMenuSubContent>
-                        </DropdownMenuSub>
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="mr-2 h-4 w-4" /> Delete Zone
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                    <Dialog>
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem><FilePen className="mr-2 h-4 w-4" /> Edit Zone Definition</DropdownMenuItem>
+                             <DialogTrigger asChild>
+                                <DropdownMenuItem><Eye className="mr-2 h-4 w-4" /> Manage Resources</DropdownMenuItem>
+                            </DialogTrigger>
+                            <DropdownMenuSub>
+                                <DropdownMenuSubTrigger><Clock className="mr-2 h-4 w-4" /> Manage Templates</DropdownMenuSubTrigger>
+                                <DropdownMenuSubContent>
+                                    <DropdownMenuItem asChild><Link href="/admin/logistics/templates">View All Templates</Link></DropdownMenuItem>
+                                    <DropdownMenuItem asChild><Link href="/admin/logistics/templates">Create New Template</Link></DropdownMenuItem>
+                                </DropdownMenuSubContent>
+                            </DropdownMenuSub>
+                            <DropdownMenuItem className="text-destructive">
+                            <Trash2 className="mr-2 h-4 w-4" /> Delete Zone
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                        <DialogContent className="max-w-2xl">
+                            <DialogHeader>
+                                <DialogTitle>Manage Resources for {zone.name}</DialogTitle>
+                                <DialogDescription>Assign facilities and drivers to this service zone.</DialogDescription>
+                            </DialogHeader>
+                            <Tabs defaultValue="facilities">
+                                <TabsList className="grid w-full grid-cols-2">
+                                    <TabsTrigger value="facilities"><Building className="mr-2"/> Facilities</TabsTrigger>
+                                    <TabsTrigger value="drivers"><Truck className="mr-2"/> Drivers</TabsTrigger>
+                                </TabsList>
+                                <TabsContent value="facilities">
+                                    <Card>
+                                        <CardHeader>
+                                            <Input placeholder="Search facilities..." />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <ScrollArea className="h-72">
+                                                <div className="space-y-4">
+                                                    {allLaundromats.filter(l => l.city === zone.city).map(l => (
+                                                        <div key={l.id} className="flex items-center justify-between">
+                                                            <div className="flex items-center gap-3">
+                                                                <Checkbox defaultChecked={l.assigned}/>
+                                                                <Label>{l.name}</Label>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </ScrollArea>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                                 <TabsContent value="drivers">
+                                    <Card>
+                                        <CardHeader>
+                                            <Input placeholder="Search drivers..." />
+                                        </CardHeader>
+                                        <CardContent>
+                                            <ScrollArea className="h-72">
+                                                <div className="space-y-4">
+                                                    {allDrivers.filter(d => d.city === zone.city).map(d => (
+                                                        <div key={d.id} className="flex items-center justify-between">
+                                                            <div className="flex items-center gap-3">
+                                                                <Checkbox defaultChecked={d.assigned}/>
+                                                                <Label>{d.name}</Label>
+                                                            </div>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </ScrollArea>
+                                        </CardContent>
+                                    </Card>
+                                </TabsContent>
+                            </Tabs>
+                             <DialogFooter>
+                                <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                                <Button>Save Resources</Button>
+                            </DialogFooter>
+                        </DialogContent>
+                    </Dialog>
                   </TableCell>
                 </TableRow>
               ))}

@@ -57,7 +57,7 @@ const initialTemplates = [
   { id: 'T-JHB-01', name: 'Joburg - Weekday', country: 'South Africa', city: 'Johannesburg', slotLength: 120, time: '08:00 - 20:00', type: 'Standard' },
 ];
 
-export default function SlotTemplatesPage() {
+export default function TemplatesPage() {
     const [templates, setTemplates] = useState(initialTemplates);
     const [isEditing, setIsEditing] = useState<(typeof initialTemplates)[0] | null>(null);
 
