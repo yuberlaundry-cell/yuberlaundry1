@@ -51,6 +51,11 @@ const featureFlagCategories = {
         { id: "item_level_entry_enabled", label: "Item-level Entry at Intake", description: "Start with bag-level; add for premium/B2B later.", defaultChecked: false },
         { id: "rating_prompt_enabled", label: "Post-Order Rating Prompt", description: "Provides free, simple insight into partner/driver quality.", defaultChecked: true },
     ],
+    "Laundromat Operations": [
+        { id: "laundromat_intake_driver_scan", label: "Enable Driver Drop-off Scans", description: "Allow laundromats to scan orders dropped off by Yuber drivers.", defaultChecked: true },
+        { id: "laundromat_intake_customer_scan", label: "Enable Customer Drop-off Scans", description: "Allow laundromats to scan QR codes from existing customers.", defaultChecked: true },
+        { id: "laundromat_intake_walk_in", label: "Enable Walk-in Orders", description: "Allow laundromats to create new orders for walk-in customers.", defaultChecked: true },
+    ],
     "B2B & Commercial Add-ons": [
         { id: "business_accounts_enabled", label: "Business Accounts", description: "Enable the B2B portal; pilot once B2C is stable.", defaultChecked: false },
         { id: "invoice_billing_enabled", label: "Invoice Billing for B2B", description: "Tied to business accounts for corporate clients.", defaultChecked: false },

@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import {
@@ -43,6 +44,8 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
   const videoRef = useRef<HTMLVideoElement>(null);
   const { toast } = useToast();
   const [manualOrderId, setManualOrderId] = useState('');
+  const [bags, setBags] = useState(mockOrder.bags);
+  const [notes, setNotes] = useState('');
 
   const getCameraPermission = async () => {
     if (hasCameraPermission === true) return;
@@ -86,7 +89,7 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
         <Card className="w-full max-w-md mx-auto">
           <CardHeader>
             <CardTitle>Confirm Order Intake</CardTitle>
-            <CardDescription>You are checking in the following order.</CardDescription>
+            <CardDescription>Verify the details for this order before checking it in.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
                <div className="p-4 border rounded-lg bg-muted/50">
@@ -95,7 +98,6 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
                           <h3 className="font-semibold text-lg">{mockOrder.id}</h3>
                           <p className="text-muted-foreground">{mockOrder.customer}</p>
                       </div>
-                      <p className="text-sm text-muted-foreground">{mockOrder.bags} bags</p>
                   </div>
                   <div className="flex items-center gap-2 mt-2">
                       <Package className="h-4 w-4 text-primary" />
@@ -103,9 +105,13 @@ export function IntakeScanner({ onBack, onComplete, scanType }: IntakeScannerPro
                   </div>
               </div>
               <Separator />
+               <div className="space-y-2">
+                  <Label htmlFor="bags">Number of Bags</Label>
+                  <Input id="bags" type="number" value={bags} onChange={(e) => setBags(Number(e.target.value))} />
+              </div>
               <div className="space-y-2">
                   <Label htmlFor="intake-notes">Intake Notes (optional)</Label>
-                  <Textarea id="intake-notes" placeholder="e.g., Stain on blue shirt, missing one sock."/>
+                  <Textarea id="intake-notes" placeholder="e.g., Stain on blue shirt, missing one sock." value={notes} onChange={(e) => setNotes(e.target.value)} />
               </div>
                <div className="flex justify-between pt-4">
                     <Button variant="ghost" onClick={() => setStep('scan')}>Back to Scanner</Button>

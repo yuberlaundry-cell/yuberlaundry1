@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -160,6 +161,25 @@ export default function LaundromatSettingsPage() {
                     <Label htmlFor="sla">Standard SLA (in hours)</Label>
                     <Input id="sla" type="number" defaultValue="24" />
                   </div>
+                  <Separator />
+                   <div>
+                        <h4 className="font-semibold text-base mb-4">Intake Methods</h4>
+                         <div className="space-y-4">
+                            <div className="flex items-center space-x-2">
+                                <Switch id="intake-driver" defaultChecked />
+                                <Label htmlFor="intake-driver">Enable Driver Drop-off Scans</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Switch id="intake-customer" defaultChecked />
+                                <Label htmlFor="intake-customer">Enable Customer Drop-off Scans</Label>
+                            </div>
+                            <div className="flex items-center space-x-2">
+                                <Switch id="intake-walkin" defaultChecked />
+                                <Label htmlFor="intake-walkin">Enable Walk-in Orders</Label>
+                            </div>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-2">These options are limited by the platform-wide settings managed by the Superadmin.</p>
+                    </div>
                   <Separator />
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">

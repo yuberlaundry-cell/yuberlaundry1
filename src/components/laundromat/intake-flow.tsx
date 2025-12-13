@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { useState } from 'react';
@@ -11,24 +12,35 @@ import Link from 'next/link';
 
 type IntakeStep = 'select_type' | 'scan_driver' | 'scan_customer' | 'walk_in';
 
+// This configuration would be driven by settings in a real application.
+const enabledIntakeTypes = {
+    scan_driver: true,
+    scan_customer: true,
+    walk_in: true,
+};
+
+
 const intakeTypes = [
   {
     type: 'scan_driver',
     title: 'Scan Driver Drop-off',
     description: 'For orders arriving via Yuber driver.',
     icon: HardHat,
+    enabled: enabledIntakeTypes.scan_driver,
   },
   {
     type: 'scan_customer',
     title: 'Scan Customer Drop-off',
     description: 'For existing customers with a QR code.',
     icon: ScanLine,
+    enabled: enabledIntakeTypes.scan_customer,
   },
   {
     type: 'walk_in',
     title: 'Create Walk-in Order',
     description: 'For new customers without an account.',
     icon: User,
+    enabled: enabledIntakeTypes.walk_in,
   },
 ] as const;
 
@@ -82,7 +94,7 @@ export function IntakeFlow() {
             </p>
         </div>
       <div className="space-y-3 py-4">
-        {intakeTypes.map((type) => (
+        {intakeTypes.filter(t => t.enabled).map((type) => (
           <Button
             key={type.type}
             variant="outline"
