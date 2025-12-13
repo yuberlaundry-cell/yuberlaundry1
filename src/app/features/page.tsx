@@ -14,7 +14,7 @@ import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import { type Plan, initialPlans } from '@/app/admin/revenue/subscriptions/page';
+import { type Plan, initialPlans } from '@/lib/plans';
 
 
 const featureTabs = [
