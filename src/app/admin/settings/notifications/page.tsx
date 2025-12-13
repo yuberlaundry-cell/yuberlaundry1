@@ -38,6 +38,17 @@ const driverNotifications = {
     ]
 }
 
+const laundromatNotifications = {
+    "Order Flow": [
+        { id: 'laundromat_new_order', title: 'New Order Arrived', defaultSms: '', defaultPush: 'New order {{order.id}} from driver {{driver.name}} has arrived at your facility.' },
+        { id: 'laundromat_pickup_reminder', title: 'Driver Pickup Reminder', defaultSms: '', defaultPush: 'Driver {{driver.name}} is scheduled to pick up ready orders in 30 minutes.' },
+    ],
+    "Alerts": [
+        { id: 'laundromat_low_supply', title: 'Low Supply Alert', defaultSms: 'Alert: Your supply of {{supply.name}} is low.', defaultPush: 'Low supply alert for {{supply.name}}.' },
+    ]
+}
+
+
 export default function NotificationTemplatesPage() {
     const { toast } = useToast();
 
@@ -72,9 +83,7 @@ export default function NotificationTemplatesPage() {
                             <TemplateForm formId="driver" categories={driverNotifications} onSave={handleSave} />
                         </TabsContent>
                         <TabsContent value="laundromat" className="mt-6">
-                           <Card className="text-center p-8">
-                            <p className="text-muted-foreground">Laundromat notification settings coming soon.</p>
-                           </Card>
+                           <TemplateForm formId="laundromat" categories={laundromatNotifications} onSave={handleSave} />
                         </TabsContent>
                     </Tabs>
                 </div>
@@ -138,13 +147,13 @@ function TemplateForm({ formId, categories, onSave }: TemplateFormProps) {
                                                         <Label htmlFor={`${template.id}-email-body`}>Email Body</Label>
                                                         <Textarea id={`${template.id}-email-body`} defaultValue="This is the full HTML email body. Use Handlebars for templating. e.g., {{customer.firstName}}..." rows={8}/>
                                                     </div>
-                                                     {template.defaultSms && (
+                                                     {template.defaultSms !== undefined && template.defaultSms !== '' && (
                                                         <div className="space-y-2">
                                                             <Label htmlFor={`${template.id}-sms`}>SMS</Label>
                                                             <Textarea id={`${template.id}-sms`} defaultValue={template.defaultSms} rows={3} />
                                                         </div>
                                                      )}
-                                                     {template.defaultPush && (
+                                                     {template.defaultPush !== undefined && template.defaultPush !== '' && (
                                                         <div className="space-y-2">
                                                             <Label htmlFor={`${template.id}-push`}>Push Notification</Label>
                                                             <Textarea id={`${template.id}-push`} defaultValue={template.defaultPush} rows={2} />
@@ -166,4 +175,3 @@ function TemplateForm({ formId, categories, onSave }: TemplateFormProps) {
         </form>
     );
 }
-
