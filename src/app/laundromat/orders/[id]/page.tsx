@@ -17,13 +17,13 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Label } from '@/components/ui/label';
 import { useParams } from 'next/navigation';
 import { Input } from '@/components/ui/input';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { useLaundromatOrders, type LaundromatOrder, type LaundromatOrderItem } from '@/hooks/use-laundromat-orders';
+import { useLaundromatOrders, type LaundromatOrder, type LaundromatOrderItem, type LaundromatOrderStatus } from '@/hooks/use-laundromat-orders';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/dropdown-menu';
 
 
@@ -35,6 +35,15 @@ const qcChecklist = [
     { id: 'check-completeness', label: 'All items accounted for' },
 ];
 
+const allTimelineSteps: { status: LaundromatOrderStatus, title: string }[] = [
+    { status: 'Intake', title: 'Intake Completed'},
+    { status: 'Washing', title: 'Washing'},
+    { status: 'Drying', title: 'Drying'},
+    { status: 'Folding/QC', title: 'Folding & QC'},
+    { status: 'Ready', title: 'Ready for Handoff'},
+    { status: 'Completed', title: 'Completed'},
+];
+
 export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
@@ -42,19 +51,33 @@ export default function OrderProcessingDetailsPage() {
     const { getOrderById, updateOrder } = useLaundromatOrders();
 
     const [order, setOrder] = useState<LaundromatOrder | null>(null);
-    const [timeline, setTimeline] = useState<{ status: string, time: string }[]>([]);
 
     useEffect(() => {
         const fetchedOrder = getOrderById(orderId);
         if (fetchedOrder) {
             setOrder(fetchedOrder);
-            setTimeline([
-                { status: 'Intake Completed', time: '10:30 AM'},
-                ...(fetchedOrder.status !== 'Intake' ? [{ status: 'Washing Started', time: '11:00 AM'}] : []),
-            ]);
         }
     }, [orderId, getOrderById]);
     
+    const timeline = useMemo(() => {
+        if (!order) return [];
+        const currentStatusIndex = allTimelineSteps.findIndex(step => step.status === order.status);
+        
+        return allTimelineSteps.map((step, index) => {
+            let status: 'completed' | 'in-progress' | 'pending' = 'pending';
+            if (index < currentStatusIndex) {
+                status = 'completed';
+            } else if (index === currentStatusIndex) {
+                status = 'in-progress';
+            }
+            return {
+                title: step.title,
+                status: status,
+                timestamp: 'N/A' // Timestamps would be stored on the order object in a real app
+            }
+        });
+    }, [order]);
+
 
     const handleValueChange = (id: string, value: number) => {
         if (!order) return;
@@ -76,10 +99,9 @@ export default function OrderProcessingDetailsPage() {
         });
     }
 
-    const handleMoveStage = (newStatus: 'Drying' | 'Folding/QC' | 'Ready') => {
+    const handleMoveStage = (newStatus: LaundromatOrderStatus) => {
         if (!order) return;
         updateOrder({ id: order.id, status: newStatus });
-        setTimeline(prev => [...prev, { status: `${newStatus} Started`, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }]);
         toast({
             title: 'Order Updated',
             description: `Order ${order.id} has been moved to ${newStatus}.`
@@ -123,6 +145,8 @@ export default function OrderProcessingDetailsPage() {
 
     const renderActionButtons = () => {
         switch (order.status) {
+            case 'Intake':
+                return <Button onClick={() => handleMoveStage('Washing')}>Start Washing</Button>;
             case 'Washing':
                 return <Button onClick={() => handleMoveStage('Drying')}>Move to Drying</Button>;
             case 'Drying':
@@ -323,9 +347,9 @@ export default function OrderProcessingDetailsPage() {
                 <CardContent>
                     <ul className="space-y-2">
                         {timeline.map(item => (
-                            <li key={item.status} className="flex gap-4">
-                                <span className="font-semibold text-sm w-24">{item.time}</span>
-                                <span className="text-sm text-muted-foreground">{item.status}</span>
+                            <li key={item.title} className="flex gap-4">
+                                <span className="font-semibold text-sm w-24">{item.timestamp}</span>
+                                <span className="text-sm text-muted-foreground">{item.title}</span>
                             </li>
                         ))}
                     </ul>
