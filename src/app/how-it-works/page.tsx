@@ -40,51 +40,59 @@ const services = [
     }
 ];
 
-const washAndFoldSteps = [
-    {
-        icon: InspectIcon,
-        title: "We inspect your clothes and check your pockets.",
-        description: "We do “pocket inspections” for you so nothing ends up in the wash that shouldn't. All pockets and clothes are inspected before being washed."
+// Mock CMS data for the page content
+const pageContent = {
+    'wash-fold': {
+        mainContent: "Wash & Fold is built for people who don’t waste time on chores that don’t move them forward. We pick up your laundry, clean it with care using a dedicated machine, and return everything neatly folded – right down to pairing your socks. Clothes are washed to your preferences and delivered on your schedule, so you can focus on what matters most. Let us take laundry off your to-do list – permanently.",
+        steps: [
+            {
+                icon: InspectIcon,
+                title: "We inspect your clothes and check your pockets.",
+                description: "We do “pocket inspections” for you so nothing ends up in the wash that shouldn't. All pockets and clothes are inspected before being washed."
+            },
+            {
+                icon: Shirt,
+                title: "We clean your items with extra care.",
+                description: "Your lights and darks are separated and all your clothes are washed using cold water to preserve color (and save energy)."
+            },
+            {
+                icon: Waves,
+                title: "We wash your loads according to your choices.",
+                description: "Need hypoallergenic detergent? Want fabric softener? Just select the laundry preferences that are right for you."
+            },
+            {
+                icon: Box,
+                title: "We fold everything so that you don't have to.",
+                description: "Your clothes are crisply folded, and your socks are paired, ready to be worn or put away when we deliver your clothes to your door!"
+            }
+        ]
     },
-    {
-        icon: Shirt,
-        title: "We clean your items with extra care.",
-        description: "Your lights and darks are separated and all your clothes are washed using cold water to preserve color (and save energy)."
-    },
-    {
-        icon: Waves,
-        title: "We wash your loads according to your choices.",
-        description: "Need hypoallergenic detergent? Want fabric softener? Just select the laundry preferences that are right for you."
-    },
-    {
-        icon: Box,
-        title: "We fold everything so that you don't have to.",
-        description: "Your clothes are crisply folded, and your socks are paired, ready to be worn or put away when we deliver your clothes to your door!"
+    'dry-cleaning': {
+        mainContent: "This is the perfect service for items you want professionally cleaned and returned pressed and on a hanger (this service includes both Dry Cleaning and Launder & Press). Enjoy premium cleaning from the comfort of your home and never go to the dry cleaners again.",
+        steps: [
+            {
+                icon: Eye,
+                title: "We keep track so that you don’t have to.",
+                description: "We email you a photo and itemized inventory of what we pick up, so you remember what’s being cleaned and in what condition."
+            },
+            {
+                icon: InspectIcon,
+                title: "We carefully inspect for spots and stains.",
+                description: "Our “spotters” have decades of experience in identifying and treating stains in the best way possible so your garments are returned pristine."
+            },
+            {
+                icon: ShieldCheck,
+                title: "We clean your clothing with expert care.",
+                description: "We follow the care label (and know what all the symbols mean!) so your clothes receive the optimal cleaning treatment and last for years to come."
+            },
+            {
+                icon: Package,
+                title: "We press and hang each of your items.",
+                description: "Your clothes are crisply pressed, put on hangers, and placed in your protective garment bag, ready to wear when we deliver your dry cleaning to your door!"
+            }
+        ]
     }
-];
-
-const dryCleaningSteps = [
-    {
-        icon: Eye,
-        title: "We keep track so that you don’t have to.",
-        description: "We email you a photo and itemized inventory of what we pick up, so you remember what’s being cleaned and in what condition."
-    },
-    {
-        icon: InspectIcon,
-        title: "We carefully inspect for spots and stains.",
-        description: "Our “spotters” have decades of experience in identifying and treating stains in the best way possible so your garments are returned pristine."
-    },
-    {
-        icon: ShieldCheck,
-        title: "We clean your clothing with expert care.",
-        description: "We follow the care label (and know what all the symbols mean!) so your clothes receive the optimal cleaning treatment and last for years to come."
-    },
-    {
-        icon: Package,
-        title: "We press and hang each of your items.",
-        description: "Your clothes are crisply pressed, put on hangers, and placed in your protective garment bag, ready to wear when we deliver your dry cleaning to your door!"
-    }
-]
+};
 
 export default function HowItWorksPage() {
     const [activeTab, setActiveTab] = useState(services[0].id);
@@ -133,10 +141,7 @@ export default function HowItWorksPage() {
                              </div>
                             <div className="grid md:grid-cols-2 gap-12 items-center mt-8">
                                 <div className="prose lg:prose-lg max-w-none">
-                                    <p>Wash & Fold is built for people who don’t waste time on chores that don’t move them forward.</p>
-                                    <p>We pick up your laundry, clean it with care using a dedicated machine, and return everything neatly folded – right down to pairing your socks.</p>
-                                    <p>Clothes are washed to your preferences and delivered on your schedule, so you can focus on what matters most.</p>
-                                    <p>Let us take laundry off your to-do list – permanently.</p>
+                                    <p>{pageContent['wash-fold'].mainContent}</p>
                                     <Card className="mt-8 bg-transparent shadow-none border-none p-0">
                                         <CardContent className="p-0">
                                             <div className="flex flex-col sm:flex-row gap-4 p-2 border rounded-full">
@@ -182,7 +187,7 @@ export default function HowItWorksPage() {
                                     <p className="mt-4 text-lg text-muted-foreground">Rinse will pick up your laundry, clean it according to best practices and your preferences, and deliver it back neatly folded—right to your door.</p>
                                 </div>
                                 <div className="mt-12 grid md:grid-cols-4 gap-8 text-center">
-                                    {washAndFoldSteps.map((step, index) => (
+                                    {pageContent['wash-fold'].steps.map((step, index) => (
                                          <div key={index} className="flex flex-col items-center">
                                             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
                                                 <step.icon className="h-8 w-8" />
@@ -274,8 +279,7 @@ export default function HowItWorksPage() {
                             </div>
                             <div className="grid md:grid-cols-2 gap-12 items-center mt-8">
                                 <div className="prose lg:prose-lg max-w-none">
-                                    <p>This is the perfect service for items you want professionally cleaned and returned pressed and on a hanger (this service includes both Dry Cleaning and Launder & Press).</p>
-                                    <p>Enjoy premium cleaning from the comfort of your home and never go to the dry cleaners again.</p>
+                                    <p>{pageContent['dry-cleaning'].mainContent}</p>
                                 </div>
                                 <div className="relative aspect-[4/3] rounded-lg overflow-hidden">
                                     <Image
@@ -295,7 +299,7 @@ export default function HowItWorksPage() {
                                     <h2 className="text-3xl md:text-4xl font-bold font-headline">How it works</h2>
                                 </div>
                                 <div className="mt-12 grid md:grid-cols-4 gap-8 text-center">
-                                    {dryCleaningSteps.map((step, index) => (
+                                    {pageContent['dry-cleaning'].steps.map((step, index) => (
                                          <div key={index} className="flex flex-col items-center">
                                             <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
                                                 <step.icon className="h-8 w-8" />
@@ -332,5 +336,6 @@ export default function HowItWorksPage() {
         </div>
     );
 }
+
 
 
