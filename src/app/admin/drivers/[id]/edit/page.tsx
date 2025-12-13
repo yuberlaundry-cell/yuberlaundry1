@@ -21,7 +21,8 @@ const driverData = {
     'D-001': {
         name: 'Alex Ray',
         email: 'alex.ray@yuber.com',
-        vehicle: 'Blue Toyota Prius',
+        vehicleType: 'car',
+        vehicleModel: 'Blue Toyota Prius',
         licensePlate: 'LAUNDRY1',
         status: 'Online',
     }
@@ -82,10 +83,21 @@ export default function EditDriverPage() {
                         <CardTitle>Vehicle & Status</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4 max-w-lg">
-                         <div className="grid grid-cols-2 gap-4">
+                         <div className="space-y-2">
+                            <Label htmlFor="vehicle-type">Vehicle Type</Label>
+                            <Select defaultValue={driver.vehicleType}>
+                                <SelectTrigger><SelectValue /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="scooter">Scooter</SelectItem>
+                                    <SelectItem value="car">Car</SelectItem>
+                                    <SelectItem value="van">Van</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
-                                <Label htmlFor="vehicle">Vehicle</Label>
-                                <Input id="vehicle" defaultValue={driver.vehicle} />
+                                <Label htmlFor="vehicle-model">Vehicle Model</Label>
+                                <Input id="vehicle-model" defaultValue={driver.vehicleModel} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="license-plate">License Plate</Label>
@@ -114,6 +126,3 @@ export default function EditDriverPage() {
         </div>
     );
 }
-
-
-    
