@@ -94,6 +94,7 @@ const notifications = [
 
 const BottomNavbar = () => {
     const pathname = usePathname();
+    const { logout } = useAuth();
     return (
         <nav className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t md:hidden">
             <div className="grid h-16 grid-cols-5 w-full text-xs">
