@@ -1,10 +1,8 @@
 
 'use client';
-
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -23,9 +21,8 @@ import {
   PlusCircle,
   Search,
   Tag,
-  Gift,
-  RefreshCw,
   Trash2,
+  Edit
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -34,18 +31,16 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger, DialogClose } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Calendar } from '@/components/ui/calendar';
+import { useState } from 'react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import { PromoCodeForm, type Promotion } from '@/components/admin/promotions/promo-code-form';
 
-const promotions = [
-    { code: 'WELCOME20', value: '20% off', type: 'First Order', uses: 125, limit: 1000, status: 'Active' },
-    { code: 'YUBERPLUS10', value: '10% off', type: 'Subscription', uses: 450, limit: 0, status: 'Active' },
-    { code: 'SAVEBIG50', value: 'R50 off', type: 'General', uses: 50, limit: 50, status: 'Expired' },
+const initialPromotions: Promotion[] = [
+    { id: 'promo-1', code: 'WELCOME20', value: '20', type: 'percentage', uses: 125, limit: 1000, status: 'Active', expiryDate: new Date('2025-12-31') },
+    { id: 'promo-2', code: 'YUBERPLUS10', value: '10', type: 'percentage', uses: 450, limit: null, status: 'Active' },
+    { id: 'promo-3', code: 'SAVEBIG50', value: '50', type: 'fixed', uses: 50, limit: 50, status: 'Expired', expiryDate: new Date('2024-01-01') },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -54,14 +49,41 @@ const statusColors: { [key: string]: string } = {
 };
 
 export default function PromotionsPage() {
+    const [promotions, setPromotions] = useState(initialPromotions);
+    const [isPromoDialogOpen, setIsPromoDialogOpen] = useState(false);
+    const [editingPromo, setEditingPromo] = useState<Promotion | null>(null);
     const { toast } = useToast();
 
-    const handleCreatePromo = (e: React.FormEvent) => {
-        e.preventDefault();
-        toast({
-            title: "Promotion Created",
-            description: "The new promotional code is now active.",
-        });
+    const handleSavePromo = (promoData: Omit<Promotion, 'id' | 'uses' | 'status'> & { id?: string }) => {
+        if (editingPromo) {
+            setPromotions(prev => prev.map(p => p.id === editingPromo.id ? { ...p, ...promoData } : p));
+            toast({ title: "Promotion Updated" });
+        } else {
+            const newPromo: Promotion = {
+                id: `promo-${Date.now()}`,
+                code: promoData.code,
+                value: promoData.value,
+                type: promoData.type,
+                uses: 0,
+                limit: promoData.limit,
+                status: 'Active',
+                expiryDate: promoData.expiryDate
+            };
+            setPromotions(prev => [newPromo, ...prev]);
+            toast({ title: "Promotion Created" });
+        }
+        setIsPromoDialogOpen(false);
+        setEditingPromo(null);
+    };
+
+    const handleEditPromo = (promo: Promotion) => {
+        setEditingPromo(promo);
+        setIsPromoDialogOpen(true);
+    }
+    
+    const handleDeletePromo = (promoId: string) => {
+        setPromotions(prev => prev.filter(p => p.id !== promoId));
+        toast({ title: "Promotion Deleted", variant: "destructive" });
     }
 
   return (
@@ -71,58 +93,18 @@ export default function PromotionsPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Promotions</h1>
                 <p className="text-muted-foreground">Create and manage discount codes for marketing campaigns.</p>
             </div>
-            <Dialog>
+            <Dialog open={isPromoDialogOpen} onOpenChange={setIsPromoDialogOpen}>
                 <DialogTrigger asChild>
-                    <Button>
+                    <Button onClick={() => { setEditingPromo(null); setIsPromoDialogOpen(true); }}>
                         <PlusCircle className="mr-2 h-4 w-4" /> Create Promotion
                     </Button>
                 </DialogTrigger>
                 <DialogContent>
                     <DialogHeader>
-                        <DialogTitle>Create New Promotion</DialogTitle>
-                        <DialogDescription>Define a new discount code and its rules.</DialogDescription>
+                        <DialogTitle>{editingPromo ? "Edit Promotion" : "Create New Promotion"}</DialogTitle>
+                        <DialogDescription>Define a discount code and its rules.</DialogDescription>
                     </DialogHeader>
-                    <form className="space-y-4" onSubmit={handleCreatePromo}>
-                        <div className="grid grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="promo-code">Promo Code</Label>
-                                <div className="flex items-center gap-2">
-                                    <Input id="promo-code" placeholder="e.g., LAUNCH25" />
-                                    <Button variant="ghost" size="icon"><RefreshCw className="h-4 w-4"/></Button>
-                                </div>
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="promo-type">Type</Label>
-                                <Select>
-                                    <SelectTrigger><SelectValue placeholder="Select type" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="percentage">Percentage (%)</SelectItem>
-                                        <SelectItem value="fixed">Fixed Amount (R)</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="promo-value">Value</Label>
-                            <Input id="promo-value" type="number" placeholder="e.g., 25 or 100" />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="promo-limit">Usage Limit</Label>
-                            <Input id="promo-limit" type="number" placeholder="Leave blank for unlimited" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="promo-expiry">Expiry Date (optional)</Label>
-                            <Popover>
-                                <PopoverTrigger asChild>
-                                    <Button variant="outline" className="w-full justify-start text-left font-normal">Select a date</Button>
-                                </PopoverTrigger>
-                                <PopoverContent className="w-auto p-0"><Calendar /></PopoverContent>
-                            </Popover>
-                        </div>
-                        <DialogFooter>
-                            <Button type="submit">Create & Activate</Button>
-                        </DialogFooter>
-                    </form>
+                    <PromoCodeForm promo={editingPromo} onSave={handleSavePromo} />
                 </DialogContent>
             </Dialog>
         </div>
@@ -152,32 +134,48 @@ export default function PromotionsPage() {
             </TableHeader>
             <TableBody>
               {promotions.map((p) => (
-                <TableRow key={p.code}>
+                <TableRow key={p.id}>
                   <TableCell className="font-mono text-primary font-semibold">
                     <div className="flex items-center gap-2">
                         <Tag className="h-4 w-4 text-muted-foreground" />
                         {p.code}
                     </div>
                   </TableCell>
-                  <TableCell>{p.value}</TableCell>
-                   <TableCell>{p.type}</TableCell>
+                  <TableCell>{p.type === 'fixed' ? `R${p.value}` : `${p.value}%`}</TableCell>
+                   <TableCell className="capitalize">{p.type}</TableCell>
                    <TableCell>{p.uses} / {p.limit || '∞'}</TableCell>
                    <TableCell>
                         <Badge variant="secondary" className={statusColors[p.status as keyof typeof statusColors]}>{p.status}</Badge>
                    </TableCell>
-                   <TableCell>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <Button aria-haspopup="true" size="icon" variant="ghost">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem>View Details</DropdownMenuItem>
-                                <DropdownMenuItem>Deactivate</DropdownMenuItem>
-                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/> Delete</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                   <TableCell className="text-right">
+                        <AlertDialog>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <Button aria-haspopup="true" size="icon" variant="ghost">
+                                        <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem onClick={() => handleEditPromo(p)}><Edit className="mr-2 h-4 w-4" />Edit</DropdownMenuItem>
+                                    <DropdownMenuItem>Deactivate</DropdownMenuItem>
+                                     <AlertDialogTrigger asChild>
+                                        <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/> Delete</DropdownMenuItem>
+                                    </AlertDialogTrigger>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>Delete Promotion?</AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will permanently delete the <strong>{p.code}</strong> promotion.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                    <AlertDialogAction onClick={() => handleDeletePromo(p.id)}>Yes, Delete</AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
                    </TableCell>
                 </TableRow>
               ))}

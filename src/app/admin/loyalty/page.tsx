@@ -24,6 +24,8 @@ import {
   Search,
   Star,
   MinusCircle,
+  Trash2,
+  Edit,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -39,6 +41,8 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { Separator } from '@/components/ui/separator';
+import React, { useState } from 'react';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
 const usersWithPoints = Object.values(mockUsers).map(u => ({ ...u, points: Math.floor(Math.random() * 2000) }));
 
@@ -48,14 +52,17 @@ const pointTransactions = [
     { user: 'John Smith', date: '2024-05-09', type: 'Adjust', amount: 500, reason: 'Customer service grant'},
 ];
 
-const rewards = [
-    { name: 'R50 Off Next Order', cost: 1000 },
-    { name: 'Free Delivery', cost: 500 },
-    { name: 'Free Ironing (5 items)', cost: 1500 },
+const initialRewards = [
+    { id: 'reward-1', name: 'R50 Off Next Order', cost: 1000 },
+    { id: 'reward-2', name: 'Free Delivery', cost: 500 },
+    { id: 'reward-3', name: 'Free Ironing (5 items)', cost: 1500 },
 ]
 
 export default function LoyaltyProgramPage() {
     const { toast } = useToast();
+    const [rewards, setRewards] = useState(initialRewards);
+    const [isRewardDialogOpen, setIsRewardDialogOpen] = useState(false);
+    const [editingReward, setEditingReward] = useState<typeof initialRewards[0] | null>(null);
 
     const handlePointAdjustment = (e: React.FormEvent, userName: string) => {
         e.preventDefault();
@@ -66,6 +73,34 @@ export default function LoyaltyProgramPage() {
             title: "Points Adjusted",
             description: `${points} points have been adjusted for ${userName}. Reason: ${reason}`
         });
+    }
+
+    const handleSaveReward = (e: React.FormEvent) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget as HTMLFormElement);
+        const name = formData.get('reward-name') as string;
+        const cost = Number(formData.get('reward-cost'));
+        
+        if (editingReward) {
+            setRewards(prev => prev.map(r => r.id === editingReward.id ? { ...r, name, cost } : r));
+            toast({ title: "Reward Updated", description: "The redemption reward has been updated." });
+        } else {
+            const newReward = { id: `reward-${Date.now()}`, name, cost };
+            setRewards(prev => [newReward, ...prev]);
+            toast({ title: "Reward Added", description: "The new reward is now available for customers." });
+        }
+        setIsRewardDialogOpen(false);
+        setEditingReward(null);
+    }
+    
+    const handleEditReward = (reward: typeof initialRewards[0]) => {
+        setEditingReward(reward);
+        setIsRewardDialogOpen(true);
+    }
+
+    const handleDeleteReward = (rewardId: string) => {
+        setRewards(prev => prev.filter(r => r.id !== rewardId));
+        toast({ title: "Reward Deleted", variant: "destructive" });
     }
 
   return (
@@ -170,23 +205,66 @@ export default function LoyaltyProgramPage() {
                             <Label>Redemption Rewards</Label>
                              <div className="space-y-2 mt-2">
                                 {rewards.map(reward => (
-                                    <div key={reward.name} className="flex items-center gap-2 p-3 border rounded-lg">
-                                        <Input defaultValue={reward.name} className="flex-grow" />
-                                        <Input type="number" defaultValue={reward.cost} className="w-28" />
-                                        <Button variant="ghost" size="icon"><MinusCircle className="h-4 w-4 text-destructive"/></Button>
+                                    <div key={reward.id} className="flex items-center gap-2 p-3 border rounded-lg">
+                                        <div className="flex-grow">
+                                            <p className="font-medium">{reward.name}</p>
+                                            <p className="text-sm text-muted-foreground">{reward.cost} points</p>
+                                        </div>
+                                        <AlertDialog>
+                                            <DropdownMenu>
+                                                <DropdownMenuTrigger asChild>
+                                                    <Button variant="ghost" size="icon"><MoreHorizontal className="h-4 w-4"/></Button>
+                                                </DropdownMenuTrigger>
+                                                <DropdownMenuContent align="end">
+                                                    <DropdownMenuItem onClick={() => handleEditReward(reward)}><Edit className="mr-2 h-4 w-4" /> Edit</DropdownMenuItem>
+                                                    <AlertDialogTrigger asChild>
+                                                        <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4" /> Delete</DropdownMenuItem>
+                                                    </AlertDialogTrigger>
+                                                </DropdownMenuContent>
+                                            </DropdownMenu>
+                                            <AlertDialogContent>
+                                                <AlertDialogHeader><AlertDialogTitle>Delete Reward?</AlertDialogTitle></AlertDialogHeader>
+                                                <AlertDialogDescription>
+                                                    This will permanently delete the "{reward.name}" reward. This action cannot be undone.
+                                                </AlertDialogDescription>
+                                                <AlertDialogFooter>
+                                                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                                    <AlertDialogAction onClick={() => handleDeleteReward(reward.id)}>Delete</AlertDialogAction>
+                                                </AlertDialogFooter>
+                                            </AlertDialogContent>
+                                        </AlertDialog>
                                     </div>
                                 ))}
-                                 <Button variant="outline" className="w-full">
+                                 <Button variant="outline" className="w-full" onClick={() => { setEditingReward(null); setIsRewardDialogOpen(true); }}>
                                     <PlusCircle className="mr-2 h-4 w-4" /> Add Reward
                                 </Button>
                              </div>
                         </div>
-
                          <Button>Save Program Settings</Button>
                     </CardContent>
                 </Card>
             </TabsContent>
         </Tabs>
+        <Dialog open={isRewardDialogOpen} onOpenChange={setIsRewardDialogOpen}>
+            <DialogContent>
+                <DialogHeader>
+                    <DialogTitle>{editingReward ? 'Edit Reward' : 'Add New Reward'}</DialogTitle>
+                </DialogHeader>
+                <form onSubmit={handleSaveReward} className="space-y-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="reward-name">Reward Name</Label>
+                        <Input id="reward-name" name="reward-name" defaultValue={editingReward?.name} placeholder="e.g., R100 Off Voucher" required />
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="reward-cost">Point Cost</Label>
+                        <Input id="reward-cost" name="reward-cost" type="number" defaultValue={editingReward?.cost} placeholder="e.g., 2000" required />
+                    </div>
+                    <DialogFooter>
+                        <Button type="submit">Save Reward</Button>
+                    </DialogFooter>
+                </form>
+            </DialogContent>
+        </Dialog>
     </div>
   );
 }
