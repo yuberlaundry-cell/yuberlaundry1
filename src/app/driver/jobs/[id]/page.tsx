@@ -3,14 +3,15 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, Signature, Building, Ban, UserX, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, ShieldCheck, Ban, UserX, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useParams, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import SignatureCanvas from 'react-signature-canvas';
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 
 const jobData = {
@@ -61,7 +62,7 @@ const pickupSteps = [
 const deliverySteps = [
     { id: 'navigate', label: 'Navigate to Customer', actionLabel: 'Start Navigation' },
     { id: 'arrive', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
-    { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: Signature },
+    { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: ShieldCheck },
     { id: 'complete', label: 'Job Complete', actionLabel: '' },
     { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat' },
     { id: 'confirm_return_handoff', label: 'Confirm Laundromat Return', actionLabel: 'Confirm Handoff' },
@@ -79,13 +80,14 @@ export default function JobDetailsPage() {
 
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const sigCanvas = useRef<SignatureCanvas | null>(null);
     const { toast } = useToast();
     
     const [isModalOpen, setModalOpen] = useState(false);
-    const [modalContent, setModalContent] = useState<'scan_photo' | 'photo' | 'signature' | null>(null);
+    const [modalContent, setModalContent] = useState<'scan_photo' | 'photo' | 'otp' | null>(null);
+    const [otp, setOtp] = useState('');
 
-    const openModal = (type: 'scan_photo' | 'photo' | 'signature') => {
+
+    const openModal = (type: 'scan_photo' | 'photo' | 'otp') => {
         setModalContent(type);
         setModalOpen(true);
     }
@@ -157,14 +159,34 @@ export default function JobDetailsPage() {
         }, 1500);
     }
     
+    const handleConfirmOtp = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Simulate OTP check
+        if (otp.length === 6) {
+             toast({
+                title: 'OTP Verified!',
+                description: `Delivery for ${job.id} confirmed.`,
+            });
+            setModalOpen(false);
+            setOtp('');
+            handleNextStep();
+        } else {
+            toast({
+                title: 'Invalid OTP',
+                description: 'Please enter a valid 6-digit OTP.',
+                variant: 'destructive'
+            });
+        }
+    }
+
     const renderActionButton = (step: typeof workflowSteps[0]) => {
         const ActionIcon = step.icon;
 
         if (step.id === 'confirm_or_fail') {
              return (
                 <div className="mt-2 space-y-2">
-                    <Button className="w-full" onClick={() => openModal('signature')}>
-                        <Signature className="mr-2" /> {step.actionLabel}
+                    <Button className="w-full" onClick={() => openModal('otp')}>
+                        <ShieldCheck className="mr-2" /> {step.actionLabel}
                     </Button>
                     <Button variant="destructive" className="w-full" onClick={handleCustomerNotAvailable}>
                         <UserX className="mr-2" /> Customer Not Available
@@ -173,9 +195,9 @@ export default function JobDetailsPage() {
             );
         }
 
-        if (step.id === 'scan_photo' || step.id === 'photo' || (step.icon && step.id !== 'confirm_or_fail')) {
+        if (step.id === 'scan_photo' || step.id === 'photo') {
              return (
-                <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan_photo' | 'photo' | 'signature')}>
+                <Button className="mt-2 w-full" onClick={() => openModal(step.id as 'scan_photo' | 'photo')}>
                     {ActionIcon && <ActionIcon className="mr-2" />} {step.actionLabel}
                 </Button>
             );
@@ -194,10 +216,6 @@ export default function JobDetailsPage() {
         return <Button className="mt-2 w-full" onClick={handleNextStep}>{step.actionLabel}</Button>
     }
     
-    const clearSignature = () => {
-        sigCanvas.current?.clear();
-    };
-
     const renderModalContent = () => {
         switch (modalContent) {
             case 'scan_photo':
@@ -256,32 +274,31 @@ export default function JobDetailsPage() {
                         <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>Capture</Button>
                     </>
                 );
-            case 'signature':
+            case 'otp':
                  return (
                     <>
                         <DialogHeader>
-                            <DialogTitle>Capture Signature</DialogTitle>
+                            <DialogTitle>Confirm Delivery</DialogTitle>
                             <DialogDescription>
-                                Ask the customer to sign on the screen to confirm delivery.
+                                Ask the customer for their 6-digit OTP code to confirm delivery.
                             </DialogDescription>
                         </DialogHeader>
-                        <div className="w-full aspect-video bg-muted rounded-lg border">
-                           <SignatureCanvas
-                                ref={sigCanvas}
-                                penColor='black'
-                                canvasProps={{ className: 'w-full h-full' }}
-                            />
-                        </div>
-                         <div className="grid grid-cols-2 gap-2">
-                            <Button variant="outline" onClick={clearSignature}>
-                                <Trash2 className="mr-2" />
-                                Clear
-                            </Button>
-                            <Button onClick={() => { handleNextStep(); setModalOpen(false); }}>
-                                <Check className="mr-2" />
-                                Confirm Signature
-                            </Button>
-                        </div>
+                        <form onSubmit={handleConfirmOtp} className="space-y-4 pt-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="otp">One-Time Password (OTP)</Label>
+                                <Input
+                                    id="otp"
+                                    type="tel"
+                                    maxLength={6}
+                                    placeholder="_ _ _ _ _ _"
+                                    className="text-center text-2xl font-mono tracking-[1em]"
+                                    value={otp}
+                                    onChange={(e) => setOtp(e.target.value)}
+                                />
+                            </div>
+                            <p className="text-xs text-muted-foreground">The customer received this code via SMS.</p>
+                            <Button type="submit" className="w-full">Confirm OTP</Button>
+                        </form>
                     </>
                 );
             default:
