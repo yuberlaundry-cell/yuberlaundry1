@@ -6,8 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { Upload } from 'lucide-react';
+import { Upload, Palette, Text, Link as LinkIcon } from 'lucide-react';
 import { platformName, appStoreLinks } from '@/lib/branding';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function BrandingSettingsPage() {
     const { toast } = useToast();
@@ -25,51 +26,76 @@ export default function BrandingSettingsPage() {
             <div>
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Branding</h1>
                 <p className="text-muted-foreground">
-                    Manage your platform's logo, colors, and name.
+                    Manage your platform's name, logos, colors, fonts, and app store links.
                 </p>
             </div>
 
             <Card>
                 <CardHeader>
                     <CardTitle>Platform Name</CardTitle>
-                    <CardDescription>This name will be displayed throughout the application, including the copyright notice in the footer.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 max-w-lg">
                     <div className="space-y-2">
                         <Label htmlFor="platform-name">Platform Name</Label>
                         <Input id="platform-name" defaultValue={platformName} />
-                    </div>
-                </CardContent>
-            </Card>
-            
-            <Card>
-                <CardHeader>
-                    <CardTitle>Theme</CardTitle>
-                    <CardDescription>Customize the look and feel of your application by changing the theme colors. HSL format is recommended.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6 max-w-lg">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                         <div className="space-y-2">
-                            <Label htmlFor="primary-color">Primary</Label>
-                            <Input id="primary-color" defaultValue="221.2 83.2% 53.3%" />
-                        </div>
-                         <div className="space-y-2">
-                            <Label htmlFor="background-color">Background</Label>
-                            <Input id="background-color" defaultValue="210 40% 98%" />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="accent-color">Accent</Label>
-                            <Input id="accent-color" defaultValue="262.1 83.3% 57.8%" />
-                        </div>
+                        <p className="text-xs text-muted-foreground">This name will be displayed throughout the application, including the copyright notice.</p>
                     </div>
                 </CardContent>
             </Card>
 
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Palette/> Theme Colors</CardTitle>
+                    <CardDescription>Customize the look and feel of your application. Click a color to change it.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6 max-w-2xl">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+                        <ColorInput label="Background" defaultValue="#f0f2f7" />
+                        <ColorInput label="Foreground" defaultValue="#09090b" />
+                        <ColorInput label="Card" defaultValue="#ffffff" />
+                        <ColorInput label="Primary" defaultValue="#4975f5" />
+                        <ColorInput label="Primary Foreground" defaultValue="#f0f2f7" />
+                        <ColorInput label="Secondary" defaultValue="#f1f5f9" />
+                        <ColorInput label="Accent" defaultValue="#7149f5" />
+                        <ColorInput label="Destructive" defaultValue="#ef4444" />
+                    </div>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Text/> Fonts</CardTitle>
+                    <CardDescription>Select the typography for headlines and body text.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6 max-w-lg">
+                    <div className="space-y-2">
+                        <Label htmlFor="headline-font">Headline Font</Label>
+                         <Select defaultValue="space-grotesk">
+                            <SelectTrigger id="headline-font"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="space-grotesk">Space Grotesk</SelectItem>
+                                <SelectItem value="plus-jakarta-sans">Plus Jakarta Sans</SelectItem>
+                                <SelectItem value="onest">Onest</SelectItem>
+                                <SelectItem value="geist-sans">Geist Sans</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                    <div className="space-y-2">
+                        <Label htmlFor="body-font">Body Font</Label>
+                         <Select defaultValue="inter">
+                            <SelectTrigger id="body-font"><SelectValue /></SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="inter">Inter</SelectItem>
+                                <SelectItem value="geist-sans">Geist Sans</SelectItem>
+                                <SelectItem value="onest">Onest</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                </CardContent>
+            </Card>
 
             <Card>
                 <CardHeader>
                     <CardTitle>Logo & Favicon</CardTitle>
-                    <CardDescription>Upload your company logo and browser favicon.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 max-w-lg">
                     <div className="space-y-2">
@@ -90,24 +116,49 @@ export default function BrandingSettingsPage() {
                             </div>
                             <Input id="favicon-upload" type="file" className="max-w-xs" />
                         </div>
-                        <p className="text-xs text-muted-foreground">Recommended: ICO or PNG file, 32x32px or 64x64px.</p>
+                        <p className="text-xs text-muted-foreground">Recommended: ICO or PNG file, 32x32px.</p>
                     </div>
                 </CardContent>
             </Card>
 
             <Card>
                 <CardHeader>
-                    <CardTitle>App Store Links</CardTitle>
-                    <CardDescription>Enter the URLs for your mobile apps in the Apple App Store and Google Play Store.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><LinkIcon/> App Store Links</CardTitle>
+                    <CardDescription>Enter the URLs for your mobile apps.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 max-w-lg">
-                    <div className="space-y-2">
-                        <Label htmlFor="app-store-url">Apple App Store URL</Label>
-                        <Input id="app-store-url" placeholder="https://apps.apple.com/..." defaultValue={appStoreLinks.apple} />
+                    <div className="space-y-4 p-4 border rounded-lg">
+                        <h4 className="font-semibold">Consumer App</h4>
+                        <div className="space-y-2">
+                            <Label htmlFor="consumer-apple-url">Apple App Store URL</Label>
+                            <Input id="consumer-apple-url" placeholder="https://apps.apple.com/..." defaultValue={appStoreLinks.consumer.apple} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="consumer-google-url">Google Play Store URL</Label>
+                            <Input id="consumer-google-url" placeholder="https://play.google.com/store/apps/..." defaultValue={appStoreLinks.consumer.google}/>
+                        </div>
                     </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="play-store-url">Google Play Store URL</Label>
-                        <Input id="play-store-url" placeholder="https://play.google.com/store/apps/..." defaultValue={appStoreLinks.google}/>
+                     <div className="space-y-4 p-4 border rounded-lg">
+                        <h4 className="font-semibold">Driver App</h4>
+                        <div className="space-y-2">
+                            <Label htmlFor="driver-apple-url">Apple App Store URL</Label>
+                            <Input id="driver-apple-url" placeholder="https://apps.apple.com/..." defaultValue={appStoreLinks.driver.apple} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="driver-google-url">Google Play Store URL</Label>
+                            <Input id="driver-google-url" placeholder="https://play.google.com/store/apps/..." defaultValue={appStoreLinks.driver.google}/>
+                        </div>
+                    </div>
+                     <div className="space-y-4 p-4 border rounded-lg">
+                        <h4 className="font-semibold">Laundromat App</h4>
+                        <div className="space-y-2">
+                            <Label htmlFor="laundromat-apple-url">Apple App Store URL</Label>
+                            <Input id="laundromat-apple-url" placeholder="https://apps.apple.com/..." defaultValue={appStoreLinks.laundromat.apple} />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="laundromat-google-url">Google Play Store URL</Label>
+                            <Input id="laundromat-google-url" placeholder="https://play.google.com/store/apps/..." defaultValue={appStoreLinks.laundromat.google}/>
+                        </div>
                     </div>
                 </CardContent>
             </Card>
@@ -116,5 +167,17 @@ export default function BrandingSettingsPage() {
                 <Button type="submit">Save Branding Settings</Button>
             </div>
         </form>
+    );
+}
+
+function ColorInput({ label, defaultValue }: { label: string; defaultValue: string }) {
+    return (
+        <div className="space-y-2">
+            <Label>{label}</Label>
+            <div className="flex items-center gap-2">
+                <Input type="color" defaultValue={defaultValue} className="w-10 h-10 p-1" />
+                <Input defaultValue={defaultValue} className="font-mono text-xs" />
+            </div>
+        </div>
     );
 }

@@ -67,7 +67,7 @@ export function PublicFooter() {
           </div>
           <div className="flex flex-col sm:flex-row items-center gap-2 order-1 md:order-2">
              <Button asChild variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
-                <a href={appStoreLinks.apple} target="_blank" rel="noopener noreferrer">
+                <a href={appStoreLinks.consumer.apple} target="_blank" rel="noopener noreferrer">
                     <Smartphone className="h-6 w-6"/>
                     <div>
                         <div className='text-xs'>Download on the</div>
@@ -76,7 +76,7 @@ export function PublicFooter() {
                 </a>
             </Button>
             <Button asChild variant="ghost" className="h-12 text-left flex items-center gap-2 border bg-gray-800 hover:bg-gray-700 text-white hover:text-white w-full sm:w-auto">
-                <a href={appStoreLinks.google} target="_blank" rel="noopener noreferrer">
+                <a href={appStoreLinks.consumer.google} target="_blank" rel="noopener noreferrer">
                     <Store className="h-6 w-6"/>
                     <div>
                         <div className='text-xs'>GET IT ON</div>
