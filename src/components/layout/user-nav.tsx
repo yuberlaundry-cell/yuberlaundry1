@@ -16,14 +16,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/use-auth";
-import { getRedirectPathForRole } from "@/lib/auth";
+import { UserRole, getRedirectPathForRole } from "@/lib/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { HardHat, User, Briefcase } from "lucide-react";
+import { HardHat, User, Briefcase, Building, Shield, LogOut } from "lucide-react";
 
+
+const allRoles: { role: UserRole, label: string, icon: React.FC<any> }[] = [
+    { role: 'consumer', label: 'Customer', icon: User },
+    { role: 'business_admin', label: 'Business Admin', icon: Briefcase },
+    { role: 'business_employee', label: 'Business Employee', icon: Briefcase },
+    { role: 'driver', label: 'Driver', icon: HardHat },
+    { role: 'laundromat_staff', label: 'Laundromat Staff', icon: Building },
+    { role: 'superadmin', label: 'Superadmin', icon: Shield },
+];
 
 export function UserNav() {
-  const { user, logout } = useAuth();
+  const { user, login, logout } = useAuth();
   const router = useRouter();
 
   if (!user) {
@@ -33,6 +42,12 @@ export function UserNav() {
   const handleLogout = () => {
     logout();
     router.push('/');
+  }
+
+  const switchRole = (role: UserRole) => {
+    login(role);
+    const redirectPath = getRedirectPathForRole(role);
+    router.push(redirectPath);
   }
 
   const dashboardPath = getRedirectPathForRole(user.role);
@@ -78,18 +93,17 @@ export function UserNav() {
          <DropdownMenuSub>
             <DropdownMenuSubTrigger>Switch Role</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
-                 <DropdownMenuItem>
-                    <User className="mr-2"/>
-                    <span>Customer</span>
-                </DropdownMenuItem>
-                 <DropdownMenuItem>
-                    <HardHat className="mr-2"/>
-                    <span>Driver</span>
-                </DropdownMenuItem>
+                {allRoles.filter(r => r.role !== user.role).map(roleItem => (
+                    <DropdownMenuItem key={roleItem.role} onClick={() => switchRole(roleItem.role)}>
+                        <roleItem.icon className="mr-2 h-4 w-4" />
+                        <span>{roleItem.label}</span>
+                    </DropdownMenuItem>
+                ))}
             </DropdownMenuSubContent>
         </DropdownMenuSub>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
+          <LogOut className="mr-2 h-4 w-4" />
           Log out
         </DropdownMenuItem>
       </DropdownMenuContent>
