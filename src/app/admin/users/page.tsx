@@ -21,6 +21,8 @@ import {
   PlusCircle,
   Search,
   ChevronDown,
+  Trash2,
+  Edit,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -33,12 +35,19 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { UserRole, getRedirectPathForRole, mockUsers } from '@/lib/auth';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useToast } from '@/hooks/use-toast';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 
-const users = Object.values(mockUsers);
+
+const initialUsers = Object.values(mockUsers);
 
 const statusColors: { [key: string]: string } = {
   Active: 'bg-green-100 text-green-800',
-  Inactive: 'bg-gray-100 text-gray-800',
+  Suspended: 'bg-gray-100 text-gray-800',
 };
 
 const roleColors: { [key: string]: string } = {
@@ -60,12 +69,55 @@ const toTitleCase = (str: string) => {
 export default function UsersPage() {
     const { login } = useAuth();
     const router = useRouter();
+    const { toast } = useToast();
+    const [users, setUsers] = useState(initialUsers.map(u => ({ ...u, status: 'Active' })));
+    const [editingUser, setEditingUser] = useState<(typeof users)[0] | null>(null);
+    const [isFormOpen, setIsFormOpen] = useState(false);
 
     const handleImpersonate = (role: UserRole) => {
         login(role);
         const redirectPath = getRedirectPathForRole(role);
         router.push(redirectPath);
     };
+    
+    const handleSaveUser = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const formData = new FormData(e.currentTarget);
+        const userData = {
+            id: editingUser ? editingUser.id : `user-${Date.now()}`,
+            firstName: formData.get('first-name') as string,
+            lastName: formData.get('last-name') as string,
+            email: formData.get('email') as string,
+            role: formData.get('role') as UserRole,
+            avatarUrl: editingUser?.avatarUrl || `https://picsum.photos/seed/user${Date.now()}/100/100`,
+            status: editingUser?.status || 'Active',
+        };
+
+        if (editingUser) {
+            setUsers(prev => prev.map(u => u.id === editingUser.id ? userData : u));
+            toast({ title: 'User Updated', description: `${userData.firstName} ${userData.lastName}'s details have been saved.` });
+        } else {
+            setUsers(prev => [userData, ...prev]);
+            toast({ title: 'User Added', description: `${userData.firstName} has been invited to the platform.` });
+        }
+        setIsFormOpen(false);
+        setEditingUser(null);
+    }
+    
+    const handleOpenDialog = (user: (typeof users)[0] | null) => {
+        setEditingUser(user);
+        setIsFormOpen(true);
+    }
+    
+    const handleDelete = (userId: string) => {
+        setUsers(prev => prev.filter(u => u.id !== userId));
+        toast({ title: 'User Deleted', variant: 'destructive' });
+    }
+    
+    const handleSuspend = (userId: string) => {
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, status: u.status === 'Active' ? 'Suspended' : 'Active' } : u));
+        toast({ title: 'User Status Updated' });
+    }
 
 
   return (
@@ -75,11 +127,57 @@ export default function UsersPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Users</h1>
                 <p className="text-muted-foreground">Manage all users across the platform.</p>
             </div>
-            <div className="flex gap-2">
-                <Button className="w-full sm:w-auto">
-                    <PlusCircle /> Invite User
-                </Button>
-            </div>
+             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
+                <DialogTrigger asChild>
+                    <Button className="w-full sm:w-auto" onClick={() => handleOpenDialog(null)}>
+                        <PlusCircle /> Add User
+                    </Button>
+                </DialogTrigger>
+                <DialogContent>
+                     <DialogHeader>
+                        <DialogTitle>{editingUser ? 'Edit User' : 'Add New User'}</DialogTitle>
+                        <DialogDescription>{editingUser ? `Update the details for ${editingUser.firstName}.` : 'Invite a new user to the platform.'}</DialogDescription>
+                    </DialogHeader>
+                    <form className="space-y-4" onSubmit={handleSaveUser}>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="first-name">First Name</Label>
+                                <Input id="first-name" name="first-name" defaultValue={editingUser?.firstName} required/>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="last-name">Last Name</Label>
+                                <Input id="last-name" name="last-name" defaultValue={editingUser?.lastName} required/>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="email">Email</Label>
+                            <Input id="email" name="email" type="email" defaultValue={editingUser?.email} required/>
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="role">Role</Label>
+                             <Select name="role" defaultValue={editingUser?.role} required>
+                                <SelectTrigger>
+                                    <SelectValue placeholder="Select a role"/>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {Object.keys(mockUsers).map(role => (
+                                        <SelectItem key={role} value={role}>{toTitleCase(role)}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        {!editingUser && (
+                            <div className="space-y-2">
+                                <Label htmlFor="password">Set Initial Password</Label>
+                                <Input id="password" name="password" type="password" required />
+                            </div>
+                        )}
+                        <DialogFooter>
+                            <Button type="submit">{editingUser ? 'Save Changes' : 'Add User'}</Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
         </div>
 
       <Card>
@@ -101,12 +199,9 @@ export default function UsersPage() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem>All</DropdownMenuItem>
-                    <DropdownMenuItem>Consumer</DropdownMenuItem>
-                    <DropdownMenuItem>Business Admin</DropdownMenuItem>
-                    <DropdownMenuItem>Business Employee</DropdownMenuItem>
-                    <DropdownMenuItem>Driver</DropdownMenuItem>
-                    <DropdownMenuItem>Laundromat Staff</DropdownMenuItem>
-                      <DropdownMenuItem>Superadmin</DropdownMenuItem>
+                    {Object.keys(mockUsers).map(role => (
+                         <DropdownMenuItem key={role}>{toTitleCase(role)}</DropdownMenuItem>
+                    ))}
                 </DropdownMenuContent>
             </DropdownMenu>
               <DropdownMenu>
@@ -118,7 +213,7 @@ export default function UsersPage() {
                 <DropdownMenuContent align="end">
                     <DropdownMenuItem>All</DropdownMenuItem>
                     <DropdownMenuItem>Active</DropdownMenuItem>
-                    <DropdownMenuItem>Inactive</DropdownMenuItem>
+                    <DropdownMenuItem>Suspended</DropdownMenuItem>
                 </DropdownMenuContent>
             </DropdownMenu>
             </div>
@@ -137,7 +232,7 @@ export default function UsersPage() {
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id}>
+                <TableRow key={user.id} className="cursor-pointer" onClick={() => router.push(`/admin/users/${user.id}`)}>
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar>
@@ -169,31 +264,42 @@ export default function UsersPage() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="secondary" className={statusColors['Active']}>
-                      Active
+                    <Badge variant="secondary" className={statusColors[user.status]}>
+                      {user.status}
                     </Badge>
                   </TableCell>
-                  <TableCell>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button aria-haspopup="true" size="icon" variant="ghost">
-                          <MoreHorizontal className="h-4 w-4" />
-                          <span className="sr-only">Toggle menu</span>
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem>View Details</DropdownMenuItem>
-                        <DropdownMenuItem>Edit Permissions</DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => handleImpersonate(user.role)}
-                        >
-                          Impersonate User
-                        </DropdownMenuItem>
-                        <DropdownMenuItem className="text-destructive">
-                          Suspend User
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <TableCell onClick={e => e.stopPropagation()}>
+                    <AlertDialog>
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button aria-haspopup="true" size="icon" variant="ghost">
+                            <MoreHorizontal className="h-4 w-4" />
+                            <span className="sr-only">Toggle menu</span>
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onSelect={() => router.push(`/admin/users/${user.id}`)}>View Details</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => handleOpenDialog(user)}><Edit className="mr-2 h-4 w-4"/>Edit User</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => handleImpersonate(user.role)}>Impersonate User</DropdownMenuItem>
+                            <DropdownMenuItem onSelect={() => handleSuspend(user.id)}>{user.status === 'Active' ? 'Suspend' : 'Unsuspend'}</DropdownMenuItem>
+                            <AlertDialogTrigger asChild>
+                                <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete User</DropdownMenuItem>
+                            </AlertDialogTrigger>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                         <AlertDialogContent>
+                             <AlertDialogHeader>
+                                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                This action cannot be undone. This will permanently delete the user account for {user.firstName}.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                                <AlertDialogAction onClick={() => handleDelete(user.id)}>Delete User</AlertDialogAction>
+                            </AlertDialogFooter>
+                         </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))}
