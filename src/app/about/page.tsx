@@ -8,21 +8,33 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { PlaceHolderImages } from "@/lib/placeholder-images";
 
-const teamMembers = [
-    { name: 'Jane Doe', role: 'CEO & Founder', avatarId: 'team-jane-doe' },
-    { name: 'John Smith', role: 'CTO', avatarId: 'team-john-smith' },
-    { name: 'Alex Ray', role: 'Head of Operations', avatarId: 'team-alex-ray' },
-    { name: 'Maria Garcia', role: 'Partner Success Lead', avatarId: 'team-maria-garcia' },
-];
+// This data would typically come from a CMS and be fetched on the page.
+// We're structuring it here to match what the Superadmin CMS form manages.
+const aboutPageContent = {
+    hero: {
+        headline: "About Yuber Laundry",
+        subheadline: "We're on a mission to make laundry day a thing of the past. Life's too short for sorting, washing, and folding."
+    },
+    story: {
+        imageUrlId: "modern-laundromat",
+        content: "Founded in 2023, Yuber Laundry was born from a simple idea: laundry is a chore that no one enjoys. We saw an opportunity to use technology to connect people with local, professional laundromats, creating a seamless experience from pickup to delivery. We believe in supporting local businesses while providing a world-class service to our customers."
+    },
+    values: [
+        { title: 'Customer Obsession', description: "We start with the customer and work backwards. We work vigorously to earn and keep customer trust." },
+        { title: 'Innovation', description: "We are always looking for new ways to improve our service and make our customers' lives easier." },
+        { title: 'Sustainability', description: "We are committed to building a sustainable business that is good for our customers, our partners, and the planet." },
+    ],
+    team: [
+        { name: 'Jane Doe', role: 'CEO & Founder', avatarId: 'team-jane-doe' },
+        { name: 'John Smith', role: 'CTO', avatarId: 'team-john-smith' },
+        { name: 'Alex Ray', role: 'Head of Operations', avatarId: 'team-alex-ray' },
+        { name: 'Maria Garcia', role: 'Partner Success Lead', avatarId: 'team-maria-garcia' },
+    ]
+};
 
-const values = [
-    { title: 'Customer Obsession', description: "We start with the customer and work backwards. We work vigorously to earn and keep customer trust." },
-    { title: 'Innovation', description: "We are always looking for new ways to improve our service and make our customers' lives easier." },
-    { title: 'Sustainability', description: "We are committed to building a sustainable business that is good for our customers, our partners, and the planet." },
-];
 
 export default function AboutPage() {
-    const modernLaundromatImage = PlaceHolderImages.find(p => p.id === 'modern-laundromat');
+    const storyImage = PlaceHolderImages.find(p => p.id === aboutPageContent.story.imageUrlId);
     
     return (
         <div className="flex flex-col min-h-screen">
@@ -30,9 +42,9 @@ export default function AboutPage() {
             <main className="flex-grow">
                 <section className="bg-primary text-primary-foreground py-20 md:py-32">
                     <div className="container mx-auto px-6 sm:px-8 text-center">
-                        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">About Yuber Laundry</h1>
+                        <h1 className="text-4xl md:text-5xl font-extrabold font-headline tracking-tight">{aboutPageContent.hero.headline}</h1>
                         <p className="mt-4 text-lg md:text-xl max-w-3xl mx-auto text-primary-foreground/90">
-                            We're on a mission to make laundry day a thing of the past. Life's too short for sorting, washing, and folding.
+                            {aboutPageContent.hero.subheadline}
                         </p>
                     </div>
                 </section>
@@ -41,11 +53,11 @@ export default function AboutPage() {
                     <div className="container mx-auto px-6 sm:px-8">
                         <div className="grid md:grid-cols-2 gap-12 items-center">
                             <div className="relative aspect-square">
-                                {modernLaundromatImage && (
+                                {storyImage && (
                                     <Image
-                                        src={modernLaundromatImage.imageUrl}
-                                        alt={modernLaundromatImage.description}
-                                        data-ai-hint={modernLaundromatImage.imageHint}
+                                        src={storyImage.imageUrl}
+                                        alt={storyImage.description}
+                                        data-ai-hint={storyImage.imageHint}
                                         fill
                                         className="object-cover rounded-2xl"
                                     />
@@ -54,7 +66,7 @@ export default function AboutPage() {
                             <div>
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline">Our Story</h2>
                                 <p className="mt-4 text-lg text-muted-foreground">
-                                    Founded in 2023, Yuber Laundry was born from a simple idea: laundry is a chore that no one enjoys. We saw an opportunity to use technology to connect people with local, professional laundromats, creating a seamless experience from pickup to delivery. We believe in supporting local businesses while providing a world-class service to our customers.
+                                    {aboutPageContent.story.content}
                                 </p>
                             </div>
                         </div>
@@ -70,7 +82,7 @@ export default function AboutPage() {
                             </p>
                         </div>
                         <div className="mt-12 grid gap-8 md:grid-cols-3">
-                            {values.map(value => (
+                            {aboutPageContent.values.map(value => (
                                 <Card key={value.title} className="text-center">
                                     <CardContent className="p-8">
                                         <h3 className="text-xl font-semibold mb-2">{value.title}</h3>
@@ -88,7 +100,7 @@ export default function AboutPage() {
                             <h2 className="text-3xl md:text-4xl font-bold font-headline">Meet the Team</h2>
                         </div>
                         <div className="mt-12 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                            {teamMembers.map(member => {
+                            {aboutPageContent.team.map(member => {
                                 const memberImage = PlaceHolderImages.find(p => p.id === member.avatarId);
                                 return (
                                     <div key={member.name} className="text-center">
