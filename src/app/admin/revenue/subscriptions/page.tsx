@@ -22,6 +22,7 @@ import {
   MoreVertical,
   Trash2,
   Edit,
+  Building,
 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Check, X } from 'lucide-react';
@@ -175,7 +176,7 @@ const initialPlans: Plan[] = [
 const planTypeIcons = {
     Consumer: Users,
     Business: Box,
-    Laundromat: Crown,
+    Laundromat: Building,
 }
 
 export default function SubscriptionsPage() {
