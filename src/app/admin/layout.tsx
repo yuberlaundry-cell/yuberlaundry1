@@ -41,6 +41,7 @@ import {
   Sparkles,
   Package,
   Tag,
+  MessagesSquare,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -133,6 +134,7 @@ const navigationConfig = [
       { href: '/admin/roles', label: 'Roles & Permissions', icon: UserCog },
       { href: '/admin/settings', label: 'Platform Settings', icon: Settings },
       { href: '/admin/settings/branding', label: 'Branding', icon: Palette },
+      { href: '/admin/settings/notifications', label: 'Notification Templates', icon: MessagesSquare },
     ],
   },
 ];
