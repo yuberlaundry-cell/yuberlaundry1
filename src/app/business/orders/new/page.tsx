@@ -1,11 +1,10 @@
 
-
 'use client';
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { ArrowLeft, User, ShoppingBag, Calendar, Check } from "lucide-react";
+import { ArrowLeft, User, ShoppingBag, Calendar, Check, Droplets, VenetianMask } from "lucide-react";
 import Link from "next/link";
 import { Progress } from "@/components/ui/progress";
 import { useToast } from "@/hooks/use-toast";
@@ -19,7 +18,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/hooks/use-auth';
-import ServicesStep from '@/components/booking/steps/services-step';
 
 const steps = [
   { id: 1, name: 'Employee', icon: User },
@@ -31,6 +29,11 @@ const steps = [
 const savedAddresses = [
     { id: 'home', type: 'Employee Home', address: '123 Main St, London, SW1A 0AA' },
     { id: 'work', type: 'Company HQ', address: '456 Business Rd, London, EC1A 1BB' },
+];
+
+const servicesConfig = [
+    { id: 'wash-fold', name: 'Wash & Fold', icon: Droplets, description: 'Priced per kg' },
+    { id: 'dry-cleaning', name: 'Dry Cleaning', icon: VenetianMask, description: 'Priced per item' },
 ];
 
 
@@ -93,7 +96,30 @@ export default function NewBusinessOrderPage() {
                     </div>
                 )
             case 2:
-                return <ServicesStep />;
+                return (
+                    <div className="space-y-6">
+                        {servicesConfig.map(service => (
+                            <Card key={service.id}>
+                                <CardHeader>
+                                    <CardTitle className="flex items-center gap-2 text-lg">
+                                        <service.icon className="h-5 w-5 text-primary"/>
+                                        {service.name}
+                                    </CardTitle>
+                                    <CardDescription>{service.description}</CardDescription>
+                                </CardHeader>
+                                <CardContent>
+                                    <div className="flex items-end gap-2">
+                                        <div className="space-y-2 flex-1">
+                                            <Label htmlFor={`input-${service.id}`}>Estimated Weight/Items</Label>
+                                            <Input id={`input-${service.id}`} type="number" placeholder="e.g. 5"/>
+                                        </div>
+                                        <Button variant="outline">Add Service</Button>
+                                    </div>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                );
             case 3:
                 return (
                     <div className="space-y-6">
