@@ -5,59 +5,65 @@ import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
-import { PlaceHolderImages } from "@/lib/placeholder-images";
-import { Check, Zap, Users, BarChart, Building, Briefcase, FileText, Utensils, Dumbbell, ArrowRight } from "lucide-react";
+import { Check, ArrowRight, Building, Briefcase, FileText, Utensils, Dumbbell, BarChart } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
 
-const features = [
-    {
-        icon: FileText,
-        title: "Centralized Billing",
-        description: "Receive a single, simple invoice for your entire company's usage each month."
+// Mock data representing content managed by the CMS
+const pageContent = {
+    hero: {
+        headline: "The employee benefit that actually gives time back.",
+        subheadline: "Empower your team with the ultimate convenience. Yuber for Business simplifies laundry so your employees can focus on what matters most.",
+        imageUrl: "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MjgxNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
     },
-    {
-        icon: BarChart,
-        title: "Usage Reports",
-        description: "Get detailed analytics on spending by employee, department, or service type."
-    },
-    {
-        icon: Briefcase,
-        title: "Employee Allowances",
-        description: "Set custom spending limits and rules for each employee to control your budget."
-    },
-    {
-        icon: Building,
-        title: "Dedicated Portal",
-        description: "Manage your account, employees, and settings from a simple, powerful admin dashboard."
-    }
-];
-
-const industries = [
-    {
-        icon: Briefcase,
-        title: "Corporates",
-        description: "Offer a modern wellness perk to your office-based or remote employees."
-    },
-    {
-        icon: Building,
-        title: "Hotels & Guesthouses",
-        description: "Outsource guest laundry and staff uniform cleaning with reliable turnaround."
-    },
-    {
-        icon: Utensils,
-        title: "Restaurants",
-        description: "Keep your table linens, aprons, and uniforms pristine and ready for service."
-    },
-    {
-        icon: Dumbbell,
-        title: "Gyms & Salons",
-        description: "Ensure a constant supply of fresh, clean towels for your members and clients."
-    }
-];
+    features: [
+        {
+            icon: FileText,
+            title: "Centralized Billing",
+            description: "Receive a single, simple invoice for your entire company's usage each month."
+        },
+        {
+            icon: BarChart,
+            title: "Usage Reports",
+            description: "Get detailed analytics on spending by employee, department, or service type."
+        },
+        {
+            icon: Briefcase,
+            title: "Employee Allowances",
+            description: "Set custom spending limits and rules for each employee to control your budget."
+        },
+        {
+            icon: Building,
+            title: "Dedicated Portal",
+            description: "Manage your account, employees, and settings from a simple, powerful admin dashboard."
+        }
+    ],
+    industries: [
+        {
+            icon: Briefcase,
+            title: "Corporates",
+            description: "Offer a modern wellness perk to your office-based or remote employees."
+        },
+        {
+            icon: Building,
+            title: "Hotels & Guesthouses",
+            description: "Outsource guest laundry and staff uniform cleaning with reliable turnaround."
+        },
+        {
+            icon: Utensils,
+            title: "Restaurants",
+            description: "Keep your table linens, aprons, and uniforms pristine and ready for service."
+        },
+        {
+            icon: Dumbbell,
+            title: "Gyms & Salons",
+            description: "Ensure a constant supply of fresh, clean towels for your members and clients."
+        }
+    ]
+};
 
 
 export default function ForBusinessPage() {
@@ -80,10 +86,10 @@ export default function ForBusinessPage() {
                     <div className="container mx-auto px-6 sm:px-8 py-20 md:py-32 grid md:grid-cols-2 gap-12 items-center">
                         <div className="text-center md:text-left">
                             <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold font-headline tracking-tight">
-                                The employee benefit that actually gives time back.
+                                {pageContent.hero.headline}
                             </h1>
                             <p className="mt-6 text-lg md:text-xl max-w-lg mx-auto md:mx-0 text-primary-foreground/90">
-                                Empower your team with the ultimate convenience. Yuber for Business simplifies laundry so your employees can focus on what matters most.
+                                {pageContent.hero.subheadline}
                             </p>
                             <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                                 <Button size="lg" variant="secondary" asChild>
@@ -96,7 +102,7 @@ export default function ForBusinessPage() {
                         </div>
                         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
                            <Image
-                                src="https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MjgxNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080"
+                                src={pageContent.hero.imageUrl}
                                 alt="Modern office environment"
                                 data-ai-hint="modern office"
                                 fill
@@ -148,7 +154,7 @@ export default function ForBusinessPage() {
                             </p>
                         </div>
                          <div className="mt-12 grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-                            {features.map(feature => (
+                            {pageContent.features.map(feature => (
                                 <div key={feature.title}>
                                     <feature.icon className="h-8 w-8 text-primary mb-4"/>
                                     <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
@@ -169,7 +175,7 @@ export default function ForBusinessPage() {
                             </p>
                         </div>
                          <div className="mt-12 grid gap-8 md:grid-cols-2">
-                            {industries.map(industry => (
+                            {pageContent.industries.map(industry => (
                                 <Card key={industry.title} className="flex items-center p-6 gap-6 hover:shadow-lg transition-shadow">
                                     <div className="bg-primary/10 text-primary rounded-lg p-4">
                                         <industry.icon className="h-8 w-8"/>
