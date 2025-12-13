@@ -1,4 +1,3 @@
-
 'use client';
 
 import {
@@ -246,7 +245,7 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
             <p className="text-sm font-medium">Service-Specific Overrides</p>
             <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                    <Label htmlFor="wash-turnaround">Wash & Fold (hours)</Label>
+                    <Label htmlFor="wash-turnaround">Wash &amp; Fold (hours)</Label>
                     <Input id="wash-turnaround" type="number" defaultValue={24} />
                 </div>
                  <div className="space-y-2">
