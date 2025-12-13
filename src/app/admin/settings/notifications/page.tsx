@@ -194,6 +194,18 @@ const driverNotifications = {
                 whatsapp: { enabled: false, content: '' }
             }
         }
+    ],
+    "Earnings & Payouts": [
+        {
+            id: 'driver_payout_sent',
+            title: 'Weekly Payout Sent',
+            channels: {
+                email: { enabled: true, subject: 'Your weekly earnings have been sent!', body: 'Hi {{driver.name}}, your payout of {{payout.amount}} for the week ending {{payout.endDate}} has been processed.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Your weekly payout of {{payout.amount}} has been sent!' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        }
     ]
 }
 
@@ -231,6 +243,18 @@ const laundromatNotifications = {
                 whatsapp: { enabled: false, content: ''}
             }
         },
+    ],
+    "Earnings & Payouts": [
+        {
+            id: 'laundromat_payout_processed',
+            title: 'Payout Processed',
+            channels: {
+                email: { enabled: true, subject: 'Your payout of {{payout.amount}} is on its way!', body: 'Hi {{laundromat.name}}, your payout for the period ending {{payout.endDate}} has been processed and will reflect in your account shortly.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: false, content: '' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        }
     ]
 }
 
