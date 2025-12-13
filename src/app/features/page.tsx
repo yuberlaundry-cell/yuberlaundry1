@@ -6,13 +6,18 @@ import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
-import { Sparkles, Gift, Users } from 'lucide-react';
+import { Sparkles, Gift, Users, ShoppingBag, Truck, Zap, Circle, Info, Switch, Check } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import Image from 'next/image';
+import { Label } from '@/components/ui/label';
 
 const featureTabs = [
     {
-        id: 'yuber-plus',
-        name: 'Yuber Plus',
+        id: 'yuber-repeat',
+        name: 'Yuber Repeat',
         icon: Sparkles,
     },
     {
@@ -27,8 +32,44 @@ const featureTabs = [
     }
 ];
 
+const repeatPlans = [
+    {
+        icon: ShoppingBag,
+        bags: 1,
+        title: '1 Bag / month',
+        description: 'Ideal for one person\'s needs',
+        pricePerBag: 800,
+        popular: false,
+    },
+    {
+        icon: Users,
+        bags: 2,
+        title: '2 Bags / month',
+        description: 'Perfect for couples',
+        pricePerBag: 750,
+        popular: true,
+    },
+    {
+        icon: Users,
+        bags: 4,
+        title: '4 Bags / month',
+        description: 'Great for families',
+        pricePerBag: 700,
+        popular: false,
+    }
+];
+
+const repeatFeatures = [
+    { icon: Truck, text: 'Free Pickup & Delivery' },
+    { icon: Zap, text: 'Free Next-Day Rush Service' },
+    { icon: Circle, text: 'Waived Service Fee' },
+    { icon: Info, text: 'Unlimited rollover of bags' },
+    { icon: Gift, text: 'R120 monthly credit for other services' }
+];
+
 export default function FeaturesPage() {
     const [activeTab, setActiveTab] = useState(featureTabs[0].id);
+    const [isAnnual, setIsAnnual] = useState(false);
 
     useEffect(() => {
         const hash = window.location.hash.replace('#', '');
@@ -55,6 +96,7 @@ export default function FeaturesPage() {
                                                 "data-[state=inactive]:bg-gray-100 data-[state=inactive]:text-gray-600 hover:bg-gray-200",
                                                 "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-md"
                                             )}
+                                            onClick={() => window.history.pushState(null, '', `#${tab.id}`)}
                                         >
                                             <tab.icon className="mr-2 h-4 w-4" />
                                             {tab.name}
@@ -65,21 +107,76 @@ export default function FeaturesPage() {
                             </ScrollArea>
                         </div>
                     </div>
-                    <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24 text-center">
-                        <div className="max-w-3xl mx-auto">
-                            <TabsContent value="yuber-plus">
-                                <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Yuber Plus</h2>
-                                <p className="text-muted-foreground text-lg">Information about the Yuber Plus subscription program.</p>
-                            </TabsContent>
-                             <TabsContent value="gift-cards">
+                    <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
+                        <TabsContent value="yuber-repeat">
+                             <section className="text-center">
+                                <Image src="https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?w=1200&h=400&fit=crop" width={1200} height={400} alt="Yuber Repeat Bag" className="w-full h-48 md:h-64 object-cover rounded-2xl mb-8" data-ai-hint="folded towels"/>
+                                <h1 className="text-4xl md:text-5xl font-bold font-headline mb-4">Returned fresh and ready to wear.</h1>
+                                <p className="text-lg text-muted-foreground max-w-3xl mx-auto">Your clothes get their own machine, are separated by lights and darks, cleaned according to your preferences, and delivered neatly folded to your door - we even pair your socks.</p>
+                            </section>
+
+                            <section className="mt-16 md:mt-24">
+                                <div className="grid lg:grid-cols-2 gap-12 items-center">
+                                    <div className="space-y-6">
+                                        <h2 className="text-3xl md:text-4xl font-bold font-headline">Choose your perfect plan</h2>
+                                        <p className="text-muted-foreground">If it fits in the bag, we take care of it. All Yuber Repeat plans include:</p>
+                                        <ul className="space-y-4">
+                                            {repeatFeatures.map(feature => (
+                                                <li key={feature.text} className="flex items-center gap-3">
+                                                    <feature.icon className="h-5 w-5 text-primary" />
+                                                    <span className="font-medium">{feature.text}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                        <div className="flex items-center space-x-2 p-3 bg-muted/50 rounded-lg">
+                                            <Switch id="annual-billing" checked={isAnnual} onCheckedChange={setIsAnnual}/>
+                                            <Label htmlFor="annual-billing" className="font-medium">Save additional 15% with annual billing</Label>
+                                        </div>
+                                        <p className="text-xs text-muted-foreground">Change, pause, or cancel your Yuber Repeat plan anytime.</p>
+                                    </div>
+                                    <div className="space-y-4">
+                                        {repeatPlans.map(plan => {
+                                            const finalPrice = isAnnual ? plan.pricePerBag * 0.85 : plan.pricePerBag;
+                                            return (
+                                                <Card key={plan.bags} className={cn("transition-all", plan.popular ? "border-2 border-primary shadow-lg" : "")}>
+                                                    {plan.popular && <Badge className="absolute -top-3 right-4">Most Popular</Badge>}
+                                                    <CardContent className="p-4 grid grid-cols-3 items-center">
+                                                        <div className="flex items-center gap-3 col-span-2">
+                                                            <div className={cn("p-2 rounded-lg", plan.popular ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>
+                                                                <plan.icon className="h-6 w-6"/>
+                                                            </div>
+                                                            <div>
+                                                                <p className="font-semibold">{plan.title}</p>
+                                                                <p className="text-sm text-muted-foreground">{plan.description}</p>
+                                                            </div>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <p className="font-bold text-xl md:text-2xl">R{finalPrice.toFixed(2)}<span className="text-sm font-normal text-muted-foreground">/bag</span></p>
+                                                            <p className="text-xs text-muted-foreground">R{(finalPrice * plan.bags).toFixed(2)}/month</p>
+                                                        </div>
+                                                         <div className="col-span-3 mt-2">
+                                                            <Button className="w-full" variant={plan.popular ? "default" : "outline"}>Choose this plan</Button>
+                                                        </div>
+                                                    </CardContent>
+                                                </Card>
+                                            )
+                                        })}
+                                    </div>
+                                </div>
+                            </section>
+                        </TabsContent>
+                         <TabsContent value="gift-cards">
+                            <div className="max-w-3xl mx-auto text-center">
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Gift Cards</h2>
                                 <p className="text-muted-foreground text-lg">Purchase and redeem gift cards for Yuber Laundry.</p>
-                            </TabsContent>
-                             <TabsContent value="referrals">
+                            </div>
+                        </TabsContent>
+                         <TabsContent value="referrals">
+                             <div className="max-w-3xl mx-auto text-center">
                                 <h2 className="text-3xl md:text-4xl font-bold font-headline mb-4">Referral Program</h2>
                                 <p className="text-muted-foreground text-lg">Learn how to earn rewards by referring friends.</p>
-                            </TabsContent>
-                        </div>
+                             </div>
+                        </TabsContent>
                     </div>
                 </Tabs>
             </main>
