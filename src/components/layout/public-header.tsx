@@ -93,11 +93,7 @@ export function PublicHeader() {
             <NavigationMenuList>
               <NavigationMenuItem>
                 <NavigationMenuTrigger>
-                  <Link href="/how-it-works" legacyBehavior passHref>
-                    <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                      Personal
-                    </NavigationMenuLink>
-                  </Link>
+                  Personal
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid w-[600px] lg:w-[700px] grid-cols-3 gap-6 p-6">
@@ -128,11 +124,7 @@ export function PublicHeader() {
 
                <NavigationMenuItem>
                 <NavigationMenuTrigger>
-                    <Link href="/for-business" legacyBehavior passHref>
-                        <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                           For Business
-                        </NavigationMenuLink>
-                    </Link>
+                   For Business
                 </NavigationMenuTrigger>
                 <NavigationMenuContent>
                   <div className="grid w-[600px] lg:w-[700px] grid-cols-3 gap-6 p-6">
