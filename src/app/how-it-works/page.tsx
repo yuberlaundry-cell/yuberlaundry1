@@ -150,9 +150,11 @@ export default function HowItWorksPage() {
                                                         <AddressInput id="address-input" placeholder="Add address" onAddressSelect={() => {}} className="border-none p-0 h-auto focus-visible:ring-0 focus-visible:ring-offset-0" />
                                                     </div>
                                                  </div>
-                                                <Button size="icon" className="w-full sm:w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shrink-0">
-                                                    <ArrowRight />
-                                                    <span className="sr-only">Schedule</span>
+                                                <Button size="icon" className="w-full sm:w-12 h-12 rounded-full bg-primary hover:bg-primary/90 shrink-0" asChild>
+                                                    <Link href="/auth/register">
+                                                        <ArrowRight />
+                                                        <span className="sr-only">Schedule</span>
+                                                    </Link>
                                                 </Button>
                                             </div>
                                             <Badge variant="secondary" className="mt-4 bg-green-100 text-green-800 border-green-200">
@@ -235,13 +237,14 @@ export default function HowItWorksPage() {
                                     </Card>
 
                                     <Card className="border-primary border-2">
-                                         <Badge className="absolute -top-3 right-4">Most popular</Badge>
+                                        <Badge className="absolute -top-3 right-4">Most popular</Badge>
                                         <CardHeader>
                                             <CardTitle>Yuber Repeat</CardTitle>
-                                            <CardDescription>All-inclusive subscription, priced per bag</CardDescription>
+                                            <CardDescription>All-inclusive subscription, priced per bag.</CardDescription>
                                             <div className="pt-4">
-                                                <span className="text-4xl font-bold">R800</span>
-                                                <span className="ml-1 text-muted-foreground">/ month</span>
+                                                <p className="text-sm">As low as*</p>
+                                                <span className="text-4xl font-bold">R20.00</span>
+                                                <span className="ml-1 text-muted-foreground">/ Kg</span>
                                             </div>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
@@ -253,7 +256,7 @@ export default function HowItWorksPage() {
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Unlimited rollover of bags</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> R120.00 in monthly credit for other services</li>
                                             </ul>
-                                             <Button className="w-full bg-accent hover:bg-accent/90" asChild>
+                                             <Button className="w-full" asChild>
                                                 <Link href="/features#yuber-repeat">Explore Yuber Repeat</Link>
                                              </Button>
                                              <Button variant="link" className="w-full p-0 h-auto">Learn about all features</Button>
@@ -329,4 +332,5 @@ export default function HowItWorksPage() {
         </div>
     );
 }
+
 
