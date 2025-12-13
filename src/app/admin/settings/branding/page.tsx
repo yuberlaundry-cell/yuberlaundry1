@@ -9,10 +9,25 @@ import { useToast } from '@/hooks/use-toast';
 import { Upload, Palette, Text, Link as LinkIcon } from 'lucide-react';
 import { platformName, appStoreLinks } from '@/lib/branding';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { useState } from 'react';
+import Image from 'next/image';
 
 export default function BrandingSettingsPage() {
     const { toast } = useToast();
+    const [logoPreview, setLogoPreview] = useState<string | null>(null);
+    const [faviconPreview, setFaviconPreview] = useState<string | null>(null);
 
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, setter: React.Dispatch<React.SetStateAction<string | null>>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setter(reader.result as string);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+    
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         toast({
@@ -101,20 +116,20 @@ export default function BrandingSettingsPage() {
                     <div className="space-y-2">
                         <Label htmlFor="logo-upload">Logo</Label>
                         <div className="flex items-center gap-4">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-md border bg-muted">
-                                <Upload className="h-8 w-8 text-muted-foreground" />
+                            <div className="flex h-16 w-16 items-center justify-center rounded-md border bg-muted relative overflow-hidden">
+                                {logoPreview ? <Image src={logoPreview} alt="Logo preview" layout="fill" objectFit="contain" /> : <Upload className="h-8 w-8 text-muted-foreground" />}
                             </div>
-                            <Input id="logo-upload" type="file" className="max-w-xs" />
+                            <Input id="logo-upload" type="file" className="max-w-xs" onChange={(e) => handleFileChange(e, setLogoPreview)} accept="image/png, image/jpeg, image/svg+xml" />
                         </div>
                         <p className="text-xs text-muted-foreground">Recommended: SVG or PNG, transparent background, at least 256x256px.</p>
                     </div>
                     <div className="space-y-2">
                         <Label htmlFor="favicon-upload">Favicon</Label>
                         <div className="flex items-center gap-4">
-                            <div className="flex h-16 w-16 items-center justify-center rounded-md border bg-muted">
-                                <Upload className="h-8 w-8 text-muted-foreground" />
+                             <div className="flex h-16 w-16 items-center justify-center rounded-md border bg-muted relative overflow-hidden">
+                                {faviconPreview ? <Image src={faviconPreview} alt="Favicon preview" layout="fill" objectFit="contain" /> : <Upload className="h-8 w-8 text-muted-foreground" />}
                             </div>
-                            <Input id="favicon-upload" type="file" className="max-w-xs" />
+                            <Input id="favicon-upload" type="file" className="max-w-xs" onChange={(e) => handleFileChange(e, setFaviconPreview)} accept="image/x-icon, image/png"/>
                         </div>
                         <p className="text-xs text-muted-foreground">Recommended: ICO or PNG file, 32x32px.</p>
                     </div>
