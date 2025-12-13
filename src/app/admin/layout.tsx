@@ -42,6 +42,7 @@ import {
   Package,
   Tag,
   MessagesSquare,
+  Banknote,
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -84,6 +85,7 @@ const navigationConfig = [
       { href: '/admin/revenue/subscriptions', label: 'Subscription Plans', icon: Crown },
       { href: '/admin/revenue/subscribers', label: 'Subscribers', icon: Users },
       { href: '/admin/billing', label: 'B2B Billing', icon: CreditCard },
+      { href: '/admin/revenue/payouts', label: 'Payout Settings', icon: Banknote },
     ],
   },
   {
