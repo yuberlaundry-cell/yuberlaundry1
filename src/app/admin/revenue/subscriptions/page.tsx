@@ -66,6 +66,7 @@ interface Plan {
     limits: {
         // Consumer
         kgIncluded?: number;
+        bagsIncluded?: number;
         deliveryFeeWaiver?: boolean;
         platformFeeWaiver?: boolean;
         discountPercentage?: number;
@@ -96,6 +97,25 @@ const initialPlans: Plan[] = [
             deliveryFeeWaiver: true,
             platformFeeWaiver: false,
             discountPercentage: 5,
+        }
+    },
+    {
+        name: "Yuber Repeat",
+        price: "800",
+        billingCycle: "monthly",
+        features: [
+            "2 bags/month for Wash & Fold",
+            "Free Next-Day Rush Service",
+            "Waived Service Fee",
+            "Unlimited rollover"
+        ],
+        active: true,
+        type: 'Consumer',
+        paystackPlanCode: 'PLN_repeat800',
+        limits: {
+            bagsIncluded: 2,
+            deliveryFeeWaiver: true,
+            platformFeeWaiver: true,
         }
     },
     {
@@ -222,6 +242,12 @@ export default function SubscriptionsPage() {
                              <li className="flex items-center gap-3 text-sm">
                                 <Check className="h-4 w-4 text-primary" />
                                 <span className="text-muted-foreground">Up to <span className="font-semibold text-foreground">{plan.limits.kgIncluded} kg</span> included</span>
+                            </li>
+                        )}
+                         {plan.limits.bagsIncluded && (
+                             <li className="flex items-center gap-3 text-sm">
+                                <Check className="h-4 w-4 text-primary" />
+                                <span className="text-muted-foreground">Up to <span className="font-semibold text-foreground">{plan.limits.bagsIncluded} bags</span> per month</span>
                             </li>
                         )}
                         {plan.limits.employees && (
@@ -381,6 +407,10 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
                     <div className="space-y-2">
                         <Label htmlFor="plan-kg">Kg Included</Label>
                         <Input id="plan-kg" type="number" placeholder="e.g., 30" defaultValue={plan?.limits.kgIncluded}/>
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="plan-bags">Bags Included (for Yuber Repeat)</Label>
+                        <Input id="plan-bags" type="number" placeholder="e.g., 2" defaultValue={plan?.limits.bagsIncluded}/>
                     </div>
                      <div className="space-y-2">
                         <Label htmlFor="plan-discount">Discount on all orders (%)</Label>

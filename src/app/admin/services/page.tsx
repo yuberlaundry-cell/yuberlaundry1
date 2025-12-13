@@ -28,6 +28,7 @@ const initialServices = [
     pricing: {
       model: 'per_kg',
       base_price: 40.00,
+      subscription_enabled: true,
       separate_wash_multiplier: 2,
     },
     preferences: {
@@ -46,7 +47,7 @@ export default function ServiceManagementPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Service Management</h1>
           <p className="text-muted-foreground">
@@ -147,11 +148,26 @@ function ServiceForm({ service }: { service?: typeof initialServices[0]}) {
               <>
                 <Separator />
                 <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
-                  <h4 className="font-semibold">Wash & Fold Preferences</h4>
+                  <h4 className="font-semibold">Wash & Fold Pricing Models</h4>
+                   <div className="flex items-center space-x-2">
+                      <Switch id="payg-enabled" defaultChecked={true} />
+                      <Label htmlFor="payg-enabled">Enable Pay-As-You-Go (per kg)</Label>
+                  </div>
                    <div className="space-y-2">
                         <Label htmlFor="base-price">Base Price per kg</Label>
                         <Input id="base-price" type="number" defaultValue={service.pricing?.base_price} />
                     </div>
+                   <Separator/>
+                   <div className="flex items-center space-x-2">
+                      <Switch id="subscription-enabled" defaultChecked={service.pricing?.subscription_enabled} />
+                      <Label htmlFor="subscription-enabled">Enable Yuber Repeat (Subscription)</Label>
+                  </div>
+                   <p className="text-xs text-muted-foreground">Manage Yuber Repeat plans in the <a href="/admin/revenue/subscriptions" className="underline">Subscriptions</a> section.</p>
+                </div>
+
+                <Separator />
+                <div className="space-y-4 p-4 border rounded-lg bg-muted/50">
+                  <h4 className="font-semibold">Wash & Fold Preferences</h4>
                   <div className="flex items-center space-x-2">
                       <Switch id="separate-wash-enabled" defaultChecked={service.preferences?.separate_wash_enabled} />
                       <Label htmlFor="separate-wash-enabled">Enable "Separate Wash" option</Label>
