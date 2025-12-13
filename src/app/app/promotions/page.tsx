@@ -10,13 +10,16 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Check, Crown, RefreshCw, Star, Loader2, Tag, Gift } from 'lucide-react';
+import { Check, Crown, Loader2, Tag, Gift } from 'lucide-react';
 import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 import PaystackPop from '@paystack/inline-js';
 import { useAuth } from '@/hooks/use-auth';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { initialPlans, type Plan } from '@/lib/plans';
+import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 const availableOffers = [
     { title: "20% Off First Dry Cleaning Order", code: "DRYCLEAN20", description: "Get 20% off your first dry cleaning order.", icon: Tag },
@@ -24,28 +27,28 @@ const availableOffers = [
 ];
 
 export default function PromotionsPage() {
-    const [isSubscribed, setIsSubscribed] = useState(false);
-    const [isProcessing, setIsProcessing] = useState(false);
+    const [currentPlan, setCurrentPlan] = useState<Plan | null>(initialPlans.find(p => p.name === 'Yuber Repeat (2 Bags)') || null);
+    const [isProcessing, setIsProcessing] = useState<string | null>(null);
     const { toast } = useToast();
     const { user } = useAuth();
     
-    const handleSubscribe = () => {
-        setIsProcessing(true);
+    const handleSubscribe = (plan: Plan) => {
+        setIsProcessing(plan.name);
         const paystack = new PaystackPop();
         paystack.newTransaction({
             key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
             email: user?.email || '',
-            amount: 450 * 100, // R450 in kobo
+            amount: parseInt(plan.price) * 100, 
             currency: 'ZAR',
-            plan: '', // In a real app, you would have a Paystack Plan Code here
-            reference: `yuber_sub_${Date.now()}`,
+            plan: plan.paystackPlanCode,
+            reference: `yuber_sub_${user?.id}_${Date.now()}`,
             onSuccess: () => {
-                toast({ title: 'Subscription Successful!', description: 'Welcome to Yuber Plus!' });
-                setIsSubscribed(true);
-                setIsProcessing(false);
+                toast({ title: 'Subscription Successful!', description: `Welcome to ${plan.name}!` });
+                setCurrentPlan(plan);
+                setIsProcessing(null);
             },
             onClose: () => {
-                setIsProcessing(false);
+                setIsProcessing(null);
             }
         });
     };
@@ -61,6 +64,8 @@ export default function PromotionsPage() {
         (e.currentTarget as HTMLFormElement).reset();
     };
 
+    const consumerPlans = initialPlans.filter(p => p.type === 'Consumer' && p.active && !p.name.includes('Legacy'));
+
   return (
     <div className="space-y-8 pb-8">
       <div>
@@ -69,55 +74,62 @@ export default function PromotionsPage() {
           Upgrade your plan and discover available offers.
         </p>
       </div>
-
-       <Card className="max-w-2xl">
-            <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                    <Crown className="h-6 w-6 text-yellow-500" />
-                    {isSubscribed ? 'Yuber Plus Member' : 'Upgrade to Yuber Plus'}
-                </CardTitle>
-                <CardDescription>
-                    {isSubscribed 
-                        ? "You're enjoying the best of Yuber Laundry." 
-                        : "Unlock savings and premium features with a subscription."
-                    }
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-                 <ul className="space-y-3">
-                    <li className="flex items-center gap-3 text-sm">
-                        <Check className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Up to 30 kg included per month</span>
-                    </li>
-                     <li className="flex items-center gap-3 text-sm">
-                        <Check className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Free pickup & delivery</span>
-                    </li>
-                     <li className="flex items-center gap-3 text-sm">
-                        <Check className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Premium detergents</span>
-                    </li>
-                     <li className="flex items-center gap-3 text-sm">
-                        <Check className="h-4 w-4 text-primary" />
-                        <span className="text-muted-foreground">Next-day turnaround</span>
-                    </li>
-                </ul>
-                {isSubscribed && (
-                    <div className="p-4 bg-muted/50 rounded-lg text-sm">
-                        <p>Your plan renews on <span className="font-semibold">June 1, 2024</span>.</p>
+      
+       {currentPlan && (
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                        <Crown className="h-6 w-6 text-yellow-500" />
+                        Your Current Plan
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="p-4 bg-primary/10 rounded-lg border-2 border-primary/20">
+                        <p className="font-bold text-lg text-primary">{currentPlan.name}</p>
+                        <p className="text-sm text-muted-foreground">Your plan renews on <span className="font-semibold">June 1, 2024</span>.</p>
+                         <Button variant="outline" size="sm" className="mt-4">Manage Subscription</Button>
                     </div>
-                )}
+                </CardContent>
+            </Card>
+        )}
+
+       <Card>
+            <CardHeader>
+                <CardTitle>Upgrade Your Plan</CardTitle>
+                <CardDescription>Unlock savings and premium features with a subscription.</CardDescription>
+            </CardHeader>
+            <CardContent className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {consumerPlans.map(plan => (
+                    <Card key={plan.name} className={cn("flex flex-col", plan.popular ? "border-2 border-primary" : "")}>
+                        {plan.popular && <Badge className="absolute -top-3 right-4">Most Popular</Badge>}
+                        <CardHeader>
+                            <CardTitle>{plan.name.replace('Yuber Repeat ', '')}</CardTitle>
+                            <div className="flex items-baseline pt-2">
+                                <span className="text-3xl font-bold">R{plan.price}</span>
+                                <span className="ml-1 text-muted-foreground">/month</span>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="flex-grow">
+                             <ul className="space-y-3">
+                                {plan.limits.bagsIncluded && <li className="flex items-center gap-3 text-sm"><Check className="h-4 w-4 text-primary" /><span className="text-muted-foreground">{plan.limits.bagsIncluded} bag(s)/month</span></li>}
+                                {plan.limits.deliveryFeeWaiver && <li className="flex items-center gap-3 text-sm"><Check className="h-4 w-4 text-primary" /><span className="text-muted-foreground">Free delivery</span></li>}
+                                {plan.limits.nextDayRushWaiver && <li className="flex items-center gap-3 text-sm"><Check className="h-4 w-4 text-primary" /><span className="text-muted-foreground">Free next-day rush</span></li>}
+                            </ul>
+                        </CardContent>
+                        <CardFooter>
+                            <Button 
+                                className="w-full"
+                                variant={plan.name === currentPlan?.name ? "secondary" : "default"}
+                                onClick={() => handleSubscribe(plan)}
+                                disabled={isProcessing !== null || plan.name === currentPlan?.name}
+                            >
+                                {isProcessing === plan.name ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+                                {plan.name === currentPlan?.name ? 'Current Plan' : 'Choose Plan'}
+                            </Button>
+                        </CardFooter>
+                    </Card>
+                ))}
             </CardContent>
-            <CardFooter className="flex-wrap gap-2">
-                {isSubscribed ? (
-                    <Button variant="outline">Manage Subscription</Button>
-                ) : (
-                    <Button onClick={handleSubscribe} disabled={isProcessing}>
-                        {isProcessing ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Crown className="mr-2 h-4 w-4" />}
-                        {isProcessing ? 'Processing...' : 'Subscribe to Yuber Plus (R450/month)'}
-                    </Button>
-                )}
-            </CardFooter>
         </Card>
         
         <Card>
@@ -161,3 +173,4 @@ export default function PromotionsPage() {
     </div>
   );
 }
+

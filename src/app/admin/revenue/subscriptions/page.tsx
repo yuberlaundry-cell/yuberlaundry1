@@ -401,4 +401,3 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
         </form>
     );
 }
-
