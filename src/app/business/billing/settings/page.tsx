@@ -10,11 +10,21 @@ import { useAuth } from "@/hooks/use-auth";
 import { Separator } from "@/components/ui/separator";
 import { AddressInput } from "@/components/ui/address-input";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 export default function BillingSettingsPage() {
     const { user } = useAuth();
-    const [address, setAddress] = useState('456 Corporate Ave');
+    const { toast } = useToast();
+    const [address, setAddress] = useState('456 Corporate Ave, London, EC2R 8DE');
     
+    const handleSave = (section: string) => (e: React.FormEvent) => {
+        e.preventDefault();
+        toast({
+            title: 'Settings Saved',
+            description: `Your ${section.toLowerCase()} have been updated.`
+        });
+    }
+
     return (
         <div className="space-y-8 pb-8">
             <div>
@@ -30,7 +40,7 @@ export default function BillingSettingsPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-6 max-w-lg">
+                    <form className="space-y-6 max-w-lg" onSubmit={handleSave('Billing Details')}>
                         <div className="space-y-2">
                             <Label htmlFor="company-name">Company Name</Label>
                             <Input id="company-name" defaultValue={user?.companyName} />
@@ -43,7 +53,6 @@ export default function BillingSettingsPage() {
                             <Label htmlFor="address">Billing Address</Label>
                             <AddressInput 
                                 id="address"
-                                placeholder="e.g., 456 Corporate Ave"
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                                 onAddressSelect={(addr) => {
@@ -52,18 +61,8 @@ export default function BillingSettingsPage() {
                                 }}
                             />
                         </div>
-                        <div className="grid sm:grid-cols-2 gap-4">
-                            <div className="space-y-2">
-                                <Label htmlFor="city">City</Label>
-                                <Input id="city" placeholder="London" />
-                            </div>
-                            <div className="space-y-2">
-                                <Label htmlFor="postal-code">Postal Code</Label>
-                                <Input id="postal-code" placeholder="EC2R 8DE" />
-                            </div>
-                        </div>
-                        <div className="pt-4">
-                            <Button>Save Changes</Button>
+                        <div className="pt-2">
+                            <Button type="submit">Save Changes</Button>
                         </div>
                     </form>
                 </CardContent>
@@ -77,7 +76,7 @@ export default function BillingSettingsPage() {
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form className="space-y-6 max-w-lg">
+                    <form className="space-y-6 max-w-lg" onSubmit={handleSave('Notification Settings')}>
                         <div className="space-y-2">
                             <Label>Primary Recipients</Label>
                              <div className="flex items-center space-x-2">
@@ -86,7 +85,7 @@ export default function BillingSettingsPage() {
                                     htmlFor="admin-email"
                                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                 >
-                                    john.smith@acmecorp.com (Primary Admin)
+                                    {user?.email} (Primary Admin)
                                 </label>
                             </div>
                         </div>
@@ -94,11 +93,11 @@ export default function BillingSettingsPage() {
                          <div className="space-y-2">
                             <Label htmlFor="additional-recipients">Additional Recipients</Label>
                             <p className="text-sm text-muted-foreground">Add other email addresses to receive invoices, separated by commas.</p>
-                            <Input id="additional-recipients" placeholder="e.g., accounting@acmecorp.com, another.admin@acmecorp.com" />
+                            <Input id="additional-recipients" placeholder="e.g., accounting@acmecorp.com" />
                         </div>
 
-                        <div className="pt-4">
-                            <Button>Save Notification Settings</Button>
+                        <div className="pt-2">
+                            <Button type="submit">Save Notification Settings</Button>
                         </div>
                     </form>
                 </CardContent>

@@ -4,7 +4,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { CreditCard, MoreVertical, PlusCircle, Trash2, Edit } from "lucide-react";
+import { CreditCard, MoreVertical, PlusCircle, Trash2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import PaystackPop from '@paystack/inline-js';
@@ -25,8 +25,9 @@ function AddCardForm() {
         paystack.newTransaction({
             key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY || '',
             email: user?.email || '',
-            amount: 0, // Amount is 0 for card authorization
-            reference: `yuber_auth_${Date.now()}`,
+            amount: 5000, // Authorize for R50, which will be reversed
+            currency: 'ZAR',
+            reference: `yuber_auth_biz_${Date.now()}`,
             onSuccess: (reference: any) => {
                 console.log('Paystack Authorization Success:', reference);
                 toast({
@@ -70,7 +71,7 @@ export default function PaymentMethodsPage() {
                         <DialogHeader>
                             <DialogTitle>Add a New Payment Method</DialogTitle>
                             <DialogDescription>
-                                This card will be used for monthly invoices. Your details are securely stored with Paystack.
+                                This card will be used for monthly invoices. We perform a temporary R50 authorization to validate your card, which is immediately reversed.
                             </DialogDescription>
                         </DialogHeader>
                         <div className="pt-4">
@@ -106,9 +107,6 @@ export default function PaymentMethodsPage() {
                                 </DropdownMenuTrigger>
                                 <DropdownMenuContent align="end">
                                     {!method.isPrimary && <DropdownMenuItem>Set as Primary</DropdownMenuItem>}
-                                    <DropdownMenuItem>
-                                        <Edit className="mr-2 h-4 w-4" /> Edit
-                                    </DropdownMenuItem>
                                     <DropdownMenuItem className="text-destructive">
                                         <Trash2 className="mr-2 h-4 w-4" /> Delete
                                     </DropdownMenuItem>
