@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -253,6 +254,21 @@ export default function SettingsPage() {
                                     <div className="space-y-2">
                                         <Label htmlFor="twilio-token">Auth Token</Label>
                                         <Input id="twilio-token" type="password" defaultValue="xxxxxxxxxxxxxxxx" />
+                                    </div>
+                                </div>
+                                
+                                <div className="space-y-4 rounded-lg border p-4">
+                                    <div className="flex items-center justify-between">
+                                        <Label htmlFor="onesignal-toggle" className="text-base font-semibold">OneSignal</Label>
+                                        <Switch id="onesignal-toggle" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="onesignal-app-id">App ID</Label>
+                                        <Input id="onesignal-app-id" type="text" placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" />
+                                    </div>
+                                    <div className="space-y-2">
+                                        <Label htmlFor="onesignal-api-key">REST API Key</Label>
+                                        <Input id="onesignal-api-key" type="password" defaultValue="xxxxxxxxxxxxxxxxxxxxxxxx" />
                                     </div>
                                 </div>
 

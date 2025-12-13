@@ -51,15 +51,15 @@ export default function BrandingSettingsPage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                          <div className="space-y-2">
                             <Label htmlFor="primary-color">Primary</Label>
-                            <Input id="primary-color" defaultValue="256 89% 63%" />
+                            <Input id="primary-color" defaultValue="221.2 83.2% 53.3%" />
                         </div>
                          <div className="space-y-2">
                             <Label htmlFor="background-color">Background</Label>
-                            <Input id="background-color" defaultValue="220 33% 97%" />
+                            <Input id="background-color" defaultValue="210 40% 98%" />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="accent-color">Accent</Label>
-                            <Input id="accent-color" defaultValue="256 89% 63%" />
+                            <Input id="accent-color" defaultValue="262.1 83.3% 57.8%" />
                         </div>
                     </div>
                 </CardContent>
