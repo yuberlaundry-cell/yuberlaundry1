@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { AddressInput } from "../ui/address-input";
 import { useToast } from "@/hooks/use-toast";
 import { Badge } from "../ui/badge";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 // This now reflects the cities managed in the Superadmin's "Service Zones" section.
 const serviceableCities = ['london', 'manchester', 'birmingham', 'johannesburg'];
@@ -56,6 +57,8 @@ export default function Hero() {
     }
   }
 
+  const heroImage = PlaceHolderImages.find(p => p.id === 'homepage-hero');
+
   return (
     <section className="bg-primary/20">
       <div className="container mx-auto px-6 sm:px-8 py-12 sm:py-16 md:py-24">
@@ -91,14 +94,16 @@ export default function Hero() {
 
           </div>
           <div className="relative hidden lg:block aspect-[4/5]">
-              <Image
-                  src="https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080"
-                  alt="A smiling black woman holding a branded laundry bag"
-                  data-ai-hint="smiling black woman laundry bag"
-                  fill
-                  className="object-cover rounded-2xl"
-                  priority
-              />
+              {heroImage && (
+                <Image
+                    src={heroImage.imageUrl}
+                    alt={heroImage.description}
+                    data-ai-hint={heroImage.imageHint}
+                    fill
+                    className="object-cover rounded-2xl"
+                    priority
+                />
+              )}
               <Card className="absolute top-6 right-6 p-3 backdrop-blur-sm bg-background/50 shadow-lg">
                 <div className="flex items-center gap-3">
                   <div className="p-2 bg-muted rounded-full">
@@ -130,3 +135,5 @@ export default function Hero() {
     </section>
   );
 }
+
+    

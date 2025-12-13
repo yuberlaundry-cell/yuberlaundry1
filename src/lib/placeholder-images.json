@@ -76,7 +76,7 @@
       "id": "feature-schedule",
       "description": "Man with luggage scheduling a pickup",
       "imageUrl": "https://images.unsplash.com/photo-1593121184920-951e4445a435?w=800&q=80",
-      "imageHint": "man with luggage"
+      "imageHint": "man luggage"
     },
     {
       "id": "feature-professional",
@@ -88,7 +88,13 @@
       "id": "feature-delivery",
       "description": "Delivery package at a door",
       "imageUrl": "https://images.unsplash.com/photo-1586528116311-069242114950?w=800&q=80",
-      "imageHint": "delivery at door"
+      "imageHint": "delivery door"
+    },
+    {
+      "id": "homepage-hero",
+      "description": "A smiling black woman holding a branded laundry bag",
+      "imageUrl": "https://images.unsplash.com/photo-1593121184920-951e4445a435?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw0fHxzbWlsaW5nJTIwYmxhY2slMjB3b21hbiUyMGhvbGRpbmclMjBsYXVuZHJ5JTIwYmFnfGVufDB8fHx8MTc2NTU2MTM5OXww&ixlib=rb-4.1.0&q=80&w=1080",
+      "imageHint": "smiling woman"
     }
   ]
 }
