@@ -119,6 +119,7 @@ const navigationConfig = [
     title: 'Content Management',
     links: [
         { href: '/admin/content/homepage', label: 'Homepage', icon: FileText },
+        { href: '/admin/content/about', label: 'About Us', icon: FileText },
         { href: '/admin/content/for-business', label: 'For Business', icon: FileText },
         { href: '/admin/content/how-it-works', label: 'How It Works', icon: FileText },
         { href: '/admin/content/features', label: 'Features', icon: Sparkles },
