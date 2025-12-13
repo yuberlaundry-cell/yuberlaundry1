@@ -19,6 +19,7 @@ const templateVariables = [
     { name: 'Driver', vars: ['{{driver.name}}', '{{driver.eta}}'] },
     { name: 'Laundromat', vars: ['{{laundromat.name}}'] },
     { name: 'Supply', vars: ['{{supply.name}}'] },
+    { name: 'Payout', vars: ['{{payout.amount}}', '{{payout.endDate}}'] },
 ];
 
 const customerNotifications = {
@@ -37,9 +38,9 @@ const customerNotifications = {
             id: 'customer_driver_assigned', 
             title: 'Driver Assigned', 
             channels: {
-                email: { enabled: true, subject: 'Your driver for order {{order.id}} is on the way', body: 'Your driver, {{driver.name}}, is on the way.' },
-                sms: { enabled: true, content: 'Your driver, {{driver.name}}, is on the way to collect order {{order.id}}.' },
-                push: { enabled: true, content: 'Your driver is on the way!' },
+                email: { enabled: true, subject: 'Your driver for order {{order.id}} is on the way', body: 'Your driver, {{driver.name}}, is on the way and will arrive in approximately {{driver.eta}}.' },
+                sms: { enabled: true, content: 'Your driver, {{driver.name}}, is on the way to collect order {{order.id}} (ETA: {{driver.eta}}).' },
+                push: { enabled: true, content: 'Your driver is on the way! ETA: {{driver.eta}}' },
                 whatsapp: { enabled: false, content: ''}
             }
         },
