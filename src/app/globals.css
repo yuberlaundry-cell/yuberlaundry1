@@ -1,28 +1,29 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 220 33% 97%; /* #f0f2f7 */
+    --background: 220 33% 97%;
     --foreground: 224 71% 4%;
     --card: 0 0% 100%;
     --card-foreground: 224 71% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-    --primary: 194 56% 79%; /* #B2EBF2 */
-    --primary-foreground: 224 71% 10%;
+    --primary: 256 89% 63%;
+    --primary-foreground: 0 0% 100%;
     --secondary: 220 13% 91%;
     --secondary-foreground: 224 71% 4%;
     --muted: 220 13% 91%;
     --muted-foreground: 220 9% 46%;
-    --accent: 256 89% 63%; /* #7149f5 */
+    --accent: 256 89% 63%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
     --border: 220 13% 85%;
     --input: 220 13% 91%;
-    --ring: 221 83% 61%;
+    --ring: 256 89% 63%;
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
@@ -45,7 +46,7 @@
     --card-foreground: 0 0% 98%;
     --popover: 224 71% 4%;
     --popover-foreground: 0 0% 98%;
-    --primary: 221 83% 61%;
+    --primary: 256 89% 63%;
     --primary-foreground: 0 0% 100%;
     --secondary: 220 15% 15%;
     --secondary-foreground: 0 0% 98%;
@@ -57,7 +58,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 220 15% 15%;
     --input: 220 15% 15%;
-    --ring: 221 83% 61%;
+    --ring: 256 89% 63%;
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;

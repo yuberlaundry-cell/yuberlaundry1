@@ -25,7 +25,7 @@ export default function BrandingSettingsPage() {
             <div>
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Branding</h1>
                 <p className="text-muted-foreground">
-                    Manage your platform's logo, favicon, and name.
+                    Manage your platform's logo, colors, and name.
                 </p>
             </div>
 
@@ -41,6 +41,30 @@ export default function BrandingSettingsPage() {
                     </div>
                 </CardContent>
             </Card>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Theme</CardTitle>
+                    <CardDescription>Customize the look and feel of your application by changing the theme colors. HSL format is recommended.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-6 max-w-lg">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                         <div className="space-y-2">
+                            <Label htmlFor="primary-color">Primary</Label>
+                            <Input id="primary-color" defaultValue="256 89% 63%" />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="background-color">Background</Label>
+                            <Input id="background-color" defaultValue="220 33% 97%" />
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="accent-color">Accent</Label>
+                            <Input id="accent-color" defaultValue="256 89% 63%" />
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
 
             <Card>
                 <CardHeader>
