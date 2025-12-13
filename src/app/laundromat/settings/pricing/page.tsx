@@ -130,7 +130,7 @@ export default function PricingSettingsPage() {
                                     <div className="space-y-2">
                                         <Label>Item Price List</Label>
                                         <div className="space-y-2">
-                                            {(itemPrices[service.id as keyof typeof itemPrices] || []).map(item => (
+                                            {(itemPrices[service.id as keyof typeof initialItemPrices] || []).map(item => (
                                                  <div key={item.id} className="flex items-center gap-2">
                                                     <Input defaultValue={item.name} placeholder="Item name (e.g., T-Shirt)" className="flex-grow"/>
                                                      <div className="relative w-[120px]">
