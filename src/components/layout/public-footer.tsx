@@ -7,9 +7,8 @@ import { platformName, appStoreLinks } from '@/lib/branding';
 const footerLinks = {
   Product: [
     { name: "Pricing", href: "/pricing" },
-    { name: "Services", href: "/services" },
-    { name: "Coverage", href: "/coverage" },
-    { name: "App", href: "/#download" },
+    { name: "How It Works", href: "/how-it-works" },
+    { name: "Features", href: "/features" },
   ],
   Company: [
     { name: "About us", href: "/about" },
@@ -19,7 +18,7 @@ const footerLinks = {
   ],
   Resources: [
     { name: "FAQ", href: "/faq" },
-    { name: "Help Center", href: "/support" },
+    { name: "Help Center", href: "/app/support" },
     { name: "Contact Us", href: "/contact" },
     { name: "Partnerships", href: "/partnerships" },
   ],

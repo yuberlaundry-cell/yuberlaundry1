@@ -32,12 +32,12 @@ const personalMegaMenuItems = {
     { icon: Wind, title: "Ironing", href: "/how-it-works#ironing" },
   ],
   "Plans & Features": [
-    { icon: Sparkles, title: "Yuber Plus", href: "/features#yuber-plus" },
+    { icon: Sparkles, title: "Yuber Repeat", href: "/features#yuber-repeat" },
     { icon: Gift, title: "Gift Cards", href: "/features#gift-cards" },
     { icon: Users, title: "Referral Program", href: "/features#referrals" },
   ],
   "Support": [
-    { icon: CircleHelp, title: "Help Centre", href: "/support" },
+    { icon: CircleHelp, title: "Help Centre", href: "/app/support" },
     { icon: Mail, title: "Contact Us", href: "/contact" },
     { icon: MessageSquare, title: "FAQs", href: "/faq" },
     { icon: Star, title: "Reviews", href: "#" },
@@ -73,7 +73,7 @@ const howItWorksMenuItems = {
     "Our Services": [
       { icon: Droplets, title: "Wash & Fold", description: "Everyday laundry, priced by the pound.", href: "/how-it-works#wash-fold" },
       { icon: Shirt, title: "Dry Cleaning", description: "Special care for your delicate items.", href: "/how-it-works#dry-cleaning" },
-      { icon: Sparkles, title: "Yuber Plus", description: "Subscription for savings and convenience.", href: "/features#yuber-plus", popular: true },
+      { icon: Sparkles, title: "Yuber Repeat", description: "Subscription for savings and convenience.", href: "/features#yuber-repeat", popular: true },
     ]
 };
 
@@ -105,7 +105,6 @@ export function PublicHeader() {
                                   <Link href={item.href} className="flex items-center gap-3 text-sm font-medium hover:text-primary transition-colors">
                                       <item.icon className="h-4 w-4 text-muted-foreground" />
                                       <span>{item.title}</span>
-                                      {item.popular && <Badge variant="secondary">POPULAR</Badge>}
                                   </Link>
                                 </NavigationMenuLink>
                               </li>
