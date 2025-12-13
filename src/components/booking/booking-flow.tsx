@@ -1,5 +1,6 @@
 
 
+
 'use client';
 
 import { useState } from "react";
@@ -17,6 +18,7 @@ import PaystackPop from "@paystack/inline-js";
 import { useAuth } from "@/hooks/use-auth";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import { type Plan, initialPlans } from "@/lib/plans";
 
 
 const steps = [
@@ -34,6 +36,11 @@ export function BookingFlow() {
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
+
+    // Simulate fetching the user's active subscription.
+    // In a real app, this would come from your backend.
+    const activeSubscription: Plan | null = initialPlans.find(p => p.name === 'Yuber Repeat (2 Bags)') || null;
+
 
     const goToNextStep = () => setCurrentStep(prev => (prev < steps.length ? prev + 1 : prev));
     const goToPrevStep = () => setCurrentStep(prev => (prev > 1 ? prev - 1 : prev));
@@ -107,7 +114,7 @@ export function BookingFlow() {
                         <p className="text-sm font-medium">Step {currentStep} of {steps.length}</p>
                         <Progress value={progress} />
                     </div>
-                    <OrderSummary />
+                    <OrderSummary subscription={activeSubscription} />
                 </div>
                 <div className="flex justify-between items-center mt-8 pt-6 border-t">
                     {currentStep > 1 ? (

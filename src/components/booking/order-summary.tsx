@@ -4,8 +4,22 @@
 import { Separator } from "../ui/separator";
 import { MapPin, Calendar, Clock, Sparkle, Tag, Info, ShoppingBag, CheckCircle } from 'lucide-react';
 import { Button } from "../ui/button";
+import { type Plan } from "@/lib/plans";
 
-export function OrderSummary() {
+interface OrderSummaryProps {
+    subscription: Plan | null;
+}
+
+export function OrderSummary({ subscription }: OrderSummaryProps) {
+    const subtotal = 40.00;
+    const baseServiceFee = 6.00;
+    
+    // Apply subscription benefits
+    const serviceFee = subscription?.limits.platformFeeWaiver ? 0.00 : baseServiceFee;
+    const discount = subscription?.limits.discountPercentage ? subtotal * (subscription.limits.discountPercentage / 100) : 0;
+    
+    const total = subtotal + serviceFee - discount;
+
     return (
         <div className="space-y-6">
             <ol className="space-y-4">
@@ -69,15 +83,24 @@ export function OrderSummary() {
             <div className="space-y-2 text-sm">
                  <div className="flex justify-between">
                     <p className="text-muted-foreground">Subtotal</p>
-                    <p className="font-medium">R40.00</p>
+                    <p className="font-medium">R{subtotal.toFixed(2)}</p>
                 </div>
                  <div className="flex justify-between">
-                    <p className="text-muted-foreground">Tip (15%)</p>
-                    <p className="font-medium">R6.00</p>
+                    <div className="flex items-center gap-1 text-muted-foreground">
+                        <p>Service Fee</p>
+                        {serviceFee === 0 && <span className="text-xs font-semibold text-green-600">(Waived)</span>}
+                    </div>
+                    <p className={cn("font-medium", serviceFee === 0 && "line-through text-muted-foreground")}>R{baseServiceFee.toFixed(2)}</p>
                 </div>
+                {discount > 0 && (
+                     <div className="flex justify-between text-green-600">
+                        <p>Yuber Repeat Discount</p>
+                        <p className="font-medium">-R{discount.toFixed(2)}</p>
+                    </div>
+                )}
                  <div className="flex justify-between font-bold text-base border-t pt-2 mt-2">
                     <p>Total</p>
-                    <p>R46.00</p>
+                    <p>R{total.toFixed(2)}</p>
                 </div>
             </div>
 
