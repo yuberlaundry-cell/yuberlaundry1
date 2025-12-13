@@ -63,6 +63,27 @@ export default function ResourcesPage() {
     const [staff, setStaff] = useState(initialStaff);
     const [machines, setMachines] = useState(initialMachines);
     const [supplies, setSupplies] = useState(initialSupplies);
+    const { toast } = useToast();
+    const [isStaffDialogOpen, setIsStaffDialogOpen] = useState(false);
+    const [editingStaff, setEditingStaff] = useState<typeof initialStaff[0] | null>(null);
+
+    const handleOpenStaffDialog = (staffMember: typeof initialStaff[0] | null) => {
+        setEditingStaff(staffMember);
+        setIsStaffDialogOpen(true);
+    };
+
+    const handleSaveStaff = (newStaff: Omit<typeof initialStaff[0], 'id'> & { id?: string }) => {
+        if (editingStaff) {
+            setStaff(staff.map(s => s.id === editingStaff.id ? { ...editingStaff, ...newStaff } : s));
+            toast({ title: 'Staff Updated', description: `Details for ${newStaff.name} have been saved.` });
+        } else {
+            const newEntry = { ...newStaff, id: `st-${Date.now()}` };
+            setStaff(prev => [newEntry, ...prev]);
+            toast({ title: 'Staff Added', description: `${newStaff.name} has been added.` });
+        }
+        setIsStaffDialogOpen(false);
+        setEditingStaff(null);
+    };
   
   return (
     <div className="space-y-8 pb-8">
@@ -83,55 +104,43 @@ export default function ResourcesPage() {
           <Card>
             <CardHeader className='flex-row items-center justify-between'>
               <CardTitle>Staff Management</CardTitle>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button size="sm"><PlusCircle className="mr-2"/> Add Staff</Button>
-                </DialogTrigger>
-                <DialogContent>
-                  <DialogHeader>
-                    <DialogTitle>Add New Staff Member</DialogTitle>
-                  </DialogHeader>
-                  <StaffForm />
-                </DialogContent>
-              </Dialog>
+              <Button size="sm" onClick={() => handleOpenStaffDialog(null)}><PlusCircle className="mr-2"/> Add Staff</Button>
             </CardHeader>
             <CardContent>
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Name</TableHead>
-                    <TableHead>Role</TableHead>
-                    <TableHead className="text-right"><span className="sr-only">Actions</span></TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {staff.map((s) => (
-                    <TableRow key={s.id}>
-                      <TableCell className="font-medium">{s.name}</TableCell>
-                      <TableCell>{s.role}</TableCell>
-                      <TableCell className="text-right">
-                        <Dialog>
+              <Dialog open={isStaffDialogOpen} onOpenChange={setIsStaffDialogOpen}>
+                <Table>
+                    <TableHeader>
+                    <TableRow>
+                        <TableHead>Name</TableHead>
+                        <TableHead>Role</TableHead>
+                        <TableHead className="text-right"><span className="sr-only">Actions</span></TableHead>
+                    </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                    {staff.map((s) => (
+                        <TableRow key={s.id}>
+                        <TableCell className="font-medium">{s.name}</TableCell>
+                        <TableCell>{s.role}</TableCell>
+                        <TableCell className="text-right">
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild><Button variant="ghost" size="icon"><MoreHorizontal /></Button></DropdownMenuTrigger>
                                 <DropdownMenuContent>
-                                    <DialogTrigger asChild>
-                                        <DropdownMenuItem><Edit className="mr-2 h-4 w-4"/>Edit</DropdownMenuItem>
-                                    </DialogTrigger>
+                                    <DropdownMenuItem onClick={() => handleOpenStaffDialog(s)}><Edit className="mr-2 h-4 w-4"/>Edit</DropdownMenuItem>
                                     <DropdownMenuItem className="text-destructive"><Trash2 className="mr-2 h-4 w-4"/>Delete</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
-                            <DialogContent>
-                                <DialogHeader>
-                                    <DialogTitle>Edit Staff Member</DialogTitle>
-                                </DialogHeader>
-                                <StaffForm staff={s} />
-                            </DialogContent>
-                        </Dialog>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                        </TableCell>
+                        </TableRow>
+                    ))}
+                    </TableBody>
+                </Table>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>{editingStaff ? 'Edit Staff Member' : 'Add New Staff Member'}</DialogTitle>
+                    </DialogHeader>
+                    <StaffForm staff={editingStaff} onSave={handleSaveStaff} onCancel={() => setIsStaffDialogOpen(false)} />
+                </DialogContent>
+              </Dialog>
             </CardContent>
           </Card>
         </TabsContent>
@@ -321,26 +330,23 @@ export default function ResourcesPage() {
   );
 }
 
-function StaffForm({ staff }: { staff?: typeof initialStaff[0] }) {
-    const { toast } = useToast();
-
+function StaffForm({ staff, onSave, onCancel }: { staff: typeof initialStaff[0] | null; onSave: (data: any) => void; onCancel: () => void; }) {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        toast({
-            title: staff ? 'Staff Updated' : 'Staff Added',
-            description: `The details for ${staff?.name || 'the new staff member'} have been saved.`,
-        });
+        const formData = new FormData(e.currentTarget);
+        const data = Object.fromEntries(formData.entries());
+        onSave(data);
     };
 
     return (
         <form className="space-y-4" onSubmit={handleSubmit}>
             <div className="space-y-2">
                 <Label htmlFor="staff-name">Name</Label>
-                <Input id="staff-name" placeholder="e.g. John Doe" defaultValue={staff?.name} required />
+                <Input id="staff-name" name="name" placeholder="e.g. John Doe" defaultValue={staff?.name} required />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="staff-email">Email</Label>
-                <Input id="staff-email" type="email" placeholder="e.g. john@example.com" defaultValue={staff?.email} required />
+                <Input id="staff-email" name="email" type="email" placeholder="e.g. john@example.com" defaultValue={staff?.email} required />
             </div>
              <div className="space-y-2">
                 <Label htmlFor="staff-phone">Phone Number</Label>
@@ -348,7 +354,7 @@ function StaffForm({ staff }: { staff?: typeof initialStaff[0] }) {
             </div>
             <div className="space-y-2">
                 <Label htmlFor="staff-role">Role</Label>
-                <Select defaultValue={staff?.role}>
+                <Select name="role" defaultValue={staff?.role}>
                     <SelectTrigger id="staff-role">
                         <SelectValue placeholder="Select a role" />
                     </SelectTrigger>
@@ -361,10 +367,10 @@ function StaffForm({ staff }: { staff?: typeof initialStaff[0] }) {
             </div>
              <div className="space-y-2">
                 <Label htmlFor="staff-password">Password</Label>
-                <Input id="staff-password" type="password" placeholder={staff ? 'Enter new password to reset' : 'Set initial password'} required={!staff} />
+                <Input id="staff-password" name="password" type="password" placeholder={staff ? 'Enter new password to reset' : 'Set initial password'} required={!staff} />
             </div>
             <DialogFooter>
-                <DialogClose asChild><Button variant="ghost">Cancel</Button></DialogClose>
+                <Button variant="ghost" type="button" onClick={onCancel}>Cancel</Button>
                 <Button type="submit">Save Changes</Button>
             </DialogFooter>
         </form>
