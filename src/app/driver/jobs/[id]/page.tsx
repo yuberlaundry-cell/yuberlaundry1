@@ -25,7 +25,7 @@ const jobData = {
         status: 'Assigned',
         notes: 'Gate code is #1234. Beware of the small dog.',
         laundromatAddress: 'Speedy Suds, 45 Crisp St, London',
-        destinationType: 'laundromat'
+        destinationType: 'laundromat' as 'laundromat' | 'warehouse'
     },
     'DO-456': {
         id: 'DO-456',
@@ -37,7 +37,7 @@ const jobData = {
         status: 'Out for Delivery',
         notes: 'Leave with the concierge if not home.',
         laundromatAddress: 'Speedy Suds, 45 Crisp St, London',
-        destinationType: 'customer'
+        destinationType: 'laundromat' as 'laundromat' | 'warehouse'
     },
     'PU-124': {
         id: 'PU-124',
@@ -49,7 +49,7 @@ const jobData = {
         status: 'Assigned',
         notes: 'Call upon arrival.',
         laundromatAddress: 'Main Warehouse, 1 Industrial Way, London',
-        destinationType: 'warehouse'
+        destinationType: 'warehouse' as 'laundromat' | 'warehouse'
     }
 };
 
@@ -67,8 +67,8 @@ const deliverySteps = [
     { id: 'arrive_customer', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
     { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: ShieldCheck },
     { id: 'complete', label: 'Job Complete', actionLabel: '' },
-    { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat', icon: Navigation },
-    { id: 'confirm_return_handoff', label: 'Confirm Laundromat Return', actionLabel: 'Confirm Handoff' },
+    { id: 'return_to_laundromat', label: 'Return Items to Facility', actionLabel: 'Navigate to Facility', icon: Navigation },
+    { id: 'confirm_return_handoff', label: 'Confirm Facility Return', actionLabel: 'Confirm Handoff' },
 ];
 
 
@@ -209,7 +209,7 @@ export default function JobDetailsPage() {
              return (
                  <Button variant="outline" className="w-full mt-2" asChild>
                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.laundromatAddress || '')}`} target="_blank" rel="noopener noreferrer">
-                        <Navigation className="mr-2"/> {step.actionLabel}
+                        <Navigation className="mr-2"/> {job.destinationType === 'warehouse' ? 'Navigate to Warehouse' : 'Navigate to Laundromat'}
                     </a>
                 </Button>
             )
@@ -425,7 +425,7 @@ export default function JobDetailsPage() {
                                 {finalStatus === 'returned' ? <UserX className="h-6 w-6"/> : <Check className="h-6 w-6" />}
                                 <div>
                                     <h4 className="font-semibold">{finalStatus === 'returned' ? 'Delivery Failed' : `${job.type} Job Complete!`}</h4>
-                                    <p className="text-sm">{finalStatus === 'returned' ? 'Items returned to laundromat.' : 'This job has been marked as completed.'}</p>
+                                    <p className="text-sm">{finalStatus === 'returned' ? 'Items returned to facility.' : 'This job has been marked as completed.'}</p>
                                 </div>
                             </div>
                         )}
@@ -440,3 +440,5 @@ export default function JobDetailsPage() {
         </div>
     )
 }
+
+    
