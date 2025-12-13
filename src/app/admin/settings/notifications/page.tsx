@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
 import { Switch } from "@/components/ui/switch";
+import React from "react";
 
 const templateVariables = [
     { name: 'Customer', vars: ['{{customer.firstName}}', '{{customer.lastName}}'] },
@@ -63,6 +64,40 @@ const customerNotifications = {
             }
         },
     ],
+    "Order Issues": [
+        {
+            id: 'customer_order_issue',
+            title: 'Order Issue Reported',
+            channels: {
+                email: { enabled: true, subject: 'Update on your order {{order.id}}', body: 'Hi {{customer.firstName}}, there has been an update regarding an issue with your order. Please check the app for details.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'There\'s an update on an issue with your order {{order.id}}.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        }
+    ],
+    "Reminders": [
+        {
+            id: 'customer_pickup_reminder',
+            title: 'Pickup Reminder',
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: true, content: 'Reminder: Your Yuber Laundry pickup is scheduled for today between {{order.pickupTime}}.' },
+                push: { enabled: true, content: 'Pickup Reminder: Your driver will arrive soon!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        {
+            id: 'customer_delivery_reminder',
+            title: 'Delivery Reminder',
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: true, content: 'Reminder: Your Yuber Laundry delivery is scheduled for today between {{order.deliveryTime}}.' },
+                push: { enabled: true, content: 'Delivery Reminder: Your fresh clothes will arrive soon!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        }
+    ],
     "Account & Billing": [
          { 
             id: 'customer_account_welcome', 
@@ -109,6 +144,26 @@ const driverNotifications = {
                 whatsapp: { enabled: false, content: ''}
             }
         },
+        {
+            id: 'driver_job_updated',
+            title: 'Job Update',
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'A job on your route has been updated. Check order {{order.id}} for details.' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        },
+        {
+            id: 'driver_job_cancelled',
+            title: 'Job Cancelled',
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Job {{order.id}} has been cancelled and removed from your route.' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        }
     ]
 }
 
@@ -126,7 +181,7 @@ const laundromatNotifications = {
         },
         { 
             id: 'laundromat_pickup_reminder', 
-            title: 'Driver Pickup Reminder', 
+            title: 'Driver En-route for Pickup', 
             channels: {
                 email: { enabled: false, subject: '', body: '' },
                 sms: { enabled: false, content: '' },
@@ -149,70 +204,6 @@ const laundromatNotifications = {
     ]
 }
 
-
-export default function NotificationTemplatesPage() {
-    const { toast } = useToast();
-
-    const handleSave = (formId: string) => {
-        toast({
-            title: "Templates Saved",
-            description: `Your changes to the ${formId} templates have been saved.`
-        });
-    }
-
-    return (
-        <div className="space-y-6">
-            <div>
-                <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Notification Templates</h1>
-                <p className="text-muted-foreground">
-                    Manage automated messages sent via Email, SMS, Push, and WhatsApp.
-                </p>
-            </div>
-            
-            <div className="grid lg:grid-cols-3 gap-8 items-start">
-                <div className="lg:col-span-2">
-                    <Tabs defaultValue="customer">
-                        <TabsList className="grid w-full grid-cols-3">
-                            <TabsTrigger value="customer">Customer</TabsTrigger>
-                            <TabsTrigger value="driver">Driver</TabsTrigger>
-                            <TabsTrigger value="laundromat">Laundromat</TabsTrigger>
-                        </TabsList>
-                        <TabsContent value="customer" className="mt-6">
-                            <TemplateForm formId="customer" categories={customerNotifications} onSave={handleSave} />
-                        </TabsContent>
-                        <TabsContent value="driver" className="mt-6">
-                            <TemplateForm formId="driver" categories={driverNotifications} onSave={handleSave} />
-                        </TabsContent>
-                        <TabsContent value="laundromat" className="mt-6">
-                           <TemplateForm formId="laundromat" categories={laundromatNotifications} onSave={handleSave} />
-                        </TabsContent>
-                    </Tabs>
-                </div>
-                 <div className="lg:sticky top-24">
-                    <Card>
-                        <CardHeader>
-                            <CardTitle>Template Variables</CardTitle>
-                            <CardDescription>Use these placeholders in your messages. They will be replaced with real data.</CardDescription>
-                        </CardHeader>
-                        <CardContent>
-                           {templateVariables.map(group => (
-                               <div key={group.name} className="mb-4">
-                                   <h4 className="font-semibold mb-2">{group.name}</h4>
-                                   <div className="space-y-1">
-                                       {group.vars.map(variable => (
-                                           <code key={variable} className="block text-sm p-2 bg-muted rounded-md font-mono">{variable}</code>
-                                       ))}
-                                   </div>
-                               </div>
-                           ))}
-                        </CardContent>
-                    </Card>
-                </div>
-            </div>
-        </div>
-    );
-}
-
 interface Template {
     id: string;
     title: string;
@@ -230,7 +221,7 @@ interface TemplateFormProps {
     onSave: (formId: string) => void;
 }
 
-function TemplateForm({ formId, categories, onSave }: TemplateFormProps) {
+const TemplateForm: React.FC<TemplateFormProps> = ({ formId, categories, onSave }) => {
     return (
         <form onSubmit={(e) => { e.preventDefault(); onSave(formId); }}>
             <Accordion type="multiple" className="space-y-6">
@@ -325,4 +316,68 @@ function TemplateForm({ formId, categories, onSave }: TemplateFormProps) {
             </div>
         </form>
     );
+};
+
+export default function NotificationTemplatesPage() {
+    const { toast } = useToast();
+
+    const handleSave = (formId: string) => {
+        toast({
+            title: "Templates Saved",
+            description: `Your changes to the ${formId} templates have been saved.`
+        });
+    }
+
+    return (
+        <div className="space-y-6">
+            <div>
+                <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Notification Templates</h1>
+                <p className="text-muted-foreground">
+                    Manage automated messages sent via Email, SMS, Push, and WhatsApp.
+                </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-3 gap-8 items-start">
+                <div className="lg:col-span-2">
+                    <Tabs defaultValue="customer">
+                        <TabsList className="grid w-full grid-cols-3">
+                            <TabsTrigger value="customer">Customer</TabsTrigger>
+                            <TabsTrigger value="driver">Driver</TabsTrigger>
+                            <TabsTrigger value="laundromat">Laundromat</TabsTrigger>
+                        </TabsList>
+                        <TabsContent value="customer" className="mt-6">
+                            <TemplateForm formId="customer" categories={customerNotifications} onSave={handleSave} />
+                        </TabsContent>
+                        <TabsContent value="driver" className="mt-6">
+                            <TemplateForm formId="driver" categories={driverNotifications} onSave={handleSave} />
+                        </TabsContent>
+                        <TabsContent value="laundromat" className="mt-6">
+                           <TemplateForm formId="laundromat" categories={laundromatNotifications} onSave={handleSave} />
+                        </TabsContent>
+                    </Tabs>
+                </div>
+                 <div className="lg:sticky top-24">
+                    <Card>
+                        <CardHeader>
+                            <CardTitle>Template Variables</CardTitle>
+                            <CardDescription>Use these placeholders in your messages. They will be replaced with real data.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                           {templateVariables.map(group => (
+                               <div key={group.name} className="mb-4">
+                                   <h4 className="font-semibold mb-2">{group.name}</h4>
+                                   <div className="space-y-1">
+                                       {group.vars.map(variable => (
+                                           <code key={variable} className="block text-sm p-2 bg-muted rounded-md font-mono">{variable}</code>
+                                       ))}
+                                   </div>
+                               </div>
+                           ))}
+                        </CardContent>
+                    </Card>
+                </div>
+            </div>
+        </div>
+    );
 }
+
