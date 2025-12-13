@@ -149,6 +149,38 @@ const customerNotifications = {
                 whatsapp: { enabled: false, content: ''}
             }
         },
+    ],
+    "B2B Billing": [
+        {
+            id: 'b2b_new_invoice',
+            title: 'New B2B Invoice Ready',
+            channels: {
+                email: { enabled: true, subject: 'Your new invoice from Yuber Laundry is ready', body: 'Hi {{customer.firstName}}, your invoice for the period is now available in your business portal.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: false, content: '' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        {
+            id: 'b2b_invoice_reminder',
+            title: 'B2B Invoice Payment Reminder',
+            channels: {
+                email: { enabled: true, subject: 'Reminder: Your Yuber Laundry invoice is due soon', body: 'Hi {{customer.firstName}}, this is a friendly reminder that your invoice is due for payment in 3 days.' },
+                sms: { enabled: true, content: 'Reminder: Your Yuber Laundry invoice is due in 3 days.' },
+                push: { enabled: false, content: '' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        {
+            id: 'b2b_invoice_overdue',
+            title: 'B2B Invoice Overdue',
+            channels: {
+                email: { enabled: true, subject: 'Action Required: Your Yuber Laundry invoice is overdue', body: 'Hi {{customer.firstName}}, your invoice is now overdue. Please log in to your business portal to settle the payment.' },
+                sms: { enabled: true, content: 'Action Required: Your Yuber Laundry invoice is overdue.' },
+                push: { enabled: true, content: 'Your company invoice is overdue. Please settle the payment.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        }
     ]
 }
 
@@ -435,3 +467,5 @@ export default function NotificationTemplatesPage() {
     );
 }
  
+
+    
