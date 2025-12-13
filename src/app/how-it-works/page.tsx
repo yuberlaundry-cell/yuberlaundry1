@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { useState, useEffect } from 'react';
@@ -48,7 +47,8 @@ const pageContent = {
             {
                 icon: InspectIcon,
                 title: "We inspect your clothes and check your pockets.",
-                description: "We do “pocket inspections” for you so nothing ends up in the wash that shouldn't. All pockets and clothes are inspected before being washed."
+                description: "We do “pocket inspections” for you so nothing ends up in the wash that shouldn't. All pockets and clothes are inspected before being washed.",
+                videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&mute=1&loop=1&playlist=dQw4w9WgXcQ&controls=0"
             },
             {
                 icon: Shirt,
@@ -189,9 +189,21 @@ export default function HowItWorksPage() {
                                 <div className="mt-12 grid md:grid-cols-4 gap-8 text-center">
                                     {pageContent['wash-fold'].steps.map((step, index) => (
                                          <div key={index} className="flex flex-col items-center">
-                                            <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
-                                                <step.icon className="h-8 w-8" />
-                                            </div>
+                                            {step.videoUrl ? (
+                                                 <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20 overflow-hidden">
+                                                   <iframe
+                                                        className="w-full h-full scale-150"
+                                                        src={step.videoUrl}
+                                                        title="YouTube video player"
+                                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                        allowFullScreen={false}>
+                                                    </iframe>
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center justify-center h-16 w-16 rounded-full bg-primary/10 text-primary mb-4 border-2 border-primary/20">
+                                                    <step.icon className="h-8 w-8" />
+                                                </div>
+                                            )}
                                             <h3 className="text-xl font-semibold">{step.title}</h3>
                                             <p className="mt-2 text-muted-foreground text-sm">{step.description}</p>
                                         </div>
@@ -336,6 +348,3 @@ export default function HowItWorksPage() {
         </div>
     );
 }
-
-
-

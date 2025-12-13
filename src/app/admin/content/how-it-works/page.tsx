@@ -62,11 +62,19 @@ export default function HowItWorksContentPage() {
                             <div className="space-y-4 rounded-lg border p-4">
                                 <h4 className="font-semibold">"How it works" Section Steps</h4>
                                 {howItWorksSteps.map((step, index) => (
-                                    <div key={step.id} className="space-y-2">
-                                        <Label htmlFor={`wf-step-${index}-title`}>Step {index + 1} Title</Label>
-                                        <Input id={`wf-step-${index}-title`} defaultValue={step.title} />
-                                        <Label htmlFor={`wf-step-${index}-desc`}>Step {index + 1} Description</Label>
-                                        <Textarea id={`wf-step-${index}-desc`} defaultValue="Default description text for this step." />
+                                    <div key={step.id} className="space-y-4 p-4 border rounded-md">
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`wf-step-${index}-title`}>Step {index + 1} Title</Label>
+                                            <Input id={`wf-step-${index}-title`} defaultValue={step.title} />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`wf-step-${index}-desc`}>Step {index + 1} Description</Label>
+                                            <Textarea id={`wf-step-${index}-desc`} defaultValue="Default description text for this step." />
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`wf-step-${index}-video`}>Step {index + 1} Video URL (optional)</Label>
+                                            <Input id={`wf-step-${index}-video`} placeholder="e.g., https://youtube.com/watch?v=..."/>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
@@ -86,11 +94,19 @@ export default function HowItWorksContentPage() {
                              <div className="space-y-4 rounded-lg border p-4">
                                 <h4 className="font-semibold">"How it works" Section Steps</h4>
                                 {dryCleaningStepsCms.map((step, index) => (
-                                    <div key={step.id} className="space-y-2">
-                                        <Label htmlFor={`dc-step-${index}-title`}>Step {index + 1} Title</Label>
-                                        <Input id={`dc-step-${index}-title`} defaultValue={step.title} />
-                                        <Label htmlFor={`dc-step-${index}-desc`}>Step {index + 1} Description</Label>
-                                        <Textarea id={`dc-step-${index}-desc`} defaultValue="Default description text for this step." />
+                                    <div key={step.id} className="space-y-4 p-4 border rounded-md">
+                                        <div className="space-y-2">
+                                            <Label htmlFor={`dc-step-${index}-title`}>Step {index + 1} Title</Label>
+                                            <Input id={`dc-step-${index}-title`} defaultValue={step.title} />
+                                        </div>
+                                         <div className="space-y-2">
+                                            <Label htmlFor={`dc-step-${index}-desc`}>Step {index + 1} Description</Label>
+                                            <Textarea id={`dc-step-${index}-desc`} defaultValue="Default description text for this step." />
+                                        </div>
+                                         <div className="space-y-2">
+                                            <Label htmlFor={`dc-step-${index}-video`}>Step {index + 1} Video URL (optional)</Label>
+                                            <Input id={`dc-step-${index}-video`} placeholder="e.g., https://youtube.com/watch?v=..."/>
+                                        </div>
                                     </div>
                                 ))}
                             </div>
