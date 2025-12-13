@@ -1,9 +1,9 @@
+
 'use client';
 
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -59,13 +59,19 @@ const initialTemplates = [
 export default function TemplatesPage() {
     const [templates, setTemplates] = useState(initialTemplates);
     const [isEditing, setIsEditing] = useState<(typeof initialTemplates)[0] | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const handleOpenDialog = (template: (typeof initialTemplates)[0] | null) => {
         setIsEditing(template);
+        setIsDialogOpen(true);
     }
     
     const handleCloseDialog = () => {
-        setIsEditing(null);
+        setIsDialogOpen(false);
+        // Delay resetting the editing state to avoid dialog content flicker
+        setTimeout(() => {
+            setIsEditing(null);
+        }, 150);
     }
 
 
@@ -78,7 +84,7 @@ export default function TemplatesPage() {
             Manage reusable templates for pickup and delivery time slots, including turnaround rules.
           </p>
         </div>
-        <Dialog open={isEditing !== null} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
+        <Dialog open={isDialogOpen} onOpenChange={(isOpen) => !isOpen && handleCloseDialog()}>
           <DialogTrigger asChild>
             <Button className="w-full sm:w-auto" onClick={() => handleOpenDialog(null)}>
                 <PlusCircle className="mr-2 h-4 w-4" /> Add Template
@@ -210,6 +216,7 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
                <div className="space-y-2">
                 <Label htmlFor="slot-length">Slot Length (minutes)</Label>
                 <Input id="slot-length" type="number" defaultValue={template?.slotLength} placeholder="e.g., 120" required />
+                <p className="text-xs text-muted-foreground">The duration of each bookable window offered to customers (e.g., 120 for a 2-hour slot).</p>
               </div>
           </div>
 
@@ -255,7 +262,7 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
             </div>
           </div>
 
-          <DialogFooter className="sticky bottom-0 bg-background pt-4 pb-0 -mb-6 -mx-6 px-6">
+          <DialogFooter className="sticky bottom-0 bg-background pt-4 -mb-6 -mx-6 px-6 border-t">
             <Button variant="ghost" type="button" onClick={onClose}>Cancel</Button>
             <Button type="submit">{template ? 'Save Changes' : 'Create Template'}</Button>
           </DialogFooter>
