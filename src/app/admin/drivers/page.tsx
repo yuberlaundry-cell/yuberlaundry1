@@ -34,6 +34,7 @@ import { Input } from '@/components/ui/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useToast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const drivers = [
     { id: 'D-001', name: 'Alex Ray', location: 'London, UK', status: 'Online', activeJobs: 1, acceptanceRate: '98%', rating: 4.9, avatar: 'https://picsum.photos/seed/driver1/40/40' },
@@ -70,8 +71,10 @@ export default function DriversPage() {
                 <p className="text-muted-foreground">Manage and monitor all drivers on the platform.</p>
             </div>
             <div className="flex gap-2">
-                <Button className="w-full sm:w-auto" onClick={() => handleGenericAction('Add Driver', '')}>
-                    <PlusCircle className="mr-2 h-4 w-4" /> Add Driver
+                <Button className="w-full sm:w-auto" asChild>
+                    <Link href="/admin/drivers/new">
+                        <PlusCircle className="mr-2 h-4 w-4" /> Add Driver
+                    </Link>
                 </Button>
             </div>
         </div>
