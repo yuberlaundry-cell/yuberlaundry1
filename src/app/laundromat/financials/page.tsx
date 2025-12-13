@@ -236,58 +236,78 @@ export default function FinancialsPage() {
             </div>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Transaction ID</TableHead>
-                <TableHead>Date</TableHead>
-                <TableHead>Period</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>
-                  <span className="sr-only">Actions</span>
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {payoutHistory.map((payout) => (
-                <TableRow key={payout.id} className="cursor-pointer" onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
-                  <TableCell className="font-medium font-mono text-xs">
-                    {payout.id}
-                  </TableCell>
-                  <TableCell>{payout.date}</TableCell>
-                  <TableCell>{payout.period}</TableCell>
-                  <TableCell className="font-medium">{payout.amount}</TableCell>
-                  <TableCell>
-                    <Badge
-                      variant="secondary"
-                      className={statusColors[payout.status]}
-                    >
-                      {payout.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
-                            View Breakdown
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Download className="mr-2 h-4 w-4" />
-                          Download Statement
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
+          <div className="hidden md:block">
+            <Table>
+                <TableHeader>
+                <TableRow>
+                    <TableHead>Transaction ID</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Period</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead>
+                    <span className="sr-only">Actions</span>
+                    </TableHead>
                 </TableRow>
+                </TableHeader>
+                <TableBody>
+                {payoutHistory.map((payout) => (
+                    <TableRow key={payout.id} className="cursor-pointer" onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
+                    <TableCell className="font-medium font-mono text-xs">
+                        {payout.id}
+                    </TableCell>
+                    <TableCell>{payout.date}</TableCell>
+                    <TableCell>{payout.period}</TableCell>
+                    <TableCell className="font-medium">{payout.amount}</TableCell>
+                    <TableCell>
+                        <Badge
+                        variant="secondary"
+                        className={statusColors[payout.status as keyof typeof statusColors]}
+                        >
+                        {payout.status}
+                        </Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                        <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button variant="ghost" size="icon" onClick={(e) => e.stopPropagation()}>
+                            <MoreHorizontal className="h-4 w-4" />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
+                                View Breakdown
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                            <Download className="mr-2 h-4 w-4" />
+                            Download Statement
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                        </DropdownMenu>
+                    </TableCell>
+                    </TableRow>
+                ))}
+                </TableBody>
+            </Table>
+          </div>
+           <div className="grid sm:grid-cols-2 gap-4 md:hidden">
+              {payoutHistory.map(payout => (
+                  <Card key={payout.id} onClick={() => router.push(`/laundromat/financials/payouts/${payout.id}`)}>
+                      <CardHeader>
+                          <div className="flex justify-between items-start">
+                            <CardTitle className="text-base font-mono">{payout.id}</CardTitle>
+                             <Badge variant="secondary" className={statusColors[payout.status as keyof typeof statusColors]}>
+                                {payout.status}
+                            </Badge>
+                          </div>
+                      </CardHeader>
+                      <CardContent className="text-sm">
+                          <p className="font-semibold text-lg">{payout.amount}</p>
+                          <p className="text-muted-foreground">Paid on {payout.date}</p>
+                      </CardContent>
+                  </Card>
               ))}
-            </TableBody>
-          </Table>
+          </div>
         </CardContent>
       </Card>
     </div>
