@@ -43,6 +43,36 @@ const customerNotifications = {
                 whatsapp: { enabled: false, content: ''}
             }
         },
+        {
+            id: 'customer_items_collected',
+            title: 'Items Collected',
+            channels: {
+                email: { enabled: true, subject: 'We have your laundry!', body: 'Your items for order {{order.id}} have been collected and are on their way to the facility.' },
+                sms: { enabled: true, content: 'Your items for order {{order.id}} have been collected.' },
+                push: { enabled: true, content: 'We have your laundry!' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        },
+        {
+            id: 'customer_items_at_laundromat',
+            title: 'Items at Laundromat',
+            channels: {
+                email: { enabled: true, subject: 'Your laundry has arrived for cleaning', body: 'Order {{order.id}} has been received at {{laundromat.name}} and will be processed shortly.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Your laundry has arrived at the cleaning facility.' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        },
+        {
+            id: 'customer_items_ready',
+            title: 'Items Ready for Delivery',
+            channels: {
+                email: { enabled: true, subject: 'Your laundry is clean!', body: 'Great news! Your items for order {{order.id}} are all clean and ready for delivery.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Your laundry is clean and ready for delivery!' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        },
         { 
             id: 'customer_out_for_delivery', 
             title: 'Out for Delivery', 
