@@ -11,13 +11,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import Link from "next/link";
+import { PlaceHolderImages } from "@/lib/placeholder-images";
 
 // Mock data representing content managed by the CMS
 const pageContent = {
     hero: {
         headline: "The employee benefit that actually gives time back.",
         subheadline: "Empower your team with the ultimate convenience. Yuber for Business simplifies laundry so your employees can focus on what matters most.",
-        imageUrl: "https://images.unsplash.com/photo-1556761175-4b46a572b786?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxtb2Rlcm4lMjBvZmZpY2V8ZW58MHx8fHwxNzY1MjgxNTI5fDA&ixlib=rb-4.1.0&q=80&w=1080",
+        imageId: 'business-hero'
     },
     features: [
         {
@@ -68,6 +69,8 @@ const pageContent = {
 
 export default function ForBusinessPage() {
     const { toast } = useToast();
+    const heroImage = PlaceHolderImages.find(p => p.id === pageContent.hero.imageId);
+
 
     const handleDemoRequest = (e: React.FormEvent) => {
         e.preventDefault();
@@ -101,13 +104,15 @@ export default function ForBusinessPage() {
                             </div>
                         </div>
                         <div className="relative aspect-[4/3] rounded-2xl overflow-hidden">
-                           <Image
-                                src={pageContent.hero.imageUrl}
-                                alt="Modern office environment"
-                                data-ai-hint="modern office"
+                           {heroImage && (
+                             <Image
+                                src={heroImage.imageUrl}
+                                alt={heroImage.description}
+                                data-ai-hint={heroImage.imageHint}
                                 fill
                                 className="object-cover"
                            />
+                           )}
                         </div>
                     </div>
                 </section>
