@@ -6,49 +6,89 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { CheckCircle2, Info, Loader2, HandCoins, HardHat, Wallet, CreditCard } from "lucide-react";
+import { CheckCircle2, Info, Loader2, HandCoins, HardHat, Wallet, CreditCard, Banknote, PlusCircle, Payment, FileCreditCard } from "lucide-react";
 import { useState } from "react";
 
 
-export default function ReviewStep({ isProcessing }: { isProcessing: boolean }) {
+interface ReviewStepProps {
+    isProcessing: boolean;
+    paymentMethod: string;
+    setPaymentMethod: (method: string) => void;
+}
+
+export default function ReviewStep({ isProcessing, paymentMethod, setPaymentMethod }: ReviewStepProps) {
     const [driverTip, setDriverTip] = useState('15%');
     const [laundromatTip, setLaundromatTip] = useState('0%');
     const [agreedToTerms, setAgreedToTerms] = useState(false);
-    const [paymentMethod, setPaymentMethod] = useState('wallet');
+
+    // Mock data - in a real app, this would come from user data
+    const hasSavedCard = true;
+    const walletBalance = 150.50;
+    const isNewCustomer = !hasSavedCard && walletBalance <= 0;
 
     return (
         <div className="space-y-8">
             <div>
-                <h2 className="text-2xl font-bold font-headline">Review & Place Order</h2>
+                <h2 className="text-2xl font-bold font-headline flex items-center gap-2">
+                    <FileCreditCard className="h-6 w-6 text-muted-foreground" />
+                    Review & Pay
+                </h2>
                 <p className="text-muted-foreground mt-1">Finalize your details before confirming your order.</p>
             </div>
            
             <div className="space-y-6">
                 <div className="space-y-4">
                     <Label className="font-semibold text-lg">Payment Method</Label>
-                    <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                        <Label htmlFor="pay-wallet" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <div className="flex items-center gap-3">
-                                <RadioGroupItem value="wallet" id="pay-wallet"/>
-                                <Wallet className="h-5 w-5 text-primary"/>
-                                <div>
-                                    <p className="font-medium">Use Yuber Wallet</p>
-                                    <p className="text-sm text-muted-foreground">R150.50 available</p>
+                    {isNewCustomer ? (
+                        <div className="p-4 border-2 border-primary rounded-lg bg-primary/5">
+                            <Label htmlFor="pay-card" className="flex items-center justify-between cursor-pointer">
+                                <div className="flex items-center gap-3">
+                                    <CreditCard className="h-5 w-5 text-primary"/>
+                                    <div>
+                                        <p className="font-medium">Pay with Card</p>
+                                        <p className="text-sm text-muted-foreground">You will be prompted to add your card securely via Paystack.</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </Label>
-                         <Label htmlFor="pay-card" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <div className="flex items-center gap-3">
-                                <RadioGroupItem value="card" id="pay-card"/>
-                                <CreditCard className="h-5 w-5 text-muted-foreground"/>
-                                <div>
-                                    <p className="font-medium">Pay with Card</p>
-                                    <p className="text-sm text-muted-foreground">Visa ending in 4242</p>
+                            </Label>
+                        </div>
+                    ) : (
+                        <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
+                            {walletBalance > 0 && (
+                                <Label htmlFor="pay-wallet" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                    <div className="flex items-center gap-3">
+                                        <RadioGroupItem value="wallet" id="pay-wallet"/>
+                                        <Wallet className="h-5 w-5 text-primary"/>
+                                        <div>
+                                            <p className="font-medium">Use Yuber Wallet</p>
+                                            <p className="text-sm text-muted-foreground">R{walletBalance.toFixed(2)} available</p>
+                                        </div>
+                                    </div>
+                                </Label>
+                            )}
+                            {hasSavedCard && (
+                                <Label htmlFor="pay-card" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                    <div className="flex items-center gap-3">
+                                        <RadioGroupItem value="card" id="pay-card"/>
+                                        <CreditCard className="h-5 w-5 text-muted-foreground"/>
+                                        <div>
+                                            <p className="font-medium">Pay with Card</p>
+                                            <p className="text-sm text-muted-foreground">Visa ending in 4242</p>
+                                        </div>
+                                    </div>
+                                    <Button variant="link" size="sm" className="p-0 h-auto">Change</Button>
+                                </Label>
+                            )}
+                             <Label htmlFor="pay-new-card" className="flex items-center justify-between p-4 border rounded-lg cursor-pointer has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                <div className="flex items-center gap-3">
+                                    <RadioGroupItem value="new-card" id="pay-new-card"/>
+                                    <PlusCircle className="h-5 w-5 text-muted-foreground"/>
+                                    <div>
+                                        <p className="font-medium">Add & Pay with New Card</p>
+                                    </div>
                                 </div>
-                            </div>
-                             <Button variant="link" size="sm" className="p-0 h-auto">Change</Button>
-                        </Label>
-                    </RadioGroup>
+                            </Label>
+                        </RadioGroup>
+                    )}
                 </div>
                 
                 <div className="p-4 border rounded-lg bg-muted/50 space-y-4">

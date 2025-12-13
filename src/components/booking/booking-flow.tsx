@@ -1,7 +1,4 @@
 
-
-
-
 'use client';
 
 import { useState } from "react";
@@ -34,6 +31,7 @@ export function BookingFlow() {
     const [currentStep, setCurrentStep] = useState(1);
     const [isComplete, setIsComplete] = useState(false);
     const [isProcessing, setIsProcessing] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('wallet'); // 'wallet', 'card', 'new-card'
     const { user } = useAuth();
     const { toast } = useToast();
     const router = useRouter();
@@ -49,6 +47,18 @@ export function BookingFlow() {
     const handlePlaceOrder = () => {
         setIsProcessing(true);
 
+        if (paymentMethod === 'wallet') {
+            // Simulate wallet payment
+            setTimeout(() => {
+                const newOrderId = `YL${Math.floor(10000 + Math.random() * 90000)}`;
+                setIsProcessing(false);
+                toast({ title: 'Order Placed!', description: 'Paid with your Yuber Wallet.' });
+                router.push(`/app/orders/${newOrderId}`);
+            }, 1500);
+            return;
+        }
+
+        // For 'card' or 'new-card', proceed with Paystack
         setTimeout(() => {
             const paystack = new PaystackPop();
             paystack.newTransaction({
@@ -59,12 +69,8 @@ export function BookingFlow() {
                 reference: `yuber_${Math.random().toString(36).substring(7)}`,
                 onSuccess: (transaction) => {
                     setIsProcessing(false);
-                    // Instead of just setting complete, we redirect
-                    // This gives a cleaner UX and a permanent URL for the order
                     const newOrderId = transaction.reference.replace('yuber_', '');
                     router.push(`/app/orders/${newOrderId}`);
-                    // You might want to also close the dialog here if it's a modal
-                    // This part depends on how the dialog is controlled from the parent component
                 },
                 onClose: () => {
                     setIsProcessing(false);
@@ -94,7 +100,7 @@ export function BookingFlow() {
             case 4:
                 return <InstructionsStep />;
             case 5:
-                return <ReviewStep isProcessing={isProcessing} />;
+                return <ReviewStep isProcessing={isProcessing} paymentMethod={paymentMethod} setPaymentMethod={setPaymentMethod} />;
             default:
                 return <AddressStep />;
         }
