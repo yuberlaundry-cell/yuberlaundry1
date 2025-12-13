@@ -10,9 +10,8 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ScanLine, UserPlus, CheckCircle, Package } from 'lucide-react';
-import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
-import { IntakeFlow } from '@/components/laundromat/intake-flow';
+import { PlusCircle, Package } from 'lucide-react';
+import Link from 'next/link';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
@@ -65,16 +64,11 @@ export default function IntakePage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full h-12 text-base">
-                <ScanLine className="mr-2" /> Start Intake
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md">
-               <IntakeFlow />
-            </DialogContent>
-          </Dialog>
+          <Button className="w-full h-12 text-base" asChild>
+            <Link href="/laundromat/intake/new">
+                <PlusCircle className="mr-2" /> Start Intake
+            </Link>
+          </Button>
         </CardContent>
       </Card>
       

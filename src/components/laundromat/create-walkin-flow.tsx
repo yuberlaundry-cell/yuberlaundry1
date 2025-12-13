@@ -3,7 +3,6 @@
 
 import { useState } from 'react';
 import { Button } from '../ui/button';
-import { DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from '../ui/dialog';
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import { Separator } from '../ui/separator';
@@ -13,6 +12,8 @@ import { useToast } from '@/hooks/use-toast';
 import { RadioGroup, RadioGroupItem } from '../ui/radio-group';
 import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
 import { PhoneNumberInput } from '../ui/phone-number-input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
+import { ArrowLeft } from 'lucide-react';
 
 const servicesConfig = [
   { id: 'wash-fold', name: 'Wash & Fold', icon: ShoppingBag, model: 'per_kg', price: 40.00 },
@@ -39,32 +40,20 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const total = subtotal + tax;
 
   const handleNext = () => setStep((s) => s + 1);
-  const handleBack = () => setStep((s) => s - 1);
+  const handleBack = () => step === 1 ? onBack() : setStep((s) => s - 1);
   
   const handleCreateOrder = () => {
-    // Generate the unique order ID right away. This will be our client_reference.
     const orderId = `#W-${Math.floor(10000 + Math.random() * 90000)}`;
     setNewOrderId(orderId);
 
     if (paymentMethod === 'yoco') {
         setIsProcessingYoco(true);
-
-        // --- HERE IS WHERE THE PAYLOAD IS CONSTRUCTED ---
         const yocoPayload = {
-            amount: {
-                amount: Math.round(total * 100), // Convert to cents
-                currency: "ZAR"
-            },
-            client_reference: orderId, // Our internal order ID
-            metadata: {
-                laundromatId: "laundromat-123", // Example ID
-                customerName: customer.name,
-            }
+            amount: { amount: Math.round(total * 100), currency: "ZAR" },
+            client_reference: orderId,
+            metadata: { laundromatId: "laundromat-123", customerName: customer.name }
         };
-
         console.log("Simulating API call to Yoco with payload:", yocoPayload);
-        
-        // Simulate API call to Yoco backend
         setTimeout(() => {
             toast({
                 title: "Waiting for Yoco Payment",
@@ -74,39 +63,23 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
         return;
     }
     
-    // For non-Yoco payments (cash, pay later)
     finalizeOrder(orderId);
   }
 
   const finalizeOrder = (orderId: string) => {
     setIsProcessingYoco(false);
-    
     const serviceSummary = orderItems.map(item => item.name).join(', ');
-
     addOrder({
-        id: orderId,
-        customer: customer.name,
-        service: serviceSummary,
-        status: 'Intake',
-        pickup: new Date().toLocaleDateString(),
-        sla: 'Due in 24h',
-        bags: orderItems.length,
-        items: orderItems,
-        isBilled: true,
+        id: orderId, customer: customer.name, service: serviceSummary, status: 'Intake',
+        pickup: new Date().toLocaleDateString(), sla: 'Due in 24h', bags: orderItems.length,
+        items: orderItems, isBilled: true,
     });
-
-    toast({
-        title: `Order ${orderId} Created`,
-        description: 'The order for ' + customer.name + ' is now in the system.',
-    });
-    setStep(4); // Move to confirmation step
+    toast({ title: `Order ${orderId} Created`, description: `The order for ${customer.name} is now in the system.` });
+    setStep(4);
   }
 
   const handlePrint = (type: 'Receipt' | 'Bag Tags') => {
-    toast({
-        title: `Printing ${type}...`,
-        description: `Your ${type.toLowerCase()} have been sent to the printer.`,
-    });
+    toast({ title: `Printing ${type}...`, description: `Your ${type.toLowerCase()} have been sent to the printer.` });
   }
 
   const handleItemValueChange = (id: string, value: number) => {
@@ -116,190 +89,110 @@ export function CreateWalkinFlow({ onComplete, onBack }: CreateWalkinFlowProps) 
   const toggleService = (serviceId: string) => {
     const service = servicesConfig.find(s => s.id === serviceId);
     if (!service) return;
-
-    if (orderItems.some(item => item.id === serviceId)) {
-        setOrderItems(orderItems.filter(item => item.id !== serviceId));
-    } else {
-        setOrderItems([...orderItems, { ...service, value: 0 }]);
-    }
+    setOrderItems(prev => prev.some(item => item.id === serviceId) ? prev.filter(item => item.id !== serviceId) : [...prev, { ...service, value: 0 }]);
   };
 
 
   const renderStep = () => {
     switch (step) {
-      case 1: // Customer Details
+      case 1:
         return (
-          <>
-            <DialogHeader>
-              <DialogTitle>Create Walk-in Order</DialogTitle>
-              <DialogDescription>Step 1: Enter customer details.</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label htmlFor="customer-name">Customer Name</Label>
-                <Input
-                  id="customer-name"
-                  placeholder="John Doe"
-                  value={customer.name}
-                  onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="customer-phone">Phone Number</Label>
-                <PhoneNumberInput />
-              </div>
-            </div>
-            <DialogFooter>
-              <Button variant="ghost" onClick={onBack}>Back to Intake Type</Button>
-              <Button onClick={handleNext} disabled={!customer.name}>Continue</Button>
-            </DialogFooter>
-          </>
+          <Card>
+            <CardHeader>
+                <CardTitle>Create Walk-in Order</CardTitle>
+                <CardDescription>Step 1: Enter customer details.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-2"><Label htmlFor="customer-name">Customer Name</Label><Input id="customer-name" placeholder="John Doe" value={customer.name} onChange={(e) => setCustomer({ ...customer, name: e.target.value })}/></div>
+              <div className="space-y-2"><Label htmlFor="customer-phone">Phone Number</Label><PhoneNumberInput /></div>
+            </CardContent>
+          </Card>
         );
-      case 2: // Services and Pricing
+      case 2:
         return (
-           <>
-            <DialogHeader>
-              <DialogTitle>Services & Pricing</DialogTitle>
-              <DialogDescription>Step 2: Weigh items and calculate the price for {customer.name}.</DialogDescription>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Services & Pricing</CardTitle>
+              <CardDescription>Step 2: Weigh items and calculate the price for {customer.name}.</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
                 {servicesConfig.map((service) => (
                     <div key={service.id} className="p-3 border rounded-lg">
                         <div className="flex items-center gap-4">
-                            <Checkbox 
-                                id={`walkin-${service.id}`}
-                                checked={orderItems.some(item => item.id === service.id)}
-                                onCheckedChange={() => toggleService(service.id)}
-                            />
+                            <Checkbox id={`walkin-${service.id}`} checked={orderItems.some(item => item.id === service.id)} onCheckedChange={() => toggleService(service.id)}/>
                             <Label htmlFor={`walkin-${service.id}`} className="flex items-center gap-3 cursor-pointer flex-grow">
-                                <div className="bg-primary/10 text-primary p-3 rounded-lg">
-                                    <service.icon className="h-5 w-5" />
-                                </div>
-                                <div>
-                                    <p className="font-semibold">{service.name}</p>
-                                    <p className="text-xs text-muted-foreground">R{service.price}/{service.model === 'per_kg' ? 'kg' : 'item'}</p>
-                                </div>
+                                <div className="bg-primary/10 text-primary p-3 rounded-lg"><service.icon className="h-5 w-5" /></div>
+                                <div><p className="font-semibold">{service.name}</p><p className="text-xs text-muted-foreground">R{service.price}/{service.model === 'per_kg' ? 'kg' : 'item'}</p></div>
                             </Label>
                         </div>
                         {orderItems.some(item => item.id === service.id) && (
-                            <div className="mt-3 pl-12">
-                                <Label htmlFor={`item-val-${service.id}`}>{service.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label>
-                                <Input 
-                                    id={`item-val-${service.id}`}
-                                    type="number"
-                                    placeholder="0"
-                                    value={orderItems.find(item => item.id === service.id)?.value || ''}
-                                    onChange={(e) => handleItemValueChange(service.id, parseFloat(e.target.value) || 0)}
-                                    className="mt-1"
-                                />
-                            </div>
+                            <div className="mt-3 pl-12"><Label htmlFor={`item-val-${service.id}`}>{service.model === 'per_kg' ? 'Weight (kg)' : 'Quantity'}</Label><Input id={`item-val-${service.id}`} type="number" placeholder="0" value={orderItems.find(item => item.id === service.id)?.value || ''} onChange={(e) => handleItemValueChange(service.id, parseFloat(e.target.value) || 0)} className="mt-1"/></div>
                         )}
                     </div>
                 ))}
-                <Separator />
-                <div className="space-y-1 text-sm">
-                    <div className="flex justify-between">
-                        <p className="text-muted-foreground">Subtotal</p>
-                        <p className="font-medium">R{subtotal.toFixed(2)}</p>
-                    </div>
-                     <div className="flex justify-between">
-                        <p className="text-muted-foreground">Tax</p>
-                        <p className="font-medium">R{tax.toFixed(2)}</p>
-                    </div>
-                     <div className="flex justify-between font-bold text-base">
-                        <p>Total</p>
-                        <p>R{total.toFixed(2)}</p>
-                    </div>
-                </div>
-            </div>
-            <DialogFooter>
-              <Button variant="ghost" onClick={handleBack}>Back</Button>
-              <Button onClick={handleNext} disabled={total <= 0}>Continue to Payment</Button>
-            </DialogFooter>
-          </>
+                <Separator /><div className="space-y-1 text-sm"><div className="flex justify-between"><p className="text-muted-foreground">Subtotal</p><p className="font-medium">R{subtotal.toFixed(2)}</p></div><div className="flex justify-between"><p className="text-muted-foreground">Tax</p><p className="font-medium">R{tax.toFixed(2)}</p></div><div className="flex justify-between font-bold text-base"><p>Total</p><p>R{total.toFixed(2)}</p></div></div>
+            </CardContent>
+          </Card>
         );
-      case 3: // Payment
+      case 3:
         return (
-          <>
-            <DialogHeader>
-              <DialogTitle>Payment</DialogTitle>
-              <DialogDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</DialogDescription>
-            </DialogHeader>
-             <div className="space-y-4 py-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Payment</CardTitle>
+              <CardDescription>Step 3: Collect payment for order total of <span className="font-bold text-foreground">R{total.toFixed(2)}</span>.</CardDescription>
+            </CardHeader>
+             <CardContent className="space-y-4">
                 {isProcessingYoco ? (
                      <div className="p-8 text-center space-y-4">
                         <Loader2 className="h-12 w-12 mx-auto animate-spin text-primary" />
                         <h3 className="font-semibold text-lg">Waiting for Yoco...</h3>
                         <p className="text-muted-foreground">Complete the payment on the Yoco card machine.</p>
-                        <div className="flex gap-2 justify-center">
-                            <Button variant="destructive" size="sm" onClick={() => setIsProcessingYoco(false)}>Cancel</Button>
-                            <Button variant="secondary" size="sm" onClick={() => finalizeOrder(newOrderId)}>Simulate Success</Button>
-                        </div>
+                        <div className="flex gap-2 justify-center"><Button variant="destructive" size="sm" onClick={() => setIsProcessingYoco(false)}>Cancel</Button><Button variant="secondary" size="sm" onClick={() => finalizeOrder(newOrderId)}>Simulate Success</Button></div>
                     </div>
                 ) : (
                     <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod} className="space-y-3">
-                        <Label htmlFor="pay-cash" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="cash" id="pay-cash" />
-                            <Banknote className="h-6 w-6 text-green-600" />
-                            <div>
-                                <p className="font-semibold">Pay with Cash</p>
-                            </div>
-                        </Label>
-                        <Label htmlFor="pay-yoco" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="yoco" id="pay-yoco" />
-                            <CreditCard className="h-6 w-6 text-blue-600" />
-                            <div>
-                                <p className="font-semibold">Pay with Yoco</p>
-                            </div>
-                        </Label>
-                        <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
-                            <RadioGroupItem value="later" id="pay-later" />
-                            <Clock className="h-6 w-6 text-amber-600" />
-                            <div>
-                                <p className="font-semibold">Pay on Collection</p>
-                            </div>
-                        </Label>
+                        <Label htmlFor="pay-cash" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="cash" id="pay-cash" /><Banknote className="h-6 w-6 text-green-600" /><div><p className="font-semibold">Pay with Cash</p></div></Label>
+                        <Label htmlFor="pay-yoco" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="yoco" id="pay-yoco" /><CreditCard className="h-6 w-6 text-blue-600" /><div><p className="font-semibold">Pay with Yoco</p></div></Label>
+                        <Label htmlFor="pay-later" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary"><RadioGroupItem value="later" id="pay-later" /><Clock className="h-6 w-6 text-amber-600" /><div><p className="font-semibold">Pay on Collection</p></div></Label>
                     </RadioGroup>
                 )}
-            </div>
-            {!isProcessingYoco && (
-                <DialogFooter>
-                <Button variant="ghost" onClick={handleBack}>Back</Button>
-                <Button onClick={handleCreateOrder}>Confirm & Create Order</Button>
-                </DialogFooter>
-            )}
-          </>
+            </CardContent>
+          </Card>
         );
-      case 4: // Confirmation
+      case 4:
          return (
-             <>
-                <DialogHeader className="text-center items-center">
-                    <div className="p-4 rounded-full bg-green-100 text-green-700 mb-4">
-                        <CheckCircle className="h-10 w-10" />
-                    </div>
-                    <DialogTitle>Order {newOrderId} Created</DialogTitle>
-                    <DialogDescription>The order for {customer.name} has been successfully created and is marked as paid.</DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-4 text-center">
+             <Card className="text-center">
+                <CardHeader className="items-center">
+                    <div className="p-4 rounded-full bg-green-100 text-green-700 mb-4"><CheckCircle className="h-10 w-10" /></div>
+                    <CardTitle>Order {newOrderId} Created</CardTitle>
+                    <CardDescription>The order for {customer.name} has been successfully created and is marked as paid.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4">
                     <p className="text-muted-foreground">Attach the printed tags to the customer's bags. You can now find this order in the main queue.</p>
-                    <div className="grid grid-cols-2 gap-2">
-                        <Button className="w-full" variant="outline" onClick={() => handlePrint('Receipt')}>
-                            <Printer className="mr-2" /> Print Receipt
-                        </Button>
-                        <Button className="w-full" onClick={() => handlePrint('Bag Tags')}>
-                            <Printer className="mr-2" /> Print Bag Tags
-                        </Button>
-                    </div>
-                </div>
-                 <DialogFooter className="sm:justify-center">
-                    <Button onClick={onComplete} className="w-full">Finish Intake & Start New</Button>
-                </DialogFooter>
-             </>
+                    <div className="grid grid-cols-2 gap-2"><Button className="w-full" variant="outline" onClick={() => handlePrint('Receipt')}><Printer className="mr-2" /> Print Receipt</Button><Button className="w-full" onClick={() => handlePrint('Bag Tags')}><Printer className="mr-2" /> Print Bag Tags</Button></div>
+                </CardContent>
+             </Card>
          )
-      default:
-        return null;
+      default: return null;
     }
   };
 
-  return <div className="flex flex-col h-full">{renderStep()}</div>;
+  return (
+      <div className="max-w-md mx-auto space-y-6">
+        {renderStep()}
+        {step < 4 && !isProcessingYoco && (
+            <div className="flex justify-between">
+                <Button variant="ghost" onClick={handleBack}><ArrowLeft className="mr-2" />Back</Button>
+                {step < 3 ? (
+                     <Button onClick={handleNext} disabled={step === 1 ? !customer.name : total <= 0}>Continue</Button>
+                ) : (
+                    <Button onClick={handleCreateOrder}>Confirm & Create Order</Button>
+                )}
+            </div>
+        )}
+        {step === 4 && (
+            <Button onClick={onComplete} className="w-full">Finish Intake & Start New</Button>
+        )}
+      </div>
+  )
 }

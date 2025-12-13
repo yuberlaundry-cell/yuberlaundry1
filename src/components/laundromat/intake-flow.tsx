@@ -2,12 +2,12 @@
 'use client';
 
 import { useState } from 'react';
-import { DialogClose } from '@/components/ui/dialog';
+import { useRouter } from 'next/navigation';
 import { CreateWalkinFlow } from './create-walkin-flow';
 import { IntakeScanner } from './intake-scanner';
 import { Button } from '../ui/button';
-import { HardHat, ScanLine, User } from 'lucide-react';
-import { DialogHeader, DialogTitle, DialogDescription } from '../ui/dialog';
+import { ArrowLeft, HardHat, ScanLine, User } from 'lucide-react';
+import Link from 'next/link';
 
 type IntakeStep = 'select_type' | 'scan_driver' | 'scan_customer' | 'walk_in';
 
@@ -34,14 +34,18 @@ const intakeTypes = [
 
 export function IntakeFlow() {
   const [step, setStep] = useState<IntakeStep>('select_type');
+  const router = useRouter();
 
-  const resetFlow = () => setStep('select_type');
+  const resetAndGoToIntake = () => {
+    setStep('select_type');
+    router.push('/laundromat/intake');
+  }
 
   if (step === 'scan_driver') {
     return (
       <IntakeScanner
         onBack={() => setStep('select_type')}
-        onComplete={resetFlow}
+        onComplete={resetAndGoToIntake}
         scanType="Driver"
       />
     );
@@ -51,7 +55,7 @@ export function IntakeFlow() {
     return (
       <IntakeScanner
         onBack={() => setStep('select_type')}
-        onComplete={resetFlow}
+        onComplete={resetAndGoToIntake}
         scanType="Customer"
       />
     );
@@ -61,19 +65,22 @@ export function IntakeFlow() {
     return (
       <CreateWalkinFlow
         onBack={() => setStep('select_type')}
-        onComplete={resetFlow}
+        onComplete={resetAndGoToIntake}
       />
     );
   }
 
   return (
-    <>
-      <DialogHeader>
-        <DialogTitle>Start a New Intake</DialogTitle>
-        <DialogDescription>
-          How is this order arriving at the facility?
-        </DialogDescription>
-      </DialogHeader>
+    <div className="max-w-md mx-auto space-y-8">
+        <div>
+            <Button variant="ghost" asChild className="-ml-4">
+                <Link href="/laundromat/intake"><ArrowLeft className="mr-2" /> Back to Intake</Link>
+            </Button>
+            <h1 className="text-3xl font-bold font-headline mt-4">Start a New Intake</h1>
+            <p className="text-muted-foreground">
+                How is this order arriving at the facility?
+            </p>
+        </div>
       <div className="space-y-3 py-4">
         {intakeTypes.map((type) => (
           <Button
@@ -94,9 +101,6 @@ export function IntakeFlow() {
           </Button>
         ))}
       </div>
-      <DialogClose asChild>
-        <Button variant="ghost">Cancel</Button>
-      </DialogClose>
-    </>
+    </div>
   );
 }
