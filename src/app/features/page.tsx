@@ -6,13 +6,14 @@ import { PublicHeader } from "@/components/layout/public-header";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from '@/lib/utils';
-import { Sparkles, Gift, Users, ShoppingBag, Truck, Zap, Circle, Info, Switch, Check } from 'lucide-react';
+import { Sparkles, Gift, Users, ShoppingBag, Truck, Zap, Circle, Info, Check } from 'lucide-react';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Image from 'next/image';
 import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 const featureTabs = [
     {
