@@ -1,4 +1,5 @@
 
+
 'use client';
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -18,8 +19,8 @@ const templateVariables = [
     { name: 'Order', vars: ['{{order.id}}', '{{order.status}}', '{{order.deliveryDate}}', '{{order.pickupTime}}'] },
     { name: 'Driver', vars: ['{{driver.name}}', '{{driver.eta}}'] },
     { name: 'Laundromat', vars: ['{{laundromat.name}}'] },
-    { name: 'Supply', vars: ['{{supply.name}}'] },
     { name: 'Payout', vars: ['{{payout.amount}}', '{{payout.endDate}}'] },
+    { name: 'Supply', vars: ['{{supply.name}}'] },
 ];
 
 const customerNotifications = {
@@ -276,6 +277,26 @@ const laundromatNotifications = {
                 whatsapp: { enabled: false, content: ''}
             }
         },
+        {
+            id: 'laundromat_sla_warning',
+            title: 'SLA Breach Warning',
+            channels: {
+                email: { enabled: true, subject: 'SLA Warning for Order {{order.id}}', body: 'Order {{order.id}} is approaching its SLA deadline. Please prioritize processing.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'SLA WARNING: Order {{order.id}} is due soon!' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        },
+        {
+            id: 'laundromat_qc_issue',
+            title: 'New Customer Issue Reported',
+            channels: {
+                email: { enabled: true, subject: 'New Customer Issue for Order {{order.id}}', body: 'A customer has reported an issue with a completed order. Please review in your portal.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'New customer issue reported for order {{order.id}}.' },
+                whatsapp: { enabled: false, content: '' }
+            }
+        }
     ],
     "Earnings & Payouts": [
         {
@@ -470,3 +491,4 @@ export default function NotificationTemplatesPage() {
  
 
     
+
