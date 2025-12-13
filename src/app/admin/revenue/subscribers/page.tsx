@@ -25,6 +25,9 @@ import {
   Download,
   PowerOff,
   Power,
+  Users,
+  Building,
+  Crown,
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -38,10 +41,11 @@ import { useRouter } from 'next/navigation';
 import { useToast } from '@/hooks/use-toast';
 
 const subscribers = [
-    { customer: 'Jane Doe', avatar: 'https://picsum.photos/seed/user1/40/40', plan: 'Yuber Repeat (2 Bags)', status: 'Active', renewalDate: 'June 1, 2024' },
-    { customer: 'John Smith', avatar: 'https://picsum.photos/seed/user2/40/40', plan: 'Yuber Repeat (1 Bag)', status: 'Active', renewalDate: 'June 5, 2024' },
-    { customer: 'Acme Corp', avatar: 'https://picsum.photos/seed/biz1/40/40', plan: 'Business Pro', status: 'Active', renewalDate: 'June 15, 2024' },
-    { customer: 'Mike Ross', avatar: 'https://picsum.photos/seed/user3/40/40', plan: 'Yuber Lite (Legacy)', status: 'Cancelled', renewalDate: 'N/A' },
+    { customer: 'Jane Doe', avatar: 'https://picsum.photos/seed/user1/40/40', plan: 'Yuber Repeat (2 Bags)', planType: 'Consumer', status: 'Active', renewalDate: 'June 1, 2024' },
+    { customer: 'Acme Corp', avatar: 'https://picsum.photos/seed/biz1/40/40', plan: 'Business Pro', planType: 'Business', status: 'Active', renewalDate: 'June 15, 2024' },
+    { customer: 'John Smith', avatar: 'https://picsum.photos/seed/user2/40/40', plan: 'Yuber Repeat (1 Bag)', planType: 'Consumer', status: 'Active', renewalDate: 'June 5, 2024' },
+    { customer: 'Speedy Suds', avatar: 'https://picsum.photos/seed/lnd1/40/40', plan: 'Partner Tier 1', planType: 'Laundromat', status: 'Active', renewalDate: 'June 20, 2024' },
+    { customer: 'Mike Ross', avatar: 'https://picsum.photos/seed/user3/40/40', plan: 'Yuber Lite (Legacy)', planType: 'Consumer', status: 'Cancelled', renewalDate: 'N/A' },
 ];
 
 const statusColors: { [key: string]: string } = {
@@ -49,6 +53,18 @@ const statusColors: { [key: string]: string } = {
   Cancelled: 'bg-gray-100 text-gray-800',
   Paused: 'bg-amber-100 text-amber-800',
 };
+
+const planTypeColors: { [key: string]: string } = {
+  Consumer: 'bg-blue-100 text-blue-800',
+  Business: 'bg-purple-100 text-purple-800',
+  Laundromat: 'bg-teal-100 text-teal-800',
+};
+
+const planTypeIcons: { [key: string]: React.FC } = {
+  Consumer: Users,
+  Business: Building,
+  Laundromat: Crown,
+}
 
 
 export default function SubscribersPage() {
@@ -94,19 +110,19 @@ export default function SubscribersPage() {
                         <DropdownMenuItem>All</DropdownMenuItem>
                         <DropdownMenuItem>Active</DropdownMenuItem>
                         <DropdownMenuItem>Cancelled</DropdownMenuItem>
-                        <DropdownMenuItem>Paused</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
                  <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="w-full sm:w-auto">
-                        Plan: All <ChevronDown className="ml-2 h-4 w-4" />
+                        Plan Type: All <ChevronDown className="ml-2 h-4 w-4" />
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuItem>All</DropdownMenuItem>
-                        <DropdownMenuItem>Yuber Repeat</DropdownMenuItem>
-                        <DropdownMenuItem>Business Pro</DropdownMenuItem>
+                        <DropdownMenuItem>Consumer</DropdownMenuItem>
+                        <DropdownMenuItem>Business</DropdownMenuItem>
+                        <DropdownMenuItem>Laundromat</DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>
@@ -117,6 +133,7 @@ export default function SubscribersPage() {
               <TableRow>
                 <TableHead>Customer</TableHead>
                 <TableHead>Plan</TableHead>
+                <TableHead>Plan Type</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Next Renewal</TableHead>
                 <TableHead><span className="sr-only">Actions</span></TableHead>
@@ -135,6 +152,9 @@ export default function SubscribersPage() {
                     </div>
                   </TableCell>
                   <TableCell>{s.plan}</TableCell>
+                  <TableCell>
+                    <Badge variant="secondary" className={planTypeColors[s.planType as keyof typeof planTypeColors]}>{s.planType}</Badge>
+                  </TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={statusColors[s.status as keyof typeof statusColors]}>{s.status}</Badge>
                    </TableCell>
@@ -170,4 +190,3 @@ export default function SubscribersPage() {
     </div>
   );
 }
-
