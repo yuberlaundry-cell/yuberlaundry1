@@ -196,7 +196,7 @@ export default function HowItWorksPage() {
                             <div className="container mx-auto px-6 sm:px-8">
                                 <div className="text-center max-w-3xl mx-auto">
                                     <h2 className="text-3xl md:text-4xl font-bold font-headline">Pricing That Fits Your Needs</h2>
-                                    <p className="mt-4 text-lg text-muted-foreground">Two options, one goal: your convenience. Forget about laundry and save with Yuber Repeat, or try with Pay-As-You-Go.</p>
+                                    <p className="mt-4 text-lg text-muted-foreground">Two options, one goal: your convenience. Forget about laundry and save up to 55% with Yuber Repeat, or try with Pay-As-You-Go.</p>
                                      <div className="mt-4 flex items-center justify-center gap-2">
                                         <div className="flex -space-x-2">
                                             <Image className="inline-block h-8 w-8 rounded-full ring-2 ring-white" src="https://picsum.photos/seed/p1/32/32" alt="Reviewer 1" width={32} height={32}/>
@@ -220,10 +220,10 @@ export default function HowItWorksPage() {
                                             </div>
                                         </CardHeader>
                                         <CardContent className="space-y-4">
-                                            <div className="font-semibold text-sm">Always</div>
+                                            <p className="text-sm font-semibold">Always</p>
                                             <ul className="space-y-3 text-sm text-muted-foreground">
                                                 <li className="flex items-center gap-2">Pickup &amp; Delivery Fee</li>
-                                                <li className="flex items-center gap-2">3-4 Day Turnaround or Next-Day Rush <Info className="h-4 w-4"/></li>
+                                                <li className="flex items-center gap-2">3-4 Day Turnaround or R150 Next-Day Rush <Info className="h-4 w-4"/></li>
                                                 <li className="flex items-center gap-2">Service Fee</li>
                                                 <li className="flex items-center gap-2">Household items priced separately <Info className="h-4 w-4"/></li>
                                             </ul>
@@ -243,15 +243,15 @@ export default function HowItWorksPage() {
                                         </CardHeader>
                                         <CardContent className="space-y-4">
                                             <ul className="space-y-3 text-sm text-muted-foreground">
-                                                 <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> <span className="line-through">R10.95</span> Free Pickup &amp; Delivery</li>
+                                                 <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Free Pickup &amp; Delivery</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Free Next-Day Rush Service</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Waived Service Fee</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> 2 bags/month for Wash & Fold</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Unlimited rollover of bags</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> R120.00 in monthly credit for other services</li>
                                             </ul>
-                                             <Button className="w-full bg-blue-500 hover:bg-blue-600">Explore Yuber Repeat</Button>
-                                             <Button variant="link" className="w-full p-0 h-auto">Learn more</Button>
+                                             <Button className="w-full bg-accent hover:bg-accent/90">Explore Yuber Repeat</Button>
+                                             <Button variant="link" className="w-full p-0 h-auto">Learn about all features</Button>
                                         </CardContent>
                                     </Card>
                                 </div>
@@ -324,3 +324,4 @@ export default function HowItWorksPage() {
         </div>
     );
 }
+

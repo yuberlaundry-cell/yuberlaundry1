@@ -70,6 +70,10 @@ interface Plan {
         deliveryFeeWaiver?: boolean;
         platformFeeWaiver?: boolean;
         discountPercentage?: number;
+        nextDayRushWaiver?: boolean;
+        otherServicesCredit?: number;
+        rollover?: boolean;
+
 
         // Business
         employees?: number;
@@ -104,10 +108,7 @@ const initialPlans: Plan[] = [
         price: "800",
         billingCycle: "monthly",
         features: [
-            "2 bags/month for Wash & Fold",
-            "Free Next-Day Rush Service",
-            "Waived Service Fee",
-            "Unlimited rollover"
+            "If it fits in the bag, we'll clean it"
         ],
         active: true,
         type: 'Consumer',
@@ -116,6 +117,9 @@ const initialPlans: Plan[] = [
             bagsIncluded: 2,
             deliveryFeeWaiver: true,
             platformFeeWaiver: true,
+            nextDayRushWaiver: true,
+            otherServicesCredit: 10,
+            rollover: true,
         }
     },
     {
@@ -268,6 +272,12 @@ export default function SubscriptionsPage() {
                                 <span className="text-muted-foreground">Delivery Fee Waiver</span>
                             </li>
                         )}
+                         {plan.limits.nextDayRushWaiver !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                {plan.limits.nextDayRushWaiver ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
+                                <span className="text-muted-foreground">Next-Day Rush Waiver</span>
+                            </li>
+                        )}
                          {plan.limits.driverFeeWaiver !== undefined && (
                              <li className="flex items-center gap-3 text-sm">
                                 {plan.limits.driverFeeWaiver ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
@@ -284,6 +294,18 @@ export default function SubscriptionsPage() {
                              <li className="flex items-center gap-3 text-sm">
                                 <Check className="h-4 w-4 text-primary" />
                                 <span className="text-muted-foreground"><span className="font-semibold text-foreground">{plan.limits.discountPercentage}% discount</span> on all orders</span>
+                            </li>
+                        )}
+                        {plan.limits.rollover !== undefined && (
+                             <li className="flex items-center gap-3 text-sm">
+                                {plan.limits.rollover ? <Check className="h-4 w-4 text-primary" /> : <X className="h-4 w-4 text-muted-foreground" />}
+                                <span className="text-muted-foreground">Rollover of bags/kgs</span>
+                            </li>
+                        )}
+                         {plan.limits.otherServicesCredit !== undefined && plan.limits.otherServicesCredit > 0 && (
+                             <li className="flex items-center gap-3 text-sm">
+                                <Check className="h-4 w-4 text-primary" />
+                                <span className="text-muted-foreground"><span className="font-semibold text-foreground">R{plan.limits.otherServicesCredit} credit</span> for other services</span>
                             </li>
                         )}
 
@@ -416,13 +438,27 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
                         <Label htmlFor="plan-discount">Discount on all orders (%)</Label>
                         <Input id="plan-discount" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.discountPercentage}/>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="delivery-waiver" defaultChecked={plan?.limits.deliveryFeeWaiver} />
-                        <Label htmlFor="delivery-waiver">Waive Delivery Fee</Label>
+                    <div className="space-y-2">
+                        <Label htmlFor="plan-credit">Credit for other services (R)</Label>
+                        <Input id="plan-credit" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.otherServicesCredit}/>
                     </div>
-                    <div className="flex items-center space-x-2">
-                        <Checkbox id="platform-waiver" defaultChecked={plan?.limits.platformFeeWaiver} />
-                        <Label htmlFor="platform-waiver">Waive Platform Service Fee</Label>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="delivery-waiver" defaultChecked={plan?.limits.deliveryFeeWaiver} />
+                            <Label htmlFor="delivery-waiver">Waive Delivery Fee</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Checkbox id="platform-waiver" defaultChecked={plan?.limits.platformFeeWaiver} />
+                            <Label htmlFor="platform-waiver">Waive Platform Fee</Label>
+                        </div>
+                         <div className="flex items-center space-x-2">
+                            <Checkbox id="rush-waiver" defaultChecked={plan?.limits.nextDayRushWaiver} />
+                            <Label htmlFor="rush-waiver">Waive Next-Day Rush</Label>
+                        </div>
+                         <div className="flex items-center space-x-2">
+                            <Checkbox id="rollover" defaultChecked={plan?.limits.rollover} />
+                            <Label htmlFor="rollover">Allow Rollover</Label>
+                        </div>
                     </div>
                 </div>
             )}
@@ -472,3 +508,4 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
         </form>
     );
 }
+
