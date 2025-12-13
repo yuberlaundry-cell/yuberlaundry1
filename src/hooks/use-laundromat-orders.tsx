@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
-export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Completed' | 'Cancelled';
+export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Completed' | 'Cancelled' | 'Handoff to Driver';
 
 export interface LaundromatOrderItem {
     id: string;
@@ -35,7 +35,7 @@ const initialOrders: LaundromatOrder[] = [
     {id: '#YL12347', customer: 'Acme Corp', status: 'Completed', service: 'Wash & Fold', pickup: 'Yesterday', sla: 'Completed', bags: 5, readyTime: 'Yesterday, 2:15 PM', driver: 'Assigned (David L.)', rating: 5, reviewDate: 'May 12, 2024'},
     {id: '#YL12348', customer: 'Peter Pan', status: 'Drying', service: 'Ironing', pickup: 'Today, 11am', sla: 'Due in 5h', bags: 3, readyTime: 'Today, 4:00 PM', driver: 'Unassigned'},
     {id: '#YL12349', customer: 'Mary Poppins', status: 'Intake', service: 'Wash & Fold', pickup: 'Today, 1pm', sla: 'Due in 24h', bags: 2, readyTime: 'Tomorrow, 1:00 PM', driver: 'Unassigned'},
-    {id: '#YL12350', customer: 'Wonderland Inc.', status: 'Ready', service: 'Bedding', bags: 12, readyTime: 'Today, 3:00 PM', pickup: 'Today, 10am', sla: 'Completed'},
+    {id: '#YL12350', customer: 'Wonderland Inc.', status: 'Handoff to Driver', service: 'Bedding', bags: 12, readyTime: 'Today, 3:00 PM', pickup: 'Today, 10am', sla: 'Completed'},
     {id: '#YL12351', customer: 'Walk-in Customer', service: 'Wash & Fold', bags: 2, readyTime: 'Today, 3:30 PM', status: 'Completed', pickup: 'Today, 11am', sla: 'Completed', rating: 4, reviewDate: 'May 13, 2024'},
 ];
 

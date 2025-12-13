@@ -3,10 +3,10 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { ArrowLeft, Check, MapPin, Phone, QrCode, Truck, Package, Navigation, Camera, MessageSquare, ShieldCheck, Ban, UserX, Trash2 } from "lucide-react";
+import { ArrowLeft, Check, MapPin, Phone, Building, Navigation, Camera, MessageSquare, ShieldCheck, UserX, Package, Truck, Warehouse } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect, useRef } from "react";
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useParams, useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -24,7 +24,8 @@ const jobData = {
         time: '12:00 - 14:00',
         status: 'Assigned',
         notes: 'Gate code is #1234. Beware of the small dog.',
-        laundromatAddress: 'Speedy Suds, 45 Crisp St, London'
+        laundromatAddress: 'Speedy Suds, 45 Crisp St, London',
+        destinationType: 'laundromat'
     },
     'DO-456': {
         id: 'DO-456',
@@ -35,7 +36,8 @@ const jobData = {
         time: '16:00 - 18:00',
         status: 'Out for Delivery',
         notes: 'Leave with the concierge if not home.',
-        laundromatAddress: 'Speedy Suds, 45 Crisp St, London'
+        laundromatAddress: 'Speedy Suds, 45 Crisp St, London',
+        destinationType: 'customer'
     },
     'PU-124': {
         id: 'PU-124',
@@ -46,25 +48,26 @@ const jobData = {
         time: 'ASAP',
         status: 'Assigned',
         notes: 'Call upon arrival.',
-        laundromatAddress: 'Fresh Folds, 12 Laundry Lane, London'
+        laundromatAddress: 'Main Warehouse, 1 Industrial Way, London',
+        destinationType: 'warehouse'
     }
 };
 
 const pickupSteps = [
-    { id: 'navigate', label: 'Start Navigation to Customer', actionLabel: 'Start Navigation' },
-    { id: 'arrive', label: 'Arrive at Pickup', actionLabel: 'Confirm Arrival' },
+    { id: 'navigate_customer', label: 'Start Navigation to Customer', actionLabel: 'Navigate to Customer', icon: Navigation },
+    { id: 'arrive_customer', label: 'Arrive at Pickup', actionLabel: 'Confirm Arrival' },
     { id: 'scan_photo', label: 'Scan Bags or Take Photo', actionLabel: 'Scan/Photograph Items', icon: Camera },
     { id: 'confirm_collection', label: 'Confirm Items Collected', actionLabel: 'Confirm Collection' },
-    { id: 'navigate_laundromat', label: 'Deliver to Laundromat', actionLabel: 'Navigate to Laundromat' },
-    { id: 'confirm_handoff', label: 'Confirm Laundromat Handoff', actionLabel: 'Confirm Handoff' },
+    { id: 'navigate_destination', label: 'Deliver to Facility', actionLabel: 'Navigate to Facility', icon: Navigation },
+    { id: 'confirm_handoff', label: 'Confirm Facility Handoff', actionLabel: 'Confirm Handoff' },
 ];
 
 const deliverySteps = [
-    { id: 'navigate', label: 'Navigate to Customer', actionLabel: 'Start Navigation' },
-    { id: 'arrive', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
+    { id: 'navigate_customer', label: 'Navigate to Customer', actionLabel: 'Start Navigation', icon: Navigation },
+    { id: 'arrive_customer', label: 'Arrive at Delivery', actionLabel: 'Confirm Arrival' },
     { id: 'confirm_or_fail', label: 'Confirm Handover / Mark Incomplete', actionLabel: 'Confirm Handover', icon: ShieldCheck },
     { id: 'complete', label: 'Job Complete', actionLabel: '' },
-    { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat' },
+    { id: 'return_to_laundromat', label: 'Return Items to Laundromat', actionLabel: 'Navigate to Laundromat', icon: Navigation },
     { id: 'confirm_return_handoff', label: 'Confirm Laundromat Return', actionLabel: 'Confirm Handoff' },
 ];
 
@@ -114,7 +117,6 @@ export default function JobDetailsPage() {
     const handleNextStep = () => {
         const nextStepIndex = currentStep + 1;
         
-        // Logic for Delivery workflow
         if (job.type === 'Delivery') {
             const currentStepId = workflowSteps[currentStep].id;
 
@@ -203,7 +205,7 @@ export default function JobDetailsPage() {
             );
         }
         
-        if (step.id === 'navigate_laundromat' || (step.id === 'return_to_laundromat' && job.type === 'Delivery')) {
+        if (step.id === 'navigate_destination' || (step.id === 'return_to_laundromat' && job.type === 'Delivery')) {
              return (
                  <Button variant="outline" className="w-full mt-2" asChild>
                     <a href={`https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(job.laundromatAddress || '')}`} target="_blank" rel="noopener noreferrer">
@@ -375,8 +377,8 @@ export default function JobDetailsPage() {
                          <Card>
                             <CardHeader>
                                 <CardTitle className="flex items-center gap-2">
-                                    <Building />
-                                    Laundromat Location
+                                     {job.destinationType === 'warehouse' ? <Warehouse /> : <Building />}
+                                     Destination Facility
                                 </CardTitle>
                             </CardHeader>
                             <CardContent>
@@ -420,7 +422,7 @@ export default function JobDetailsPage() {
                         </ol>
                         {isJobComplete && (
                              <div className={`mt-6 flex items-center gap-3 rounded-lg border p-4 ${finalStatus === 'returned' ? 'border-amber-500 bg-amber-50 text-amber-800' : 'border-green-500 bg-green-50 text-green-800'}`}>
-                                {finalStatus === 'returned' ? <Ban className="h-6 w-6"/> : <Check className="h-6 w-6" />}
+                                {finalStatus === 'returned' ? <UserX className="h-6 w-6"/> : <Check className="h-6 w-6" />}
                                 <div>
                                     <h4 className="font-semibold">{finalStatus === 'returned' ? 'Delivery Failed' : `${job.type} Job Complete!`}</h4>
                                     <p className="text-sm">{finalStatus === 'returned' ? 'Items returned to laundromat.' : 'This job has been marked as completed.'}</p>

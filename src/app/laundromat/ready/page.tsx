@@ -14,7 +14,9 @@ import { Check, Truck, User, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
-import { useLaundromatOrders } from '@/hooks/use-laundromat-orders';
+import { useLaundromatOrders, type LaundromatOrderStatus } from '@/hooks/use-laundromat-orders';
+
+const handoffReadyStatuses: LaundromatOrderStatus[] = ['Ready', 'Handoff to Driver'];
 
 export default function ReadyForHandoffPage() {
     const [searchTerm, setSearchTerm] = useState('');
@@ -30,8 +32,8 @@ export default function ReadyForHandoffPage() {
         }
     }
 
-    const readyForDriverOrders = useMemo(() => orders.filter(o => o.status === 'Ready' && !o.id.startsWith('#W-')), [orders]);
-    const readyForPickupOrders = useMemo(() => orders.filter(o => o.status === 'Ready' && o.id.startsWith('#W-')), [orders]);
+    const readyForDriverOrders = useMemo(() => orders.filter(o => handoffReadyStatuses.includes(o.status) && !o.id.startsWith('#W-')), [orders]);
+    const readyForPickupOrders = useMemo(() => orders.filter(o => handoffReadyStatuses.includes(o.status) && o.id.startsWith('#W-')), [orders]);
 
     const filteredDriverOrders = useMemo(() => readyForDriverOrders.filter(
         (order) =>
@@ -146,5 +148,3 @@ export default function ReadyForHandoffPage() {
     </div>
   );
 }
-
-    
