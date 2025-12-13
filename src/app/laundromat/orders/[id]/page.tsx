@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -47,17 +46,10 @@ const allTimelineSteps: { status: LaundromatOrderStatus, title: string }[] = [
 export default function OrderProcessingDetailsPage() {
     const params = useParams();
     const orderId = `#${params.id as string}`;
-    const { toast } = useToast();
+    const { toast } } from useToast();
     const { getOrderById, updateOrder } = useLaundromatOrders();
 
-    const [order, setOrder] = useState<LaundromatOrder | null>(null);
-
-    useEffect(() => {
-        const fetchedOrder = getOrderById(orderId);
-        if (fetchedOrder) {
-            setOrder(fetchedOrder);
-        }
-    }, [orderId, getOrderById]);
+    const order = getOrderById(orderId);
     
     const timeline = useMemo(() => {
         if (!order) return [];
@@ -87,12 +79,12 @@ export default function OrderProcessingDetailsPage() {
             }
             return item;
         });
-        setOrder({...order, items: newItems});
+        updateOrder({ id: order.id, items: newItems });
     }
     
     const handleFinalizeBill = () => {
         if (!order) return;
-        updateOrder({ id: order.id, isBilled: true, items: order.items });
+        updateOrder({ id: order.id, isBilled: true });
         toast({
             title: 'Bill Finalized',
             description: `The total for order ${order.id} has been confirmed.`,
@@ -118,7 +110,7 @@ export default function OrderProcessingDetailsPage() {
         
         const newIssue = { type: issueType, notes: issueNotes };
         // This is a local update for UI purposes. In a real app, this would be part of the `updateOrder` logic.
-        // setOrder(prev => ({...prev, issues: [...(prev?.issues || []), newIssue]}));
+        // updateOrder({ id: order.id, issues: [...(order.issues || []), newIssue] });
 
         toast({
             title: 'Issue Logged',
@@ -252,21 +244,7 @@ export default function OrderProcessingDetailsPage() {
                   </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                   {/* This is where logged issues would be displayed.
-                   {order.issues.length > 0 && (
-                        <div className="space-y-3">
-                             <h4 className="font-medium">Logged Issues</h4>
-                             {order.issues.map((issue, index) => (
-                                 <div key={index} className="p-3 border border-destructive/50 bg-destructive/5 rounded-lg">
-                                     <div className="flex justify-between items-center">
-                                         <Badge variant="destructive">{issue.type}</Badge>
-                                         <span className="text-xs text-muted-foreground">Logged Today</span>
-                                     </div>
-                                     <p className="text-sm text-destructive/90 mt-2">{issue.notes}</p>
-                                 </div>
-                             ))}
-                        </div>
-                   )} */}
+                   {/* This is where logged issues would be displayed. */}
 
                   <Separator />
                   <div className="space-y-3">
@@ -385,4 +363,6 @@ export default function OrderProcessingDetailsPage() {
     </div>
   );
 }
+    
+
     
