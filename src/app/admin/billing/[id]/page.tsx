@@ -28,8 +28,10 @@ import {
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
+import { useToast } from '@/hooks/use-toast';
+import { useState } from 'react';
 
-const invoices = [
+const initialInvoices = [
     { id: 'INV-ACME-001', company: 'Acme Corp', date: 'Dec 1, 2024', dueDate: 'Dec 15, 2024', amount: '42,500.00', status: 'Paid' },
     { id: 'INV-STARK-023', company: 'Stark Industries', date: 'Dec 1, 2024', dueDate: 'Dec 15, 2024', amount: '128,800.00', status: 'Paid' },
     { id: 'INV-WAYNE-045', company: 'Wayne Enterprises', date: 'Dec 5, 2024', dueDate: 'Dec 20, 2024', amount: '85,500.00', status: 'Due' },
@@ -46,8 +48,11 @@ const statusColors: { [key: string]: string } = {
 
 export default function B2BInvoiceDetailPage() {
     const params = useParams();
+    const { toast } = useToast();
     const invoiceId = params.id;
-    const invoice = invoices.find(inv => inv.id === invoiceId);
+    const initialInvoice = initialInvoices.find(inv => inv.id === invoiceId);
+    
+    const [invoice, setInvoice] = useState(initialInvoice);
 
     if (!invoice) {
         return (
@@ -58,6 +63,21 @@ export default function B2BInvoiceDetailPage() {
                 <div className="text-center py-12">Invoice not found.</div>
             </div>
         );
+    }
+
+    const handleMarkAsPaid = () => {
+        setInvoice(prev => prev ? { ...prev, status: 'Paid' } : null);
+        toast({
+            title: "Invoice Updated",
+            description: `Invoice ${invoice.id} has been marked as Paid.`
+        });
+    }
+
+    const handleSendReminder = () => {
+         toast({
+            title: "Reminder Sent",
+            description: `A payment reminder has been sent to ${invoice.company}.`
+        });
     }
     
   return (
@@ -73,9 +93,9 @@ export default function B2BInvoiceDetailPage() {
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl mt-2">Invoice {invoice.id}</h1>
             </div>
              <div className="flex items-center gap-2">
-                <Button variant="outline"><Mail className="mr-2 h-4 w-4"/> Send Reminder</Button>
+                {invoice.status !== 'Paid' && <Button variant="outline" onClick={handleSendReminder}><Mail className="mr-2 h-4 w-4"/> Send Reminder</Button>}
                 <Button variant="outline"><Download className="mr-2 h-4 w-4"/> Download PDF</Button>
-                {invoice.status !== 'Paid' && <Button><CheckCircle className="mr-2 h-4 w-4"/> Mark as Paid</Button>}
+                {invoice.status !== 'Paid' && <Button onClick={handleMarkAsPaid}><CheckCircle className="mr-2 h-4 w-4"/> Mark as Paid</Button>}
             </div>
         </div>
 
