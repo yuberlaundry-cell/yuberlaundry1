@@ -15,6 +15,7 @@ import { Badge } from '@/components/ui/badge';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
+import Link from 'next/link';
 
 const services = [
     {
@@ -227,7 +228,9 @@ export default function HowItWorksPage() {
                                                 <li className="flex items-center gap-2">Service Fee</li>
                                                 <li className="flex items-center gap-2">Household items priced separately <Info className="h-4 w-4"/></li>
                                             </ul>
-                                             <Button variant="outline" className="w-full">Schedule a pickup</Button>
+                                             <Button variant="outline" className="w-full" asChild>
+                                                <Link href="/auth/register">Schedule a pickup</Link>
+                                             </Button>
                                         </CardContent>
                                     </Card>
 
@@ -250,7 +253,9 @@ export default function HowItWorksPage() {
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> Unlimited rollover of bags</li>
                                                  <li className="flex items-center gap-2"><Check className="h-4 w-4 text-green-500"/> R120.00 in monthly credit for other services</li>
                                             </ul>
-                                             <Button className="w-full bg-accent hover:bg-accent/90">Explore Yuber Repeat</Button>
+                                             <Button className="w-full bg-accent hover:bg-accent/90" asChild>
+                                                <Link href="/features#yuber-repeat">Explore Yuber Repeat</Link>
+                                             </Button>
                                              <Button variant="link" className="w-full p-0 h-auto">Learn about all features</Button>
                                         </CardContent>
                                     </Card>
