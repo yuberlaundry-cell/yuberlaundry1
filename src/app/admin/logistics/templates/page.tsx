@@ -50,10 +50,10 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 const initialTemplates = [
-  { id: 'T-LON-01', name: 'London - Standard Weekday', country: 'United Kingdom', city: 'London', slotLength: 120, time: '08:00 - 22:00', type: 'Standard' },
-  { id: 'T-LON-02', name: 'London - Express', country: 'United Kingdom', city: 'London', slotLength: 60, time: '10:00 - 20:00', type: 'Premium' },
-  { id: 'T-MAN-01', name: 'Manchester - All Day', country: 'United Kingdom', city: 'Manchester', slotLength: 180, time: '09:00 - 21:00', type: 'Standard' },
-  { id: 'T-JHB-01', name: 'Joburg - Weekday', country: 'South Africa', city: 'Johannesburg', slotLength: 120, time: '08:00 - 20:00', type: 'Standard' },
+  { id: 'T-LON-01', name: 'London - Standard Weekday', country: 'United Kingdom', city: 'London', slotLength: 120, time: '08:00 - 22:00', type: 'Standard', surcharge: 0 },
+  { id: 'T-LON-02', name: 'London - Express', country: 'United Kingdom', city: 'London', slotLength: 60, time: '10:00 - 20:00', type: 'Premium', surcharge: 100 },
+  { id: 'T-MAN-01', name: 'Manchester - All Day', country: 'United Kingdom', city: 'Manchester', slotLength: 180, time: '09:00 - 21:00', type: 'Standard', surcharge: 0 },
+  { id: 'T-JHB-01', name: 'Joburg - Weekday', country: 'South Africa', city: 'Johannesburg', slotLength: 120, time: '08:00 - 20:00', type: 'Standard', surcharge: 0 },
 ];
 
 export default function TemplatesPage() {
@@ -157,6 +157,7 @@ export default function TemplatesPage() {
 
 function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplates)[0] | null, onClose: () => void}) {
     const { toast } = useToast();
+    const [templateType, setTemplateType] = useState(template?.type || 'Standard');
     
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -224,7 +225,7 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
             <h4 className="font-semibold text-base flex items-center gap-2"><Sparkles/> Service Level</h4>
             <div className="space-y-2">
                 <Label htmlFor="template-type">Template Type</Label>
-                <Select name="template-type" defaultValue={template?.type}>
+                <Select name="template-type" value={templateType} onValueChange={(value) => setTemplateType(value)}>
                     <SelectTrigger id="template-type">
                         <SelectValue placeholder="Select service type" />
                     </SelectTrigger>
@@ -234,6 +235,13 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
                     </SelectContent>
                 </Select>
             </div>
+            {templateType === 'Premium' && (
+                <div className="space-y-2">
+                    <Label htmlFor="surcharge">Premium Surcharge (R)</Label>
+                    <Input id="surcharge" type="number" placeholder="e.g., 100" defaultValue={template?.surcharge || ''} />
+                    <p className="text-xs text-muted-foreground">This flat fee will be added to orders using this template.</p>
+                </div>
+            )}
              <div className="space-y-2">
                 <Label htmlFor="cutoff-time">Order Cut-off Time</Label>
                 <Input id="cutoff-time" type="time" defaultValue="14:00" />
@@ -269,3 +277,5 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
         </form>
     )
 }
+
+    
