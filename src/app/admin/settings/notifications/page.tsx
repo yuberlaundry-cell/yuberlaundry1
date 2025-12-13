@@ -10,41 +10,142 @@ import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
+import { Switch } from "@/components/ui/switch";
 
 const templateVariables = [
     { name: 'Customer', vars: ['{{customer.firstName}}', '{{customer.lastName}}'] },
     { name: 'Order', vars: ['{{order.id}}', '{{order.status}}', '{{order.deliveryDate}}', '{{order.pickupTime}}'] },
     { name: 'Driver', vars: ['{{driver.name}}', '{{driver.eta}}'] },
     { name: 'Laundromat', vars: ['{{laundromat.name}}'] },
+    { name: 'Supply', vars: ['{{supply.name}}'] },
 ];
 
 const customerNotifications = {
     "Order Updates": [
-        { id: 'customer_order_confirmation', title: 'Order Confirmation', defaultSms: 'Hi {{customer.firstName}}, your Yuber Laundry order {{order.id}} is confirmed for pickup on {{order.pickupTime}}.', defaultPush: 'Your order {{order.id}} is confirmed!', defaultEmailSubject: 'Your Yuber Laundry Order {{order.id}} is Confirmed' },
-        { id: 'customer_driver_assigned', title: 'Driver Assigned', defaultSms: 'Your driver, {{driver.name}}, is on the way to collect order {{order.id}}.', defaultPush: 'Your driver is on the way!', defaultEmailSubject: 'Your driver for order {{order.id}} is on the way' },
-        { id: 'customer_out_for_delivery', title: 'Out for Delivery', defaultSms: 'Good news! Order {{order.id}} is out for delivery and will arrive on {{order.deliveryDate}}.', defaultPush: 'Your laundry is on its way!', defaultEmailSubject: 'Your order {{order.id}} is out for delivery' },
-        { id: 'customer_order_delivered', title: 'Order Delivered', defaultSms: 'Your order {{order.id}} has been delivered. Enjoy your fresh clothes!', defaultPush: 'Your laundry has been delivered!', defaultEmailSubject: 'Order {{order.id}} Delivered' },
+        { 
+            id: 'customer_order_confirmation', 
+            title: 'Order Confirmation', 
+            channels: {
+                email: { enabled: true, subject: 'Your Yuber Laundry Order {{order.id}} is Confirmed', body: 'Hi {{customer.firstName}}, your order is confirmed.' },
+                sms: { enabled: true, content: 'Hi {{customer.firstName}}, your Yuber Laundry order {{order.id}} is confirmed for pickup on {{order.pickupTime}}.' },
+                push: { enabled: true, content: 'Your order {{order.id}} is confirmed!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'customer_driver_assigned', 
+            title: 'Driver Assigned', 
+            channels: {
+                email: { enabled: true, subject: 'Your driver for order {{order.id}} is on the way', body: 'Your driver, {{driver.name}}, is on the way.' },
+                sms: { enabled: true, content: 'Your driver, {{driver.name}}, is on the way to collect order {{order.id}}.' },
+                push: { enabled: true, content: 'Your driver is on the way!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'customer_out_for_delivery', 
+            title: 'Out for Delivery', 
+            channels: {
+                email: { enabled: true, subject: 'Your order {{order.id}} is out for delivery', body: 'Good news! Your laundry is on its way.' },
+                sms: { enabled: true, content: 'Good news! Order {{order.id}} is out for delivery and will arrive on {{order.deliveryDate}}.' },
+                push: { enabled: true, content: 'Your laundry is on its way!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'customer_order_delivered', 
+            title: 'Order Delivered', 
+            channels: {
+                email: { enabled: true, subject: 'Order {{order.id}} Delivered', body: 'Your laundry has been delivered. Enjoy!' },
+                sms: { enabled: true, content: 'Your order {{order.id}} has been delivered. Enjoy your fresh clothes!' },
+                push: { enabled: true, content: 'Your laundry has been delivered!' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
     ],
     "Account & Billing": [
-         { id: 'customer_account_welcome', title: 'Welcome Email', defaultSms: '', defaultPush: '', defaultEmailSubject: 'Welcome to Yuber Laundry, {{customer.firstName}}!' },
-         { id: 'customer_payment_failed', title: 'Payment Failed', defaultSms: '', defaultPush: 'Payment failed for order {{order.id}}.', defaultEmailSubject: 'Payment Failed for Order {{order.id}}' },
+         { 
+            id: 'customer_account_welcome', 
+            title: 'Welcome Email', 
+            channels: {
+                email: { enabled: true, subject: 'Welcome to Yuber Laundry, {{customer.firstName}}!', body: 'Welcome to the Yuber Laundry family!' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: false, content: '' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+         { 
+            id: 'customer_payment_failed', 
+            title: 'Payment Failed', 
+            channels: {
+                email: { enabled: true, subject: 'Payment Failed for Order {{order.id}}', body: 'We were unable to process the payment for your recent order.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Payment failed for order {{order.id}}.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
     ]
 }
 
 const driverNotifications = {
     "Job Updates": [
-        { id: 'driver_new_job', title: 'New Job Available', defaultSms: '', defaultPush: 'New job available in your area. Open the app to accept.' },
-        { id: 'driver_job_assigned', title: 'New Job Assignment', defaultSms: '', defaultPush: 'You have been assigned order {{order.id}} for pickup.' },
+        { 
+            id: 'driver_new_job', 
+            title: 'New Job Available', 
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'New job available in your area. Open the app to accept.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'driver_job_assigned', 
+            title: 'New Job Assignment', 
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: true, content: 'You have been assigned order {{order.id}} for pickup.' },
+                push: { enabled: true, content: 'You have been assigned order {{order.id}} for pickup.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
     ]
 }
 
 const laundromatNotifications = {
     "Order Flow": [
-        { id: 'laundromat_new_order', title: 'New Order Arrived', defaultSms: '', defaultPush: 'New order {{order.id}} from driver {{driver.name}} has arrived at your facility.' },
-        { id: 'laundromat_pickup_reminder', title: 'Driver Pickup Reminder', defaultSms: '', defaultPush: 'Driver {{driver.name}} is scheduled to pick up ready orders in 30 minutes.' },
+        { 
+            id: 'laundromat_new_order', 
+            title: 'New Order Arrived', 
+            channels: {
+                email: { enabled: true, subject: 'New Order {{order.id}} at your facility', body: 'A new order has arrived.' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'New order {{order.id}} from driver {{driver.name}} has arrived at your facility.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
+        { 
+            id: 'laundromat_pickup_reminder', 
+            title: 'Driver Pickup Reminder', 
+            channels: {
+                email: { enabled: false, subject: '', body: '' },
+                sms: { enabled: false, content: '' },
+                push: { enabled: true, content: 'Driver {{driver.name}} is scheduled to pick up ready orders in 30 minutes.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
     ],
     "Alerts": [
-        { id: 'laundromat_low_supply', title: 'Low Supply Alert', defaultSms: 'Alert: Your supply of {{supply.name}} is low.', defaultPush: 'Low supply alert for {{supply.name}}.' },
+        { 
+            id: 'laundromat_low_supply', 
+            title: 'Low Supply Alert', 
+            channels: {
+                email: { enabled: true, subject: 'Low Supply Alert: {{supply.name}}', body: 'Your supply of {{supply.name}} is running low.' },
+                sms: { enabled: true, content: 'Alert: Your supply of {{supply.name}} is low.' },
+                push: { enabled: true, content: 'Low supply alert for {{supply.name}}.' },
+                whatsapp: { enabled: false, content: ''}
+            }
+        },
     ]
 }
 
@@ -64,7 +165,7 @@ export default function NotificationTemplatesPage() {
             <div>
                 <h1 className="text-2xl font-bold font-headline tracking-tight sm:text-3xl">Notification Templates</h1>
                 <p className="text-muted-foreground">
-                    Manage automated messages sent via Email, SMS, and Push Notification.
+                    Manage automated messages sent via Email, SMS, Push, and WhatsApp.
                 </p>
             </div>
             
@@ -112,9 +213,20 @@ export default function NotificationTemplatesPage() {
     );
 }
 
+interface Template {
+    id: string;
+    title: string;
+    channels: {
+        email: { enabled: boolean; subject: string; body: string };
+        sms: { enabled: boolean; content: string };
+        push: { enabled: boolean; content: string };
+        whatsapp: { enabled: boolean; content: string };
+    };
+}
+
 interface TemplateFormProps {
     formId: string;
-    categories: Record<string, { id: string; title: string; defaultSms?: string; defaultPush?: string; defaultEmailSubject?: string; }[]>;
+    categories: Record<string, Template[]>;
     onSave: (formId: string) => void;
 }
 
@@ -136,29 +248,68 @@ function TemplateForm({ formId, categories, onSave }: TemplateFormProps) {
                                                 {template.title}
                                             </AccordionTrigger>
                                             <AccordionContent className="p-4 pt-0">
-                                                <div className="space-y-4">
-                                                    {template.defaultEmailSubject !== undefined && (
-                                                        <div className="space-y-2">
-                                                            <Label htmlFor={`${template.id}-email-subject`}>Email Subject</Label>
-                                                            <Input id={`${template.id}-email-subject`} defaultValue={template.defaultEmailSubject} />
-                                                        </div>
-                                                    )}
-                                                     <div className="space-y-2">
-                                                        <Label htmlFor={`${template.id}-email-body`}>Email Body</Label>
-                                                        <Textarea id={`${template.id}-email-body`} defaultValue="This is the full HTML email body. Use Handlebars for templating. e.g., {{customer.firstName}}..." rows={8}/>
+                                                <div className="space-y-6">
+                                                   {/* Email */}
+                                                   <div className="space-y-3">
+                                                       <div className="flex items-center justify-between">
+                                                          <Label htmlFor={`${template.id}-email-enabled`} className="font-semibold text-base">Email</Label>
+                                                          <Switch id={`${template.id}-email-enabled`} defaultChecked={template.channels.email.enabled} />
+                                                       </div>
+                                                        {template.channels.email.enabled && (
+                                                            <div className="space-y-4 pl-2 border-l-2 ml-2">
+                                                                <div className="space-y-2">
+                                                                    <Label htmlFor={`${template.id}-email-subject`}>Subject</Label>
+                                                                    <Input id={`${template.id}-email-subject`} defaultValue={template.channels.email.subject} />
+                                                                </div>
+                                                                 <div className="space-y-2">
+                                                                    <Label htmlFor={`${template.id}-email-body`}>Body</Label>
+                                                                    <Textarea id={`${template.id}-email-body`} defaultValue={template.channels.email.body} rows={5}/>
+                                                                </div>
+                                                            </div>
+                                                        )}
+                                                   </div>
+                                                   <Separator />
+                                                   {/* SMS */}
+                                                    <div className="space-y-3">
+                                                        <div className="flex items-center justify-between">
+                                                          <Label htmlFor={`${template.id}-sms-enabled`} className="font-semibold text-base">SMS</Label>
+                                                          <Switch id={`${template.id}-sms-enabled`} defaultChecked={template.channels.sms.enabled} />
+                                                       </div>
+                                                       {template.channels.sms.enabled && (
+                                                           <div className="space-y-2 pl-2 border-l-2 ml-2">
+                                                                <Label htmlFor={`${template.id}-sms-content`}>Content</Label>
+                                                                <Textarea id={`${template.id}-sms-content`} defaultValue={template.channels.sms.content} rows={3} />
+                                                            </div>
+                                                       )}
                                                     </div>
-                                                     {template.defaultSms !== undefined && template.defaultSms !== '' && (
-                                                        <div className="space-y-2">
-                                                            <Label htmlFor={`${template.id}-sms`}>SMS</Label>
-                                                            <Textarea id={`${template.id}-sms`} defaultValue={template.defaultSms} rows={3} />
-                                                        </div>
-                                                     )}
-                                                     {template.defaultPush !== undefined && template.defaultPush !== '' && (
-                                                        <div className="space-y-2">
-                                                            <Label htmlFor={`${template.id}-push`}>Push Notification</Label>
-                                                            <Textarea id={`${template.id}-push`} defaultValue={template.defaultPush} rows={2} />
-                                                        </div>
-                                                     )}
+                                                    <Separator />
+                                                    {/* Push */}
+                                                     <div className="space-y-3">
+                                                        <div className="flex items-center justify-between">
+                                                          <Label htmlFor={`${template.id}-push-enabled`} className="font-semibold text-base">Push Notification</Label>
+                                                          <Switch id={`${template.id}-push-enabled`} defaultChecked={template.channels.push.enabled} />
+                                                       </div>
+                                                       {template.channels.push.enabled && (
+                                                            <div className="space-y-2 pl-2 border-l-2 ml-2">
+                                                                <Label htmlFor={`${template.id}-push-content`}>Content</Label>
+                                                                <Textarea id={`${template.id}-push-content`} defaultValue={template.channels.push.content} rows={2} />
+                                                            </div>
+                                                       )}
+                                                    </div>
+                                                    <Separator />
+                                                    {/* WhatsApp */}
+                                                     <div className="space-y-3">
+                                                        <div className="flex items-center justify-between">
+                                                          <Label htmlFor={`${template.id}-whatsapp-enabled`} className="font-semibold text-base">WhatsApp</Label>
+                                                          <Switch id={`${template.id}-whatsapp-enabled`} defaultChecked={template.channels.whatsapp.enabled} />
+                                                       </div>
+                                                       {template.channels.whatsapp.enabled && (
+                                                            <div className="space-y-2 pl-2 border-l-2 ml-2">
+                                                                <Label htmlFor={`${template.id}-whatsapp-content`}>Content</Label>
+                                                                <Textarea id={`${template.id}-whatsapp-content`} defaultValue={template.channels.whatsapp.content} rows={3} />
+                                                            </div>
+                                                       )}
+                                                    </div>
                                                 </div>
                                             </AccordionContent>
                                         </Card>
