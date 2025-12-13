@@ -28,7 +28,8 @@ import {
   FilePen,
   Eye,
   Clock,
-  ChevronDown
+  ChevronDown,
+  Warehouse
 } from 'lucide-react';
 import {
   DropdownMenu,
@@ -51,6 +52,8 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import Link from 'next/link';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Checkbox } from '@/components/ui/checkbox';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Alert, AlertTitle } from '@/components/ui/alert';
 
 const zones = [
     { id: 'ZONE-LON-N', name: 'North London', country: 'United Kingdom', city: 'London', facilities: 3, drivers: 15, template: 'London - Standard Weekday', definition: 'Defined by map boundary' },
@@ -111,43 +114,67 @@ export default function ZonesPage() {
                     <PlusCircle className="mr-2 h-4 w-4" /> Create New Zone
                 </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-md">
+            <DialogContent className="max-w-xl">
                 <DialogHeader>
                     <DialogTitle>Create New Service Zone</DialogTitle>
-                    <DialogDescription>Define a new geographic area using the map or by listing concrete areas like postal codes.</DialogDescription>
+                    <DialogDescription>Define a new geographic area for your operations.</DialogDescription>
                 </DialogHeader>
                  <ScrollArea className="max-h-[70vh]">
-                    <form className="space-y-4 py-4 pr-6">
-                        <div className="grid sm:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="zone-country">Country</Label>
-                            <Select name="zone-country">
-                            <SelectTrigger id="zone-country">
-                                <SelectValue placeholder="Select a country" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="United Kingdom">United Kingdom</SelectItem>
-                                <SelectItem value="South Africa">South Africa</SelectItem>
-                            </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="zone-city">City</Label>
-                            <Select name="zone-city">
-                            <SelectTrigger id="zone-city">
-                                <SelectValue placeholder="Select a city" />
-                            </SelectTrigger>
-                            <SelectContent>
-                                <SelectItem value="London">London</SelectItem>
-                                <SelectItem value="Manchester">Manchester</SelectItem>
-                                <SelectItem value="Johannesburg">Johannesburg</SelectItem>
-                            </SelectContent>
-                            </Select>
-                        </div>
-                        </div>
+                    <form className="space-y-6 py-4 pr-6">
                         <div className="space-y-2">
                             <Label htmlFor="zone-name">Zone Name</Label>
                             <Input id="zone-name" placeholder="e.g., Central London or Sandton" />
+                        </div>
+                        <div className="grid sm:grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="zone-country">Country</Label>
+                                <Select name="zone-country">
+                                <SelectTrigger id="zone-country">
+                                    <SelectValue placeholder="Select a country" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                                    <SelectItem value="South Africa">South Africa</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="zone-city">City</Label>
+                                <Select name="zone-city">
+                                <SelectTrigger id="zone-city">
+                                    <SelectValue placeholder="Select a city" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="London">London</SelectItem>
+                                    <SelectItem value="Manchester">Manchester</SelectItem>
+                                    <SelectItem value="Johannesburg">Johannesburg</SelectItem>
+                                </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+
+                         <div className="space-y-4 rounded-lg border p-4">
+                            <Label className="font-semibold text-base">Logistics Model</Label>
+                             <RadioGroup defaultValue="direct" className="space-y-3">
+                                <Label htmlFor="logistics-direct" className="flex items-start gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                    <RadioGroupItem value="direct" id="logistics-direct"/>
+                                    <div>
+                                        <p className="font-medium flex items-center gap-2"><Truck/> Direct to Partner</p>
+                                        <p className="text-sm text-muted-foreground">Drivers take orders directly from customers to the assigned laundromat.</p>
+                                    </div>
+                                </Label>
+                                 <Label htmlFor="logistics-hub" className="flex items-start gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                    <RadioGroupItem value="hub" id="logistics-hub"/>
+                                    <div>
+                                        <p className="font-medium flex items-center gap-2"><Warehouse/> Warehouse Hub</p>
+                                        <p className="text-sm text-muted-foreground">Drivers bring all orders to a central warehouse for sorting and dispatch.</p>
+                                    </div>
+                                </Label>
+                            </RadioGroup>
+                             <Alert variant="default" className="mt-2 text-xs">
+                                <AlertTitle className="text-xs font-semibold flex items-center gap-2"><MapPin/> Note on Warehouses</AlertTitle>
+                                <p>Warehouse locations are managed in a separate section. This setting only determines the logistical model for this zone.</p>
+                            </Alert>
                         </div>
                         
                         <div className="space-y-2">
