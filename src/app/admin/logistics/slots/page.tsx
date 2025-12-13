@@ -51,16 +51,17 @@ import { useState } from 'react';
 import { useToast } from '@/hooks/use-toast';
 
 const initialTemplates = [
-  { id: 'T-LON-01', name: 'London - Standard Weekday', city: 'London', slotLength: 120, time: '08:00 - 22:00', type: 'Standard' },
-  { id: 'T-LON-02', name: 'London - Express', city: 'London', slotLength: 60, time: '10:00 - 20:00', type: 'Premium' },
-  { id: 'T-MAN-01', name: 'Manchester - All Day', city: 'Manchester', slotLength: 180, time: '09:00 - 21:00', type: 'Standard' },
+  { id: 'T-LON-01', name: 'London - Standard Weekday', country: 'United Kingdom', city: 'London', slotLength: 120, time: '08:00 - 22:00', type: 'Standard' },
+  { id: 'T-LON-02', name: 'London - Express', country: 'United Kingdom', city: 'London', slotLength: 60, time: '10:00 - 20:00', type: 'Premium' },
+  { id: 'T-MAN-01', name: 'Manchester - All Day', country: 'United Kingdom', city: 'Manchester', slotLength: 180, time: '09:00 - 21:00', type: 'Standard' },
+  { id: 'T-JHB-01', name: 'Joburg - Weekday', country: 'South Africa', city: 'Johannesburg', slotLength: 120, time: '08:00 - 20:00', type: 'Standard' },
 ];
 
 export default function SlotTemplatesPage() {
     const [templates, setTemplates] = useState(initialTemplates);
-    const [isEditing, setIsEditing] = useState<typeof initialTemplates[0] | null>(null);
+    const [isEditing, setIsEditing] = useState<(typeof initialTemplates)[0] | null>(null);
 
-    const handleOpenDialog = (template: typeof initialTemplates[0] | null) => {
+    const handleOpenDialog = (template: (typeof initialTemplates)[0] | null) => {
         setIsEditing(template);
     }
     
@@ -169,18 +170,33 @@ function SlotTemplateForm({template, onClose}: {template: (typeof initialTemplat
                 <Label htmlFor="template-name">Template Name</Label>
                 <Input id="template-name" defaultValue={template?.name} placeholder="e.g., London - Weekend Express" required />
               </div>
-              <div className="space-y-2">
-                <Label htmlFor="city">City</Label>
-                <Select name="city" defaultValue={template?.city.toLowerCase()} required>
-                  <SelectTrigger id="city">
-                    <SelectValue placeholder="Select a city" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="london">London</SelectItem>
-                    <SelectItem value="manchester">Manchester</SelectItem>
-                    <SelectItem value="birmingham">Birmingham</SelectItem>
-                  </SelectContent>
-                </Select>
+               <div className="grid grid-cols-2 gap-4">
+                 <div className="space-y-2">
+                    <Label htmlFor="country">Country</Label>
+                    <Select name="country" defaultValue={template?.country} required>
+                      <SelectTrigger id="country">
+                        <SelectValue placeholder="Select a country" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                        <SelectItem value="South Africa">South Africa</SelectItem>
+                      </SelectContent>
+                    </Select>
+                 </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="city">City</Label>
+                    <Select name="city" defaultValue={template?.city} required>
+                      <SelectTrigger id="city">
+                        <SelectValue placeholder="Select a city" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="London">London</SelectItem>
+                        <SelectItem value="Manchester">Manchester</SelectItem>
+                        <SelectItem value="Birmingham">Birmingham</SelectItem>
+                        <SelectItem value="Johannesburg">Johannesburg</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">

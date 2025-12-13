@@ -109,8 +109,8 @@ export default function ZonesPage() {
                             <SelectValue placeholder="Select a country" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="uk">United Kingdom</SelectItem>
-                            <SelectItem value="za">South Africa</SelectItem>
+                            <SelectItem value="United Kingdom">United Kingdom</SelectItem>
+                            <SelectItem value="South Africa">South Africa</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -121,9 +121,9 @@ export default function ZonesPage() {
                             <SelectValue placeholder="Select a city" />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value="london">London</SelectItem>
-                            <SelectItem value="manchester">Manchester</SelectItem>
-                            <SelectItem value="johannesburg">Johannesburg</SelectItem>
+                            <SelectItem value="London">London</SelectItem>
+                            <SelectItem value="Manchester">Manchester</SelectItem>
+                            <SelectItem value="Johannesburg">Johannesburg</SelectItem>
                           </SelectContent>
                         </Select>
                       </div>
@@ -248,4 +248,3 @@ export default function ZonesPage() {
     </div>
   );
 }
-
