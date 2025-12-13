@@ -3,7 +3,7 @@
 
 import React, { createContext, useContext, useState, ReactNode, useCallback } from 'react';
 
-export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Completed' | 'Cancelled' | 'Handoff to Driver';
+export type LaundromatOrderStatus = 'Intake' | 'Washing' | 'Drying' | 'Folding/QC' | 'Ready' | 'Handoff to Driver' | 'Completed' | 'Cancelled';
 
 export interface LaundromatOrderItem {
     id: string;
