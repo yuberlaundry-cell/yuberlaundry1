@@ -12,6 +12,7 @@ import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ScrollArea, ScrollBar } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { Smartphone, CheckCircle, Apple, AppWindow } from 'lucide-react';
 
 const featureFlagCategories = {
     "Core Order & Service Features": [
@@ -63,6 +64,30 @@ const featureFlagCategories = {
     ]
 };
 
+const appVersionConfig = [
+    {
+        title: "Consumer App",
+        platforms: [
+            { id: 'consumer-ios', name: 'iOS', icon: Apple, version: "1.1.2", forceUpdate: false },
+            { id: 'consumer-android', name: 'Android', icon: Smartphone, version: "1.1.4", forceUpdate: false },
+        ]
+    },
+    {
+        title: "Driver App",
+        platforms: [
+            { id: 'driver-ios', name: 'iOS', icon: Apple, version: "1.0.8", forceUpdate: false },
+            { id: 'driver-android', name: 'Android', icon: Smartphone, version: "1.0.9", forceUpdate: true },
+        ]
+    },
+    {
+        title: "Laundromat App",
+        platforms: [
+            { id: 'laundromat-ios', name: 'iOS (Tablet)', icon: Apple, version: "1.0.2", forceUpdate: false },
+            { id: 'laundromat-android', name: 'Android (Tablet)', icon: Smartphone, version: "1.0.3", forceUpdate: false },
+        ]
+    }
+];
+
 
 export default function SettingsPage() {
      const { toast } = useToast();
@@ -88,6 +113,7 @@ export default function SettingsPage() {
                     <TabsList>
                         <TabsTrigger value="general">General</TabsTrigger>
                         <TabsTrigger value="integrations">Integrations</TabsTrigger>
+                        <TabsTrigger value="app-versions">App Versions</TabsTrigger>
                         <TabsTrigger value="feature-flags">Feature Flags</TabsTrigger>
                         <TabsTrigger value="advanced">Advanced</TabsTrigger>
                     </TabsList>
@@ -293,6 +319,44 @@ export default function SettingsPage() {
                             </CardContent>
                         </Card>
                      </form>
+                </TabsContent>
+                <TabsContent value="app-versions" className="mt-4">
+                    <form onSubmit={(e) => { e.preventDefault(); handleSave('App Version')}}>
+                         <Card>
+                            <CardHeader>
+                                <CardTitle>App Version Control</CardTitle>
+                                <CardDescription>Manage minimum required app versions and force updates for each platform.</CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {appVersionConfig.map((app) => (
+                                    <div key={app.title} className="space-y-4 rounded-lg border p-4">
+                                        <h3 className="font-semibold text-base">{app.title}</h3>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                            {app.platforms.map((platform) => (
+                                                <div key={platform.id} className="space-y-3">
+                                                    <Label className="flex items-center gap-2 font-medium">
+                                                        <platform.icon className="h-5 w-5" />
+                                                        {platform.name}
+                                                    </Label>
+                                                    <div className="space-y-2">
+                                                        <Label htmlFor={`${platform.id}-version`} className="text-xs text-muted-foreground">Minimum Version</Label>
+                                                        <Input id={`${platform.id}-version`} defaultValue={platform.version} placeholder="e.g., 1.2.0" />
+                                                    </div>
+                                                    <div className="flex items-center space-x-2">
+                                                        <Switch id={`${platform.id}-force`} defaultChecked={platform.forceUpdate} />
+                                                        <Label htmlFor={`${platform.id}-force`} className="text-xs">Force Update</Label>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                ))}
+                                 <div className="flex justify-end pt-2">
+                                    <Button type="submit">Save App Version Settings</Button>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </form>
                 </TabsContent>
                 <TabsContent value="feature-flags" className="mt-4">
                      <form onSubmit={(e) => {e.preventDefault(); handleSave('Feature Flag')}}>
