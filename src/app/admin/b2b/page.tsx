@@ -73,7 +73,7 @@ export default function B2BAccountsPage() {
         const newCompany = {
             id: (formData.get('company-name') as string).toLowerCase().replace(/\s+/g, '-'),
             name: formData.get('company-name') as string,
-            industry: 'New',
+            industry: formData.get('industry') as string,
             admin: formData.get('admin-name') as string,
             plan: formData.get('company-plan') === 'pro' ? 'Business Pro' : 'Enterprise',
             status: 'Pending',
@@ -107,9 +107,26 @@ export default function B2BAccountsPage() {
                         </DialogDescription>
                     </DialogHeader>
                     <form className="space-y-4" onSubmit={handleAddCompany}>
-                        <div className="space-y-2">
-                            <Label htmlFor="company-name">Company Name</Label>
-                            <Input id="company-name" name="company-name" placeholder="e.g., Acme Corporation" required />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="company-name">Company Name</Label>
+                                <Input id="company-name" name="company-name" placeholder="e.g., Acme Corp" required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="industry">Industry</Label>
+                                <Select name="industry" required>
+                                    <SelectTrigger id="industry">
+                                        <SelectValue placeholder="Select an industry" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Technology">Technology</SelectItem>
+                                        <SelectItem value="Defense">Defense</SelectItem>
+                                        <SelectItem value="Conglomerate">Conglomerate</SelectItem>
+                                        <SelectItem value="Healthcare">Healthcare</SelectItem>
+                                        <SelectItem value="Finance">Finance</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
                             <div className="space-y-2">
