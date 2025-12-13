@@ -1,5 +1,4 @@
 
-
 'use client';
 
 import { Button } from '@/components/ui/button';
@@ -26,6 +25,7 @@ import { CheckCircle, PlusCircle, Trash2, Settings, AlertTriangle, Mail, Phone }
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Alert, AlertTitle } from '@/components/ui/alert';
 import { PhoneNumberInput } from '@/components/ui/phone-number-input';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 
 
 export default function LaundromatSettingsPage() {
@@ -179,6 +179,26 @@ export default function LaundromatSettingsPage() {
                             </div>
                         </div>
                         <p className="text-xs text-muted-foreground mt-2">These options are limited by the platform-wide settings managed by the Superadmin.</p>
+                    </div>
+                    <Separator/>
+                     <div>
+                        <h4 className="font-semibold text-base mb-4">Order Acceptance</h4>
+                        <RadioGroup defaultValue="auto" className="space-y-3">
+                            <Label htmlFor="accept-auto" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                <RadioGroupItem value="auto" id="accept-auto"/>
+                                <div>
+                                    <p className="font-medium">Automatic (Recommended)</p>
+                                    <p className="text-sm text-muted-foreground">Automatically accept all new orders assigned to your facility.</p>
+                                </div>
+                            </Label>
+                             <Label htmlFor="accept-manual" className="flex items-center gap-4 p-4 border rounded-lg cursor-pointer hover:bg-muted/50 has-[:checked]:bg-primary/10 has-[:checked]:border-primary">
+                                <RadioGroupItem value="manual" id="accept-manual"/>
+                                <div>
+                                    <p className="font-medium">Manual</p>
+                                    <p className="text-sm text-muted-foreground">You will be notified of new orders and must accept them within the time limit set by the platform.</p>
+                                </div>
+                            </Label>
+                        </RadioGroup>
                     </div>
                   <Separator />
                   <div className="space-y-2">

@@ -61,10 +61,10 @@ export default function RoutingSettingsPage() {
         <CardHeader>
           <CardTitle>Dispatch Automation</CardTitle>
           <CardDescription>
-            Rules for automatic dispatching of orders to drivers.
+            Rules for automatic dispatching of orders to drivers and laundromats.
           </CardDescription>
         </CardHeader>
-        <CardContent className="space-y-4 max-w-lg">
+        <CardContent className="space-y-6 max-w-lg">
            <div className="flex items-center justify-between rounded-lg border p-4">
               <div className="space-y-0.5">
               <Label htmlFor="auto-dispatch" className="text-base">
@@ -81,6 +81,13 @@ export default function RoutingSettingsPage() {
             <Input id="cutoff-time" type="time" defaultValue="21:00" />
             <p className="text-xs text-muted-foreground">
                 The latest time a same-day order can be dispatched.
+            </p>
+          </div>
+           <div className="space-y-2">
+            <Label htmlFor="acceptance-timeout">Manual Acceptance Time Limit (seconds)</Label>
+            <Input id="acceptance-timeout" type="number" defaultValue="90" />
+            <p className="text-xs text-muted-foreground">
+                Time a laundromat has to manually accept an order before it's re-allocated.
             </p>
           </div>
            <Button>Save Dispatch Settings</Button>
