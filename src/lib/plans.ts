@@ -83,7 +83,7 @@ export const initialPlans: Plan[] = [
         ],
         active: true,
         type: 'Business',
-        paystackPlanCode: 'PLN_yyyyyyyyyyyyyyy',
+        paystackPlanCode: 'PLN_bizpro_monthly',
         limits: {
             employees: 100,
             driverFeeWaiver: true,
@@ -101,7 +101,7 @@ export const initialPlans: Plan[] = [
         ],
         active: true,
         type: 'Laundromat',
-        paystackPlanCode: 'PLN_zzzzzzzzzzzzzzz',
+        paystackPlanCode: 'PLN_laundro_tier1',
         limits: {
             commissionOverride: 12,
         }
@@ -115,7 +115,7 @@ export const initialPlans: Plan[] = [
         ],
         active: false,
         type: 'Consumer',
-        paystackPlanCode: 'PLN_aaaaaaaaaaaaaaa',
+        paystackPlanCode: 'PLN_lite_legacy',
         limits: {
             kgIncluded: 15
         }

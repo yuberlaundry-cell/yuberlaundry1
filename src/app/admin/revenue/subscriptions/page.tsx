@@ -314,22 +314,26 @@ function SubscriptionForm({ plan }: { plan: Plan | null }) {
             {planType === 'Consumer' && (
                 <div className="space-y-4 p-4 border bg-muted/50 rounded-lg">
                     <h4 className="font-semibold">Consumer Limits & Waivers</h4>
-                    <div className="space-y-2">
-                        <Label htmlFor="plan-kg">Kg Included</Label>
-                        <Input id="plan-kg" type="number" placeholder="e.g., 30" defaultValue={plan?.limits.kgIncluded}/>
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="space-y-2">
+                            <Label htmlFor="plan-kg">Kg Included</Label>
+                            <Input id="plan-kg" type="number" placeholder="e.g., 30" defaultValue={plan?.limits.kgIncluded}/>
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="plan-bags">Bags Included (for Repeat)</Label>
+                            <Input id="plan-bags" type="number" placeholder="e.g., 2" defaultValue={plan?.limits.bagsIncluded}/>
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="plan-discount">Discount on all orders (%)</Label>
+                            <Input id="plan-discount" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.discountPercentage}/>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="plan-credit">Credit for other services (R)</Label>
+                            <Input id="plan-credit" type="number" placeholder="e.g., 100" defaultValue={plan?.limits.otherServicesCredit}/>
+                        </div>
                     </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="plan-bags">Bags Included (for Yuber Repeat)</Label>
-                        <Input id="plan-bags" type="number" placeholder="e.g., 2" defaultValue={plan?.limits.bagsIncluded}/>
-                    </div>
-                     <div className="space-y-2">
-                        <Label htmlFor="plan-discount">Discount on all orders (%)</Label>
-                        <Input id="plan-discount" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.discountPercentage}/>
-                    </div>
-                    <div className="space-y-2">
-                        <Label htmlFor="plan-credit">Credit for other services (R)</Label>
-                        <Input id="plan-credit" type="number" placeholder="e.g., 10" defaultValue={plan?.limits.otherServicesCredit}/>
-                    </div>
+                    <Separator className="my-4"/>
+                     <h4 className="font-semibold text-sm">Fee Waivers & Benefits</h4>
                     <div className="grid grid-cols-2 gap-4">
                         <div className="flex items-center space-x-2">
                             <Checkbox id="delivery-waiver" defaultChecked={plan?.limits.deliveryFeeWaiver} />
