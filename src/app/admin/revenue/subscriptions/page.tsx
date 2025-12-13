@@ -87,24 +87,6 @@ interface Plan {
 
 const initialPlans: Plan[] = [
     {
-        name: "Yuber Plus",
-        price: "450",
-        billingCycle: "monthly",
-        features: [
-            "Premium detergents",
-            "Next-day turnaround"
-        ],
-        active: true,
-        type: 'Consumer',
-        paystackPlanCode: 'PLN_xxxxxxxxxxxxxxx',
-        limits: {
-            kgIncluded: 30,
-            deliveryFeeWaiver: true,
-            platformFeeWaiver: false,
-            discountPercentage: 5,
-        }
-    },
-    {
         name: "Yuber Repeat",
         price: "800",
         billingCycle: "monthly",

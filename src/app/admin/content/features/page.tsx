@@ -28,25 +28,25 @@ export default function FeaturesContentPage() {
                 </p>
             </div>
 
-            <Tabs defaultValue="yuber-plus">
+            <Tabs defaultValue="yuber-repeat">
                 <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="yuber-plus">Yuber Plus</TabsTrigger>
+                    <TabsTrigger value="yuber-repeat">Yuber Repeat</TabsTrigger>
                     <TabsTrigger value="gift-cards">Gift Cards</TabsTrigger>
                     <TabsTrigger value="referrals">Referral Program</TabsTrigger>
                 </TabsList>
-                <TabsContent value="yuber-plus">
+                <TabsContent value="yuber-repeat">
                     <Card>
                         <CardHeader>
-                            <CardTitle>Yuber Plus Page</CardTitle>
+                            <CardTitle>Yuber Repeat Page</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
                                 <Label htmlFor="plus-headline">Headline</Label>
-                                <Textarea id="plus-headline" defaultValue="Yuber Plus" />
+                                <Textarea id="plus-headline" defaultValue="Returned fresh and ready to wear." />
                             </div>
                              <div className="space-y-2">
                                 <Label htmlFor="plus-desc">Description</Label>
-                                <Textarea id="plus-desc" defaultValue="Information about the Yuber Plus subscription program." />
+                                <Textarea id="plus-desc" defaultValue="Your clothes get their own machine, are separated by lights and darks, cleaned according to your preferences, and delivered neatly folded to your door - we even pair your socks." />
                             </div>
                         </CardContent>
                     </Card>
