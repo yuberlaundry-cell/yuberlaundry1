@@ -183,7 +183,7 @@ export default function LaundromatSettingsPage() {
                   <Separator />
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2">
-                      <Checkbox id="auto-assign" defaultChecked />
+                      <Switch id="auto-assign" defaultChecked />
                       <Label htmlFor="auto-assign">
                         Automatically assign ready orders to available drivers.
                       </Label>
