@@ -16,7 +16,7 @@ import React from "react";
 
 const templateVariables = [
     { name: 'Customer', vars: ['{{customer.firstName}}', '{{customer.lastName}}'] },
-    { name: 'Order', vars: ['{{order.id}}', '{{order.status}}', '{{order.deliveryDate}}', '{{order.pickupTime}}'] },
+    { name: 'Order', vars: ['{{order.id}}', '{{order.status}}', '{{order.pickupTime}}', '{{order.deliveryDate}}', '{{order.deliveryTime}}'] },
     { name: 'Driver', vars: ['{{driver.name}}', '{{driver.eta}}'] },
     { name: 'Laundromat', vars: ['{{laundromat.name}}'] },
     { name: 'Payout', vars: ['{{payout.amount}}', '{{payout.endDate}}'] },
@@ -29,7 +29,7 @@ const customerNotifications = {
             id: 'customer_order_confirmation', 
             title: 'Order Confirmation', 
             channels: {
-                email: { enabled: true, subject: 'Your Yuber Laundry Order {{order.id}} is Confirmed', body: 'Hi {{customer.firstName}}, your order is confirmed.' },
+                email: { enabled: true, subject: 'Your Yuber Laundry Order {{order.id}} is Confirmed', body: 'Hi {{customer.firstName}}, your order is confirmed for pickup on {{order.pickupTime}}.' },
                 sms: { enabled: true, content: 'Hi {{customer.firstName}}, your Yuber Laundry order {{order.id}} is confirmed for pickup on {{order.pickupTime}}.' },
                 push: { enabled: true, content: 'Your order {{order.id}} is confirmed!' },
                 whatsapp: { enabled: false, content: ''}
@@ -514,5 +514,7 @@ export default function NotificationTemplatesPage() {
 
 
 
+
+    
 
     
