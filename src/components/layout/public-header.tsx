@@ -93,7 +93,7 @@ export function PublicHeader() {
             <NavigationMenuList>
               <NavigationMenuItem>
                  <NavigationMenuTrigger>
-                    <Link href="/how-it-works" legacyBehavior passHref>
+                    <Link href="/how-it-works">
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                             Personal
                         </NavigationMenuLink>
@@ -128,7 +128,7 @@ export function PublicHeader() {
 
                <NavigationMenuItem>
                  <NavigationMenuTrigger>
-                    <Link href="/for-business" legacyBehavior passHref>
+                    <Link href="/for-business">
                         <NavigationMenuLink className={navigationMenuTriggerStyle()}>
                            For Business
                         </NavigationMenuLink>
@@ -273,7 +273,7 @@ export function PublicHeader() {
 
 const ListItem = React.forwardRef<
   React.ElementRef<"a">,
-  React.ComponentPropsWithoutRef<"a" >
+  React.ComponentPropsWithoutRef<"a">
 >(({ className, title, children, ...props }, ref) => {
   return (
     <li>
@@ -293,6 +293,6 @@ const ListItem = React.forwardRef<
         </a>
       </NavigationMenuLink>
     </li>
-  )
-})
-ListItem.displayName = "ListItem"
+  );
+});
+ListItem.displayName = "ListItem";

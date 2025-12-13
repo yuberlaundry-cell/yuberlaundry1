@@ -25,38 +25,29 @@ const AddressInput = React.forwardRef<HTMLInputElement, AddressInputProps>(
     const controlledValue = value === undefined ? internalValue : value;
 
     useEffect(() => {
-      const loadGoogleMapsScript = () => {
-        const scriptId = 'google-maps-script';
-        
-        if (window.google?.maps?.places) {
-          setIsScriptLoaded(true);
-          return;
-        }
-        
+        const scriptId = "google-maps-script";
         if (document.getElementById(scriptId)) {
-             const checkInterval = setInterval(() => {
-                if (window.google && window.google.maps && window.google.maps.places) {
-                    setIsScriptLoaded(true);
-                    clearInterval(checkInterval);
-                }
-            }, 100);
-          return;
+            setIsScriptLoaded(true);
+            return;
         }
 
-        const script = document.createElement('script');
+        const script = document.createElement("script");
         script.id = scriptId;
-        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`;
+        script.src = `https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&async`;
         script.async = true;
         script.defer = true;
-        script.onload = () => setIsScriptLoaded(true);
+        script.onload = () => {
+            setIsScriptLoaded(true);
+        };
+        script.onerror = () => {
+            console.error("Failed to load Google Maps script");
+        };
         document.head.appendChild(script);
-      };
 
-      loadGoogleMapsScript();
     }, []);
     
     useEffect(() => {
-        if (isScriptLoaded && !autocompleteService.current) {
+        if (isScriptLoaded && window.google) {
             autocompleteService.current = new window.google.maps.places.AutocompleteService();
             geocoder.current = new window.google.maps.Geocoder();
         }
